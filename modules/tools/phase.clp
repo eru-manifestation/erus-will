@@ -1,16 +1,16 @@
 ; DEFINICIÓN DEL TEMPLATE DE FASE
-(deftemplate phase
+(deftemplate TOOLS::phase
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE))
 	(multislot stage (default ?NONE))
 )
 
-(deffunction start-turn (?player)
+(deffunction TOOLS::start-turn (?player)
 	; No sobreescribe la fase, crea una nueva
 	(assert (phase (player ?player) (stage (create$ start))))
 )
 
 ; FUNCION ESQUEMA DE FASES
-(deffunction stage-guide ($?stage)
+(deffunction TOOLS::stage-guide ($?stage)
 	(switch ?stage
 		(case (create$ start) then (create$ 0 0))
 		(case (create$ 0 0) then (create$ 0 1 0))
@@ -31,8 +31,9 @@
 		(default FALSE))
 )
 
+; TODO: cambiar a main
 ; REGLA DE FLUJO DE FASE DENTRO DE UN TURNO
-(defrule clock (declare (salience ?*clock-salience*))
+(defrule TOOLS::clock (declare (salience ?*clock-salience*))
 	?p <- (phase (stage $?xs ?x))
 	=>
 	(bind ?next-stage (stage-guide $?xs ?x))
@@ -44,12 +45,12 @@
 )
 
 ; FUNCION DE SALTO DE FASE, USADA POR LAS ACCIONES Y EVENTOS
-(deffunction jump ($?jump-stage)
+(deffunction TOOLS::jump ($?jump-stage)
 	(do-for-fact ((?phase phase)) TRUE (modify ?phase (stage $?jump-stage)))
 ) 
 
 ; ELIMINAR FASE PARA FINALIZAR PROGRAMA
-(defrule SALIDA-FORZADA-ELIMINAR (declare (salience ?*universal-rules-salience*))
+(defrule TOOLS::SALIDA-FORZADA-ELIMINAR (declare (salience ?*universal-rules-salience*))
 	?f <- (phase (stage finalizar))
 	=>
 	(retract ?f)

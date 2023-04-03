@@ -1,0 +1,111 @@
+Divido los cometidos de mi programa en módulos que cumplen su cometido independientemente:
+* Módulo main:
+    - Phase Rules: reglas que generan el comportamiento en fases
+    - Clock: regla que gestiona el cambio de fases
+
+* Módulo move-fellowship:
+    Reglas relacionadas con el movimiento de una compañía
+
+* Módulo corruption-check:
+    Reglas que llevan a cabo el chequeo de corrupción a un personaje
+
+* Módulo combat:
+    Modela el combate contra una compañía
+
+* Módulo elronds-council:
+    Reglas que gestionan la verificación de condición de victoria
+
+* Módulo organize-fellowship:
+    Gestionan la organización de compañías
+
+* Módulo tools:
+    Contiene los constructos que representan la partida (objetos y template fase), 
+    los eventos (para modificarlos y gestionar las subfases de los módulos), 
+    acciones (tanto la definición como la implementación), constantes 
+    globales (jugadores, manos, localizaciones), objetos auxiliares y sus reglas.
+
+
+Como todos los módulos necesitan conocer el estado de la partida para funcionar,
+todos deben importar los constructos necesarios del módulo "tools".
+
+Todos los módulos excepto "main" y "tools" representan subtareas que necesitan resolución.
+El módulo "tools" es sólo una utilidad, y el "main" representa el flujo y hechos que deben
+ocurrir de forma consistente en cada una de esas fases.
+
+Todos los módulos que representan acciones deben tener un punto único de entrada que debe
+estar atento a la llamada que surja (como evento) desde cualquier punto o estado del programa.
+Estas llamadas deben tener una saliencia alta, ya que no deben verse eclipsadas por
+la ejecución de otra fase eventual inferior.
+
+Al elegir que la saliencia se verifique al añadir la regla en la agenda, consigo que
+las fases eventuales se ejecuten desde el inicio hasta el final, sin ser interrumpidas
+por ninguna fase de ejecución inferior. Ex:
+
+Se inicia la cadena de fases eventuales
+MAIN --inicia combate-->  COMBAT --inicia corr. check--> CORR-CHK --inicia corr. check--> CORR-CHK2
+                          MAIN                           COMBAT                           CORR-CHK
+                                                         MAIN                             COMBAT
+                                                                                          MAIN
+
+Se resuelven de más reciente a más antigua
+resuelvo CORR-CHK2 --> resuelvo CORR-CHK --> resuelvo COMBAT --> resuelvo MAIN
+
+Resolver MAIN implica retomar el flujo normal de la fase, sin reiniciar la agenda
+(ya que cada módulo tiene su propia agenda). Las fases eventuales no se ven entorpecidas
+entre ellas en su ejecución (si son de módulos distintos, porque no comparten agenda, y si
+son del mísmo módulo porque la saliencia dinámica indicará que tendrá mayor saliencia siempre
+el hilo de ejecución más arriba en el focus-stack. Al final del hilo de ejecución del módulo
+siempre debe hacer un pop-focus para evitar saltarse el orden de ejecución marcado por
+el focus-stack).
+
+Ejemplo funcional:
+(clear)
+(watch focus)
+(watch rules)
+(set-salience-evaluation when-activated)
+(defmodule MAIN (export ?ALL))
+(deftemplate fire
+    (slot letter) (slot any))
+(defmodule B (import MAIN ?ALL))
+(defrule set-B (declare (auto-focus TRUE) )
+    (fire (letter B))
+    =>
+)
+(defrule print-B (declare (auto-focus FALSE)(salience (length$ (get-focus-stack))))
+    (fire (letter B))
+    =>
+    (println Se imprime B)
+    (pop-focus)
+)
+(defmodule C (import MAIN ?ALL))
+(defrule set-C (declare (auto-focus TRUE))
+    (fire (letter C))
+    =>
+)
+(defrule print-C (declare (auto-focus FALSE)(salience (length$ (get-focus-stack))))
+    (fire (letter C))
+    =>
+    (println Se imprime C)
+    (pop-focus)
+)
+(assert (fire (letter B) (any 1234)))
+(assert (fire (letter C) (any DSKA4)))
+(assert (fire (letter B) (any 1FDKJE)))
+(run)
+(println "Se ejecuta primero el hilo de ejecución B con evento fire-B-1234")
+(println "Luego el hilo de ejecución C con evento fire-C-DSKA4")
+(println "Finalmente, el hilo de ejecución B con evento fire-B-DSKA4")
+
+
+
+En este ejemplo, cada fase eventual inicia el hilo de ejecución mediante un punto único
+de entrada, con auto-focus, que cambiará el focus a su módulo, para que las reglas de dicho
+módulo, sin auto-focus, manejen el hilo de ejecución sin intervenciones externas.
+
+El módulo main no tiene ninguna regla con auto-focus, ya que proseguirá su ejecución
+cuando hayan terminado todos los demás módulos.
+Importante, recordar que el reloj debe tener saliencia inferior a las reglas de fase.
+
+El módulo utils contiene sólo reglas de uso auxiliar, que tienen como objetivo facilitar
+la programación. Deben tener SALIENCIA MÁXIMA y poder ser llamadas desde cualquier punto
+del programa, con auto-focus.

@@ -118,3 +118,16 @@ y revisada en tiempo de ejecución)
 al terminar la fase eventual
 
 * Función que imprima constantemente el estado del juego (muy complejo)
+
+* Definir qué debe exportarse y qué no del paquete TOOLS
+
+* Traducir y encapsular todo a sistema de módulo según la plantilla
+
+* Crear una subclase de EVENT-PHASE para cada fase eventual con los argumentos extra
+que necesite
+
+* Revisar el sistema de saliencia de los módulos (evitar conflicto de underflowing/overflowing
+entre saliencias de distintos hilos de ejecución del mismo módulo, mientras se garantiza la
+preferencia de saliencias definidas para clock, event-handler, phase-rules, action-population...)
+
+* Crear plantilla para modelo de mini-reloj personalizado para cada módulo

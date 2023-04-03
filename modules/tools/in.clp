@@ -1,4 +1,4 @@
-(deftemplate in
+(deftemplate TOOLS::in
 	; Representa que un elemento de juego esté bajo otro
 	(slot over (type INSTANCE-NAME) (default ?NONE))
 	(slot under (type INSTANCE-NAME) (default ?NONE))
@@ -7,7 +7,7 @@
 )
 
 
-(defrule in-transitive (declare (salience ?*universal-rules-salience*))
+(defrule TOOLS::in-transitive (declare (salience ?*universal-rules-salience*))
 	(logical (in (over ?a) (under ?b)))
 	(logical (in (over ?b) (under ?c)))
 	=>

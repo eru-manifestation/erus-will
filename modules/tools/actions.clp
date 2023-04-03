@@ -1,12 +1,12 @@
 ; PLANTILLA DE ACCIÓN
-(deftemplate action
+(deftemplate TOOLS::action
 	; Plantilla básica de acción
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE))
 	(slot action-fact (type STRING) (default ?NONE))
 )
 
 ; FUNCIÓN GENERADORA DE ACCIONES
-(deffunction gen-action (?player ?event-def $?data)
+(deffunction TOOLS::gen-action (?player ?event-def $?data)
 	; Formato de uso: (gen-action <player-name> <generated-event-definitor> <data>*)
 	; Ex: (gen-action [player1] CHARACTER-play ?char ?fell)
 	(assert (action 
@@ -15,7 +15,8 @@
 	))
 )
 
-(deffunction play-actions (?p)
+; Jugar la acción deseada
+(deffunction TOOLS::play-actions (?p)
 	(bind ?acc (create$))
 	; Acumular en ?acc las cadenas "action-fact" de las acciones del jugador ?p
 	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
@@ -29,7 +30,7 @@
 )
 
 ; REGLA QUE PARA EL FLUJO DE EJECUCIÓN DEL PROGRAMA PARA REQUERIR ATENCIÓN DEL JUGADOR
-(defrule require-player-attention (declare (salience ?*action-selection-salience*))
+(defrule TOOLS::require-player-attention (declare (salience ?*action-selection-salience*))
 	; TODO: Debe tener saliencia inferior a todas las reglas que creen 
     ; o cambien acciones, si no, se activará con la primera acción y mostrará solo esa 
     ; en cada activación: n activaciones de 1 acción, en vez de 1 activación de n acciones

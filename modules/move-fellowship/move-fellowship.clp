@@ -1,5 +1,5 @@
 ; ROBA CARTAS AL MOVER (SI EFECTIVAMENTE SE MUEVE)
-(defrule FELLOWSHIP-draw-on-move (declare (salience ?*phase-salience*))
+(defrule MOVE-FELLOWSHIP::FELLOWSHIP-draw-on-move (declare (salience ?*phase-salience*))
 	; Estamos en la fase correcta
 	(phase (player ?p) (stage $? move-fellowship ?f ?from 1 1))
 	
@@ -25,8 +25,9 @@
 	(gen-event HAND-multiple-draw player (enemy ?player) max ?enemy-draw-limit)
 )
 
+
 ; ROBA CARTAS AL QUEDARSE
-(defrule FELLOWSHIP-draw-on-stay (declare (salience ?*phase-salience*))
+(defrule MOVE-FELLOWSHIP::FELLOWSHIP-draw-on-stay (declare (salience ?*phase-salience*))
 	; Estamos en la fase correcta
 	(phase (player ?p) (stage $? move-fellowship ?f ?from 1 1))
 	
@@ -48,8 +49,9 @@
 	(gen-event HAND-multiple-draw player (enemy ?player) max ?enemy-draw-limit)
 )
 
+
 ; PONER CARTAS EN GUARDIA (SI REALMENTE SE MUEVE)
-(defrule ACTION-guard-card-move (declare (salience ?*action-population-salience*))
+(defrule MOVE-FELLOWSHIP::ACTION-guard-card-move (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase adecuada
 		(phase (player ?p) (stage $? move-fellowship ?f ?from 2 1))
@@ -66,8 +68,9 @@
 	(gen-action LOCATION-ward guard ?card location (send ?e get-data to))
 )
 
+
 ; PONER CARTAS EN GUARDIA SI PERMANECE
-(defrule ACTION-guard-card-stay (declare (salience ?*action-population-salience*))
+(defrule MOVE-FELLOWSHIP::ACTION-guard-card-stay (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase adecuada
 		(phase (player ?p) (stage $? move-fellowship ?f ?from 2 1))
@@ -84,10 +87,14 @@
 	(gen-action LOCATION-ward guard ?card location ?from)
 )
 
+
 ; CAMBIAR DE LUGAR SI SE MUEVE (event handler)
-(defrule fellowship-move-handler (declare (salience ?*event-handler-salience*))
+(defrule MOVE-FELLOWSHIP::fellowship-move-handler 
+	(declare (salience (+ (* 100 (gen-# EVENT-PHASE)) ?*event-handler-salience*)))
 	; Estamos en la fase correcta
-	(phase (stage $? move-fellowship ?fell ?from 3 1))
+	(object (is-a MOVE-FELLOWSHIP-EP) (type IN) (player ?p)
+		(priority ?pr&:(eq ?pr (gen-# EVENT-PHASE))) (name ?e) (stage 3 1)
+		(fell ?fell) (from ?from))
 
 	; Localizo el evento de movimiento
 	(object (is-a EVENT) (event-definitor FELLOWSHIP-move) (type IN) 
@@ -103,20 +110,22 @@
 
 
 ; DESCARTAR/ROBAR HASTA TENER LA MANO REFILLEADA
-(defrule refill-hand (declare (salience ?*phase-salience*))
+(defrule MOVE-FELLOWSHIP::refill-hand 
+	(declare (salience (+ (* 100 (gen-# EVENT-PHASE)) ?*phase-salience*)))
 	; Estamos en la fase correcta
-	(phase (player ?p) (stage $? move-fellowship ?fell ?from 4 1))
+	(object (is-a MOVE-FELLOWSHIP-EP) (type IN) (player ?p)
+		(priority ?pr&:(eq ?pr (gen-# MOVE-FELLOWSHIP-EP))) (name ?e) (stage 4 1))
 	=>
 	; Relleno las manos de ambos jugadores
 	(gen-event HAND-refill player ?p)
 	(gen-event HAND-refill player (enemy ?p))
 )
 
-
-; JUMP BACKWARDS (salta de vuelta a donde estaba el programa)
-(defrule move-jump-back (declare (salience ?*jump-salience*))
-	; Estamos en la fase correcta
-	(phase (player ?p) (stage $?pre-stage move-fellowship ? ? 5))
+; JUMP BACKWARDS (MODULE)
+(defrule MOVE-FELLOWSHIP::module-jump-back (declare (salience (gen-# EVENT-PHASE)))
+	(object (is-a MOVE-FELLOWSHIP-EP) (type IN)
+		(priority ?p&:(eq ?p (gen-# MOVE-FELLOWSHIP-EP))) (name ?e) (stage 5))
 	=>
-	(jump $?pre-stage)
+	(send ?e complete)
+	(pop-focus)
 )

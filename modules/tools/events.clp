@@ -1,5 +1,5 @@
 ; DEFINICIÓN DE TEMPLATE EVENTO
-(defclass EVENT (is-a USER)
+(defclass TOOLS::EVENT (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 	(slot event-definitor (type SYMBOL) (default ?NONE) (access initialize-only))
 	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT))
@@ -24,7 +24,7 @@
 )
 
 ; RECOLECTOR DE BASURA
-(defrule event-garbage-collector (declare (salience ?*event-handler-salience*))
+(defrule TOOLS::event-garbage-collector (declare (salience ?*event-handler-salience*))
 	; Destruye los eventos marcados como terminados
 	?e <- (object (is-a EVENT) (type OUT))
 	=>
@@ -79,7 +79,7 @@
 )
 
 ; GENERADOR DE EVENTO
-(deffunction gen-event (?event-definitor $?event-data)
+(deffunction TOOLS::gen-event (?event-definitor $?event-data)
 	; Función generadora de eventos, hacerlo a través de esta función
 	; (gen-event <event-definitor> <event-data>*)
 	(make-instance 

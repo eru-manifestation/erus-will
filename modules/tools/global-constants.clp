@@ -1,4 +1,7 @@
-(defglobal
+(defglobal TOOLS
+	; COMPORTAMIENTO INADECUADO SI ALGUNA CONSTANTE DE SALIENCIA ESTÁ FUERA DE (-50,50)
+
+    
     ; Reglas que NO REPRESENTAN reglas de juego, sino ayudas al programador. Deben tener
     ; saliencia máxima, ya que su incumplimiento puede significar la corrupción
     ; del estado del programa
@@ -38,8 +41,4 @@
     ; se altere la fase en la que podrían ocurrir. Por tanto, cada regla se debe disparar
     ; durante la PRIMERA fase en la que se activen.
     ?*clock-salience* = -14
-
-
-    ; Activa o desactiva la función de casting
-    ?*cast-activated* = TRUE
 )
