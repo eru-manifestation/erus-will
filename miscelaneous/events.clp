@@ -1,5 +1,6 @@
 ; DEFINICIÓN DE TEMPLATE EVENTO
-(defclass EVENT (is-a BASIC)
+(defclass EVENT (is-a USER)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
 	(slot event-definitor (type SYMBOL) (default ?NONE) (access initialize-only))
 	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT))
 	; Revisar en los que capturen datos de eventos que se especifique defused FALSE
