@@ -1,0 +1,29 @@
+(load-all)
+(watch facts)
+(start-turn [player1])
+(run)
+
+
+(clear)
+(defmodule MAIN (export ?ALL))
+(deftemplate person
+(slot name)
+(slot age))
+(defrule get-person
+=>
+(print "What is your name? ")
+(bind ?name (readline))
+(print "What is your age? ")
+(bind ?age (read))
+(assert (person (name ?name) (age ?age))))
+(defmodule VIOLATIONS (import MAIN deftemplate person))
+(defrule bad-age
+(declare (auto-focus TRUE))
+(person (name ?name) (age ?age&:(< ?age 0)))
+=>
+(println ?name " has a bad age value."))
+(reset)
+(watch focus)
+(watch rules)
+(run)
+

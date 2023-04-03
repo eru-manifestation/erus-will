@@ -1,0 +1,120 @@
+* Directrices sobre Información Derivada:
+    - Siempre que sea posible, implementar message handlers en vez de funciones para obtener información
+    derivada de una carta o de la relación entre dos cartas independiente del estado del programa
+
+* Directrices de Manejo de eventos:
+    - Asociar al evento la clase que sufre el cambio al desatar dicho evento en el identificador
+    - Un manejador de eventos debe finalizar todo evento: si está defuseado lo ignora (ya está
+    terminado). Si no lo está y cumple las demás condiciones para llevar a cabo su función
+    con normalidad se sigue el manejo normal y se declara como finalizado. Si no está defuseado
+    pero tampoco cumple todas las condiciones para su correcto funcionamiento, el propio manejador de eventos debe encargarse de defusearlo.
+ 
+* Directrices sobre Información Primaria:
+    Descripción:
+    - Los objetos del juego deben dividir sus propiedades en tres tipos (identificativas, cualitativas y de estado).
+    Las identificativas sirven para identificar unívocamente al objeto; por tanto, no deben modificarse
+    en ningún momento durante el trascurso del programa. Las cualitativas y de estado describen las cualidades del 
+    objeto, las cuáles están sujetas a cambios durante el programa. Las cualitativas describen características
+    que sí pueden depender del contexto donde se pregunten (Ex. La piedra del arca asegura 2 MP a cualquier personaje,
+    pero si el personaje que la porta es enano da 5 MP) mientras que las de estado describen propiedades
+    que cambian en el programa pero son iguales independientemente del contexto (Ex. Saber si un personaje
+    está girado o no, no depende del contexto donde se pregunte, sólo del estado del personaje).
+    Necesidades de la Implementación:
+    - El contexto del programa se describe como un set de ítems de información que conforman las modificaciones
+    pertinentes al valor crudo cada propiedad cualitativa de los objetos.
+    - Las peticiones de información o intento de acceso de lectura a las variables identificativas y de estado 
+    pueden hacerse de cualquier manera deseada, ya que el resultado es al menos consistente (no depende de cómo
+    se pregunte).
+    - Las peticiones de información o intento de acceso de lectura a las variables cualitativas deben SIEMPRE
+    llevarse a cabo mediante el manejador de mensajes get- asociado. Este será el que coleccione e interprete
+    los ítem de información y el valor crudo el objeto para elaborar una respuesta final.
+    - Como toda modificación de los valores crudos se representa como un ítem de información asociado a la
+    variable, TODOS los campos de los objetos deben ser CONSTANTES.
+    Implementación:
+    - Las propiedades identificativas deben ser CONSTANTES del objeto
+    - Las propiedades de estado deben ser VARIABLES del objeto
+    - Las propiedades cualitativas deben ser llamadas al manejador de mensaje get- del objeto para esa cualidad
+
+* Sistema de query de atributos:
+    - Una regla gestiona cada modificador de atributo
+    - El get- message handler de cada atributo de la clase debe modificarse con los modificadores existentes
+    - Las reglas de gestión no deben ser conscientes de cuándo han sido leídas
+
+
+* Propiedades Primarias:
+        CLASE       PROPIEDAD           RANGO DE VALORES
+    --------------------------------------------------------
+    - CHARACTER     birthplace
+    - LOCATION      enemy-draw
+    - PLAYER        general-influence
+    - CHARACTER     direct-influence
+    - CHARACTER     mind
+    - CHARACTER     player
+    - FELLOWSHIP    player
+    - HAND          player
+    - R-LONG-EVENT  player
+    - LOCATION      player-draw
+    - CHARACTER     race
+    - ~LOCATION     tap                 (TAPPED)
+    - CHARACTER     tap                 (TAPPED WOUNDED)
+    - ALLY          tap                 (TAPPED WOUNDED)
+
+
+* Message Handlers:
+    Propiedades Derivadas:
+        CLASE       MESSAGE-HANDLER     DESCRIPCIÓN
+    --------------------------------------------------------------------------------
+    - FELLOWSHIP    has-room            False si no queda espacio para un 
+                                        personaje en la compañía
+    - ALL           is-a                Devuelve la lista de clases del objeto
+    - FELLOWHSIP    is-empty            False si contiene algún personaje
+    - LOCATION      is-haven            False si no es un refugio
+    - 
+
+* Events:
+        CLASE       EVENT                           DESCRIPCIÓN
+    ---------------------------------------------------------------------------
+    - CHARACTER     cure target                 Cura el personaje
+    - ALLY          cure target                 Cura el aliado
+    - A-LONG-EVENT  discard target              Descarta la adversidad suceso duradero
+    - R-LONG-EVENT  discard target              Descarta el recurso suceso duradero
+    - HAND          draw player                 Roba una carta
+    - FELLOWSHIP    EP-move fell from           Inicia la fase de evento "movimiento"
+    - FELLOWSHIP    move fell from to           Mueve la compañía al lugar indicado
+    - HAND          multiple-draw player max    El personaje puede elegir robar una a una
+                                                hasta max cartas
+    - CHARACTER     play target under           Juega el personaje bajo esa compañía
+    - CHARACTER     play target under           Juega el personaje como seguidor del otro
+    - R-LONG-EVENT  play target                 Juega el recurso suceso duradero
+    - HAND          refill player               Evento de fase eventual para descartar/robar
+                                                hasta tener la cantidad de cartas estipulada
+    - LOCATION      reorganize player loc       Reorganiza las compañías del jugador
+                                                en la localización
+    - FELLOWSHIP    stay fell                   La compañía se queda en este turno
+    - OBJECT        store obj                   Almacena el objeto
+    - OBJECT        transfer obj disposer 
+                        receiver                Transfiere el objeto del disposer al
+                                                receiver
+    - CARD          untap target                Endereza la carta (no localizacion)
+
+
+* Funciones:
+    Propiedades Derivadas:
+    - 
+* Módulo con variables globales:
+    - Descripción de fases
+    - Saliencia según el sistema
+
+* Árbol de herencia de las características básicas de las clases para poder concluir las **reglas mínimas de juego**
+
+* Hacer que el jugador puede elegir el orden en el que se mueven sus compañías
+
+* Gestionar: ACCIONES, CADENAS DE EFECTOS de las instrucciones (pista: salience no constante
+y revisada en tiempo de ejecución)
+
+* SE PUEDE HACER QUE EL JUGADOR Y SU MANO SEAN LA MISMA COSA?
+
+* Que se creen compañías vacías al iniciar la fase eventual reorganizar compañía y se eliminen
+al terminar la fase eventual
+
+* Función que imprima constantemente el estado del juego (muy complejo)

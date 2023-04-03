@@ -1,0 +1,1 @@
+"C:\Program Files\CLIPS 6.4\CLIPSDOS.exe" -f2 "D:+  SATM\erus-will\load.clp"
