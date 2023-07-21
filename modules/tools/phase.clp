@@ -31,28 +31,7 @@
 		(default FALSE))
 )
 
-; TODO: cambiar a main
-; REGLA DE FLUJO DE FASE DENTRO DE UN TURNO
-(defrule TOOLS::clock (declare (salience ?*clock-salience*))
-	?p <- (phase (stage $?xs ?x))
-	=>
-	(bind ?next-stage (stage-guide $?xs ?x))
-	(if ?next-stage then
-		(modify ?p (stage ?next-stage))
-		else
-		(modify ?p (stage $?xs (+ 1 ?x)))
-	)
-)
-
 ; FUNCION DE SALTO DE FASE, USADA POR LAS ACCIONES Y EVENTOS
 (deffunction TOOLS::jump ($?jump-stage)
 	(do-for-fact ((?phase phase)) TRUE (modify ?phase (stage $?jump-stage)))
 ) 
-
-; ELIMINAR FASE PARA FINALIZAR PROGRAMA
-(defrule TOOLS::SALIDA-FORZADA-ELIMINAR (declare (salience ?*universal-rules-salience*))
-	?f <- (phase (stage finalizar))
-	=>
-	(retract ?f)
-	(halt)
-)

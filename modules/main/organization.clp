@@ -1,10 +1,16 @@
-; ACCIÓN JUGAR PERSONAJE
+
+
+;/////////////////////// FASE 1 0: INICIO FASE ORGANIZACION ///////////////////////
+
+;/////////////////////// FASE 1 1 0: INICIO ACCIONES FASE ORGANIZACION ///////////////////////
+
+;/////////////////////// FASE 1 1 1: EJECUCIÓN ACCIONES FASE ORGANIZACION ///////////////////////
+
+; ACCIÓN: JUGAR PERSONAJE 1
 ; Puedes jugar un personaje de tu mano en su lugar natal o
 ; en cualquier refugio si tienes suficiente Influencia general o
 ; Influencia directa de algún personaje para controlarlo
-
-
-(defrule CHARACTER-action-1-1-1-follower (declare (salience ?*action-population-salience*))
+(defrule MAIN::CHARACTER-action-1-1-1-follower (declare (salience ?*action-population-salience*))
 	(logical 
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -42,8 +48,8 @@
 	)
 )
 
-
-(defrule CHARACTER-action-1-1-1-fellowship (declare (salience ?*action-population-salience*))
+; ACCIÓN: Jugar personaje 2
+(defrule MAIN::CHARACTER-action-1-1-1-fellowship (declare (salience ?*action-population-salience*))
 	(logical 
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -74,8 +80,8 @@
 )
 
 
-; ACCIÓN DECLARAR MOVIMIENTO
-(defrule FELLOWSHIP-declare-movement (declare (salience ?*action-population-salience*))
+; ACCIÓN: DECLARAR MOVIMIENTO
+(defrule  MAIN::FELLOWSHIP-declare-movement (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -112,11 +118,11 @@
 )
 
 
-; ACCIÓN TRANSFERIR
+; ACCIÓN: TRANSFERIR OBJETO
 ; Puedes intercambiar objetos entre tus personajes si están en
 ; el mismo lugar, pero antes, el portador de cada objeto deberá
 ; hacer un chequeo de corrupción
-(defrule OBJECT-transfer (declare (salience ?*action-population-salience*))
+(defrule  MAIN::OBJECT-transfer (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -142,9 +148,9 @@
 		receiver ?receiver)
 )
 
-; ACCIÓN ALMACENAR
+; ACCIÓN: ALMACENAR OBJETO
 ; También puedes almacenar objetos si el portador está en un refugio
-(defrule OBJECT-store (declare (salience ?*action-population-salience*))
+(defrule  MAIN::OBJECT-store (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -163,10 +169,10 @@
 )
 
 
-; ACCIÓN REORGANIZAR COMPAÑÍAS EN UN LUGAR
+; ACCIÓN: REORGANIZAR COMPAÑÍAS EN UN LUGAR
 ; Si tus personajes están en el mismo refugio puedes dividirlos en
 ; cualquier número de compañías
-(defrule LOCATION-reorganize (declare (salience ?*action-population-salience*))
+(defrule  MAIN::LOCATION-reorganize (declare (salience ?*action-population-salience*))
 	(logical
 		; Estamos en la fase correcta
 		(phase (player ?p) (stage 1 1 1))
@@ -181,3 +187,17 @@
 		player ?p 
 		loc ?loc)
 )
+
+
+;/////////////////////// FASE 1 1 2: FIN ACCIONES FASE ORGANIZACION ///////////////////////
+
+;/////////////////////// FASE 1 2: FIN FASE ORGANIZACION ///////////////////////
+
+
+
+
+
+
+
+
+

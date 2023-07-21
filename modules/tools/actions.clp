@@ -26,15 +26,17 @@
 	(while (not (member$ ?command ?acc))
 		(bind ?command (obtain ?p Accion invalida, acciones posibles: ?acc))
 	)
+	;Idea loca: verificar si la accion elegida es (pass) o asi?
 	(eval ?command)
 )
 
-; REGLA QUE PARA EL FLUJO DE EJECUCIÓN DEL PROGRAMA PARA REQUERIR ATENCIÓN DEL JUGADOR
+; REGLA PARA QUE EL FLUJO DE EJECUCIÓN DEL PROGRAMA REQUIERA LA ATENCIÓN DEL JUGADOR
 (defrule TOOLS::require-player-attention (declare (salience ?*action-selection-salience*))
 	; TODO: Debe tener saliencia inferior a todas las reglas que creen 
     ; o cambien acciones, si no, se activará con la primera acción y mostrará solo esa 
     ; en cada activación: n activaciones de 1 acción, en vez de 1 activación de n acciones
-	(object (is-a PLAYER) (name ?p))
+	
+	(object (is-a PLAYER) (name ?p));OPTIMIZAR: esta instrucción es innecesaria dada la sig
 	(exists (action (player ?p)))
 	=>
 	(play-actions ?p)

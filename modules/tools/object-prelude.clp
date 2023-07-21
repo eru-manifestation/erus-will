@@ -11,11 +11,14 @@
 )
 
 ; GENERADOR DE NUMERO DE INSTANCIAS (NO CUENTA REALMENTE EL NUMERO DE INSTANCIAS)
-(deffunction gen-# (?class)
+(deffunction TOOLS::gen-# (?class)
 	; Devuelve el primer numero de instancia libre
 	(bind ?instance-# 1)
 	(do-for-instance ((?cualquiera ?class)) TRUE
-		(bind ?instance-# (send ?cualquiera get-instance-#)))
-
-	?instance-#
+		(bind ?instance-# (send ?cualquiera get-instance-#))
+    )
+    (if (eq ?instance-# nil)
+        then 1
+        else (- ?instance-# 1)
+    )
 )

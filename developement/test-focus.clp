@@ -1,0 +1,7 @@
+(load-all)
+(watch rules)
+(watch focus)
+(watch facts)
+(watch instances)
+(start-turn [player1])
+(run)
