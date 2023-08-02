@@ -1,4 +1,4 @@
-(defglobal ?*route* = "D:+  SATM\\erus-will\\")
+(defglobal ?*route* = "C:\Users\Pablo\Documents\GitHub\erus-will")
 
 ; Cargo el modulo tools
 (deffunction load-tools ()
@@ -6,16 +6,23 @@
     (load* "modules\\tools\\innit.clp")
     (load* "modules\\tools\\object-prelude.clp")
     (load* "modules\\tools\\objects.clp")
-    (load* "modules\\tools\\game-setting.clp")
-    (load* "modules\\tools\\global-constants.clp")
-    (load* "modules\\tools\\DEF-events.clp")
-    (load* "modules\\tools\\events.clp")
-    (load* "modules\\tools\\event-phase.clp")
+
+    ;game-settings
+    (load* "modules\\tools\\game-settings\\game-settings.clp")
+    (load* "modules\\tools\\game-settings\\global-constants.clp")
+
+    ;events
+    (load* "modules\\tools\\events\\DEF-events.clp")
+    (load* "modules\\tools\\events\\events.clp")
+    (load* "modules\\tools\\events\\event-phase.clp")
+
     (load* "modules\\tools\\in.clp")
-    (load* "modules\\tools\\interaction.clp")
     (load* "modules\\tools\\phase.clp")
-    (load* "modules\\tools\\actions.clp")
-    (load* "modules\\tools\\caster.clp")
+
+    ;user-interaction
+    (load* "modules\\tools\\user-interaction\\interaction.clp")
+    (load* "modules\\tools\\user-interaction\\actions.clp")
+    (load* "modules\\tools\\user-interaction\\caster.clp")
 )
 
 ; Carga el modulo main

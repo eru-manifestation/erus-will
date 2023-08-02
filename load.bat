@@ -1,1 +1,1 @@
-"C:\Program Files\CLIPS 6.4\CLIPSDOS.exe" -f2 "D:+  SATM\erus-will\load.clp"
+"C:\Program Files\SSS\CLIPS 6.4.1\CLIPSDOS.exe" -f2 "C:\Users\Pablo\Documents\GitHub\erus-will\load.clp"

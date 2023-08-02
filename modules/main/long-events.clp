@@ -15,6 +15,7 @@
 	(phase (player ?p) (stage 2 1 1))
 	
 	; Dado un rec suceso duradero tuyo
+	;TODO: se debe comprobar que este suceso duradero esté en juego
 	(object (is-a R-LONG-EVENT) (name ?le) (player ?p))
 	=>
 	(gen-event R-LONG-EVENT-discard 
