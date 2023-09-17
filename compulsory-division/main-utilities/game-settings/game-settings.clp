@@ -1,5 +1,5 @@
 ;CREA LOS DOS JUGADORES Y SUS MANOS Y BARAJAS
-(defglobal TOOLS
+(defglobal MAIN
 	?*player1* = (make-instance (gen-name PLAYER) of PLAYER)
 	?*player2* = (make-instance (gen-name PLAYER) of PLAYER)
 	?*draw-deck1* = (make-instance (gen-name DECK) of DECK (player ?*player1*))

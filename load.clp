@@ -1,55 +1,44 @@
-(defglobal ?*route* = "C:\Users\Pablo\Documents\GitHub\erus-will")
+(defglobal ?*route* = "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
 
-; Cargo el modulo tools
-(deffunction load-tools ()
+; Cargo el modulo main
+(deffunction load-utilities ()
     (chdir ?*route*)
-    (load* "modules\\tools\\innit.clp")
-    (load* "modules\\tools\\object-prelude.clp")
-    (load* "modules\\tools\\objects.clp")
+    (load* "compulsory-division\\main-utilities\\innit.clp")
+    (load* "compulsory-division\\main-utilities\\object-prelude.clp")
+    (load* "compulsory-division\\main-utilities\\objects.clp")
 
     ;game-settings
-    (load* "modules\\tools\\game-settings\\game-settings.clp")
-    (load* "modules\\tools\\game-settings\\global-constants.clp")
+    (load* "compulsory-division\\main-utilities\\game-settings\\game-settings.clp")
+    (load* "compulsory-division\\main-utilities\\game-settings\\global-constants.clp")
 
     ;events
-    (load* "modules\\tools\\events\\DEF-events.clp")
-    (load* "modules\\tools\\events\\events.clp")
-    (load* "modules\\tools\\events\\event-phase.clp")
+    (load* "compulsory-division\\main-utilities\\events.clp")
 
-    (load* "modules\\tools\\in.clp")
-    (load* "modules\\tools\\phase.clp")
+    (load* "compulsory-division\\main-utilities\\in.clp")
+    (load* "compulsory-division\\main-utilities\\clock.clp")
 
     ;user-interaction
-    (load* "modules\\tools\\user-interaction\\interaction.clp")
-    (load* "modules\\tools\\user-interaction\\actions.clp")
-    (load* "modules\\tools\\user-interaction\\caster.clp")
+    (load* "compulsory-division\\main-utilities\\user-interaction\\interaction.clp")
+    (load* "compulsory-division\\main-utilities\\user-interaction\\actions.clp")
 )
 
-; Carga el modulo main
-(deffunction load-main ()
+(deffunction load-standard()
     (chdir ?*route*)
-    (load* "modules\\main\\innit.clp")
-    (load* "modules\\main\\clock.clp")
-    (load* "modules\\main\\untapping.clp")
-    (load* "modules\\main\\organization.clp")
-    (load* "modules\\main\\long-events.clp")
-    (load* "modules\\main\\movement.clp")
-)
-
-; Carga el módulo move-fellowship
-(deffunction load-move-fellowship ()
-    (chdir ?*route*)
-    (load* "modules\\move-fellowship\\innit.clp")
-    (load* "modules\\move-fellowship\\event-phase.clp")
-    (load* "modules\\move-fellowship\\move-fellowship.clp")
+    (load* "compulsory-division\\standard-phases\\phase-0-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-0-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-1-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-2-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-2-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-2-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-3-1-0.clp")
+    (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
 )
 
 ; Cargo todas los archivos
 (deffunction load-all ()
     (chdir ?*route*)
-    (load-tools)
-    (load-main)
-    (load-move-fellowship)
+    (load-utilities)
+    (load-standard)
 )
 
 

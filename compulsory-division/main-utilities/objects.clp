@@ -2,31 +2,31 @@
 ; Solo deben estar aquí aquellos elementos que necesariamente deben ir al principio para ser referenciados
 ; cuanto antes mejor
 
-(defclass TOOLS::PLAYER (is-a USER)
+(defclass MAIN::PLAYER (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
 
-(defclass TOOLS::ELEMENT-HOLDER (is-a USER)
+(defclass MAIN::ELEMENT-HOLDER (is-a USER)
 	(role abstract) (pattern-match non-reactive)
 	(multislot cards (type INSTANCE-NAME) (allowed-classes CARD))
 )
 
-(defclass TOOLS::OWNABLE (is-a USER)
+(defclass MAIN::OWNABLE (is-a USER)
 	(role abstract) (pattern-match non-reactive)
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE) (access initialize-only))
 )
 
-(defclass TOOLS::DECK (is-a ELEMENT-HOLDER OWNABLE)
+(defclass MAIN::DECK (is-a ELEMENT-HOLDER OWNABLE)
 	(role concrete) (pattern-match reactive)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
 
-(defclass TOOLS::HAND (is-a ELEMENT-HOLDER OWNABLE)
+(defclass MAIN::HAND (is-a ELEMENT-HOLDER OWNABLE)
 	(role concrete) (pattern-match reactive)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
 
-(defclass TOOLS::FELLOWSHIP (is-a OWNABLE)
+(defclass MAIN::FELLOWSHIP (is-a OWNABLE)
 	(role concrete) (pattern-match reactive)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
@@ -35,24 +35,24 @@
 
 
 ; *** VARIABLES GLOBALES ***
-(defglobal TOOLS
+(defglobal MAIN
 	?*havens* = (create$ [l1] [l2] [l3] [l4]) 
 )
 
 ; *** DEFINICIÓN DE CLASES ***
-(defclass TOOLS::TAPPABLE (is-a ELEMENT-HOLDER)
+(defclass MAIN::TAPPABLE (is-a ELEMENT-HOLDER)
 	(role abstract) (pattern-match non-reactive)
 	(slot tap (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED))
 	(slot card-name (type STRING) (default ?NONE) (access initialize-only))
 )
 
-(defclass TOOLS::CARD (is-a TAPPABLE OWNABLE)
+(defclass MAIN::CARD (is-a TAPPABLE OWNABLE)
 	(role abstract) (pattern-match non-reactive)
 	(slot unique (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE) (access initialize-only))
 	(slot marshalling-points (type INTEGER) (default 0) (range 0 ?VARIABLE) (access initialize-only))
 )
 
-(defclass TOOLS::LOCATION (is-a TAPPABLE)
+(defclass MAIN::LOCATION (is-a TAPPABLE)
 	(role concrete) (pattern-match reactive)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 	; *** CARACTERÍSTICAS PROPIAS ***
@@ -72,7 +72,7 @@
 	(member$ ?self ?*havens*)
 )
 
-(defglobal TOOLS
+(defglobal MAIN
 	?*locations* = 
 		(create$ 
 			(make-instance l5 of LOCATION
@@ -86,7 +86,7 @@
 		)
 )
 
-(defclass TOOLS::COMBAT-ABLE (is-a CARD)
+(defclass MAIN::COMBAT-ABLE (is-a CARD)
 	(role abstract) (pattern-match non-reactive)
 	; *** CARACTERÍSTICAS HEREDADAS MODIFICADAS ***
 	(slot tap (allowed-symbols UNTAPPED TAPPED WOUNDED))
@@ -99,7 +99,7 @@
 		(access initialize-only))
 )
 
-(defclass TOOLS::CHARACTER (is-a COMBAT-ABLE)
+(defclass MAIN::CHARACTER (is-a COMBAT-ABLE)
 	(role concrete) (pattern-match reactive)
 	; *** CARACTERÍSTICAS PROPIAS ***
 	(slot influence (type INTEGER) (default 0) (range 0 ?VARIABLE) (access initialize-only))
@@ -108,23 +108,23 @@
 	(slot corruption-modifier (type INTEGER) (default 0))
 )
 
-(defclass TOOLS::ALLY (is-a COMBAT-ABLE)
+(defclass MAIN::ALLY (is-a COMBAT-ABLE)
 	(role concrete) (pattern-match reactive)
 	; *** CARACTERÍSTICAS PROPIAS ***
 	
 )
 
-(defclass TOOLS::R-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass TOOLS::A-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass TOOLS::R-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass TOOLS::A-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass TOOLS::R-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass TOOLS::A-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::R-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::A-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::R-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::A-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::R-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::A-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
 
 ; *** DEFINICIÓN DE PLANTILLAS ***
 
 ; TODO: USARLO?
-(deftemplate TOOLS::path
+(deftemplate MAIN::path
 	; Representan la conexión entre dos localizaciones
 	(slot haven (type INSTANCE-NAME) (default ?NONE) (allowed-instance-names [l1] [l2] [l3] [l4]))
 	(slot location (type INSTANCE-NAME) (default ?NONE))
@@ -133,23 +133,21 @@
 )
 
 ;TODO: UNUSED YET
-(deftemplate TOOLS::attack
+(deftemplate MAIN::attack
 	(slot strikes (type INTEGER) (default ?NONE))
 	(slot prowess (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
 	(slot enemy (type SYMBOL) (allowed-symbols ORCS DRAGON MEN)) ; COMPLETAAAAR
 )
 
 ; *** DEFINICIÓN DE FUNCIONES ***
-(deffunction TOOLS::is-haven (?location)
+(deffunction MAIN::is-haven (?location)
 	(member$ ?location ?*havens*)
 )
 
-(deffunction TOOLS::enemy (?player)
+(deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then
 		[player2]
 		else
 		[player1]
 	)
 )
-
-;(defrule secarga => (println secarga))
