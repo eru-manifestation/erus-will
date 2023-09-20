@@ -1,148 +1,74 @@
-; *** DEFINICIÓN ELEMENTOS PRIMARIOS (I) ***
-; Solo deben estar aquí aquellos elementos que necesariamente deben ir al principio para ser referenciados
-; cuanto antes mejor
-
 (defclass MAIN::PLAYER (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
 
-(defclass MAIN::ELEMENT-HOLDER (is-a USER)
-	(role abstract) (pattern-match non-reactive)
-	(multislot cards (type INSTANCE-NAME) (allowed-classes CARD))
-)
-
-(defclass MAIN::OWNABLE (is-a USER)
-	(role abstract) (pattern-match non-reactive)
-	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE) (access initialize-only))
-)
-
-(defclass MAIN::DECK (is-a ELEMENT-HOLDER OWNABLE)
-	(role concrete) (pattern-match reactive)
+(defclass MAIN::DECK (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
-(defclass MAIN::HAND (is-a ELEMENT-HOLDER OWNABLE)
-	(role concrete) (pattern-match reactive)
+(defclass MAIN::HAND (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
-(defclass MAIN::FELLOWSHIP (is-a OWNABLE)
-	(role concrete) (pattern-match reactive)
+(defclass MAIN::FELLOWSHIP (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
-)
-
-;(defclass TABLE (is-a ELEMENT-HOLDER)) Por simplicidad, omitiré el elemento tablero y las localizaciones serán las raíces
-
-
-; *** VARIABLES GLOBALES ***
-(defglobal MAIN
-	?*havens* = (create$ [l1] [l2] [l3] [l4]) 
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
 ; *** DEFINICIÓN DE CLASES ***
-(defclass MAIN::TAPPABLE (is-a ELEMENT-HOLDER)
-	(role abstract) (pattern-match non-reactive)
+(defclass MAIN::CARD (is-a USER)
 	(slot tap (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED))
-	(slot card-name (type STRING) (default ?NONE) (access initialize-only))
 )
 
-(defclass MAIN::CARD (is-a TAPPABLE OWNABLE)
-	(role abstract) (pattern-match non-reactive)
-	(slot unique (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE) (access initialize-only))
-	(slot marshalling-points (type INTEGER) (default 0) (range 0 ?VARIABLE) (access initialize-only))
+(defclass MAIN::RESOURCE (is-a CARD)
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
+)
+(defclass MAIN::ADVERSITY (is-a CARD)
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
-(defclass MAIN::LOCATION (is-a TAPPABLE)
-	(role concrete) (pattern-match reactive)
-    (slot instance-# (type INTEGER) (default 2) (storage shared))
-	; *** CARACTERÍSTICAS PROPIAS ***
-	; COMPLETAR
-	(slot location-type (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-values HAVEN WILDS FREE-LANDS))
-	(slot closest-haven (type INSTANCE-NAME) (access initialize-only) (allowed-instance-names [l1] [l2] [l3] [l4]))
-	(slot ally-draws (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
-	(slot enemy-draws (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
-	(slot region (type SYMBOL) (default ?NONE) (access initialize-only))
-	(multislot playable (type SYMBOL) (default (create$)) (access initialize-only))
-	(slot automatic-attack-strikes (default FALSE) (access initialize-only))
-	(slot automatic-attack-prowess (default FALSE) (access initialize-only))
-	(slot automatic-attack-enemy (default FALSE) (access initialize-only))
+(defclass MAIN::LOCATION (is-a CARD)
+	(slot closest-haven (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
+	(slot is-haven (type SYMBOL) (default FALSE) (access initialize-only) (allowed-symbols TRUE FALSE))
 )
 
-(defmessage-handler LOCATION is-haven ()
-	(member$ ?self ?*havens*)
+
+(defclass MAIN::CHARACTER (is-a CARD)
+	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
+	(slot influence (type INTEGER) (default 0) (access initialize-only))
+	(slot mind (type INTEGER) (default 0) (access initialize-only))
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
+	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
+	(slot tap (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED WOUNDED))
 )
 
-(defglobal MAIN
-	?*locations* = 
-		(create$ 
-			(make-instance l5 of LOCATION
-				(card-name "Bolsón Cerrado")
-				(location-type FREE-LANDS)
-				(closest-haven l1)
-				(ally-draws 2)
-				(enemy-draws 2)
-				(region LA-COMARCA)
-			)
-		)
+(defclass MAIN::ALLY (is-a RESOURCE)
+	(slot tap (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED WOUNDED))
 )
 
-(defclass MAIN::COMBAT-ABLE (is-a CARD)
-	(role abstract) (pattern-match non-reactive)
-	; *** CARACTERÍSTICAS HEREDADAS MODIFICADAS ***
-	(slot tap (allowed-symbols UNTAPPED TAPPED WOUNDED))
-	; *** CARACTERÍSTICAS PROPIAS ***
-	(slot prowess (type INTEGER) (default ?NONE) (range 0 ?VARIABLE) (access initialize-only))
-	(slot body (type INTEGER) (default ?NONE) (range 0 ?VARIABLE) (access initialize-only))
-	(slot mind (type INTEGER) (default ?NONE) (range 1 ?VARIABLE) (access initialize-only))
-	(slot birthplace (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
-	(multislot skills (type SYMBOL) (default ?NONE) (allowed-symbols WARRIOR SCOUT RANGER SAGE DIPLOMAT) 
-		(access initialize-only))
+(defclass MAIN::R-PERMANENT-EVENT (is-a RESOURCE))
+(defclass MAIN::A-PERMANENT-EVENT (is-a ADVERSITY))
+
+(defclass MAIN::R-LONG-EVENT (is-a RESOURCE)
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
-(defclass MAIN::CHARACTER (is-a COMBAT-ABLE)
-	(role concrete) (pattern-match reactive)
-	; *** CARACTERÍSTICAS PROPIAS ***
-	(slot influence (type INTEGER) (default 0) (range 0 ?VARIABLE) (access initialize-only))
-	(slot race (type SYMBOL) (default ?NONE) (allowed-symbols ELF HOBBIT DWARF DUNEDAN MAN WIZARD) 
-		(access initialize-only))
-	(slot corruption-modifier (type INTEGER) (default 0))
+(defclass MAIN::A-LONG-EVENT (is-a ADVERSITY)
+	(slot player (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [player1] [player2]))
 )
 
-(defclass MAIN::ALLY (is-a COMBAT-ABLE)
-	(role concrete) (pattern-match reactive)
-	; *** CARACTERÍSTICAS PROPIAS ***
-	
-)
+(defclass MAIN::R-SHORT-EVENT (is-a RESOURCE))
+(defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
-(defclass MAIN::R-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass MAIN::A-PERMANENT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass MAIN::R-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass MAIN::A-LONG-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass MAIN::R-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
-(defclass MAIN::A-SHORT-EVENT (is-a CARD)(role concrete) (pattern-match reactive))
+(defclass MAIN::ITEM(is-a RESOURCE))
+(defclass MAIN::MINOR-ITEM(is-a ITEM))
+(defclass MAIN::GREATER-ITEM(is-a ITEM))
+(defclass MAIN::MAJOR-ITEM(is-a ITEM))
 
-; *** DEFINICIÓN DE PLANTILLAS ***
-
-; TODO: USARLO?
-(deftemplate MAIN::path
-	; Representan la conexión entre dos localizaciones
-	(slot haven (type INSTANCE-NAME) (default ?NONE) (allowed-instance-names [l1] [l2] [l3] [l4]))
-	(slot location (type INSTANCE-NAME) (default ?NONE))
-	; COMPLETAR
-	(multislot regions-between (type SYMBOL) (allowed-values WILD-LANDS))
-)
-
-;TODO: UNUSED YET
-(deftemplate MAIN::attack
-	(slot strikes (type INTEGER) (default ?NONE))
-	(slot prowess (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
-	(slot enemy (type SYMBOL) (allowed-symbols ORCS DRAGON MEN)) ; COMPLETAAAAR
-)
-
-; *** DEFINICIÓN DE FUNCIONES ***
-(deffunction MAIN::is-haven (?location)
-	(member$ ?location ?*havens*)
-)
+(defclass MAIN::FACTION(is-a RESOURCE))
+(defclass MAIN::CREATURE(is-a ADVERSITY))
 
 (deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then

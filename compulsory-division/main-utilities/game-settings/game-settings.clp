@@ -7,6 +7,6 @@
 	?*hand1* = (make-instance (gen-name HAND) of HAND (player ?*player1*))
 	?*hand2* = (make-instance (gen-name HAND) of HAND (player ?*player2*))
 
-    ; Activa o desactiva la función de casting
+    ; Activa o desactiva la función de casting (TODO)
     ?*cast-activated* = TRUE
 )

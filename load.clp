@@ -34,11 +34,17 @@
     (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
 )
 
+(deffunction load-handG()
+    (chdir ?*route*)
+    (load* "compulsory-division\\main-utilities\\game-settings\\handG.clp")
+)
+
 ; Cargo todas los archivos
 (deffunction load-all ()
     (chdir ?*route*)
     (load-utilities)
     (load-standard)
+    (load-handG)
 )
 
 

@@ -7,7 +7,7 @@
 (announce (sym-cat DEV - (get-focus)) Eleccion de la ejecucion del movimiento))
 
 ; EVENT HANDLER: FELLOWSHIP-gen-move (es un salto)
-(defrule move-fellowship (declare (salience ?*jump-salience*))
+(defrule move-fellowship (declare (salience ?*event-handler-salience*))
 	(object (is-a EVENT) (type IN) (event-definitor FELLOWSHIP-EP-move)
 		(name ?e))
 	=>

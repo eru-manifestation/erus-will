@@ -7,7 +7,7 @@
 (announce (sym-cat DEV - (get-focus)) Genera evento de movimiento))
 
 ; EVENT-PHASE: Para cada compañía, crear el evento generador de fase
-(defrule gen-movement (declare (salience ?*phase-salience*))
+(defrule gen-movement
 	; Crea el evento generador de fase para cada compañía
 	; del personaje dueño del turno que no esté vacía
 	(object (is-a FELLOWSHIP) (name ?fell) (player ?p))

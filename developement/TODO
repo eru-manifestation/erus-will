@@ -27,7 +27,7 @@
     se pregunte).
     - Las peticiones de información o intento de acceso de lectura a las variables cualitativas deben SIEMPRE
     llevarse a cabo mediante el manejador de mensajes get- asociado. Este será el que coleccione e interprete
-    los ítem de información y el valor crudo el objeto para elaborar una respuesta final.
+    los ítem de información y el valor crudo del objeto para elaborar una respuesta final.
     - Como toda modificación de los valores crudos se representa como un ítem de información asociado a la
     variable, TODOS los campos de los objetos deben ser CONSTANTES.
     Implementación:
@@ -55,7 +55,7 @@
     - R-LONG-EVENT  player
     - LOCATION      player-draw
     - CHARACTER     race
-    - ~LOCATION     tap                 (TAPPED)
+    - CARD          tap                 (TAPPED)
     - CHARACTER     tap                 (TAPPED WOUNDED)
     - ALLY          tap                 (TAPPED WOUNDED)
 

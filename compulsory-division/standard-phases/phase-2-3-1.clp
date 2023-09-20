@@ -12,7 +12,7 @@
 	(bind ?p [player1])
 
 	; Dado una adversidad suceso duradero del contrincante
-	(object (is-a A-LONG-EVENT) (name ?le) (player ?p2&:(eq ?p (enemy ?p))))
+	(object (is-a A-LONG-EVENT) (name ?le) (player ?p2&:(eq ?p2 (enemy ?p))))
 	=>
 	;(gen-event A-LONG-EVENT-discard target ?le)
 )
