@@ -13,3 +13,12 @@
 	=>
 	(assert (in (over ?a) (under ?c) (transitive TRUE)))
 )
+
+(deffunction MAIN::in-move (?element ?to)
+	; Elimina el primer elemento in no transitivo que defina lo que tenga arriba ?c
+	; (solo debería haber uno)
+	(do-for-fact ((?rm in)) (and (eq ?rm:transitive TRUE) (eq ?element ?rm:under))
+		(retract ?rm)
+	)
+	(assert (in (over ?to) (under ?element)))
+)

@@ -6,7 +6,7 @@ P-1-1-1
 P-2-1-1
 P-2-2-1
 P-2-3-1
-P-3-1-0
+;P-3-1-0
 P-3-1-1
 FALSE
 
@@ -15,19 +15,19 @@ FALSE
 	?*jumps* = 0
 )
 
-(deffunction jump (?jump-stage)
+(deffunction MAIN::jump (?jump-stage)
     (focus ?jump-stage)
 	(bind ?*jumps* (+ 1 ?*jumps*))
 )
 
 ; REGLA DE INICIO DE JUEGO
-(defrule start => 
+(defrule MAIN::start => 
 	(jump P-0-1-1)
 )
 
 
 ; RECUPERA EL FOCO ACTUAL Y LO COMPARA EN LA LISTA PARA DEVOLVER EL FOCO SIGUIENTE
-(deffunction stage-guide (?stage)
+(deffunction MAIN::stage-guide (?stage)
 	(bind ?i (member$ ?stage $?*phase-list*))
 	(nth$ (+ 1 ?i) $?*phase-list*)
 )

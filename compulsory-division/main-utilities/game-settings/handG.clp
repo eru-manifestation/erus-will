@@ -180,7 +180,7 @@
 
 (deffunction MAIN::init-card(?card-class ?times ?player-n)
     (make-instance (gen-name ?card-class) of ?card-class 
-        (player (sym-cat [player ?player-n ])))
+        (player (symbol-to-instance-name (sym-cat player ?player-n))))
     (if (< 1 ?times)
     then
         (init-card ?card-class (- ?times 1) ?player-n)
@@ -188,6 +188,8 @@
 )
 
 (deffunction MAIN::init-handG()
+    (debug Creating inital card of Gandalf)
+
     (init-card ARAGORN-II 1 1)
     (init-card EOMER 1 1)
     (init-card BOROMIR-II 1 1)
@@ -233,6 +235,37 @@
     (init-card BRIGANDS 3 1)
     (init-card CAVE-DRAKE 2 1)
     
+    (debug Initial cards of Gandalf created)
+)
+
+
+(defrule MAIN::post-draw (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (object (is-a ARAGORN-II) (name ?aragorn) (player ?p&:(eq ?p ?*player*)))
+    (object (is-a EOMER) (name ?eomer) (player ?p))
+    (object (is-a BOROMIR-II) (name ?boromir) (player ?p))
+    (object (is-a MERRY) (name ?merry) (player ?p))
+    (object (is-a ELVEN-CLOAK) (name ?cloak) (player ?p))
+    (object (is-a SHIELD-OF-IRON--BOUND-ASH) (name ?shield) (player ?p))
+
+    (object (is-a RIVENDELL) (name ?rivendell))
+    (object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+    (in (over ?rivendell) (under ?fell))
+    =>
+    ;TODO: COLOCAR EL TABLERO INICIAL
+    (debug Creating initial hand)
+
+    (make-instance (gen-name E-char-play) of E-char-play (card ?aragorn) (under ?fell))
+    (make-instance (gen-name E-char-play) of E-char-play (card ?eomer) (under ?fell))
+    (make-instance (gen-name E-char-play) of E-char-play (card ?boromir) (under ?fell))
+    (make-instance (gen-name E-char-play) of E-char-play (card ?merry) (under ?fell))
+
+    ;(make-instance (gen-name E-char-play) of E-char-play (card ?shield) (under ?boromir))
+    ;(make-instance (gen-name E-char-play) of E-char-play (card ?cloak) (under ?merry))
+
+    (debug Putting initial items)
+
+    (assert (in (over ?boromir) (under ?shield)))
+    (assert (in (over ?merry) (under ?cloak)))
 )
 
 

@@ -9,9 +9,9 @@
 ; EVENTO: DESCARTAR RECURSOS DE SUCESO DURADERO
 (defrule long-event-discard
 	; Dado un rec suceso duradero tuyo
-	;TODO: se debe comprobar que este suceso duradero esté en juego
-	(object (is-a R-LONG-EVENT) (name ?le) (player ?p))
+	(object (is-a R-LONG-EVENT) (name ?le) 
+		(state TAPPED | UNTAPPED) (player ?p))
 	=>
-	;(gen-event R-LONG-EVENT-discard 
-	;	target ?le)
+	(make-instance (gen-name E-r-long-event-discard) of E-r-long-event-discard 
+		(r-long-event ?le))
 )

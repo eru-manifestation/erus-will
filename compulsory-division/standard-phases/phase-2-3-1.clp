@@ -8,11 +8,10 @@
 
 ; EVENTO: DESCARTAR ADVERSIDADES DE SUCESO DURADERO
 (defrule long-event-adversity-discard
-	;TODO: ENCONTRAR EL JUGADOR ACTUAL. APAÑO:
-	(bind ?p [player1])
-
 	; Dado una adversidad suceso duradero del contrincante
-	(object (is-a A-LONG-EVENT) (name ?le) (player ?p2&:(eq ?p2 (enemy ?p))))
+	(object (is-a A-LONG-EVENT) (name ?le) (player [player2])
+		(state TAPPED | UNTAPPED))
 	=>
-	;(gen-event A-LONG-EVENT-discard target ?le)
+	(make-instance (gen-name E-a-long-event-discard) of E-a-long-event-discard
+		(a-long-event ?le))
 )

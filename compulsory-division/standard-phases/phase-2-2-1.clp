@@ -10,11 +10,10 @@
 (defrule action-long-event-play (declare (salience ?*action-population-salience*))
 	(logical
 		; Dado un suceso duradero en la mano del jugador
-		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p))
-		(object (is-a HAND) (name ?hand) (player ?p))
-		(in (over ?hand) (under ?rle))
+		(object (is-a R-LONG-EVENT) (name ?rle) (player [player1])
+			(state HAND))
 	)
 	=>
-	;(gen-action R-LONG-EVENT-play ?p 
-	;	target ?rle)
+	(gen-action [player1] r-long-event-play
+		"(" r-long-event ?rle ")")
 )

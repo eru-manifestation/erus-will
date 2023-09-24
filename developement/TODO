@@ -131,3 +131,19 @@ entre saliencias de distintos hilos de ejecución del mismo módulo, mientras se
 preferencia de saliencias definidas para clock, event-handler, phase-rules, action-population...)
 
 * Crear plantilla para modelo de mini-reloj personalizado para cada módulo
+
+
+
+
+
+
+
+Gestionar elemento de jugador actual y enemigo actual, hasta ahora se está sustituyendo por [player1] y [player2] respectivamente
+
+Reglas para que cuando un objeto salga del juego (esté en mano, baraja, MP o descarte) desaparezca su localizador IN directo correspondiente
+
+Eliminar el archivo phase-2-3-0.clp, ya que su evento ha sido sustituido por otro
+
+En la regla post-draw, revisar que todas las cartas sean del jugador [player1]
+
+Hacer que se resuelvan los eventos, primero los primeros que entren, para que tenga sentido la escritura secuencial de los eventos, cambiando la estrategia de resolución de conflictos

@@ -7,10 +7,14 @@
 (announce (sym-cat DEV - (get-focus)) Eleccion de la ejecucion del movimiento))
 
 ; EVENT HANDLER: FELLOWSHIP-gen-move (es un salto)
-(defrule move-fellowship (declare (salience ?*event-handler-salience*))
-	(object (is-a EVENT) (type IN) (event-definitor FELLOWSHIP-EP-move)
-		(name ?e))
+(defrule E-fell-decl-move (declare (salience ?*event-handler-salience*))
+	?e <- (object (is-a E-fell-decl-move) (type IN)
+		(fell ?fell) (from ?from) (to ?to))
 	=>
+	; TODO: encontrar forma de llevar los datos (dejar vivo el evento??)
 	;(jump 3 1 1 move-fellowship (send ?e get-data fell) (send ?e get-data from) 0)
-	;(send ?e complete)
+	(send ?e complete)
+	(jump EP-1)
+
+	(debug Declaring movement of ?fell from ?from to ?to)
 )

@@ -11,7 +11,8 @@
 	; Ex: (gen-action [player1] CHARACTER-play ?char ?fell)
 	(assert (action 
 		(player ?player) 
-		(action-fact (str-cat "(gen-event " ?event-def " "(implode$ ?data) ")" ))
+		(action-fact (str-cat 
+			"(make-instance (gen-name E-" ?event-def ") of E-" ?event-def " "(implode$ ?data) ")" ))
 	))
 )
 

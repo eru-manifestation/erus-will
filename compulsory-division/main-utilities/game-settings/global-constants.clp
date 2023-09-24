@@ -19,16 +19,16 @@
     ;?*special-effects-salience* = 0
 
     ; Reglas que lanzan actions
-    ?*action-population-salience* = -2
+    ?*action-population-salience* = 8
 
     ; Reglas que requieren la intervención del usuario (restringido para user-interaction)
-    ?*action-selection-salience* = -4
+    ?*action-selection-salience* = 6
 
     ; Intercepción de eventos tanto en la salida como la entrada
-    ?*event-interception-salience* = -6
+    ?*event-interception-salience* = 4
 
     ; Manejo y recolector de basura de eventos que no desencadenen saltos inmediatos
-    ?*event-handler-salience* = -8
+    ?*event-handler-salience* = 2
 
     ; Reglas de funcionamiento básico propias de las fases (EN DESUSO)
     ;?*phase-salience* = -10
@@ -37,6 +37,9 @@
     ; que desencadenen saltos en general) EN DESUSO, YA QUE SON LLAMADOS COMO FUNCIONES
     ; EN EVENT HANDLERS
     ;?*jump-salience* = -12
+
+    ; Exclusivo para el recolector de basura de eventos finalizados
+    ?*garbage-collector-salience* = -13
 
     ; Cambio de fase, con la menor saliencia para que toda acción ocurra antes de que
     ; se altere la fase en la que podrían ocurrir. Por tanto, cada regla se debe disparar

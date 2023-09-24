@@ -8,9 +8,9 @@
 
 ; EVENTO: Curar personajes y aliados heridos en refugios
 (defrule heal
-	(object (is-a CHARACTER | ALLY) (name ?c) (tap WOUNDED))
+	(object (is-a CHARACTER | ALLY) (name ?c) (state WOUNDED))
 	(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
 	(in (over ?loc) (under ?c))
 	=>
-	;(gen-event CHARACTER-cure target ?c)
+	(make-instance (gen-name E-cure) of E-cure (card ?c))
 )
