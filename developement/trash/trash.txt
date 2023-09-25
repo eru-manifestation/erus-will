@@ -1,0 +1,422 @@
+
+C:\Users\Pablo\Documents\GitHub\erus-will>"C:\Program Files\SSS\CLIPS 6.4.1\CLIPSDOS.exe" -f2 "C:\Users\Pablo\Documents\GitHub\erus-will\load.clp"
+         CLIPS (6.4.1 4/8/23)
+CLIPS> (load-all)
+TRUE
+CLIPS> (init-locations)
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Starting locations
+----------------------------------------------
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Locations started
+----------------------------------------------
+CLIPS> (init-handG)
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating inital card of Gandalf
+----------------------------------------------
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Initial cards of Gandalf created
+----------------------------------------------
+CLIPS> (watch rules)
+CLIPS> (run 8)
+FIRE    1 empty-fell-creation: [lorien],[player2],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player2] in [lorien]
+----------------------------------------------
+FIRE    2 empty-fell-creation: [lorien],[player1],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player1] in [lorien]
+----------------------------------------------
+FIRE    3 empty-fell-creation: [grey-havens],[player2],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player2] in [grey-havens]
+----------------------------------------------
+FIRE    4 empty-fell-creation: [grey-havens],[player1],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player1] in [grey-havens]
+----------------------------------------------
+FIRE    5 empty-fell-creation: [edhellond],[player2],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player2] in [edhellond]
+----------------------------------------------
+FIRE    6 empty-fell-creation: [edhellond],[player1],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player1] in [edhellond]
+----------------------------------------------
+FIRE    7 empty-fell-creation: [rivendell],[player2],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player2] in [rivendell]
+----------------------------------------------
+FIRE    8 empty-fell-creation: [rivendell],[player1],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player1] in [rivendell]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 start: *
+CLIPS> (run 1)
+FIRE    1 post-draw: f-9,[aragorn-ii1],[eomer1],[boromir-ii1],[merry1],[elven-cloak1],[shield-of-iron--bound-ash1],[rivendell],[fellowship8],f-8
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Putting initial hand
+----------------------------------------------
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Putting initial items
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 E-char-play: [e-char-play4]
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Playing character [merry1] under [fellowship8]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-12,f-11
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-13
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-12
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-15,f-11
+CLIPS> (run 1)
+FIRE    1 empty-fell-untagging: [fellowship8],*
+CLIPS> (run 1)
+FIRE    1 empty-fell-creation: [rivendell],[player1],*
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Creating empty fellowship for player [player1] in [rivendell]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 E-char-play: [e-char-play3]
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Playing character [boromir-ii1] under [fellowship8]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-17,f-10
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-18
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-17
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-20,f-10
+CLIPS> (run 1)
+FIRE    1 E-char-play: [e-char-play2]
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Playing character [eomer1] under [fellowship8]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-21
+CLIPS> (run 1)
+FIRE    1 E-char-play: [e-char-play1]
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-0-1-1 MAIN)
+-->     DEBUG:  Playing character [aragorn-ii1] under [fellowship8]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-23
+CLIPS> (run 1)
+FIRE    1 cast: *
+-->     DEV-P-0-1-1: Genera evento enderezar carta no localizaciones
+CLIPS> (run 1)
+FIRE    1 clock: *
+CLIPS> (run 1)
+FIRE    1 cast: *
+-->     DEV-P-0-2-1: Cura personajes en refugios
+CLIPS> (run 1)
+FIRE    1 clock: *
+CLIPS> (run 1)
+FIRE    1 cast: *
+-->     DEV-P-1-1-1: Ejecucion de la fase de organizacion
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [elven-cloak1],[merry1],f-11,[rivendell],f-15,[aragorn-ii1],f-24
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [shield-of-iron--bound-ash1],[boromir-ii1],f-10,[rivendell],f-20,[aragorn-ii1],f-24
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [elven-cloak1],[merry1],f-11,[rivendell],f-15,[eomer1],f-22
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [shield-of-iron--bound-ash1],[boromir-ii1],f-10,[rivendell],f-20,[eomer1],f-22
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [shield-of-iron--bound-ash1],[boromir-ii1],f-10,[rivendell],f-20,[merry1],f-15
+CLIPS> (run 1)
+FIRE    1 action-transfer-item: [elven-cloak1],[merry1],f-11,[rivendell],f-15,[boromir-ii1],f-20
+CLIPS> (facts)
+f-1     (in (over [lorien]) (under [fellowship1]) (transitive FALSE))
+f-2     (in (over [lorien]) (under [fellowship2]) (transitive FALSE))
+f-3     (in (over [grey-havens]) (under [fellowship3]) (transitive FALSE))
+f-4     (in (over [grey-havens]) (under [fellowship4]) (transitive FALSE))
+f-5     (in (over [edhellond]) (under [fellowship5]) (transitive FALSE))
+f-6     (in (over [edhellond]) (under [fellowship6]) (transitive FALSE))
+f-7     (in (over [rivendell]) (under [fellowship7]) (transitive FALSE))
+f-8     (in (over [rivendell]) (under [fellowship8]) (transitive FALSE))
+f-10    (in (over [boromir-ii1]) (under [shield-of-iron--bound-ash1]) (transitive FALSE))
+f-11    (in (over [merry1]) (under [elven-cloak1]) (transitive FALSE))
+f-12    (in (over [fellowship8]) (under [merry1]) (transitive FALSE))
+f-13    (in (over [fellowship8]) (under [elven-cloak1]) (transitive TRUE))
+f-14    (in (over [rivendell]) (under [elven-cloak1]) (transitive TRUE))
+f-15    (in (over [rivendell]) (under [merry1]) (transitive TRUE))
+f-16    (in (over [rivendell]) (under [fellowship9]) (transitive FALSE))
+f-17    (in (over [fellowship8]) (under [boromir-ii1]) (transitive FALSE))
+f-18    (in (over [fellowship8]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-19    (in (over [rivendell]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-20    (in (over [rivendell]) (under [boromir-ii1]) (transitive TRUE))
+f-21    (in (over [fellowship8]) (under [eomer1]) (transitive FALSE))
+f-22    (in (over [rivendell]) (under [eomer1]) (transitive TRUE))
+f-23    (in (over [fellowship8]) (under [aragorn-ii1]) (transitive FALSE))
+f-24    (in (over [rivendell]) (under [aragorn-ii1]) (transitive TRUE))
+f-25    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-26    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-27    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to eomer1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [eomer1] "])"))
+f-28    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to eomer1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [eomer1] "])"))
+f-29    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to merry1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [merry1] "])"))
+f-30    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to boromir-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [boromir-ii1] "])"))
+For a total of 29 facts.
+CLIPS> (run 1)
+FIRE    1 action-item-store: [shield-of-iron--bound-ash1],[rivendell],f-19,[boromir-ii1],f-10
+CLIPS> (run 1)
+FIRE    1 action-loc-organize: [rivendell],*
+CLIPS> (run 1)
+FIRE    1 action-item-store: [elven-cloak1],[rivendell],f-14,[merry1],f-11
+CLIPS> (run 1)
+FIRE    1 choose-action: [player1],*
+-->     [player1]: Possible actions:
+-->     [player1]: 1 .- Transfer item elven-cloak1 from merry1 to aragorn-ii1
+-->     [player1]: 2 .- Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to aragorn-ii1
+-->     [player1]: 3 .- Transfer item elven-cloak1 from merry1 to eomer1
+-->     [player1]: 4 .- Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to eomer1
+-->     [player1]: 5 .- Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to merry1
+-->     [player1]: 6 .- Transfer item elven-cloak1 from merry1 to boromir-ii1
+-->     [player1]: 7 .- Store item shield-of-iron--bound-ash1 from boromir-ii1 in rivendell
+-->     [player1]: 8 .- Organize fellowship in rivendell
+-->     [player1]: 9 .- Store item elven-cloak1 from merry1 in rivendell
+<--     [player1]: 1
+CLIPS> (facts)
+f-1     (in (over [lorien]) (under [fellowship1]) (transitive FALSE))
+f-2     (in (over [lorien]) (under [fellowship2]) (transitive FALSE))
+f-3     (in (over [grey-havens]) (under [fellowship3]) (transitive FALSE))
+f-4     (in (over [grey-havens]) (under [fellowship4]) (transitive FALSE))
+f-5     (in (over [edhellond]) (under [fellowship5]) (transitive FALSE))
+f-6     (in (over [edhellond]) (under [fellowship6]) (transitive FALSE))
+f-7     (in (over [rivendell]) (under [fellowship7]) (transitive FALSE))
+f-8     (in (over [rivendell]) (under [fellowship8]) (transitive FALSE))
+f-10    (in (over [boromir-ii1]) (under [shield-of-iron--bound-ash1]) (transitive FALSE))
+f-11    (in (over [merry1]) (under [elven-cloak1]) (transitive FALSE))
+f-12    (in (over [fellowship8]) (under [merry1]) (transitive FALSE))
+f-13    (in (over [fellowship8]) (under [elven-cloak1]) (transitive TRUE))
+f-14    (in (over [rivendell]) (under [elven-cloak1]) (transitive TRUE))
+f-15    (in (over [rivendell]) (under [merry1]) (transitive TRUE))
+f-16    (in (over [rivendell]) (under [fellowship9]) (transitive FALSE))
+f-17    (in (over [fellowship8]) (under [boromir-ii1]) (transitive FALSE))
+f-18    (in (over [fellowship8]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-19    (in (over [rivendell]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-20    (in (over [rivendell]) (under [boromir-ii1]) (transitive TRUE))
+f-21    (in (over [fellowship8]) (under [eomer1]) (transitive FALSE))
+f-22    (in (over [rivendell]) (under [eomer1]) (transitive TRUE))
+f-23    (in (over [fellowship8]) (under [aragorn-ii1]) (transitive FALSE))
+f-24    (in (over [rivendell]) (under [aragorn-ii1]) (transitive TRUE))
+f-25    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-26    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-27    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to eomer1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [eomer1] "])"))
+f-28    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to eomer1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [eomer1] "])"))
+f-29    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to merry1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [merry1] "])"))
+f-30    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to boromir-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [boromir-ii1] "])"))
+f-31    (action (player [player1]) (description Store item shield-of-iron--bound-ash1 from boromir-ii1 in rivendell) (event-def item-store) (data "(" item [shield-of-iron--bound-ash1] ")" "(" bearer [boromir-ii1] ")" "(" haven [rivendell] ")"))
+f-32    (action (player [player1]) (description Organize fellowship in rivendell) (event-def loc-organize) (data "(" player [player1] ")" "(" loc [rivendell] ")"))
+f-33    (action (player [player1]) (description Store item elven-cloak1 from merry1 in rivendell) (event-def item-store) (data "(" item [elven-cloak1] ")" "(" bearer [merry1] ")" "(" haven [rivendell] ")"))
+For a total of 32 facts.
+CLIPS> (instances)
+[player1] of PLAYER
+[player2] of PLAYER
+[rivendell] of RIVENDELL
+[edhellond] of EDHELLOND
+[grey-havens] of GREY-HAVENS
+[lorien] of LORIEN
+[aragorn-ii1] of ARAGORN-II
+[eomer1] of EOMER
+[boromir-ii1] of BOROMIR-II
+[shield-of-iron--bound-ash1] of SHIELD-OF-IRON--BOUND-ASH
+[merry1] of MERRY
+[elven-cloak1] of ELVEN-CLOAK
+[scroll-of-isildur1] of SCROLL-OF-ISILDUR
+[great-shield-of-rohan1] of GREAT-SHIELD-OF-ROHAN
+[glamdring1] of GLAMDRING
+[star--glass1] of STAR--GLASS
+[red-arrow1] of RED-ARROW
+[rangers-of-the-north1] of RANGERS-OF-THE-NORTH
+[riders-of-rohan1] of RIDERS-OF-ROHAN
+[tower-guard-of-minas-tirith1] of TOWER-GUARD-OF-MINAS-TIRITH
+[quickbeam1] of QUICKBEAM
+[dodge1] of DODGE
+[dodge2] of DODGE
+[dodge3] of DODGE
+[lucky-strike1] of LUCKY-STRIKE
+[lucky-strike2] of LUCKY-STRIKE
+[lucky-strike3] of LUCKY-STRIKE
+[new-friendship1] of NEW-FRIENDSHIP
+[new-friendship2] of NEW-FRIENDSHIP
+[concealement1] of CONCEALEMENT
+[concealement2] of CONCEALEMENT
+[concealement3] of CONCEALEMENT
+[halfling-strength1] of HALFLING-STRENGTH
+[halfling-strength2] of HALFLING-STRENGTH
+[escape1] of ESCAPE
+[escape2] of ESCAPE
+[ford1] of FORD
+[ford2] of FORD
+[a-friend-or-three1] of A-FRIEND-OR-THREE
+[a-friend-or-three2] of A-FRIEND-OR-THREE
+[lapse-of-will1] of LAPSE-OF-WILL
+[lapse-of-will2] of LAPSE-OF-WILL
+[gandalf1] of GANDALF
+[gandalf2] of GANDALF
+[beregond1] of BEREGOND
+[faramir1] of FARAMIR
+[kili1] of KILI
+[erkenbrand1] of ERKENBRAND
+[beretar1] of BERETAR
+[awaken-minions1] of AWAKEN-MINIONS
+[awaken-minions2] of AWAKEN-MINIONS
+[muster-disperses1] of MUSTER-DISPERSES
+[muster-disperses2] of MUSTER-DISPERSES
+[minions-stir1] of MINIONS-STIR
+[minions-stir2] of MINIONS-STIR
+[minions-stir3] of MINIONS-STIR
+[lure-of-nature1] of LURE-OF-NATURE
+[lure-of-nature2] of LURE-OF-NATURE
+[weariness-of-the-heart1] of WEARINESS-OF-THE-HEART
+[weariness-of-the-heart2] of WEARINESS-OF-THE-HEART
+[new-moon1] of NEW-MOON
+[new-moon2] of NEW-MOON
+[twilight1] of TWILIGHT
+[twilight2] of TWILIGHT
+[tom1] of TOM
+[giant1] of GIANT
+[giant2] of GIANT
+[orc-guard1] of ORC-GUARD
+[orc-guard2] of ORC-GUARD
+[orc-lieautenant1] of ORC-LIEAUTENANT
+[orc-lieautenant2] of ORC-LIEAUTENANT
+[orc-warriors1] of ORC-WARRIORS
+[orc-warriors2] of ORC-WARRIORS
+[orc-warriors3] of ORC-WARRIORS
+[brigands1] of BRIGANDS
+[brigands2] of BRIGANDS
+[brigands3] of BRIGANDS
+[cave-drake1] of CAVE-DRAKE
+[cave-drake2] of CAVE-DRAKE
+[fellowship1] of FELLOWSHIP
+[fellowship2] of FELLOWSHIP
+[fellowship3] of FELLOWSHIP
+[fellowship4] of FELLOWSHIP
+[fellowship5] of FELLOWSHIP
+[fellowship6] of FELLOWSHIP
+[fellowship7] of FELLOWSHIP
+[fellowship8] of FELLOWSHIP
+[e-char-play1] of E-char-play
+[e-char-play2] of E-char-play
+[e-char-play3] of E-char-play
+[e-char-play4] of E-char-play
+[fellowship9] of FELLOWSHIP
+[e-item-transfer1] of E-item-transfer
+For a total of 93 instances.
+CLIPS> (send [e-char-play1] get-type)
+OUT
+CLIPS> (send [e-item-transfer1] get-type)
+IN
+CLIPS> (agenda)
+2      E-item-transfer: [e-item-transfer1]
+For a total of 1 activation.
+CLIPS> (run 1)
+FIRE    1 E-item-transfer: [e-item-transfer1]
+DEBUG MESSAGE_________________________________
+-->     TRACE FROM:     (MAIN P-1-1-1 MAIN)
+-->     DEBUG:  Transfering item [elven-cloak1] from [aragorn-ii1] to [merry1]
+----------------------------------------------
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-23,f-34
+CLIPS> (agenda)
+10     in-transitive: f-8,f-35
+10     in-transitive: f-24,f-34
+For a total of 2 activations.
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-8,f-35
+CLIPS> (run 1)
+FIRE    1 in-transitive: f-24,f-34
+CLIPS> (agenda)
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[merry1],f-15
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[boromir-ii1],f-20
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[eomer1],f-22
+8      action-item-store: [elven-cloak1],[rivendell],f-14,[aragorn-ii1],f-34
+-14    clock: *
+For a total of 5 activations.
+CLIPS> (facts)
+f-1     (in (over [lorien]) (under [fellowship1]) (transitive FALSE))
+f-2     (in (over [lorien]) (under [fellowship2]) (transitive FALSE))
+f-3     (in (over [grey-havens]) (under [fellowship3]) (transitive FALSE))
+f-4     (in (over [grey-havens]) (under [fellowship4]) (transitive FALSE))
+f-5     (in (over [edhellond]) (under [fellowship5]) (transitive FALSE))
+f-6     (in (over [edhellond]) (under [fellowship6]) (transitive FALSE))
+f-7     (in (over [rivendell]) (under [fellowship7]) (transitive FALSE))
+f-8     (in (over [rivendell]) (under [fellowship8]) (transitive FALSE))
+f-10    (in (over [boromir-ii1]) (under [shield-of-iron--bound-ash1]) (transitive FALSE))
+f-11    (in (over [merry1]) (under [elven-cloak1]) (transitive FALSE))
+f-12    (in (over [fellowship8]) (under [merry1]) (transitive FALSE))
+f-14    (in (over [rivendell]) (under [elven-cloak1]) (transitive TRUE))
+f-15    (in (over [rivendell]) (under [merry1]) (transitive TRUE))
+f-16    (in (over [rivendell]) (under [fellowship9]) (transitive FALSE))
+f-17    (in (over [fellowship8]) (under [boromir-ii1]) (transitive FALSE))
+f-18    (in (over [fellowship8]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-19    (in (over [rivendell]) (under [shield-of-iron--bound-ash1]) (transitive TRUE))
+f-20    (in (over [rivendell]) (under [boromir-ii1]) (transitive TRUE))
+f-21    (in (over [fellowship8]) (under [eomer1]) (transitive FALSE))
+f-22    (in (over [rivendell]) (under [eomer1]) (transitive TRUE))
+f-23    (in (over [fellowship8]) (under [aragorn-ii1]) (transitive FALSE))
+f-24    (in (over [rivendell]) (under [aragorn-ii1]) (transitive TRUE))
+f-25    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-26    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to aragorn-ii1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [aragorn-ii1] "])"))
+f-27    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to eomer1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [eomer1] "])"))
+f-28    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to eomer1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [eomer1] "])"))
+f-29    (action (player [player1]) (description Transfer item shield-of-iron--bound-ash1 from boromir-ii1 to merry1) (event-def item-transfer) (data "(item [" [shield-of-iron--bound-ash1] "])" "(disposer [" [boromir-ii1] "])" "(receiver [" [merry1] "])"))
+f-30    (action (player [player1]) (description Transfer item elven-cloak1 from merry1 to boromir-ii1) (event-def item-transfer) (data "(item [" [elven-cloak1] "])" "(disposer [" [merry1] "])" "(receiver [" [boromir-ii1] "])"))
+f-31    (action (player [player1]) (description Store item shield-of-iron--bound-ash1 from boromir-ii1 in rivendell) (event-def item-store) (data "(" item [shield-of-iron--bound-ash1] ")" "(" bearer [boromir-ii1] ")" "(" haven [rivendell] ")"))
+f-32    (action (player [player1]) (description Organize fellowship in rivendell) (event-def loc-organize) (data "(" player [player1] ")" "(" loc [rivendell] ")"))
+f-33    (action (player [player1]) (description Store item elven-cloak1 from merry1 in rivendell) (event-def item-store) (data "(" item [elven-cloak1] ")" "(" bearer [merry1] ")" "(" haven [rivendell] ")"))
+f-34    (in (over [aragorn-ii1]) (under [elven-cloak1]) (transitive FALSE))
+f-35    (in (over [fellowship8]) (under [elven-cloak1]) (transitive TRUE))
+For a total of 33 facts.
+CLIPS> (agenda)
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[merry1],f-15
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[boromir-ii1],f-20
+8      action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[eomer1],f-22
+8      action-item-store: [elven-cloak1],[rivendell],f-14,[aragorn-ii1],f-34
+-14    clock: *
+For a total of 5 activations.
+CLIPS>
+(run 4)
+FIRE    1 action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[merry1],f-15
+FIRE    2 action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[boromir-ii1],f-20
+FIRE    3 action-transfer-item: [elven-cloak1],[aragorn-ii1],f-34,[rivendell],f-24,[eomer1],f-22
+FIRE    4 action-item-store: [elven-cloak1],[rivendell],f-14,[aragorn-ii1],f-34
+CLIPS> (agenda)
+-14    clock: *
+For a total of 1 activation.
+CLIPS> (run 1)
+FIRE    1 clock: *
+CLIPS> (agenda)
+10     cast: *
+6      choose-action: [player1],*
+-14    clock: *
+For a total of 3 activations.
+CLIPS>

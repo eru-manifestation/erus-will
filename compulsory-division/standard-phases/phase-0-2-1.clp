@@ -5,10 +5,14 @@
 ;/////CAST
 (defrule cast (declare (salience ?*universal-rules-salience*)) => 
 (announce (sym-cat DEV - (get-focus)) Cura personajes en refugios))
+;/////ACTION MANAGEMENT
+(defrule choose-action (declare (salience ?*action-selection-salience*))
+	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
+	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
-; EVENTO: Curar personajes y aliados heridos en refugios
+; EVENTO: Curar personajes y aliados heridos en refugios que sean del jugador actual
 (defrule heal
-	(object (is-a CHARACTER | ALLY) (name ?c) (state WOUNDED))
+	(object (is-a CHARACTER | ALLY) (name ?c) (state WOUNDED) (player ?p&:(eq ?p ?*player*)))
 	(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
 	(in (over ?loc) (under ?c))
 	=>

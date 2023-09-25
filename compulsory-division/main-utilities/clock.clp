@@ -21,8 +21,10 @@ FALSE
 )
 
 ; REGLA DE INICIO DE JUEGO
-(defrule MAIN::start => 
-	(jump P-0-1-1)
+(defrule MAIN::start =>
+	(jump P-0-1-1) 
+	(assert (post-draw))
+	(assert (infinite))
 )
 
 

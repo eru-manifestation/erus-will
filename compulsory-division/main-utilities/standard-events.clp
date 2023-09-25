@@ -8,7 +8,7 @@
 		(card ?c))
     =>
     (send ?e complete)
-    (send ?c put-tap UNTAPPED)
+    (send ?c put-state UNTAPPED)
 
     (debug Untapping ?c)
 )
@@ -23,7 +23,7 @@
 		(card ?c))
     =>
     (send ?e complete)
-    (send ?c put-tap UNTAPPED)
+    (send ?c put-state TAPPED)
 
     (debug Healing ?c)
 )
@@ -42,7 +42,7 @@
     =>
     (send ?e complete)
     (in-move ?c ?u)
-
+    (send ?c put-state UNTAPPED)
     (debug Playing character ?c under ?u)
 )
 
@@ -81,7 +81,7 @@
     (send ?e complete)
     ;TODO: corruption check para ?bearer
     (send ?item put-state MP)
-    ;TODO: Lo de arriba es así???
+    ;TODO: Lo de arriba es así??? Hacer regla en 
 
     (debug Storing item ?item in ?haven by ?bearer)
 )

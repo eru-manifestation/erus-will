@@ -2,7 +2,9 @@
 (defglobal MAIN
 	?*player1* = (make-instance (gen-name PLAYER) of PLAYER)
 	?*player2* = (make-instance (gen-name PLAYER) of PLAYER)
-    ;TODO: función para intercambiar jugador actual y enemigo
+    ;TODO: Para cuando acabe el turno, función para intercambiar jugador actual y enemigo
+
+    ; IMPORTANTE: intercambiarse entre jugador y enemigos NO va a disparar el PATTERN MATCHING ENGINE
     ?*player* = ?*player1*
     ?*enemy* = ?*player2*
 

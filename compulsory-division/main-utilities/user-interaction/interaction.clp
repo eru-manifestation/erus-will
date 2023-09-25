@@ -17,3 +17,12 @@
 	(printout t "<--" tab ?player ": ")
 	(readline)
 )
+
+(deffunction MAIN::obtain-number (?player $?message)
+	(if (< 0 (length$ ?message))
+		then
+		(announce ?player $?message)
+	)
+	(printout t "<--" tab ?player ": ")
+	(read-number)
+)

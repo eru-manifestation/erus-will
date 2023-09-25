@@ -8,7 +8,7 @@
 
 
 (defrule MAIN::in-transitive (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
-	(logical (in (over ?a) (under ?b)))
+	(logical (in (transitive FALSE) (over ?a) (under ?b)))
 	(logical (in (over ?b) (under ?c)))
 	=>
 	(assert (in (over ?a) (under ?c) (transitive TRUE)))
@@ -17,7 +17,7 @@
 (deffunction MAIN::in-move (?element ?to)
 	; Elimina el primer elemento in no transitivo que defina lo que tenga arriba ?c
 	; (solo debería haber uno)
-	(do-for-fact ((?rm in)) (and (eq ?rm:transitive TRUE) (eq ?element ?rm:under))
+	(do-for-fact ((?rm in)) (and (eq ?rm:transitive FALSE) (eq ?element ?rm:under))
 		(retract ?rm)
 	)
 	(assert (in (over ?to) (under ?element)))

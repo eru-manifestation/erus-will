@@ -5,12 +5,16 @@
 ;/////CAST
 (defrule cast (declare (salience ?*universal-rules-salience*)) => 
 (announce (sym-cat DEV - (get-focus)) Descartar recursos de suceso duradero))
+;/////ACTION MANAGEMENT
+(defrule choose-action (declare (salience ?*action-selection-salience*))
+	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
+	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
 ; EVENTO: DESCARTAR RECURSOS DE SUCESO DURADERO
 (defrule long-event-discard
 	; Dado un rec suceso duradero tuyo
 	(object (is-a R-LONG-EVENT) (name ?le) 
-		(state TAPPED | UNTAPPED) (player ?p))
+		(state TAPPED | UNTAPPED) (player ?p&:(eq ?p ?*player*)))
 	=>
 	(make-instance (gen-name E-r-long-event-discard) of E-r-long-event-discard 
 		(r-long-event ?le))

@@ -138,12 +138,15 @@ preferencia de saliencias definidas para clock, event-handler, phase-rules, acti
 
 
 
-Gestionar elemento de jugador actual y enemigo actual, hasta ahora se está sustituyendo por [player1] y [player2] respectivamente
+DONE:   Gestionar elemento de jugador actual y enemigo actual, hasta ahora se está sustituyendo por [player1] y      [player2] respectivamente
 
 Reglas para que cuando un objeto salga del juego (esté en mano, baraja, MP o descarte) desaparezca su localizador IN directo correspondiente
 
-Eliminar el archivo phase-2-3-0.clp, ya que su evento ha sido sustituido por otro
+DONE:   Eliminar el archivo phase-2-3-0.clp, ya que su evento ha sido sustituido por otro
 
-En la regla post-draw, revisar que todas las cartas sean del jugador [player1]
+DONE:   En la regla post-draw, revisar que todas las cartas sean del jugador [player1]
 
 Hacer que se resuelvan los eventos, primero los primeros que entren, para que tenga sentido la escritura secuencial de los eventos, cambiando la estrategia de resolución de conflictos
+
+Una ventaja de hacer módulos que dividan las competencias de MAIN es que sí podría darse la combinación in-transitive/"some-phase-rule"/event-handler. Ahora mismo, al cambiar el foco,
+como no se devuelve al acabar la función por regla general, ocurre que a pesar de tener una saliencia hipotéticamente inferior, el event-handler ocurriría antes que el "some-phase-rule", ya que no necesita del AUTO-FOCUS, que sí respeta el foco original

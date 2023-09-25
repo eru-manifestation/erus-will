@@ -240,6 +240,7 @@
 
 
 (defrule MAIN::post-draw (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    ?pd <- (post-draw)
     (object (is-a ARAGORN-II) (name ?aragorn) (player ?p&:(eq ?p ?*player*)))
     (object (is-a EOMER) (name ?eomer) (player ?p))
     (object (is-a BOROMIR-II) (name ?boromir) (player ?p))
@@ -252,7 +253,7 @@
     (in (over ?rivendell) (under ?fell))
     =>
     ;TODO: COLOCAR EL TABLERO INICIAL
-    (debug Creating initial hand)
+    (debug Putting initial hand)
 
     (make-instance (gen-name E-char-play) of E-char-play (card ?aragorn) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (card ?eomer) (under ?fell))
@@ -266,6 +267,9 @@
 
     (assert (in (over ?boromir) (under ?shield)))
     (assert (in (over ?merry) (under ?cloak)))
+
+    ;ESTA REGLA SOLO SE DEBE LANZAR UNA VEZ
+    (retract ?pd)
 )
 
 

@@ -5,6 +5,10 @@
 ;/////CAST
 (defrule cast (declare (salience ?*universal-rules-salience*)) => 
 (announce (sym-cat DEV - (get-focus)) Eleccion de la ejecucion del movimiento))
+;/////ACTION MANAGEMENT
+(defrule choose-action (declare (salience ?*action-selection-salience*))
+	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
+	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
 ; EVENT HANDLER: FELLOWSHIP-gen-move (es un salto)
 (defrule E-fell-decl-move (declare (salience ?*event-handler-salience*))
@@ -12,7 +16,6 @@
 		(fell ?fell) (from ?from) (to ?to))
 	=>
 	; TODO: encontrar forma de llevar los datos (dejar vivo el evento??)
-	;(jump 3 1 1 move-fellowship (send ?e get-data fell) (send ?e get-data from) 0)
 	(send ?e complete)
 	(jump EP-1)
 

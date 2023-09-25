@@ -5,6 +5,10 @@
 ;/////CAST
 (defrule cast (declare (salience ?*universal-rules-salience*)) => 
 (announce (sym-cat DEV - (get-focus)) Ejecucion de la fase de organizacion))
+;/////ACTION MANAGEMENT
+(defrule choose-action (declare (salience ?*action-selection-salience*))
+	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
+	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
 ; ACCIÓN: JUGAR PERSONAJE 1
 ; Puedes jugar un personaje de tu mano en su lugar natal o
@@ -13,7 +17,7 @@
 (defrule action-play-as-follower (declare (salience ?*action-population-salience*))
 	(logical 
 		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) (birthplace ?bp) (race ?race))
+		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
 		
 		; Localiza un personaje en una localización
 		(object (is-a CHARACTER) (name ?play-under) (player ?p))
@@ -38,17 +42,21 @@
 	)
 	=>
 	; Asertar la acción "Jugar al personaje como seguidor"
-	(gen-action ?p char-play 
-		"(" char ?char ")"
-		"(" under ?play-under ")"
-	)
+	(assert (action 
+		(player ?p)
+		(event-def char-play)
+		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
+		(data (create$ 
+		"( char [" ?char "])" 
+		"( under ["?play-under "])"))
+	))
 )
 
 ; ACCIÓN: Jugar personaje 2
 (defrule action-play-under-fellowship (declare (salience ?*action-population-salience*))
 	(logical 
 		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) (birthplace ?bp) (race ?race))
+		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
 		
 		; Localiza una compañía/personaje en una localización
 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
@@ -69,17 +77,22 @@
 	; Asertar la acción "Jugar al personaje en esa compañía" (tener en cuenta la
 	; condición de que una localización debe tener siempre una compañía vacía
 	; asociada)
-	(gen-action ?p char-play
-		"(" char ?char ")"
-		"(" under ?fell ")")
+	(assert (action 
+		(player ?p)
+		(event-def char-play)
+		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
+		(data (create$ 
+		"( char [" ?char "])" 
+		"( under ["?fell "])"))
+	))
 )
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
 (defrule action-decl-mov-hav (declare (salience ?*action-population-salience*))
 	(logical
-		; Hay una compañía con movimiento por defecto (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 		
 		; Encuentro la localización de la compañía
 		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
@@ -89,31 +102,38 @@
 		(object (is-a LOCATION) (name ?to) (is-haven FALSE) (closest-haven ?loc))
 	)
 	=>
-	(gen-action ?p fell-decl-move 
-		"(" fell ?fell ")"
-		"(" from ?loc ")"
-		"(" to ?to ")"
-	)
+	(assert (action 
+		(player ?p)
+		(event-def fell-decl-move)
+		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?to))
+		(data (create$ 
+		"( fell [" ?fell "])"
+		"( from [" ?loc "])"
+		"( to [" ?to "])"))
+	))
 )
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
 (defrule action-decl-mov (declare (salience ?*action-population-salience*))
 	(logical
-		; Hay una compañía con movimiento por defecto (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 
 		; Encuentro la localización de la compañía
 		(object (is-a LOCATION) (name ?loc) (is-haven FALSE) (closest-haven ?cl-haven))
 		(in (transitive FALSE) (over ?loc) (under ?fell))
 	)
 	=>
-	(gen-action ?p fell-decl-move 
-		"(" fell ?fell ")"
-		"(" from ?loc ")"
-		"(" to ?cl-haven ")"
-	)
-	
+	(assert (action 
+		(player ?p)
+		(event-def fell-decl-move)
+		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?cl-haven))
+		(data (create$ 
+		"( fell [" ?fell "])"
+		"( from [" ?loc "])"
+		"( to [" ?cl-haven "])"))
+	))
 )
 
 
@@ -123,44 +143,53 @@
 ; hacer un chequeo de corrupción
 (defrule action-transfer-item (declare (salience ?*action-population-salience*))
 	(logical
-		; Localiza el personaje que posee (directamente) el objeto
-		(object (is-a ITEM) (name ?i))
-		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer))
+		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
+		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer) (player ?p))
 		(in (transitive FALSE) (over ?disposer) (under ?i))
 
 		; Localiza un personaje que esté en el mismo lugar
 		(object (is-a LOCATION) (name ?loc))
 		(in (over ?loc) (under ?disposer))
-		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?receiver))
-		(in (over ?loc) (under ?receiver))
-		
+		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?receiver) (player ?p))
 		; Reviso que el personaje que posee el objeto no puede ser el receptor
 		(test (neq ?disposer ?receiver))
+		(in (over ?loc) (under ?receiver))
 	)
 	=>
-	(gen-action [player1] item-transfer
-		"(" item ?i ")"
-		"(" disposer ?disposer ")" 
-		"(" receiver ?receiver ")")
+	(assert (action 
+		(player ?p)
+		(event-def item-transfer)
+		(description (sym-cat "Transfer item " ?i " from " ?disposer " to " ?receiver))
+		(data (create$ 
+		"(item [" ?i "])"
+		"(disposer [" ?disposer "])" 
+		"(receiver ["  ?receiver "])"))
+	))
 )
 
 ; ACCIÓN: ALMACENAR OBJETO
 ; También puedes almacenar objetos si el portador está en un refugio
 (defrule action-item-store (declare (salience ?*action-population-salience*))
 	(logical
-		; Localiza un objeto y si está en un refugio
-		(object (is-a ITEM) (name ?i))
+		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
+		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
 		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
 		(in (over ?loc) (under ?i))
 
-		(object (is-a CHARACTER) (name ?bearer))
+		(object (is-a CHARACTER) (name ?bearer) (player ?p))
 		(in (transitive FALSE) (over ?bearer) (under ?i))
 	)
 	=>
-	(gen-action [player1] item-store
-		"(" item ?i ")"
-		"(" bearer ?bearer ")"
-		"(" haven ?loc ")")
+	(assert (action 
+		(player ?p)
+		(event-def item-store)
+		(description (sym-cat "Store item " ?i " from " ?bearer " in " ?loc))
+		(data (create$ 
+		"( item [" ?i "])"
+		"( bearer [" ?bearer "])"
+		"( haven [" ?loc "])"))
+	))
 )
 
 
@@ -173,13 +202,17 @@
 		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
 		;TODO: hacer que funcione con un exist
 		(exists 
-			(object (is-a CHARACTER) (name ?char))
+			(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
 			(in (over ?loc) (under ?char))
 		)
-		
 	)
 	=>
-	(gen-action [player1] loc-organize
-		"(" player [player1] ")" 
-		"(" loc ?loc ")")
+	(assert (action 
+		(player ?*player*)
+		(event-def loc-organize)
+		(description (sym-cat "Organize fellowship in " ?loc))
+		(data (create$ 
+		"( player [" ?*player* "])" 
+		"( loc [" ?loc "])"))
+	))
 )

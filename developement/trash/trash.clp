@@ -43,3 +43,11 @@
 (watch instances)
 (run)
 (send [eomer1] get-tap)
+
+
+(load-all)
+(init-locations)
+(init-handG)
+(watch rules)
+(run 8)
+(run 1)
