@@ -13,7 +13,7 @@
 ; EVENTO: Curar personajes y aliados heridos en refugios que sean del jugador actual
 (defrule heal
 	(object (is-a WOUNDABLE) (name ?c) (state WOUNDED) (player ?p&:(eq ?p ?*player*)))
-	(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
+	(object (is-a HAVEN) (name ?loc))
 	(in (over ?loc) (under ?c))
 	=>
 	(make-instance (gen-name E-cure) of E-cure (card ?c))

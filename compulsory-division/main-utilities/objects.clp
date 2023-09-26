@@ -37,6 +37,11 @@
 	(slot state (default UNTAPPED))
 )
 
+(defclass MAIN::HAVEN (is-a LOCATION)
+	(multislot site-paths (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
+    (slot is-haven (default TRUE))
+)
+
 (defclass MAIN::CHARACTER (is-a WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
 	(slot influence (type INTEGER) (default 0) (access initialize-only))

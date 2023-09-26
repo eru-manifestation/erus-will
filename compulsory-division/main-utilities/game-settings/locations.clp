@@ -1,19 +1,22 @@
-(defclass MAIN::RIVENDELL (is-a LOCATION)
+; HAVENS
+(defclass MAIN::RIVENDELL (is-a HAVEN)
     (slot closest-haven (default (symbol-to-instance-name rivendell)))
-    (slot is-haven (default TRUE))
+    (multislot site-paths (default (create$ [lorien] [grey-havens])))
 )
 (defclass MAIN::EDHELLOND (is-a LOCATION)
     (slot closest-haven (default (symbol-to-instance-name edhellond)))
-    (slot is-haven (default TRUE))
+    (multislot site-paths (default (create$ [lorien] [grey-havens])))
 )
-(defclass MAIN::GREY-HAVENS (is-a LOCATION)
+(defclass MAIN::GREY-HAVENS (is-a HAVEN)
     (slot closest-haven (default (symbol-to-instance-name grey-havens)))
-    (slot is-haven (default TRUE))
+    (multislot site-paths (default (create$ [rivendell] [edhellond])))
 )
-(defclass MAIN::LORIEN (is-a LOCATION)
+(defclass MAIN::LORIEN (is-a HAVEN)
     (slot closest-haven (default (symbol-to-instance-name lorien)))
-    (slot is-haven (default TRUE))
+    (multislot site-paths (default (create$ [rivendell] [edhellond])))
 )
+
+; OTHER LOCATIONS
 (defclass MAIN::AMON-HEN (is-a LOCATION)
     (slot closest-haven (default (symbol-to-instance-name lorien)))
 )
@@ -40,7 +43,7 @@
     (make-instance edhellond of EDHELLOND)
     (make-instance grey-havens of GREY-HAVENS)
     (make-instance lorien of LORIEN)
-    
+
     (make-instance amon-hen of AMON-HEN)
     (make-instance bag-end of BAG-END)
     (make-instance bandit-lair of BANDIT-LAIR)

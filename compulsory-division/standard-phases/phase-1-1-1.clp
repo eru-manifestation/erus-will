@@ -96,11 +96,36 @@
 		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 		
 		; Encuentro la localización de la compañía
-		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
+		(object (is-a HAVEN) (name ?loc))
 		(in (over ?loc) (under ?fell))
 
 		; Por cada localización adyacente (excluyendo el propio haven)
 		(object (is-a LOCATION) (name ?to) (is-haven FALSE) (closest-haven ?loc))
+	)
+	=>
+	(assert (action 
+		(player ?p)
+		(event-def fell-decl-move)
+		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?to))
+		(data (create$ 
+		"( fell [" ?fell "])"
+		"( from [" ?loc "])"
+		"( to [" ?to "])"))
+	))
+)
+
+
+; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
+(defrule action-decl-mov-hav-to-hav (declare (salience ?*action-population-salience*))
+	(logical
+		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		
+		; Encuentro la localización de la compañía
+		(object (is-a HAVEN) (name ?loc) (site-paths $?paths))
+		(in (over ?loc) (under ?fell))
+
+		(object (is-a HAVEN) (name ?to&:(member$ ?to ?paths)))
 	)
 	=>
 	(assert (action 
@@ -175,7 +200,7 @@
 	(logical
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
 		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
-		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
+		(object (is-a HAVEN) (name ?loc))
 		(in (over ?loc) (under ?i))
 
 		(object (is-a CHARACTER) (name ?bearer) (player ?p))
@@ -200,7 +225,7 @@
 (defrule action-loc-organize (declare (salience ?*action-population-salience*))
 	(logical
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
-		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
+		(object (is-a HAVEN) (name ?loc))
 		;TODO: hacer que funcione con un exist
 		(exists 
 			(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
