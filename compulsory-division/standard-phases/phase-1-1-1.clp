@@ -47,7 +47,7 @@
 		(event-def char-play)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
 		(data (create$ 
-		"( char [" ?char "])" 
+		"( character [" ?char "])" 
 		"( under ["?play-under "])"))
 	))
 )
@@ -61,17 +61,18 @@
 		; Localiza una compañía/personaje en una localización
 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
 		(object (is-a LOCATION) (name ?loc) (is-haven ?is-haven))
-		(in (over ?loc) (under ?fell))
+		(in (transitive FALSE) (over ?loc) (under ?fell))
 		
-		(test (and
-			; Tiene que haber suficiente influencia general
-			(<= (send ?p get-general-influence) (send ?char get-mind))
-			; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
-			(or 
+		
+		; Tiene que haber suficiente influencia general
+		(test (<= (send ?char get-mind) (send ?p get-general-influence)))
+		; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
+		
+		(test (or 
 				(eq ?bp ?loc)
 				(eq ?loc [rivendell]); TODO: []?
 				(and ?is-haven (neq ?race WIZZARD))
-		)))
+		))
 	)
 	=>
 	; Asertar la acción "Jugar al personaje en esa compañía" (tener en cuenta la
@@ -82,7 +83,7 @@
 		(event-def char-play)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
 		(data (create$ 
-		"( char [" ?char "])" 
+		"( character [" ?char "])" 
 		"( under ["?fell "])"))
 	))
 )
@@ -92,7 +93,7 @@
 (defrule action-decl-mov-hav (declare (salience ?*action-population-salience*))
 	(logical
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 		
 		; Encuentro la localización de la compañía
 		(object (is-a LOCATION) (name ?loc) (is-haven TRUE))
@@ -118,7 +119,7 @@
 (defrule action-decl-mov (declare (salience ?*action-population-salience*))
 	(logical
 		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 
 		; Encuentro la localización de la compañía
 		(object (is-a LOCATION) (name ?loc) (is-haven FALSE) (closest-haven ?cl-haven))

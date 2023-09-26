@@ -31,19 +31,37 @@
 
 ; E-char-play
 (defclass MAIN::E-char-play (is-a EVENT)
-    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes CARD))
+    (slot character (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
     (slot under (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP CHARACTER))
 )
 
 
 (defrule MAIN::E-char-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
     ?e <- (object (is-a E-char-play) (type IN)
-		(card ?c) (under ?u))
+		(character ?c) (under ?u))
     =>
     (send ?e complete)
     (in-move ?c ?u)
     (send ?c put-state UNTAPPED)
     (debug Playing character ?c under ?u)
+)
+
+
+; E-item-play
+(defclass MAIN::E-item-play (is-a EVENT)
+    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY CHARACTER))
+)
+
+
+(defrule MAIN::E-item-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-item-play) (type IN)
+		(item ?item) (owner ?owner))
+    =>
+    (send ?e complete)
+    (in-move ?item ?owner)
+    (send ?item put-state UNTAPPED)
+    (debug Playing item ?item under ?owner)
 )
 
 
@@ -81,7 +99,6 @@
     (send ?e complete)
     ;TODO: corruption check para ?bearer
     (send ?item put-state MP)
-    ;TODO: Lo de arriba es así??? Hacer regla en 
 
     (debug Storing item ?item in ?haven by ?bearer)
 )

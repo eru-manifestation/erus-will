@@ -4,6 +4,14 @@
 		(allowed-instance-names [player1] [player2]))
 )
 
+(defclass MAIN::STATABLE (is-a USER)
+	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED))
+)
+
+(defclass MAIN::WOUNDABLE (is-a USER)
+	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED WOUNDED))
+)
+
 ; CLASES ABSTRACTAS
 (defclass MAIN::PLAYER (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
@@ -16,30 +24,27 @@
 )
 
 ; CLASES CONCRETAS
-(defclass MAIN::CARD (is-a USER)
-	(slot state (type SYMBOL) (default UNTAPPED) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED))
-)
+(defclass MAIN::CARD (is-a STATABLE))
 
-(defclass MAIN::RESOURCE (is-a CARD OWNABLE)
+(defclass MAIN::RESOURCE (is-a OWNABLE CARD)
 )
-(defclass MAIN::ADVERSITY (is-a CARD OWNABLE)
+(defclass MAIN::ADVERSITY (is-a OWNABLE CARD)
 )
 
 (defclass MAIN::LOCATION (is-a CARD)
 	(slot closest-haven (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
 	(slot is-haven (type SYMBOL) (default FALSE) (access initialize-only) (allowed-symbols TRUE FALSE))
+	(slot state (default UNTAPPED))
 )
 
-(defclass MAIN::CHARACTER (is-a CARD OWNABLE)
+(defclass MAIN::CHARACTER (is-a WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
 	(slot influence (type INTEGER) (default 0) (access initialize-only))
 	(slot mind (type INTEGER) (default 0) (access initialize-only))
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
-	(slot state (type SYMBOL) (default UNTAPPED) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED WOUNDED))
 )
 
-(defclass MAIN::ALLY (is-a RESOURCE)
-	(slot state (type SYMBOL) (default UNTAPPED) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED WOUNDED))
+(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE)
 )
 
 (defclass MAIN::R-PERMANENT-EVENT (is-a RESOURCE))

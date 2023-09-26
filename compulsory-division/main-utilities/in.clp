@@ -22,3 +22,17 @@
 	)
 	(assert (in (over ?to) (under ?element)))
 )
+
+(defrule MAIN::in-exit-game1 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
+	(object (is-a STATABLE) (state HAND | DRAW | DISCARD | MP) (name ?exit))
+	?in <- (in (transitive FALSE) (over ?exit))
+	=>
+	(retract ?in)
+)
+
+(defrule MAIN::in-exit-game2 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
+	(object (is-a STATABLE) (state HAND | DRAW | DISCARD | MP) (name ?exit))
+	?in <- (in (transitive FALSE) (under ?exit))
+	=>
+	(retract ?in)
+)

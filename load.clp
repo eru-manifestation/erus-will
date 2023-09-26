@@ -1,4 +1,5 @@
 (defglobal ?*route* = "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
+(set-strategy breadth)
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
@@ -18,6 +19,9 @@
 
     ;locations
     (load* "compulsory-division\\main-utilities\\game-settings\\locations.clp")
+
+    ;handGDEF
+    (load* "compulsory-division\\main-utilities\\game-settings\\handGDEF.clp")
 
     ;in manager
     (load* "compulsory-division\\main-utilities\\in.clp")
@@ -61,7 +65,14 @@
     (load-utilities)
     (load-standard)
     (load-handG)
+    
 )
+    (load-all)
+    (init-locations)
+    (init-handG)
+    (watch rules)
+    (run 38)
+    (run 1)
 
 
 

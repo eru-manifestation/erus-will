@@ -12,7 +12,7 @@
 
 
 ; EVENTO: En la fase Enderezamiento, enderezar todas las cartas no localizaciones del jugador
-(defrule enderezar
+(defrule untap
 	;Aprovecho que dos CE pueden referenciar conjuntamente al mismo elemento, afinando el cribado
 	(object (is-a CARD) (name ?c) (state TAPPED))
 	(object (is-a OWNABLE) (name ?c) (player ?p&:(eq ?p ?*player*)))
