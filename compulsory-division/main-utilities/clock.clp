@@ -15,21 +15,25 @@ corruption-check-2
 FALSE
 
 )
-	?*tics* = 0
 	?*jumps* = 0
 )
 
 (deftemplate only-actions (slot phase (type SYMBOL) (default ?NONE)))
 
+(deffunction update-only-actions (?jump-stage)
+	(do-for-fact ((?only-actions only-actions)) TRUE (modify ?only-actions (phase ?jump-stage)))
+)
+
 (deffunction MAIN::jump (?jump-stage)
     (focus ?jump-stage)
+	(assert (ini))
 	(bind ?*jumps* (+ 1 ?*jumps*))
-	(do-for-fact ((?only-actions only-actions)) TRUE (retract ?only-actions))
-	(assert (only-actions (phase ?jump-stage)))
+	(update-only-actions ?jump-stage)
 )
 
 ; REGLA DE INICIO DE JUEGO
 (defrule MAIN::start =>
+	(assert (only-actions (phase FALSE)))
 	(jump P-0-1-1) 
 	(assert (post-draw))
 	(assert (infinite))
@@ -45,20 +49,18 @@ FALSE
 ; FUNCION DE CAMBIO DE FASE
 (deffunction MAIN::tic (?stage)
 	(bind ?jump-stage (stage-guide ?stage))
-	(printout t FOCUS------------------------------------(get-focus-stack) crlf)
 	(if ?jump-stage then
 		(pop-focus)
-		(focus ?jump-stage)
-		(bind ?*tics* (+ 1 ?*tics*))
-
-		(do-for-fact ((?only-actions only-actions)) TRUE (retract ?only-actions))
-		(assert (only-actions (phase ?jump-stage)))
+		(jump ?jump-stage)
 		else
-		(do-for-fact ((?only-actions only-actions)) TRUE (retract ?only-actions))
 		(if (eq (nth$ 2 (get-focus-stack)) MAIN) then
-			(if (< (length$ (get-focus-stack)) 3) then (debug Fin de la partida) else (assert (only-actions (phase (nth$ 3 (get-focus-stack))))))
-		else
-		(assert (only-actions (phase (nth$ 2 (get-focus-stack)))))
+			(if (< (length$ (get-focus-stack)) 3) then 
+				(debug Fin de la partida)
+				else
+				(update-only-actions (nth$ 3 (get-focus-stack)))
+			)
+			else 
+			(update-only-actions (nth$ 2 (get-focus-stack)))
 		)
 	)
 )

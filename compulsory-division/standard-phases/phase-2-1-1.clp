@@ -3,8 +3,9 @@
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
 ;/////CAST
-(defrule cast (declare (salience ?*universal-rules-salience*)) => 
-(announce (sym-cat DEV - (get-focus)) Descartar recursos de suceso duradero))
+(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(foreach ?rule (get-defrule-list) (refresh ?rule)) 
+(debug Descartar recursos de suceso duradero))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 

@@ -1,5 +1,13 @@
 (defglobal ?*route* = "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
 (set-strategy breadth)
+;(set-dynamic-constraint-checking TRUE)
+;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
+;(set-break <rule-name>)
+
+;(get-defrule-list [<module-name>])
+;(refresh <rule-name>)
+
+;(refresh-agenda [<module-name>])
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
@@ -75,12 +83,12 @@
     (load-handG)
     
 )
-    (load-all)
-    (init-locations)
-    (init-handG)
-    (watch rules)
-    (run 38)
-    (run 1)
+
+(load-all)
+(init-locations)
+(init-handG)
+(watch rules)
+(run 40)
 
 
 

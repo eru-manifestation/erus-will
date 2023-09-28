@@ -3,10 +3,10 @@
 )
 
 (deffunction MAIN::debug ($?message)
-	(printout ?*debug-info* "DEBUG MESSAGE_________________________________" crlf)
+	(printout ?*debug-info* crlf "DEBUG MESSAGE_________________________________" crlf)
 	(printout ?*debug-traces* "-->" tab "TRACE FROM:" tab (get-focus-stack) crlf)
 	(printout ?*debug-info* "-->" tab "DEBUG:" tab (implode$ ?message) crlf)
-	(printout ?*debug-info* "----------------------------------------------" crlf)
+	(printout ?*debug-info* "----------------------------------------------" crlf crlf)
 )
 
 (deffunction MAIN::obtain (?player $?message)
