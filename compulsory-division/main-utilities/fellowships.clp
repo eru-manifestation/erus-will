@@ -7,9 +7,6 @@
 ;           con integrantes, lo cual debe ser fácilmente verificable y ser estable
 
 
-;TODO: ASEGURARME DE QUE TODAS LAS CARTAS EN MANO, BARAJA, DESCARTE Y MP ESTÉN UNTAPPED
-;       PARA QUE ESTÉN LISTA POR SI SALEN AL JUEGO
-
 
 (deffunction MAIN::gen-fell (?player ?location)
     (bind ?fell (gen-name FELLOWSHIP))

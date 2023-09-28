@@ -78,10 +78,10 @@
         (item ?item) (receiver ?rec) (disposer ?disp))
     =>
     (send ?e complete)
-    ;TODO: corruption check para ?disp
+    (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?disp))
     (in-move ?item ?rec)
 
-    (debug Transfering item ?item from ?rec to ?disp)
+    (debug Transfering item ?item from ?disp to ?rec)
 )
 
 
@@ -97,7 +97,7 @@
         (item ?item) (bearer ?bearer) (haven ?haven))
     =>
     (send ?e complete)
-    ;TODO: corruption check para ?bearer
+    (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?bearer))
     (send ?item put-state MP)
 
     (debug Storing item ?item in ?haven by ?bearer)
@@ -178,3 +178,35 @@
     (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
+
+; E-char-discard
+(defclass MAIN::E-char-discard (is-a EVENT)
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+)
+
+(defrule MAIN::E-char-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-char-discard) (type IN) 
+        (char ?c))
+    =>
+    (send ?e complete)
+    (send ?c put-state DISCARD)
+    ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
+    (debug Discarding character ?c)
+)
+
+
+; E-char-destroy
+(defclass MAIN::E-char-destroy (is-a EVENT)
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+)
+
+(defrule MAIN::E-char-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-char-destroy) (type IN) 
+        (char ?c))
+    =>
+    (send ?e complete)
+    (send ?c put-state OUT-OF-GAME)
+    ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
+
+    (debug Destroying character ?c)
+)

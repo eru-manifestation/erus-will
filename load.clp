@@ -26,6 +26,9 @@
     ;in manager
     (load* "compulsory-division\\main-utilities\\in.clp")
 
+    ;data items
+    (load* "compulsory-division\\main-utilities\\data-items.clp")
+
     ;fellowship manager
     (load* "compulsory-division\\main-utilities\\fellowships.clp")
 
@@ -34,6 +37,7 @@
 
     ;events
     (load* "compulsory-division\\main-utilities\\events.clp")
+    (load* "compulsory-division\\main-utilities\\standard-event-phases.clp")
     (load* "compulsory-division\\main-utilities\\standard-events.clp")
 
     ;action manager
@@ -53,6 +57,10 @@
     (load* "compulsory-division\\standard-phases\\phase-2-3-1.clp")
     ;(load* "compulsory-division\\standard-phases\\phase-3-1-0.clp")
     (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-2.clp")
 )
 
 (deffunction load-handG()

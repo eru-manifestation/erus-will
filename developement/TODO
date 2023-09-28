@@ -157,8 +157,12 @@ Todos los slots de cada clase deberían tener la etiqueta (source composite) par
 
 Manejar que no existan dos eventos de tipo move-fellowship (mediante un message-handler en init?) para una misma compañía
 
-Módulo para un chequeo de corrupción
+Terminar módulo para un chequeo de corrupción (compleción del evento)
 
 Módulo para la organización de una compañía
 
-Especificación de clase refugio
+DONE:   Especificación de clase refugio
+
+Formalizar la plantilla "action-only", que sirve como parche para que los action se retracten una vez lanzados cuando su modulo forma parte de la pila de ejecución
+
+Detallar las pautas para el tratamiento de los datos cualitativos

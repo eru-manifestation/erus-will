@@ -16,6 +16,7 @@
 ; Influencia directa de algún personaje para controlarlo
 (defrule action-play-as-follower (declare (salience ?*action-population-salience*))
 	(logical 
+		(only-actions (phase P-1-1-1))
 		; Hay un personaje en la mano del jugador dueño del turno
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
 		
@@ -55,6 +56,7 @@
 ; ACCIÓN: Jugar personaje 2
 (defrule action-play-under-fellowship (declare (salience ?*action-population-salience*))
 	(logical 
+		(only-actions (phase P-1-1-1))
 		; Hay un personaje en la mano del jugador dueño del turno
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
 		
@@ -92,6 +94,7 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
 (defrule action-decl-mov-hav (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
 		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 		
@@ -118,6 +121,7 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
 (defrule action-decl-mov-hav-to-hav (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
 		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 		
@@ -143,6 +147,7 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
 (defrule action-decl-mov (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
 		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
 
@@ -169,6 +174,7 @@
 ; hacer un chequeo de corrupción
 (defrule action-transfer-item (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
 		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
 		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer) (player ?p))
@@ -198,6 +204,7 @@
 ; También puedes almacenar objetos si el portador está en un refugio
 (defrule action-item-store (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
 		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
 		(object (is-a HAVEN) (name ?loc))
@@ -224,6 +231,7 @@
 ; cualquier número de compañías
 (defrule action-loc-organize (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-1-1-1))
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
 		;TODO: hacer que funcione con un exist

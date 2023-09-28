@@ -22,9 +22,12 @@
     (slot influence (default 1))
     (slot mind (default 4))
     (slot race (default TODO))
+    (slot corruption (default -1))
 )
 
-(defclass SHIELD-OF-IRON--BOUND-ASH (is-a MINOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared))
+(defclass SHIELD-OF-IRON--BOUND-ASH (is-a MINOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 1))
 )
 
 (defclass MERRY (is-a CHARACTER)     
@@ -35,22 +38,37 @@
     (slot race (default TODO))
 )
 
-(defclass ELVEN-CLOAK (is-a MINOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared))
+(defclass ELVEN-CLOAK (is-a MINOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 1))
 )
 
 ; RECURSOS (OBJETOS)
 
-(defclass SCROLL-OF-ISILDUR (is-a GREATER-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
+(defclass SCROLL-OF-ISILDUR (is-a GREATER-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 3))
+)
 
-(defclass GREAT-SHIELD-OF-ROHAN (is-a MAJOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
+(defclass GREAT-SHIELD-OF-ROHAN (is-a MAJOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 2))
+)
 
-(defclass SCROLL-OF-ISILDUR (is-a GREATER-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
+(defclass GLAMDRING (is-a MAJOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 1))
+)
 
-(defclass GLAMDRING (is-a MAJOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
+(defclass STAR--GLASS (is-a MINOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 1))
+)
 
-(defclass STAR--GLASS (is-a MINOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
-
-(defclass RED-ARROW (is-a MAJOR-ITEM)(slot instance-# (type INTEGER) (default 2) (storage shared)))
+(defclass RED-ARROW (is-a MAJOR-ITEM)
+    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot corruption (default 2))
+)
 
 
 ; RECURSOS (FACCIONES)
@@ -97,6 +115,7 @@
     (slot influence (default 10))
     (slot mind (default 0))
     (slot race (default TODO))
+    (slot corruption (default 1))
 )
 
 (defclass BEREGOND (is-a CHARACTER)     
@@ -105,6 +124,7 @@
     (slot influence (default 0))
     (slot mind (default 2))
     (slot race (default TODO))
+    (slot corruption (default -1))
 )
 
 (defclass FARAMIR (is-a CHARACTER)     
@@ -121,6 +141,7 @@
     (slot influence (default 0))
     (slot mind (default 3))
     (slot race (default TODO))
+    (slot corruption (default -1))
 )
 
 (defclass ERKENBRAND (is-a CHARACTER)     

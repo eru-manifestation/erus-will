@@ -5,11 +5,15 @@
 )
 
 (defclass MAIN::STATABLE (is-a USER)
-	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED))
+	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD OUT-OF-GAME UNTAPPED TAPPED))
 )
 
 (defclass MAIN::WOUNDABLE (is-a USER)
-	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD UNTAPPED TAPPED WOUNDED))
+	(slot state (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD OUT-OF-GAME UNTAPPED TAPPED WOUNDED))
+)
+
+(defclass MAIN::CORRUPTION (is-a USER)
+	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
 )
 
 ; CLASES ABSTRACTAS
@@ -47,6 +51,7 @@
 	(slot influence (type INTEGER) (default 0) (access initialize-only))
 	(slot mind (type INTEGER) (default 0) (access initialize-only))
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
+	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
 )
 
 (defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE)
@@ -64,7 +69,7 @@
 (defclass MAIN::FACTION(is-a RESOURCE))
 (defclass MAIN::CREATURE(is-a ADVERSITY))
 
-(defclass MAIN::ITEM(is-a RESOURCE))
+(defclass MAIN::ITEM(is-a RESOURCE CORRUPTION))
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
