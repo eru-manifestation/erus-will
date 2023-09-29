@@ -9,6 +9,8 @@
 
 ;(refresh-agenda [<module-name>])
 
+;(class [instance-name])
+
 ; Cargo el modulo main
 (deffunction load-utilities ()
     (chdir ?*route*)
@@ -87,7 +89,7 @@
 (load-all)
 (init-locations)
 (init-handG)
-(watch rules)
+;(watch rules)
 (run 40)
 
 

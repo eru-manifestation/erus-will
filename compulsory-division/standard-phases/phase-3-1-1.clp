@@ -16,7 +16,6 @@
 	?e <- (object (is-a E-fell-decl-move) (type IN)
 		(fell ?fell) (from ?from) (to ?to))
 	=>
-	; TODO: encontrar forma de llevar los datos (dejar vivo el evento??)
 	(send ?e complete)
 	(jump EP-1)
 

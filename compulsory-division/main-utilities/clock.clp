@@ -13,6 +13,8 @@ corruption-check-1-1-1
 corruption-check-1-2
 corruption-check-2
 FALSE
+loc-organize-1
+FALSE
 
 )
 	?*jumps* = 0

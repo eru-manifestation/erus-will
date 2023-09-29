@@ -74,16 +74,12 @@
     (object (is-a FELLOWSHIP) (name ?fell) (player ?p))
     (in (over ?rivendell) (under ?fell))
     =>
-    ;TODO: COLOCAR EL TABLERO INICIAL
     (debug Putting initial fellowship)
 
     (make-instance (gen-name E-char-play) of E-char-play (character ?aragorn) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?eomer) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?boromir) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?merry) (under ?fell))
-
-    ;(make-instance (gen-name E-char-play) of E-char-play (character ?shield) (under ?boromir))
-    ;(make-instance (gen-name E-char-play) of E-char-play (character ?cloak) (under ?merry))
 
     (debug Putting initial items)
 

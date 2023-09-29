@@ -16,24 +16,26 @@
 	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
 )
 
-; CLASES ABSTRACTAS
-(defclass MAIN::PLAYER (is-a USER)
+(defclass MAIN::NUMERABLE (is-a USER)
     (slot instance-# (type INTEGER) (default 2) (storage shared))
+)
+
+; CLASES ABSTRACTAS
+(defclass MAIN::PLAYER (is-a NUMERABLE)
+    (slot instance-# (source composite))
 	(slot general-influence (type INTEGER) (default 20) (access initialize-only))
 )
 
-(defclass MAIN::FELLOWSHIP (is-a OWNABLE)
-    (slot instance-# (type INTEGER) (default 2) (storage shared))
+(defclass MAIN::FELLOWSHIP (is-a OWNABLE NUMERABLE)
+    (slot instance-# (source composite))
 	(slot empty (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
 )
 
 ; CLASES CONCRETAS
-(defclass MAIN::CARD (is-a STATABLE))
+(defclass MAIN::CARD (is-a STATABLE NUMERABLE))
 
-(defclass MAIN::RESOURCE (is-a OWNABLE CARD)
-)
-(defclass MAIN::ADVERSITY (is-a OWNABLE CARD)
-)
+(defclass MAIN::RESOURCE (is-a OWNABLE CARD))
+(defclass MAIN::ADVERSITY (is-a OWNABLE CARD))
 
 (defclass MAIN::LOCATION (is-a CARD)
 	(slot closest-haven (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
@@ -48,14 +50,16 @@
 
 (defclass MAIN::CHARACTER (is-a WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
-	(slot influence (type INTEGER) (default 0) (access initialize-only))
-	(slot mind (type INTEGER) (default 0) (access initialize-only))
+	(slot influence (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
+	(slot mind (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
 	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
 )
+(defmessage-handler CHARACTER raw-corruption () ?self:corruption)
+(defmessage-handler CHARACTER raw-influence () ?self:influence)
+(defmessage-handler CHARACTER raw-mind () ?self:mind)
 
-(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE)
-)
+(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE))
 
 (defclass MAIN::R-PERMANENT-EVENT (is-a RESOURCE))
 (defclass MAIN::A-PERMANENT-EVENT (is-a ADVERSITY))

@@ -1,6 +1,6 @@
 ; DEFINICIÓN DE TEMPLATE EVENTO
-(defclass MAIN::EVENT (is-a USER)
-    (slot instance-# (type INTEGER) (default 2) (storage shared))
+(defclass MAIN::EVENT (is-a NUMERABLE)
+    (slot instance-# (source composite))
 	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT))
 	; Revisar en los que capturen datos de eventos que se especifique defused FALSE
 	; para evitar pattern matching innecesario
@@ -10,13 +10,12 @@
 
 
 ; DEFINICION DEL EVENTO DE FASE EVENTUAL
-(defclass MAIN::EVENT-PHASE (is-a USER)
-    (slot instance-# (type INTEGER) (default 2) (storage shared))
+(defclass MAIN::EVENT-PHASE (is-a NUMERABLE)
+    (slot instance-# (source composite))
 	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT ONGOING))
 	(slot defused (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
 		(pattern-match non-reactive))
 	
-	(slot ini (type SYMBOL) (default ?NONE))
 	(slot ep-name (type SYMBOL) (default ?NONE))
 )
 

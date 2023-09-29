@@ -104,23 +104,6 @@
 )
 
 
-; E-loc-organize
-(defclass MAIN::E-loc-organize (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-loc-organize (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-loc-organize) (type IN) 
-        (player ?p) (loc ?loc))
-    =>
-    (send ?e complete)
-    ;TODO: fase eventual de organización
-
-    (debug Organizing fellowships of player ?p in ?loc)
-)
-
-
 ; E-r-long-event-discard
 (defclass MAIN::E-r-long-event-discard (is-a EVENT)
     (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))

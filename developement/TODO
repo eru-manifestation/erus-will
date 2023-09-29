@@ -155,7 +155,7 @@ Hay eventos complejos que deben sucederse unos detrás de otros, donde la finali
 
 Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
 
-Manejar que no existan dos eventos de tipo move-fellowship (mediante un message-handler en init?) para una misma compañía
+Manejar que no existan dos eventos de tipo move-fellowship (eliminar la anterior en la consecuencia de crear la segunda) para una misma compañía
 
 Terminar módulo para un chequeo de corrupción (compleción del evento)
 
@@ -166,3 +166,11 @@ DONE:   Especificación de clase refugio
 Formalizar la plantilla "action-only", que sirve como parche para que los action se retracten una vez lanzados cuando su modulo forma parte de la pila de ejecución
 
 Detallar las pautas para el tratamiento de los datos cualitativos
+
+(gen-name) ------> name + (gen-sym* - "sym")
+
+En P-1-1-1 falta jugar personaje como seguidor
+
+Generar una especie de evento de problema si se detecta que cambia alguna condicion necesaria del juego? Como que por cierto evento pierdas influencia en un personaje y por ende no pueda hacerse cargo de un seguidor de buenas a primeras
+
+Hacer division entre event phase a realizar ahora mismo (corruption check, organization ...) y los que son manejados más tarde (move-fellowship)

@@ -235,7 +235,6 @@
 		(only-actions (phase P-1-1-1))
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
-		;TODO: hacer que funcione con un exist
 		(exists 
 			(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
 			(in (over ?loc) (under ?char))
@@ -249,5 +248,28 @@
 		(data (create$ 
 		"( player [" ?*player* "])" 
 		"( loc [" ?loc "])"))
+	))
+)
+
+
+; ACCIÓN: DESCARTAR UN PERSONAJE
+; Como parche para la opcion que deja la guia de organizar compañia de modo que descartes los
+; personajes que no te quepan en la compañia
+; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
+(defrule action-loc-organize (declare (salience ?*action-population-salience*))
+	(logical
+		(only-actions (phase P-1-1-1))
+		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
+		(object (is-a HAVEN) (name ?loc))
+		(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
+		(in (over ?loc) (under ?char))
+	)
+	=>
+	(assert (action 
+		(player ?p)
+		(event-def char-discard)
+		(description (sym-cat "Discard character " ?char))
+		(data (create$ 
+		"( char [" ?char "])"))
 	))
 )

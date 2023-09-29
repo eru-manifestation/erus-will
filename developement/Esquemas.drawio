@@ -1,10 +1,10 @@
-<mxfile host="Electron" modified="2023-09-27T18:12:02.865Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="H7IKNXTWblYhcV2vnv62" version="21.8.2" type="device" pages="2">
+<mxfile host="Electron" modified="2023-09-29T11:15:32.455Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="1qCey1gkEnUy2pc4lGK0" version="21.8.2" type="device" pages="3">
   <diagram id="-piYB9Pu7bBWKfccMFOV" name="Herencias">
-    <mxGraphModel dx="2314" dy="1177" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2760" dy="1488" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="KLGHeFAOVJ3ZuUFzJ31N-2" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="KLGHeFAOVJ3ZuUFzJ31N-1" target="pl66EDMDvCy734QFJXa0-37">
+        <mxCell id="KLGHeFAOVJ3ZuUFzJ31N-2" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" parent="1" source="KLGHeFAOVJ3ZuUFzJ31N-1" target="pl66EDMDvCy734QFJXa0-37" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="-432" y="878" />
@@ -98,12 +98,6 @@
         <mxCell id="pl66EDMDvCy734QFJXa0-26" value="&lt;div&gt;CARD&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;strokeColor=#005700;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="150" y="440" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="pl66EDMDvCy734QFJXa0-27" value="&lt;div&gt;PLAYER&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;strokeColor=#005700;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
-          <mxGeometry x="-886" y="757" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="pl66EDMDvCy734QFJXa0-28" value="FELLOWSHIP" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#005700;fontFamily=Helvetica;fontSize=12;fontColor=#ffffff;fillColor=#008a00;fontStyle=1" parent="1" vertex="1">
-          <mxGeometry x="-1043" y="757" width="120" height="60" as="geometry" />
-        </mxCell>
         <mxCell id="pl66EDMDvCy734QFJXa0-29" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=#ffffff;curved=1;" parent="1" source="pl66EDMDvCy734QFJXa0-33" target="pl66EDMDvCy734QFJXa0-8" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
@@ -127,7 +121,7 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="252" y="1152" />
-              <mxPoint x="-993" y="1152" />
+              <mxPoint x="-1009" y="1152" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -155,13 +149,10 @@
         <mxCell id="pl66EDMDvCy734QFJXa0-40" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;noJump=0;curved=1;" parent="1" source="pl66EDMDvCy734QFJXa0-41" target="pl66EDMDvCy734QFJXa0-26" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="-210" y="1025" />
-              <mxPoint x="210" y="1025" />
+              <mxPoint x="-210" y="1042" />
+              <mxPoint x="210" y="1042" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="pl66EDMDvCy734QFJXa0-41" value="STATABLE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
-          <mxGeometry x="-270" y="1050" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="pl66EDMDvCy734QFJXa0-42" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" parent="1" source="pl66EDMDvCy734QFJXa0-44" target="pl66EDMDvCy734QFJXa0-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -175,14 +166,55 @@
         <mxCell id="pl66EDMDvCy734QFJXa0-45" value="HAVEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;strokeColor=#005700;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="240" y="680" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="KLGHeFAOVJ3ZuUFzJ31N-1" value="CORRUPTION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-2" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="FO5Hrt-hr4NYURpYupH0-1" target="pl66EDMDvCy734QFJXa0-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-3" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="FO5Hrt-hr4NYURpYupH0-1" target="pl66EDMDvCy734QFJXa0-28">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-973" y="1082" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-4" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="FO5Hrt-hr4NYURpYupH0-1" target="pl66EDMDvCy734QFJXa0-26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="195" y="1082" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-8" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="FO5Hrt-hr4NYURpYupH0-1" target="FO5Hrt-hr4NYURpYupH0-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-9" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;jettySize=auto;html=1;curved=1;" edge="1" parent="1" source="FO5Hrt-hr4NYURpYupH0-1" target="FO5Hrt-hr4NYURpYupH0-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-1" value="NUMERABLE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="-653" y="1052" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pl66EDMDvCy734QFJXa0-41" value="STATABLE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="-270" y="1050" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="KLGHeFAOVJ3ZuUFzJ31N-1" value="CORRUPTION" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
           <mxGeometry x="-492" y="1052" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-5" value="&lt;div&gt;EVENT&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;strokeColor=#005700;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="-853" y="644" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FO5Hrt-hr4NYURpYupH0-6" value="EVENT-PHASE" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#005700;fontFamily=Helvetica;fontSize=12;fontColor=#ffffff;fillColor=#008a00;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="-1010" y="644" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pl66EDMDvCy734QFJXa0-27" value="&lt;div&gt;PLAYER&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;strokeColor=#005700;fontStyle=1;fontColor=#ffffff;" parent="1" vertex="1">
+          <mxGeometry x="-886" y="757" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pl66EDMDvCy734QFJXa0-28" value="FELLOWSHIP" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#005700;fontFamily=Helvetica;fontSize=12;fontColor=#ffffff;fillColor=#008a00;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="-1043" y="757" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Corruption check">
-    <mxGraphModel dx="1847" dy="1713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="EP-corruption-check">
+    <mxGraphModel dx="1861" dy="1728" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -284,6 +316,47 @@
         </mxCell>
         <mxCell id="DcXT3rauM754YG0SbR2x-7" value="El sistema está pensado para representar la sucesión de fases y fases eventuales como una pila de módulos en el focus-stack.&lt;br&gt;Esto es estable y no surgen problemas entre fases y fases eventuales distintas, SIN EMBARGO, esta estabilidad desaparece&lt;br&gt;al intentar acumular dos fases idénticas en la pila de focus, ya que se realizarían órdenes de una fase o de la anterior indistintamente.&lt;br&gt;&lt;br&gt;Como conclusión, se permite que una fase o fase eventual llame a otra fase eventual distinta, siempre y cuando no esté ya presente en la pila&lt;br&gt;de ejecución. Esto implica que el esquema de llamadas posibles entre fases eventuales es un digrafo acíclico.&lt;br&gt;&lt;br&gt;La ejecución de este sistema hace necesaria la existencia de una clase de evento distinta, EVENT-PHASE, donde se sobrecarga&lt;br&gt;el atributo type con la constante extra ONGOING, indicando que esa fase está en funcionamiento; además del símbolo que representa&lt;br&gt;al módulo que debe llamar el event-phase-handler designado por cada EVENT-PHASE. Además, cada fase eventual deberá hacer su&lt;br&gt;propia clase heradando de EVENT-PHASE para transmitir los datos necesarios hacia el inicio del módulo." style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="-780" y="295" width="780" height="170" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="kMybVrYrUGz7dgwIrckW" name="EP-organize-fell">
+    <mxGraphModel dx="1034" dy="559" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="12bgaepketlrPZSBsv4C-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="30" width="400" height="550" as="geometry" />
+        </mxCell>
+        <mxCell id="12bgaepketlrPZSBsv4C-3" value="FASE EVENTUAL ORGANIZACION&lt;br&gt;(organization)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="70" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4iIYx3PKoLdyP78qjuEt-1" target="4iIYx3PKoLdyP78qjuEt-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-1" value="INICIO FASE ORGANIZACION&lt;br&gt;(organization 0)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="55" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="4iIYx3PKoLdyP78qjuEt-3" target="4iIYx3PKoLdyP78qjuEt-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-3" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="408.75" y="140" width="242.5" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-5" value="EJECUCION FASE ORGANIZACION&lt;br&gt;(organization 1)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="160" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-7" value="MOVER PERSONAJE DE COMPAÑÍA&lt;br&gt;(accion)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="220" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-8" value="HACER PERSONAJE SEGUIDOR&lt;br&gt;(accion)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="225" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-9" value="HACER SEGUIDOR PERSONAJE&lt;br&gt;(accion)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="435" y="340" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="4iIYx3PKoLdyP78qjuEt-12" value="FIN FASE ORGANIZACION&lt;br&gt;(organization 2)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="480" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
