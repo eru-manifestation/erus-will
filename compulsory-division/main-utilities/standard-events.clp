@@ -104,6 +104,22 @@
 )
 
 
+; E-loc-organize
+(defclass MAIN::E-loc-organize (is-a EVENT)
+    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-loc-organize (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-loc-organize) (type IN) 
+        (player ?p) (loc ?loc))
+    =>
+    (send ?e complete)
+    (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
+    (debug Organizing fellowships of player ?p in ?loc)
+)
+
+
 ; E-r-long-event-discard
 (defclass MAIN::E-r-long-event-discard (is-a EVENT)
     (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
@@ -192,4 +208,36 @@
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Destroying character ?c)
+)
+
+
+; E-char-move
+(defclass MAIN::E-char-move (is-a EVENT)
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+)
+
+(defrule MAIN::E-char-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-char-move) (type IN) 
+        (char ?c) (fell ?fell))
+    =>
+    (send ?e complete)
+    (in-move ?c ?fell)
+    (debug Moving character ?c to ?fell)
+)
+
+
+; E-char-follow
+(defclass MAIN::E-char-follow (is-a EVENT)
+    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot followed (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+)
+
+(defrule MAIN::E-char-follow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-char-follow) (type IN) 
+        (follower ?follower) (followed ?followed))
+    =>
+    (send ?e complete)
+    (in-move ?follower ?followed)
+    (debug Making character ?follower follower of ?followed)
 )

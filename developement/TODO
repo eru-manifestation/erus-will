@@ -153,11 +153,11 @@ como no se devuelve al acabar la función por regla general, ocurre que a pesar 
 
 Hay eventos complejos que deben sucederse unos detrás de otros, donde la finalización de uno implica el inicio del siguiente. Ocurre que si una única regla aserta las instancias de eventos, puede ocurrir que cierto evento sea cancelado y que ocurra después otro que para tener consistencia, necesite del anterior. Ahora mismo, los eventos son incorrelados. Hacer un campo con la info de los eventos subyacentes comprimidos, que se activen automáticamente al completar el evento que los contiene. Así se puede conseguir una correlación entre los eventos que ahora mismo sólo se diseña con la estrategia de resolución de conflictos
 
-Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
+DONE:   Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
 
 Manejar que no existan dos eventos de tipo move-fellowship (eliminar la anterior en la consecuencia de crear la segunda) para una misma compañía
 
-Terminar módulo para un chequeo de corrupción (compleción del evento)
+DONE:   Terminar módulo para un chequeo de corrupción (compleción del evento)
 
 Módulo para la organización de una compañía
 
@@ -173,4 +173,5 @@ En P-1-1-1 falta jugar personaje como seguidor
 
 Generar una especie de evento de problema si se detecta que cambia alguna condicion necesaria del juego? Como que por cierto evento pierdas influencia en un personaje y por ende no pueda hacerse cargo de un seguidor de buenas a primeras
 
-Hacer division entre event phase a realizar ahora mismo (corruption check, organization ...) y los que son manejados más tarde (move-fellowship)
+DONE:   Hacer division entre event phase a realizar ahora mismo (corruption check, organization ...) y los que son manejados más tarde (move-fellowship)
+SOLUCION: lanzar el EVENT en el instante y dejar el handler para el momento de activacion del EVENT-PHASE del mismo nombre

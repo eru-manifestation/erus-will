@@ -15,7 +15,7 @@
 ; Puedes jugar un personaje de tu mano en su lugar natal o
 ; en cualquier refugio si tienes suficiente Influencia general o
 ; Influencia directa de algún personaje para controlarlo
-(defrule action-play-as-follower (declare (salience ?*action-population-salience*))
+(defrule action-char-play#as-follower (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
 		; Hay un personaje en la mano del jugador dueño del turno
@@ -55,7 +55,7 @@
 )
 
 ; ACCIÓN: Jugar personaje 2
-(defrule action-play-under-fellowship (declare (salience ?*action-population-salience*))
+(defrule action-char-play#under-fell (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
 		; Hay un personaje en la mano del jugador dueño del turno
@@ -93,7 +93,7 @@
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
-(defrule action-decl-mov-hav (declare (salience ?*action-population-salience*))
+(defrule action-fell-decl-mov#from-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
@@ -120,7 +120,7 @@
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
-(defrule action-decl-mov-hav-to-hav (declare (salience ?*action-population-salience*))
+(defrule action-fell-decl-mov#haven-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
@@ -146,7 +146,7 @@
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
-(defrule action-decl-mov (declare (salience ?*action-population-salience*))
+(defrule action-fell-decl-mov#no-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
 		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
@@ -173,7 +173,7 @@
 ; Puedes intercambiar objetos entre tus personajes si están en
 ; el mismo lugar, pero antes, el portador de cada objeto deberá
 ; hacer un chequeo de corrupción
-(defrule action-transfer-item (declare (salience ?*action-population-salience*))
+(defrule action-item-transfer (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
@@ -255,8 +255,9 @@
 ; ACCIÓN: DESCARTAR UN PERSONAJE
 ; Como parche para la opcion que deja la guia de organizar compañia de modo que descartes los
 ; personajes que no te quepan en la compañia
+
 ; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
-(defrule action-loc-organize (declare (salience ?*action-population-salience*))
+(defrule action-char-discard (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)

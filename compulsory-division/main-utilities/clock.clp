@@ -14,6 +14,7 @@ corruption-check-1-2
 corruption-check-2
 FALSE
 loc-organize-1
+loc-organize-2
 FALSE
 
 )

@@ -71,6 +71,9 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-2.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-2.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize-2.clp")
 )
 
 (deffunction load-handG()

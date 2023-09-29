@@ -13,7 +13,7 @@
 )
 
 (defclass MAIN::CORRUPTION (is-a USER)
-	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
+	(slot corruption (type INTEGER) (default 0) (access read-only))
 )
 
 (defclass MAIN::NUMERABLE (is-a USER)
@@ -23,12 +23,13 @@
 ; CLASES ABSTRACTAS
 (defclass MAIN::PLAYER (is-a NUMERABLE)
     (slot instance-# (source composite))
-	(slot general-influence (type INTEGER) (default 20) (access initialize-only))
+	(slot general-influence (type INTEGER) (default 20) (access read-write))
 )
 
 (defclass MAIN::FELLOWSHIP (is-a OWNABLE NUMERABLE)
     (slot instance-# (source composite))
 	(slot empty (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
+	(slot companions (type INTEGER) (default 0) (access read-write))
 )
 
 ; CLASES CONCRETAS
@@ -39,25 +40,22 @@
 
 (defclass MAIN::LOCATION (is-a CARD)
 	(slot closest-haven (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
-	(slot is-haven (type SYMBOL) (default FALSE) (access initialize-only) (allowed-symbols TRUE FALSE))
-	(slot state (default UNTAPPED))
+	(slot is-haven (type SYMBOL) (default FALSE) (access read-only) (allowed-symbols TRUE FALSE))
+	(slot state (source composite) (default UNTAPPED))
 )
 
 (defclass MAIN::HAVEN (is-a LOCATION)
 	(multislot site-paths (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
-    (slot is-haven (default TRUE))
+    (slot is-haven (source composite) (default TRUE))
 )
 
 (defclass MAIN::CHARACTER (is-a WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
-	(slot influence (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
-	(slot mind (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
+	(slot influence (type INTEGER) (default 0) (access read-write))
+	(slot mind (type INTEGER) (default 0) (access read-write))
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
-	(slot corruption (type INTEGER) (default 0) (access initialize-only) (create-accessor ?NONE))
+	(slot corruption (type INTEGER) (default 0) (access read-write))
 )
-(defmessage-handler CHARACTER raw-corruption () ?self:corruption)
-(defmessage-handler CHARACTER raw-influence () ?self:influence)
-(defmessage-handler CHARACTER raw-mind () ?self:mind)
 
 (defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE))
 

@@ -1,3 +1,6 @@
+;TODO: IMPORTANTE, RECORDAR QUE LA CORRUPCIÓN DE LOS PERSONAJES AL SER UN MODIFICADOR,
+;   SE DEBE INVERTIR CON RESPECTO A LA INFORMACIÓN DE LA CARTA
+
 ; PERSONAJES Y OBJETOS INICIALES
 
 (defclass ARAGORN-II (is-a CHARACTER)     
@@ -7,10 +10,6 @@
     (slot mind (source composite) (default 9))
     (slot race (source composite) (default TODO))
 )
-(defmessage-handler ARAGORN-II get-mind () (call-next-handler))
-(defmessage-handler ARAGORN-II raw-mind () ?self:mind)
-(defmessage-handler ARAGORN-II get-influence () (call-next-handler))
-(defmessage-handler ARAGORN-II raw-influence () ?self:influence)
 
 (defclass EOMER (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -19,10 +18,6 @@
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default TODO))
 )
-(defmessage-handler EOMER get-mind () (call-next-handler))
-(defmessage-handler EOMER raw-mind () ?self:mind)
-(defmessage-handler EOMER get-influence () (call-next-handler))
-(defmessage-handler EOMER raw-influence () ?self:influence)
 
 (defclass BOROMIR-II (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -30,15 +25,8 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default TODO))
-    (slot corruption (source composite) (default -1))
+    (slot corruption (source composite) (default 1))
 )
-(defmessage-handler BOROMIR-II get-corruption () (call-next-handler))
-(defmessage-handler BOROMIR-II raw-corruption () ?self:corruption)
-(defmessage-handler BOROMIR-II get-mind () (call-next-handler))
-(defmessage-handler BOROMIR-II raw-mind () ?self:mind)
-(defmessage-handler BOROMIR-II get-influence () (call-next-handler))
-(defmessage-handler BOROMIR-II raw-influence () ?self:influence)
-
 
 (defclass SHIELD-OF-IRON--BOUND-ASH (is-a MINOR-ITEM)
     (slot instance-# (source composite))
@@ -52,10 +40,6 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default TODO))
 )
-(defmessage-handler MERRY get-mind () (call-next-handler))
-(defmessage-handler MERRY raw-mind () ?self:mind)
-(defmessage-handler MERRY get-influence () (call-next-handler))
-(defmessage-handler MERRY raw-influence () ?self:influence)
 
 
 (defclass ELVEN-CLOAK (is-a MINOR-ITEM)
@@ -135,14 +119,8 @@
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
     (slot race (source composite) (default TODO))
-    (slot corruption (source composite) (default 1))
+    (slot corruption (source composite) (default -1))
 )
-(defmessage-handler GANDALF get-corruption () (call-next-handler))
-(defmessage-handler GANDALF raw-corruption () ?self:corruption)
-(defmessage-handler GANDALF get-mind () (call-next-handler))
-(defmessage-handler GANDALF raw-mind () ?self:mind)
-(defmessage-handler GANDALF get-influence () (call-next-handler))
-(defmessage-handler GANDALF raw-influence () ?self:influence)
 
 (defclass BEREGOND (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -150,14 +128,8 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default TODO))
-    (slot corruption (source composite) (default -1))
+    (slot corruption (source composite) (default 1))
 )
-(defmessage-handler BEREGOND get-corruption () (call-next-handler))
-(defmessage-handler BEREGOND raw-corruption () ?self:corruption)
-(defmessage-handler BEREGOND get-mind () (call-next-handler))
-(defmessage-handler BEREGOND raw-mind () ?self:mind)
-(defmessage-handler BEREGOND get-influence () (call-next-handler))
-(defmessage-handler BEREGOND raw-influence () ?self:influence)
 
 (defclass FARAMIR (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -173,14 +145,8 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default TODO))
-    (slot corruption (source composite) (default -1))
+    (slot corruption (source composite) (default 1))
 )
-(defmessage-handler KILI get-corruption () (call-next-handler))
-(defmessage-handler KILI raw-corruption () ?self:corruption)
-(defmessage-handler KILI get-mind () (call-next-handler))
-(defmessage-handler KILI raw-mind () ?self:mind)
-(defmessage-handler KILI get-influence () (call-next-handler))
-(defmessage-handler KILI raw-influence () ?self:influence)
 
 (defclass ERKENBRAND (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -189,10 +155,6 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default TODO))
 )
-(defmessage-handler ERKENBRAND get-mind () (call-next-handler))
-(defmessage-handler ERKENBRAND raw-mind () ?self:mind)
-(defmessage-handler ERKENBRAND get-influence () (call-next-handler))
-(defmessage-handler ERKENBRAND raw-influence () ?self:influence)
 
 (defclass BERETAR (is-a CHARACTER)     
     (slot instance-# (source composite))
@@ -201,10 +163,6 @@
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default TODO))
 )
-(defmessage-handler BERETAR get-mind () (call-next-handler))
-(defmessage-handler BERETAR raw-mind () ?self:mind)
-(defmessage-handler BERETAR get-influence () (call-next-handler))
-(defmessage-handler BERETAR raw-influence () ?self:influence)
 
 ; ADVERSIDADES (SUCESOS)
 
