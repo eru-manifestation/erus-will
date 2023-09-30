@@ -11,25 +11,13 @@
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
-; EVENT HANDLER: FELLOWSHIP-gen-move (es un salto)
-(defrule E-fell-decl-move (declare (salience ?*event-handler-salience*))
-	?e <- (object (is-a E-fell-decl-move) (type IN)
-		(fell ?fell) (from ?from) (to ?to))
-	=>
-	(send ?e complete)
-	(jump EP-1)
 
-	(debug Declaring movement of ?fell from ?from to ?to)
-)
-
-
-; ACCIÓN: 
-; 
+; ACCIÓN: Ejecutar movimiento declarado por el propio evento
 (defrule action-fell-move (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-3-1-1))
 		(object (is-a E-fell-decl-move) (type IN)
-			(fell ?fell) (from ?from) (to ?to) (name ?name))
+			(fell ?fell) (from ?from) (to ?to) (name ?event))
 	)
 	=>
 	(assert (action 
@@ -37,9 +25,9 @@
 		(event-def fell-move)
 		(description (sym-cat "Move fellowship " ?fell " from " ?from " to " ?to))
 		(data (create$ 
-		"( decl-name [" ?name "])"
+		"( decl-event [" ?event "])"
 		"( fell [" ?fell "])"
 		"( from [" ?from "])"
 		"( to [" ?to "])"))
-	)); TODO: Completar e evento fell-declare-move lo antes posible en la fase fell-move
+	))
 )

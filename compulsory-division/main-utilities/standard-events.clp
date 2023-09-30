@@ -257,3 +257,47 @@
     (in-move ?follower ?fell)
     (debug Making the follower ?follower an usual character in ?fell)
 )
+
+
+; E-fell-move
+(defclass MAIN::E-fell-move (is-a EVENT)
+    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-fell-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-fell-move) (type IN) 
+        (from ?from) (to ?to) (fell ?fell) (decl-event ?decl-event))
+    =>
+    (send ?e complete)
+    (send ?decl-event complete)
+    (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?from) (to ?to) (fell ?fell))
+    (debug Executing ?fell movement from ?from to ?to)
+)
+
+
+; E-fell-decl-remain
+(defclass MAIN::E-fell-decl-remain (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+
+; E-fell-remain
+(defclass MAIN::E-fell-remain (is-a EVENT)
+    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-fell-remain (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-fell-remain) (type IN) 
+        (loc ?loc) (fell ?fell) (decl-event ?decl-event))
+    =>
+    (send ?e complete)
+    (send ?decl-event complete)
+    (make-instance (gen-name EP-fell-move) of EP-fell-remain (loc ?loc) (fell ?fell))
+    (debug Executing the remain of ?fell in ?loc)
+)

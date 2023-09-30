@@ -12,7 +12,7 @@
 	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
 
-(defrule throw-dices
+(defrule roll-dices
 	?ep <- (object (is-a EP-corruption-check) (type ONGOING))
 	=>
 	(send ?ep put-dices (+ (random 1 6) (random 1 6)))

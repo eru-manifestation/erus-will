@@ -23,7 +23,8 @@
 ; CLASES ABSTRACTAS
 (defclass MAIN::PLAYER (is-a NUMERABLE)
     (slot instance-# (source composite))
-	(slot general-influence (type INTEGER) (default 20) (access read-write))
+	(slot general-influence (type INTEGER) (default 20))
+	(slot hand (type INTEGER) (default 0))
 )
 
 (defclass MAIN::FELLOWSHIP (is-a OWNABLE NUMERABLE)

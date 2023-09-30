@@ -1,20 +1,30 @@
 (defglobal MAIN ?*phase-list* = (create$ 
 
+START
 P-0-1-1
 P-0-2-1
 P-1-1-1
+P-1-1-2
 P-2-1-1
 P-2-2-1
 P-2-3-1
 ;P-3-1-0
 P-3-1-1
 FALSE
+
+START-corruption-check
 corruption-check-1-1-1
 corruption-check-1-2
 corruption-check-2
 FALSE
+
+START-loc-organize
 loc-organize-1
 loc-organize-2
+FALSE
+
+START-fell-move
+fell-move-1
 FALSE
 
 )
@@ -27,7 +37,16 @@ FALSE
 	(do-for-fact ((?only-actions only-actions)) TRUE (modify ?only-actions (phase ?jump-stage)))
 )
 
+
+; RECUPERA EL FOCO ACTUAL Y LO COMPARA EN LA LISTA PARA DEVOLVER EL FOCO SIGUIENTE
+(deffunction MAIN::stage-guide (?stage)
+	(bind ?i (member$ ?stage $?*phase-list*))
+	(nth$ (+ 1 ?i) $?*phase-list*)
+)
+
 (deffunction MAIN::jump (?jump-stage)
+	; Comportamiento inesperado si una fase tiene el FALSE justo despues de su START
+	(if (str-index START ?jump-stage) then (bind ?jump-stage (stage-guide ?jump-stage)))
     (focus ?jump-stage)
 	(assert (ini))
 	(bind ?*jumps* (+ 1 ?*jumps*))
@@ -37,16 +56,9 @@ FALSE
 ; REGLA DE INICIO DE JUEGO
 (defrule MAIN::start =>
 	(assert (only-actions (phase FALSE)))
-	(jump P-0-1-1) 
+	(jump START) 
 	(assert (post-draw))
 	(assert (infinite))
-)
-
-
-; RECUPERA EL FOCO ACTUAL Y LO COMPARA EN LA LISTA PARA DEVOLVER EL FOCO SIGUIENTE
-(deffunction MAIN::stage-guide (?stage)
-	(bind ?i (member$ ?stage $?*phase-list*))
-	(nth$ (+ 1 ?i) $?*phase-list*)
 )
 
 ; FUNCION DE CAMBIO DE FASE

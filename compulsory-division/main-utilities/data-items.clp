@@ -66,3 +66,15 @@
     (debug Se crea el general influence item por ?char para el jugador ?p)
     (make-instance (gen-name data-item) of data-item (target-slot general-influence) (target ?p) (value (- 0 ?mind)))
 )
+
+
+; INFO ITEM PARA HAND DE PLAYER
+(defrule MAIN::hand-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a PLAYER) (name ?p))
+        (object (is-a CARD) (player ?p) (state HAND) (name ?c))
+    )
+    =>
+    (debug Se crea el hand item por ?c para el jugador ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot hand) (target ?p) (value 1))
+)
