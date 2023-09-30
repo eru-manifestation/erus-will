@@ -11,6 +11,8 @@
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
+
+
 ; ACCIÓN: JUGAR PERSONAJE 1
 ; Puedes jugar un personaje de tu mano en su lugar natal o
 ; en cualquier refugio si tienes suficiente Influencia general o
@@ -19,16 +21,17 @@
 	(logical 
 		(only-actions (phase P-1-1-1))
 		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
+		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) 
+			(birthplace ?bp) (race ?race) (mind ?mind))
 		
-		; Localiza un personaje en una localización
-		(object (is-a CHARACTER) (name ?play-under) (player ?p))
+		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de
+		; una compañía) y la compañía tiene espacio
+		(object (is-a CHARACTER) (player ?p) (name ?play-under) (influence ?influence&:(<= ?mind ?influence)))
+		(object (is-a FELLOWSHIP) (player ?p) (name ?fell) (companions ?comp&:(< ?comp 7)))
+		(in (transitive FALSE) (over ?fell) (under ?play-under))
+
 		(object (is-a LOCATION) (name ?loc))
 		(in (over ?loc) (under ?play-under))
-	
-		; Un seguidor no puede tener sus propios seguidores.
-		(object (is-a CHARACTER) (name ?followed))
-		(not (in (transitive FALSE) (over ?followed) (under ?play-under)))
 
 		; O bien está en el lugar natal del personaje o en un refugio
 		; No tiene sentido que un mago sea seguidor
@@ -37,10 +40,6 @@
 				(eq ?bp ?loc)
 				(send ?loc get-is-haven)
 		)))
-
-		; Comprobar que el personaje play-under tiene infl. dir. como para tener
-		; a char de seguidor
-		(test (< (send ?char get-mind) (send ?play-under get-influence)))
 	)
 	=>
 	; Asertar la acción "Jugar al personaje como seguidor"
@@ -58,19 +57,18 @@
 (defrule action-char-play#under-fell (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
-		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) (birthplace ?bp) (race ?race))
+		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen
+		; necesaria para jugarlo)
+		(object (is-a PLAYER) (name ?p&:(eq ?p ?*player*)) (general-influence ?gen-inf))
+		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
+			(birthplace ?bp) (race ?race) (mind ?mind&:(<= ?mind ?gen-inf)))
 		
 		; Localiza una compañía/personaje en una localización
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
 		(object (is-a LOCATION) (name ?loc) (is-haven ?is-haven))
 		(in (transitive FALSE) (over ?loc) (under ?fell))
 		
-		
-		; Tiene que haber suficiente influencia general
-		(test (<= (send ?char get-mind) (send ?p get-general-influence)))
 		; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
-		
 		(test (or 
 				(eq ?bp ?loc)
 				(eq ?loc [rivendell]); TODO: []?

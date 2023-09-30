@@ -170,11 +170,22 @@
 )
 
 
+; E-fell-decl-remain
+(defclass MAIN::E-fell-decl-remain (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+
 ; E-fell-decl-move
 (defclass MAIN::E-fell-decl-move (is-a EVENT)
     (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
     (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
     (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+(defmessage-handler E-fell-decl-move init after ()
+	; Defuseo el evento de permanencia en el lugar de la compañía
+	(do-for-instance ((?e E-fell-decl-remain)) (eq ?e:fell ?self:fell) (send ?e defuse))
 )
 
 
@@ -275,13 +286,6 @@
     (send ?decl-event complete)
     (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?from) (to ?to) (fell ?fell))
     (debug Executing ?fell movement from ?from to ?to)
-)
-
-
-; E-fell-decl-remain
-(defclass MAIN::E-fell-decl-remain (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 
