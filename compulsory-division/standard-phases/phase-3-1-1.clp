@@ -21,3 +21,25 @@
 
 	(debug Declaring movement of ?fell from ?from to ?to)
 )
+
+
+; ACCIÓN: 
+; 
+(defrule action-fell-move (declare (salience ?*action-population-salience*))
+	(logical
+		(only-actions (phase P-3-1-1))
+		(object (is-a E-fell-decl-move) (type IN)
+			(fell ?fell) (from ?from) (to ?to) (name ?name))
+	)
+	=>
+	(assert (action 
+		(player ?*player*)
+		(event-def fell-move)
+		(description (sym-cat "Move fellowship " ?fell " from " ?from " to " ?to))
+		(data (create$ 
+		"( decl-name [" ?name "])"
+		"( fell [" ?fell "])"
+		"( from [" ?from "])"
+		"( to [" ?to "])"))
+	)); TODO: Completar e evento fell-declare-move lo antes posible en la fase fell-move
+)

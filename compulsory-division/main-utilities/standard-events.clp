@@ -241,3 +241,19 @@
     (in-move ?follower ?followed)
     (debug Making character ?follower follower of ?followed)
 )
+
+
+; E-char-unfollow
+(defclass MAIN::E-char-unfollow (is-a EVENT)
+    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+)
+
+(defrule MAIN::E-char-unfollow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-char-unfollow) (type IN) 
+        (follower ?follower) (fell ?fell))
+    =>
+    (send ?e complete)
+    (in-move ?follower ?fell)
+    (debug Making the follower ?follower an usual character in ?fell)
+)

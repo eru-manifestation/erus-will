@@ -50,3 +50,19 @@
     (debug Se crea el influence item por ?follower para ?char)
     (make-instance (gen-name data-item) of data-item (target-slot influence) (target ?char) (value (- 0 ?mind)))
 )
+
+
+; INFO ITEM PARA GENERAL INFLUENCE DE PLAYER
+(defrule MAIN::general-influence-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a PLAYER) (name ?p))
+        (object (is-a CHARACTER) (name ?char) (mind ?mind) (player ?p))
+        (exists
+            (object (is-a FELLOWSHIP) (player ?p) (name ?fell))
+            (in (transitive FALSE) (over ?fell) (under ?char))
+        )
+    )
+    =>
+    (debug Se crea el general influence item por ?char para el jugador ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot general-influence) (target ?p) (value (- 0 ?mind)))
+)

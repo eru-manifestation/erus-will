@@ -45,7 +45,7 @@
 
 
 ; ACCIÓN: HACER PERSONAJE UN SEGUIDOR
-; Siempre que un personaje tenga suficiente influencia puedes jugar el seguidor
+; Siempre que un personaje tenga suficiente influencia puedes hacer de un personaje seguidor
 (defrule action-char-follow (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase loc-organize-1))
@@ -78,6 +78,42 @@
 		(description (sym-cat "Make " ?follower " a follower of " ?char))
 		(data (create$ 
 		"( followed [" ?char "])" 
+		"( follower [" ?follower "])"))
+	))
+)
+
+
+; ACCIÓN: PASAR DE SEGUIDOR A PERSONAJE
+; Siempre que el jugador tenga suficiente influencia general y que haya espacio en la compañía
+; puedo bajarlo
+(defrule action-char-unfollow (declare (salience ?*action-population-salience*))
+	(logical 
+		(only-actions (phase loc-organize-1))
+        (object (is-a EP-loc-organize) (type ONGOING) (player ?p) (loc ?loc))
+
+		;Compruebo que el jugador tenga influencia general suficiente
+		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
+
+		;Dado un personaje en la localizacion que sea seguidor (bajo otro personaje)
+		(object (is-a CHARACTER) (name ?followed) (player ?p))
+		(in (over ?loc) (under ?followed))
+
+		;Compruebo que sea seguidor
+		(object (is-a CHARACTER) (name ?follower) (player ?p) (mind ?mind&:(<= ?mind ?gen-inf)))
+		(in (over ?followed) (under ?follower))
+
+		;Encuentro una compañía con espacio en el lugar
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
+		(in (transitive FALSE) (over ?loc) (under ?fell))
+	)
+	=>
+	; Asertar la acción "Hacer seguidor un personaje en cierta compañía"
+	(assert (action 
+		(player ?p)
+		(event-def char-unfollow)
+		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
+		(data (create$ 
+		"( fell [" ?fell "])" 
 		"( follower [" ?follower "])"))
 	))
 )
