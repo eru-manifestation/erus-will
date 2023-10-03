@@ -85,7 +85,10 @@
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
 (defclass MAIN::FACTION(is-a RESOURCE))
-(defclass MAIN::CREATURE(is-a ADVERSITY))
+(defclass MAIN::CREATURE(is-a ADVERSITY)
+	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
+		(allowed-symbols ANIMALS SPIDERS AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MEN WOLVES UNDEAD ORCS TROLLS NAZGUL))
+)
 
 (defclass MAIN::ITEM(is-a RESOURCE CORRUPTION))
 (defclass MAIN::MINOR-ITEM(is-a ITEM))

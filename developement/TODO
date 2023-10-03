@@ -177,3 +177,5 @@ DONE:   Hacer division entre event phase a realizar ahora mismo (corruption chec
 SOLUCION: lanzar el EVENT en el instante y dejar el handler para el momento de activacion del EVENT-PHASE del mismo nombre
 
 DONE:   Revisar que antes de jugar un personaje, la compañia tenga siempre espacio
+
+Definir dos tipos de reglas: las de unicidad (que se ejecutan una única vez por módulo) y las que están diseñadas para ejecutarse las veces necesarias mientras se cumplan las condiciones

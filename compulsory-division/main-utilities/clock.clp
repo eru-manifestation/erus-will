@@ -27,6 +27,12 @@ FALSE
 START-fell-move
 fell-move-1
 fell-move-2
+fell-move-3-1
+fell-move-3-2
+fell-move-3-3
+fell-move-4-0
+fell-move-4-1
+fell-move-4-2
 FALSE
 
 )

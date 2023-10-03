@@ -305,3 +305,60 @@
     (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?loc) (to ?loc) (fell ?fell))
     (debug Executing the remain of ?fell in ?loc)
 )
+
+
+; E-player-draw
+(defclass MAIN::E-player-draw (is-a EVENT)
+    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot draw-ammount (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
+)
+
+(defrule MAIN::E-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-player-draw) (type IN) 
+        (player ?p) (draw-ammount ?n))
+    =>
+    (send ?e complete)
+
+    (bind ?chosen (create$))
+	; TODO: ESCOGE LOS PRIMEROS QUE SEAN, NO ES ALEATORIO
+    (do-for-all-instances ((?card CARD) (?ownable OWNABLE)) (and (eq ?card ?ownable) (eq ?card:state DRAW) (eq ?card:player ?p))
+        (if (< 0 ?n) then
+            (bind ?chosen (insert$ ?chosen 1 ?card))
+            (bind ?n (- ?n 1))
+            (send ?card put-state HAND)
+            else
+            break
+        )
+    )
+    (debug Player ?p draws (implode$ ?chosen))
+)
+
+
+; E-fell-move-player-draw
+(defclass MAIN::E-fell-move-player-draw (is-a EVENT)
+    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
+)
+
+(defrule MAIN::E-fell-move-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-fell-move-player-draw) (type IN) 
+        (fell-move ?fell-move))
+    =>
+    (send ?e complete)
+    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?*player*))
+    (send ?fell-move put-player-draw (- (send ?fell-move get-player-draw) 1))
+)
+
+
+; E-fell-move-enemy-draw
+(defclass MAIN::E-fell-move-enemy-draw (is-a EVENT)
+    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
+)
+
+(defrule MAIN::E-fell-move-enemy-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-fell-move-enemy-draw) (type IN) 
+        (fell-move ?fell-move))
+    =>
+    (send ?e complete)
+    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?*enemy*))
+    (send ?fell-move put-enemy-draw (- (send ?fell-move get-enemy-draw) 1))
+)

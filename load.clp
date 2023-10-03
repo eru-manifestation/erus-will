@@ -74,6 +74,12 @@
 
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-3-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-3-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-4-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-4-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-4-2.clp")
 )
 
 (deffunction load-handG()

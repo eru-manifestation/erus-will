@@ -2,7 +2,7 @@
 (defmodule fell-move-2 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////CAST
+;/////INIT
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
 (debug Calcular limite de adversidades, cartas por robar e itinerario))
