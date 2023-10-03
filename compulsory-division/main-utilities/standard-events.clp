@@ -302,6 +302,6 @@
     =>
     (send ?e complete)
     (send ?decl-event complete)
-    (make-instance (gen-name EP-fell-move) of EP-fell-remain (loc ?loc) (fell ?fell))
+    (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?loc) (to ?loc) (fell ?fell))
     (debug Executing the remain of ?fell in ?loc)
 )

@@ -20,19 +20,16 @@
 (defclass MAIN::EP-fell-move (is-a EVENT-PHASE)
 	(slot ep-name (type SYMBOL) (default START-fell-move))
 
+	; Cuando la compañía quiera permanecer, from será igual a to
     (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
     (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
     (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+
+	(slot adversity-limit (type FLOAT) (default 0.0))
+	(slot player-draw (type INTEGER) (default 0))
+	(slot enemy-draw (type INTEGER) (default 0))
+	(multislot route (type ?VARIABLE) (default (create$)))
 )
-
-
-; E-fell-remain
-(defclass MAIN::EP-fell-remain (is-a EVENT-PHASE)
-	(slot ep-name (type SYMBOL) (default START-fell-remain))
-
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-); TODO MODULO REMAIN Y MODULO MOVE
 
 
 

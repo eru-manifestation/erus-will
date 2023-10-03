@@ -35,10 +35,10 @@
 
 		; O bien está en el lugar natal del personaje o en un refugio
 		; No tiene sentido que un mago sea seguidor
-		(test (and (neq ?race WIZZARD)
+		(test (and (neq ?race WIZARD)
 			(or 
 				(eq ?bp ?loc)
-				(send ?loc get-is-haven)
+				(eq (send ?loc get-place) HAVEN)
 		)))
 	)
 	=>
@@ -65,14 +65,14 @@
 		
 		; Localiza una compañía/personaje en una localización
 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
-		(object (is-a LOCATION) (name ?loc) (is-haven ?is-haven))
+		(object (is-a LOCATION) (name ?loc) (place ?place))
 		(in (transitive FALSE) (over ?loc) (under ?fell))
 		
 		; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
 		(test (or 
 				(eq ?bp ?loc)
 				(eq ?loc [rivendell]); TODO: []?
-				(and ?is-haven (neq ?race WIZZARD))
+				(and (eq ?place HAVEN) (neq ?race WIZARD))
 		))
 	)
 	=>

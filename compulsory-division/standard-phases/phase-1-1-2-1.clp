@@ -26,7 +26,7 @@
 		(in (over ?loc) (under ?fell))
 
 		; Por cada localización adyacente (excluyendo el propio haven)
-		(object (is-a LOCATION) (name ?to) (is-haven FALSE) (closest-haven ?loc))
+		(object (is-a LOCATION) (name ?to) (place ?place&:(neq ?place HAVEN)) (closest-haven ?loc))
 	)
 	=>
 	(assert (action 
@@ -50,20 +50,27 @@
 		(not (object (is-a E-fell-decl-move) (fell ?fell)))
 		
 		; Encuentro la localización de la compañía
-		(object (is-a HAVEN) (name ?loc) (site-paths $?paths))
+		(object (is-a HAVEN) (name ?loc) (site-pathA ?pathA) (site-pathB ?pathB))
 		(in (over ?loc) (under ?fell))
-
-		(object (is-a HAVEN) (name ?to&:(member$ ?to ?paths)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
 		(event-def fell-decl-move)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?to))
+		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathA))
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"
-		"( to [" ?to "])"))
+		"( to [" ?pathA "])"))
+	))
+	(assert (action 
+		(player ?p)
+		(event-def fell-decl-move)
+		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathB))
+		(data (create$ 
+		"( fell [" ?fell "])"
+		"( from [" ?loc "])"
+		"( to [" ?pathB "])"))
 	))
 )
 
@@ -77,7 +84,7 @@
 		(not (object (is-a E-fell-decl-move) (fell ?fell)))
 
 		; Encuentro la localización de la compañía
-		(object (is-a LOCATION) (name ?loc) (is-haven FALSE) (closest-haven ?cl-haven))
+		(object (is-a LOCATION) (name ?loc) (place ?place&:(neq ?place HAVEN)) (closest-haven ?cl-haven))
 		(in (transitive FALSE) (over ?loc) (under ?fell))
 	)
 	=>

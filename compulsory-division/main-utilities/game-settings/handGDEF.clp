@@ -8,7 +8,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 3))
     (slot mind (source composite) (default 9))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DUNADAN))
 )
 
 (defclass EOMER (is-a CHARACTER)     
@@ -16,7 +16,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default MAN))
 )
 
 (defclass BOROMIR-II (is-a CHARACTER)     
@@ -24,7 +24,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DUNADAN))
     (slot corruption (source composite) (default 1))
 )
 
@@ -38,7 +38,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default HOBBIT))
 )
 
 
@@ -118,7 +118,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default WIZARD))
     (slot corruption (source composite) (default -1))
 )
 
@@ -127,7 +127,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DUNADAN))
     (slot corruption (source composite) (default 1))
 )
 
@@ -136,7 +136,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DUNADAN))
 )
 
 (defclass KILI (is-a CHARACTER)     
@@ -144,7 +144,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DWARF))
     (slot corruption (source composite) (default 1))
 )
 
@@ -153,7 +153,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 4))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default MAN))
 )
 
 (defclass BERETAR (is-a CHARACTER)     
@@ -161,7 +161,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
-    (slot race (source composite) (default TODO))
+    (slot race (source composite) (default DUNADAN))
 )
 
 ; ADVERSIDADES (SUCESOS)

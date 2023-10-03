@@ -4,10 +4,6 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-;(get-defrule-list [<module-name>])
-;(refresh <rule-name>)
-
-;(refresh-agenda [<module-name>])
 
 ;(class [instance-name])
 
@@ -75,6 +71,9 @@
 
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize-2.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-2.clp")
 )
 
 (deffunction load-handG()
@@ -94,7 +93,7 @@
 (init-locations)
 (init-handG)
 ;(watch rules)
-(run 40)
-
+;(run 40)
+(run)
 
 

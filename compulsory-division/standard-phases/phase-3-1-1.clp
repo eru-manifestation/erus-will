@@ -31,3 +31,23 @@
 		"( to [" ?to "])"))
 	))
 )
+
+; ACCIÓN: Ejecutar permanencia en el lugar
+(defrule action-fell-remain (declare (salience ?*action-population-salience*))
+	(logical
+		(only-actions (phase P-3-1-1))
+		(object (is-a E-fell-decl-remain) (type IN)
+			(loc ?loc) (fell ?fell) (name ?event))
+	)
+	=>
+	(assert (action 
+		(player ?*player*)
+		(event-def fell-move)
+		(description (sym-cat "Execute remain of " ?fell " in " ?loc))
+		(data (create$ 
+		"( decl-event [" ?event "])"
+		"( fell [" ?fell "])"
+		"( from [" ?loc "])"
+		"( to [" ?loc "])"))
+	))
+)
