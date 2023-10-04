@@ -362,3 +362,68 @@
     (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?*enemy*))
     (send ?fell-move put-enemy-draw (- (send ?fell-move get-enemy-draw) 1))
 )
+
+
+; E-creature-attack-fell
+(defclass MAIN::E-creature-attack-fell (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
+    (slot attack-at (type SYMBOL) (default ?NONE))
+)
+
+(defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-creature-attack-fell) (type IN) 
+        (fell ?fell) (creature ?creature) (attack-at ?attack-at))
+    =>
+    (send ?e complete)
+    ;TODO: HACER FASE EVENTUAL FELL-ATTACK
+    (debug Creature ?creature attacking ?fell at ?attack-at)
+)
+
+
+; E-fell-change-loc
+(defclass MAIN::E-fell-change-loc (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-fell-change-loc (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-fell-change-loc) (type IN) 
+        (fell ?fell) (from ?from) (to ?to))
+    =>
+    (send ?e complete)
+    (in-move ?fell ?to)
+    (debug Changing location of fellowship ?fell from ?from to ?to)
+)
+
+
+; E-loc-destroy
+(defclass MAIN::E-loc-destroy (is-a EVENT)
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-loc-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-loc-destroy) (type IN) 
+        (loc ?loc))
+    =>
+    (send ?e complete)
+    (send ?loc put-state OUT-OF-GAME)
+    (debug Taking ?loc out of the game)
+)
+
+
+; E-player-discard-from-hand
+(defclass MAIN::E-player-discard-from-hand (is-a EVENT)
+    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes OWNABLE))
+)
+
+(defrule MAIN::E-player-discard-from-hand (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-player-discard-from-hand) (type IN) 
+        (player ?p) (card ?c))
+    =>
+    (send ?e complete)
+    (send ?c put-state DISCARD)
+    (debug Discarding ?c of ?p from hand)
+)

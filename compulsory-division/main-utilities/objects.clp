@@ -41,7 +41,7 @@
 
 (defclass MAIN::LOCATION (is-a CARD)
 	(slot closest-haven (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
-	(slot state (source composite) (default UNTAPPED))
+	(slot state (source composite) (default UNTAPPED) (allowed-symbols OUT-OF-GAME UNTAPPED TAPPED))
 	(slot player-draw (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
 	(slot enemy-draw (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
 	(multislot route (type ?VARIABLE) (default ?NONE) (access initialize-only) 
@@ -87,7 +87,13 @@
 (defclass MAIN::FACTION(is-a RESOURCE))
 (defclass MAIN::CREATURE(is-a ADVERSITY)
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
-		(allowed-symbols ANIMALS SPIDERS AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MEN WOLVES UNDEAD ORCS TROLLS NAZGUL))
+		(allowed-symbols ANIMAL SPIDER AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MAN WOLF UNDEAD ORC TROLL NAZGUL))
+	(multislot regions (type ?VARIABLE) (default ?NONE) (access initialize-only) 
+		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
+	(slot prowess (type INTEGER) (default ?NONE) (access initialize-only) (range 1 ?VARIABLE))
+	(slot strikes (type INTEGER) (default 1) (access initialize-only))
+	(multislot places (type SYMBOL) (default (create$)) (access initialize-only) 
+		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
 )
 
 (defclass MAIN::ITEM(is-a RESOURCE CORRUPTION))

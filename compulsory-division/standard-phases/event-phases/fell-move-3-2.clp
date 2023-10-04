@@ -2,7 +2,7 @@
 (defmodule fell-move-3-2 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INIT
+;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
 (debug El jugador ?*player* decide si sigue robando, de poder robar))

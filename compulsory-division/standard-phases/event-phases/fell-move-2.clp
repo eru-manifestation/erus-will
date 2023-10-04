@@ -2,7 +2,7 @@
 (defmodule fell-move-2 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INIT
+;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
 (debug Calcular limite de adversidades, cartas por robar e itinerario))
@@ -50,9 +50,24 @@
 (defrule calculate-route
     ?e<-(object (is-a EP-fell-move) (type ONGOING) (from ?from) (to ?to&:(neq ?to ?from)))
     =>
+    ; Si se va a refugio
     (if (eq HAVEN (send ?to get-place)) then
-        (send ?e put-route (send ?from get-route))
-        else        
+        ; si ademas se viene de un refugio
+        (if (eq HAVEN (send ?from get-place)) then
+            ; ahora queda elegir que representa la conexion, si A o B
+            (println (send ?from get-site-pathA) ?to)
+
+            (if (eq (send ?from get-site-pathA) ?to) then
+                (send ?e put-route (send ?from get-routeA))
+                else
+                (send ?e put-route (send ?from get-routeB))  
+            )
+            else
+            ; se va por la ruta de la carta fuente
+            (send ?e put-route (send ?from get-route))
+        )
+        else  
+        ; se va por la ruta de la carta destino      
         (send ?e put-route (send ?to get-route))
     )
 )

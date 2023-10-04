@@ -1,8 +1,8 @@
 ;/////////////////// FELLWOSHIP MOVE 4 0: INICIO ENEMIGO JUEGA ADVERSIDADES ////////////////////////
-(defmodule fell-move-4-1 (import MAIN ?ALL))
+(defmodule fell-move-4-0 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INIT
+;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
 (debug Inicio jugador ?*enemy* juega adversidades))

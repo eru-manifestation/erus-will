@@ -9,7 +9,6 @@ P-1-1-2-1
 P-2-1-1
 P-2-2-1
 P-2-3-1
-;P-3-1-0
 P-3-1-1
 FALSE
 
@@ -33,6 +32,10 @@ fell-move-3-3
 fell-move-4-0
 fell-move-4-1
 fell-move-4-2
+fell-move-5-0
+fell-move-5-1
+fell-move-6
+fell-move-7
 FALSE
 
 )

@@ -1,11 +1,11 @@
-;/////////////////////// CORRUPTION CHECK 2: FIN CHEQUEO DE CORRUPCION ///////////////////////
-(defmodule corruption-check-2 (import MAIN ?ALL))
+;/////////////////// FELLWOSHIP MOVE 7: FIN FASE MOVIMIENTO ////////////////////////
+(defmodule fell-move-7 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Fin chequeo corrupcion))
+(foreach ?rule (get-defrule-list) (refresh ?rule))
+(debug Fin fase movimiento))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -13,10 +13,9 @@
 
 
 
-(defrule fin-chequeo
-	?ep <- (object (is-a EP-corruption-check) (type ONGOING) (character ?char) (dices ?dices))
+(defrule fell-move-end (declare (salience ?*action-population-salience*))
+	?ep<-(object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (from ?from) (to ?to))
 	=>
 	(send ?ep complete)
-
-	(debug Termina el chequeo de corrupcion de ?char con (send ?char get-corruption) tras haber sacado un ?dices)
+	(debug Finaliza la fase de movimiento para ?fell desde ?from hasta ?to)
 )
