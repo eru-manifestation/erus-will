@@ -27,7 +27,7 @@
     (load* "compulsory-division\\main-utilities\\game-settings\\locations.clp")
 
     ;handGDEF
-    (load* "compulsory-division\\main-utilities\\game-settings\\handGDEF.clp")
+    (load* "compulsory-division\\main-utilities\\game-settings\\cards-def.clp")
 
     ;in manager
     (load* "compulsory-division\\main-utilities\\in.clp")
@@ -51,10 +51,14 @@
 
     ;handG
     (load* "compulsory-division\\main-utilities\\game-settings\\handG.clp")
+    ;handS
+    (load* "compulsory-division\\main-utilities\\game-settings\\handS.clp")
 )
 
 (deffunction load-standard()
     (chdir ?*route*)
+    (load* "compulsory-division\\standard-phases\\both-players-draw.clp")
+
     (load* "compulsory-division\\standard-phases\\phase-0-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-0-2-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-1-1-1.clp")
@@ -83,11 +87,6 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-5-0.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-5-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-6.clp")
-    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-7.clp")
-)
-
-(deffunction load-handG()
-    (chdir ?*route*)
 )
 
 ; Cargo todas los archivos
@@ -95,13 +94,13 @@
     (chdir ?*route*)
     (load-utilities)
     (load-standard)
-    (load-handG)
     
 )
 
 (load-all)
 (init-locations)
 (init-handG)
+(init-handS)
 ;(watch rules)
 ;(run 40)
 (run)

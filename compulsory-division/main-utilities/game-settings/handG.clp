@@ -74,14 +74,14 @@
     (object (is-a FELLOWSHIP) (name ?fell) (player ?p))
     (in (over ?rivendell) (under ?fell))
     =>
-    (debug Putting initial fellowship)
+    (debug Putting initial fellowship of Gandalf)
 
     (make-instance (gen-name E-char-play) of E-char-play (character ?aragorn) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?eomer) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?boromir) (under ?fell))
     (make-instance (gen-name E-char-play) of E-char-play (character ?merry) (under ?fell))
 
-    (debug Putting initial items)
+    (debug Putting initial items of Gandalf)
 
     (make-instance (gen-name E-item-play) of E-item-play (item ?shield) (owner ?boromir))
     (make-instance (gen-name E-item-play) of E-item-play (item ?cloak) (owner ?merry))

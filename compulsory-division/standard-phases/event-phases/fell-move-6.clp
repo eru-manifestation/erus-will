@@ -1,39 +1,21 @@
-;/////////////////// FELLWOSHIP MOVE 6: ROBAR O DESCARTAR HASTA TENER 8 ////////////////////////
+;/////////////////// FELLWOSHIP MOVE 6: FIN FASE MOVIMIENTO ////////////////////////
 (defmodule fell-move-6 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Ambos jugadores descartan o roban hasta tener 8 cartas))
+(debug Fin fase movimiento))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (play-actions ?p))
 
 
-; Roba las cartas que necesites
-(defrule card-draw (declare (salience ?*action-population-salience*))
-	(object (is-a PLAYER) (name ?p) (hand ?hand&:(< ?hand 8)))
-	=>
-	(make-instance (gen-name E-player-draw) of E-player-draw (player ?p) (draw-ammount (- 8 ?hand)))
-)
 
-
-; ACCION descartar una desde la mano
-(defrule action-card-discard-from-hand (declare (salience ?*action-population-salience*))
-	(logical
-		(only-actions (phase fell-move-6))
-		(object (is-a PLAYER) (name ?p) (hand ?hand&:(> ?hand 8)))
-		(object (is-a CARD) (player ?p) (state HAND) (name ?c))
-	)
+(defrule fell-move-end (declare (salience ?*action-population-salience*))
+	?ep<-(object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (from ?from) (to ?to))
 	=>
-	(assert (action 
-		(player ?p)
-		(event-def player-discard-from-hand)
-		(description (sym-cat "Discard card " ?c " from player " ?p "'s hand"))
-		(data (create$ 
-		"( card [" ?c "])" 
-		"( player [" ?p "])"))
-	))
+	(send ?ep complete)
+	(debug Finaliza la fase de movimiento para ?fell desde ?from hasta ?to)
 )

@@ -100,6 +100,7 @@
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
+(defclass MAIN::SPECIAL-ITEM(is-a ITEM))
 
 (deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then
