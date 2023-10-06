@@ -20,6 +20,13 @@
     (slot instance-# (type INTEGER) (default 2) (storage shared))
 )
 
+(defclass MAIN::ATTACKABLE (is-a USER)
+	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
+		(allowed-symbols ANIMAL SPIDER AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MAN WOLF UNDEAD ORC TROLL NAZGUL))
+	(slot prowess (type INTEGER) (default ?NONE) (access initialize-only) (range 1 ?VARIABLE))
+	(slot strikes (type INTEGER) (default 1) (access initialize-only))
+)
+
 ; CLASES ABSTRACTAS
 (defclass MAIN::PLAYER (is-a NUMERABLE)
     (slot instance-# (source composite))
@@ -48,6 +55,8 @@
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
 	(slot place (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
+	(multislot automatic-attacks (type INSTANCE-NAME) (default (create$)) (access initialize-only) (allowed-classes ATTACKABLE))
+	(multislot playable-items (type SYMBOL) (default (create$)) (access read-only) (allowed-symbols MINOR-ITEM GREATER-ITEM MAJOR-ITEM))
 )
 
 (defclass MAIN::HAVEN (is-a LOCATION)
@@ -85,13 +94,9 @@
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
 (defclass MAIN::FACTION(is-a RESOURCE))
-(defclass MAIN::CREATURE(is-a ADVERSITY)
-	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
-		(allowed-symbols ANIMAL SPIDER AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MAN WOLF UNDEAD ORC TROLL NAZGUL))
+(defclass MAIN::CREATURE(is-a ADVERSITY ATTACKABLE)
 	(multislot regions (type ?VARIABLE) (default ?NONE) (access initialize-only) 
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
-	(slot prowess (type INTEGER) (default ?NONE) (access initialize-only) (range 1 ?VARIABLE))
-	(slot strikes (type INTEGER) (default 1) (access initialize-only))
 	(multislot places (type SYMBOL) (default (create$)) (access initialize-only) 
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
 )

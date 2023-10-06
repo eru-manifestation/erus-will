@@ -12,6 +12,12 @@ P-2-1-1
 P-2-2-1
 P-2-3-1
 P-3-1-1
+P-4
+FALSE
+
+START-both-players-draw
+both-players-draw
+both-players-draw-0
 FALSE
 
 START-corruption-check
@@ -40,9 +46,9 @@ fell-move-6
 fell-move-7
 FALSE
 
-START-both-players-draw
-both-players-draw
-both-players-draw-0
+START-loc-phase
+loc-phase-1-1
+loc-phase-1-2
 FALSE
 
 )

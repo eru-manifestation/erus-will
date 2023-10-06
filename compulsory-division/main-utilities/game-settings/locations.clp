@@ -35,6 +35,8 @@
     (slot player-draw (source composite) (default 1))
     (slot place (source composite) (default RUINS))
     (multislot route (source composite) (default (create$ WILDERNESS 1 BORDER-LAND 1)))
+    ;(multislot automatic-attacks (source composite) (default [attackable-amon-hen]))
+    (multislot playable-items (source composite) (default MINOR-ITEM))
 )
 (defclass MAIN::BAG-END (is-a LOCATION)
     (slot closest-haven (source composite) (default (symbol-to-instance-name rivendell)))
@@ -49,6 +51,8 @@
     (slot player-draw (source composite) (default 1))
     (slot place (source composite) (default RUINS))
     (multislot route (source composite) (default (create$ WILDERNESS 1 SHADOW-LAND 1)))
+    ;(multislot automatic-attacks (source composite) (default [attackable-bandit-lair]))
+    (multislot playable-items (source composite) (default MINOR-ITEM))
 )
 (defclass MAIN::BARAD-DUR (is-a LOCATION)
     (slot closest-haven (source composite) (default (symbol-to-instance-name lorien)))
@@ -56,6 +60,8 @@
     (slot player-draw (source composite) (default 3))
     (slot place (source composite) (default SHADOW-HOLD))
     (multislot route (source composite) (default (create$ WILDERNESS 2 BORDER-LAND 1 FREE-LAND 1 SHADOW-LAND 1 DARK-LAND 1)))
+    ;(multislot automatic-attacks (source composite) (default [attackable-barad-dur1] [attackable-barad-dur2]))
+    (multislot playable-items (source composite) (default MINOR-ITEM MAJOR-ITEM GREATER-ITEM))
 )
 (defclass MAIN::BARROW--DOWNS (is-a LOCATION)
     (slot closest-haven (source composite) (default (symbol-to-instance-name rivendell)))
@@ -63,6 +69,8 @@
     (slot player-draw (source composite) (default 1))
     (slot place (source composite) (default RUINS))
     (multislot route (source composite) (default (create$ WILDERNESS 2)))
+    ;(multislot automatic-attacks (source composite) (default [attackable-barrow--downs]))
+    (multislot playable-items (source composite) (default MINOR-ITEM MAJOR-ITEM))
 )
 (defclass MAIN::BEORNS-HOUSE (is-a LOCATION)
     (slot closest-haven (source composite) (default (symbol-to-instance-name lorien)))
@@ -74,17 +82,30 @@
 
 (deffunction MAIN::init-locations ()
     (debug Starting locations)
+    
+    ; ATAQUES AUTOMATICOS
+
+    (make-instance attackable-amon-hen of ATTACKABLE (race UNDEAD) (prowess 6))
+
+    (make-instance attackable-bandit-lair of ATTACKABLE (race MAN) (prowess 6) (strikes 3))
+
+    (make-instance attackable-barad-dur1 of ATTACKABLE (race ORC) (prowess 7) (strikes 4))
+    (make-instance attackable-barad-dur2 of ATTACKABLE (race TROLL) (prowess 9) (strikes 3))
+
+    (make-instance attackable-barrow--downs of ATTACKABLE (race UNDEAD) (prowess 8))
+
+    ; LOCALIZACIONES
 
     (make-instance rivendell of RIVENDELL)
     (make-instance edhellond of EDHELLOND)
     (make-instance grey-havens of GREY-HAVENS)
     (make-instance lorien of LORIEN)
 
-    (make-instance amon-hen of AMON-HEN)
+    (make-instance amon-hen of AMON-HEN (automatic-attacks [attackable-amon-hen]))
     (make-instance bag-end of BAG-END)
-    (make-instance bandit-lair of BANDIT-LAIR)
-    (make-instance barad-dur of BARAD-DUR)
-    (make-instance barrow--downs of BARROW--DOWNS)
+    (make-instance bandit-lair of BANDIT-LAIR (automatic-attacks [attackable-bandit-lair1] [attackable-bandit-lair2]))
+    (make-instance barad-dur of BARAD-DUR (automatic-attacks [attackable-barad-dur]))
+    (make-instance barrow--downs of BARROW--DOWNS (automatic-attacks [attackable-barrow--downs]))
     (make-instance beorns-house of BEORNS-HOUSE)
 
     (debug Locations started)

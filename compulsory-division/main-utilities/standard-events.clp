@@ -47,20 +47,41 @@
 )
 
 
-; E-item-play
-(defclass MAIN::E-item-play (is-a EVENT)
+; E-item-play-only-start
+(defclass MAIN::E-item-play-only-start (is-a EVENT)
     (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY CHARACTER))
+    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 
-(defrule MAIN::E-item-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-play) (type IN)
+(defrule MAIN::E-item-play-only-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-item-play-only-start) (type IN)
 		(item ?item) (owner ?owner))
     =>
     (send ?e complete)
     (in-move ?item ?owner)
     (send ?item put-state UNTAPPED)
+    (debug Playing item ?item under ?owner in start only)
+)
+
+
+; E-item-play
+(defclass MAIN::E-item-play (is-a EVENT)
+    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+
+(defrule MAIN::E-item-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-item-play) (type IN)
+		(item ?item) (owner ?owner) (loc ?loc))
+    =>
+    (send ?e complete)
+    (in-move ?item ?owner)
+    (send ?item put-state UNTAPPED)
+    (send ?owner put-state TAPPED)
+    (send ?loc put-state TAPPED)
     (debug Playing item ?item under ?owner)
 )
 
@@ -428,4 +449,20 @@
     (send ?e complete)
     (send ?c put-state DISCARD)
     (debug Discarding ?c of ?p from hand)
+)
+
+
+; E-loc-phase
+(defclass MAIN::E-loc-phase (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+(defrule MAIN::E-loc-phase (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-loc-phase) (type IN) 
+        (fell ?fell) (loc ?loc))
+    =>
+    (send ?e complete)
+    (make-instance (gen-name EP-loc-phase) of EP-loc-phase (fell ?fell) (loc ?loc))
+    (debug Beginning location phase for ?fell in ?loc)
 )

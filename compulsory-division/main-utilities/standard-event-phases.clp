@@ -38,6 +38,15 @@
 )
 
 
+; EP-loc-phase
+(defclass MAIN::EP-loc-phase (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-loc-phase))
+
+	(slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+	(slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+)
+
+
 
 ;/////////////////// UNIFIED HANDLER //////////////////
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))

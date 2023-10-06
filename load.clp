@@ -68,6 +68,7 @@
     (load* "compulsory-division\\standard-phases\\phase-2-2-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-2-3-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-4.clp")
 
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-2.clp")
@@ -91,6 +92,10 @@
 
     (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw-0.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-2.clp")
+    
 )
 
 ; Cargo todas los archivos

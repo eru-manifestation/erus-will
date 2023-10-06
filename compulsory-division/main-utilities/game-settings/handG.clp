@@ -83,8 +83,8 @@
 
     (debug Putting initial items of Gandalf)
 
-    (make-instance (gen-name E-item-play) of E-item-play (item ?shield) (owner ?boromir))
-    (make-instance (gen-name E-item-play) of E-item-play (item ?cloak) (owner ?merry))
+    (make-instance (gen-name E-item-play-only-start) of E-item-play-only-start (item ?shield) (owner ?boromir))
+    (make-instance (gen-name E-item-play-only-start) of E-item-play-only-start (item ?cloak) (owner ?merry))
 
     ;ESTA REGLA SOLO SE DEBE LANZAR UNA VEZ
     (retract ?pd)
