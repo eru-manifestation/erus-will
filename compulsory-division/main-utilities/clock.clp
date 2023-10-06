@@ -1,7 +1,8 @@
 (defglobal MAIN ?*phase-list* = (create$ 
 
+START-start-game
+start-game
 START
-both-players-draw
 P-0-1-1
 P-0-2-1
 P-1-1-1
@@ -35,8 +36,13 @@ fell-move-4-1
 fell-move-4-2
 fell-move-5-0
 fell-move-5-1
-both-players-draw
 fell-move-6
+fell-move-7
+FALSE
+
+START-both-players-draw
+both-players-draw
+both-players-draw-0
 FALSE
 
 )
@@ -68,8 +74,9 @@ FALSE
 ; REGLA DE INICIO DE JUEGO
 (defrule MAIN::start =>
 	(assert (only-actions (phase FALSE)))
-	(jump START) 
-	(assert (post-draw))
+	(jump START-start-game) 
+	(assert (post-drawS))
+	(assert (post-drawG))
 	(assert (infinite))
 )
 

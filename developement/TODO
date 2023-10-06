@@ -179,3 +179,5 @@ SOLUCION: lanzar el EVENT en el instante y dejar el handler para el momento de a
 DONE:   Revisar que antes de jugar un personaje, la compañia tenga siempre espacio
 
 Definir dos tipos de reglas: las de unicidad (que se ejecutan una única vez por módulo) y las que están diseñadas para ejecutarse las veces necesarias mientras se cumplan las condiciones
+
+Verificar que se haya puesto saliencia correcta en los event handler correspondientes

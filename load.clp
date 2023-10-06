@@ -57,7 +57,7 @@
 
 (deffunction load-standard()
     (chdir ?*route*)
-    (load* "compulsory-division\\standard-phases\\both-players-draw.clp")
+    (load* "compulsory-division\\standard-phases\\start-game.clp")
 
     (load* "compulsory-division\\standard-phases\\phase-0-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-0-2-1.clp")
@@ -87,6 +87,10 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-5-0.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-5-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-6.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-7.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw-0.clp")
 )
 
 ; Cargo todas los archivos

@@ -62,7 +62,7 @@
 
 
 (defrule MAIN::post-drawS (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
-    ?pd <- (post-draw)
+    ?pd <- (post-drawS)
     (object (is-a GIMLI) (name ?gimli) (player ?p&:(eq ?p ?*enemy*)))
     (object (is-a LEGOLAS) (name ?legolas) (player ?p))
     (object (is-a ELLADAN) (name ?elladan) (player ?p))

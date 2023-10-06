@@ -7,7 +7,7 @@
 )
 
 
-; E-loc-organize
+; EP-loc-organize
 (defclass MAIN::EP-loc-organize (is-a EVENT-PHASE)
 	(slot ep-name (type SYMBOL) (default START-loc-organize))
 
@@ -16,7 +16,7 @@
 )
 
 
-; E-fell-move
+; EP-fell-move
 (defclass MAIN::EP-fell-move (is-a EVENT-PHASE)
 	(slot ep-name (type SYMBOL) (default START-fell-move))
 
@@ -29,6 +29,12 @@
 	(slot player-draw (type INTEGER) (default 0))
 	(slot enemy-draw (type INTEGER) (default 0))
 	(multislot route (type ?VARIABLE) (default (create$)))
+)
+
+
+; EP-both-players-draw
+(defclass MAIN::EP-both-players-draw (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-both-players-draw))
 )
 
 

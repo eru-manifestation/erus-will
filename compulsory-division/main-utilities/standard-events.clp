@@ -376,6 +376,8 @@
         (fell ?fell) (creature ?creature) (attack-at ?attack-at))
     =>
     (send ?e complete)
+    (in-move ?creature ?fell)
+    (send ?creature put-state UNTAPPED)
     ;TODO: HACER FASE EVENTUAL FELL-ATTACK
     (debug Creature ?creature attacking ?fell at ?attack-at)
 )

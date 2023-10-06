@@ -61,8 +61,8 @@
 )
 
 
-(defrule MAIN::post-draw (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
-    ?pd <- (post-draw)
+(defrule MAIN::post-drawG (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    ?pd <- (post-drawG)
     (object (is-a ARAGORN-II) (name ?aragorn) (player ?p&:(eq ?p ?*player*)))
     (object (is-a EOMER) (name ?eomer) (player ?p))
     (object (is-a BOROMIR-II) (name ?boromir) (player ?p))
