@@ -78,3 +78,16 @@
     (debug Se crea el hand item por ?c para el jugador ?p)
     (make-instance (gen-name data-item) of data-item (target-slot hand) (target ?p) (value 1))
 )
+
+
+; INFO ITEM PARA DICES DE INFLUENCE-CHECK EN LOC PHASE
+(defrule MAIN::faction-play-dices-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a EP-faction-play) (name ?ep-loc-phase) (faction ?faction) (char ?char))
+        (object (is-a CHARACTER) (name ?char) (race ?race))
+        (object (is-a FACTION) (name ?faction) (influence-modifiers $? ?race ?value $?))
+    )
+    =>
+    (debug Se crea el dices item por ?char y ?faction)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep-loc-phase) (value ?value))
+)

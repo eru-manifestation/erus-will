@@ -47,6 +47,24 @@
 )
 
 
+; EP-faction-play
+(defclass MAIN::EP-faction-play (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-faction-play))
+
+	(slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+	(slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+	(slot faction (type INSTANCE-NAME) (default ?NONE) (allowed-classes FACTION))
+	
+	(slot dices (type INTEGER) (default 0))
+)
+
+
+; EP-free-council
+(defclass MAIN::EP-free-council (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-free-council))
+)
+
+
 
 ;/////////////////// UNIFIED HANDLER //////////////////
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))

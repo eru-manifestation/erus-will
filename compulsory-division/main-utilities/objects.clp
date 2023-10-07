@@ -32,6 +32,7 @@
     (slot instance-# (source composite))
 	(slot general-influence (type INTEGER) (default 20))
 	(slot hand (type INTEGER) (default 0))
+	(slot mp (type INTEGER) (default 0))
 )
 
 (defclass MAIN::FELLOWSHIP (is-a OWNABLE NUMERABLE)
@@ -78,11 +79,13 @@
 	(slot influence (type INTEGER) (default 0) (access read-write))
 	(slot mind (type INTEGER) (default 0) (access read-write))
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
-		(allowed-symbols DUNADAN ELF DWARF HOBBIT MAN WIZARD))
+		(allowed-symbols DUNEDAIN ELF DWARF HOBBIT MAN WIZARD))
 	(slot corruption (type INTEGER) (default 0) (access read-write))
 )
 
-(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE))
+(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE);TODO poner el allowed classes de playable-places
+	(multislot playable-places (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
+)
 
 (defclass MAIN::R-PERMANENT-EVENT (is-a RESOURCE))
 (defclass MAIN::A-PERMANENT-EVENT (is-a ADVERSITY))
@@ -93,7 +96,12 @@
 (defclass MAIN::R-SHORT-EVENT (is-a RESOURCE))
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
-(defclass MAIN::FACTION(is-a RESOURCE))
+(defclass MAIN::FACTION(is-a RESOURCE)
+	(multislot playable-places (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
+	(slot influence-check (type INTEGER) (default ?NONE) (access initialize-only))
+	(multislot influence-modifiers (type ?VARIABLE) (default ?NONE) (access initialize-only) 
+		(allowed-values 1 2 3 4 5 6 7 8 9 -1 -2 -3 -4 -5 -6 -7 -8 -9 DUNEDAIN ELF DWARF HOBBIT MAN WIZARD))
+)
 (defclass MAIN::CREATURE(is-a ADVERSITY ATTACKABLE)
 	(multislot regions (type ?VARIABLE) (default ?NONE) (access initialize-only) 
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))

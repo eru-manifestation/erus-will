@@ -181,3 +181,9 @@ DONE:   Revisar que antes de jugar un personaje, la compañia tenga siempre espa
 Definir dos tipos de reglas: las de unicidad (que se ejecutan una única vez por módulo) y las que están diseñadas para ejecutarse las veces necesarias mientras se cumplan las condiciones
 
 Verificar que se haya puesto saliencia correcta en los event handler correspondientes
+
+Si el personaje que controla el aliado abandona el juego, también tendrás que descartarlo.
+
+Cinematica basada en imágenes superpuestas que facilitan la comprensión y dinamismo de las acciones y que se comporta correctamente con el planteamiento modular
+
+MP item para player

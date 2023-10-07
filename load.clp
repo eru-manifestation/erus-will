@@ -32,9 +32,6 @@
     ;in manager
     (load* "compulsory-division\\main-utilities\\in.clp")
 
-    ;data items
-    (load* "compulsory-division\\main-utilities\\data-items.clp")
-
     ;fellowship manager
     (load* "compulsory-division\\main-utilities\\fellowships.clp")
 
@@ -53,6 +50,9 @@
     (load* "compulsory-division\\main-utilities\\game-settings\\handG.clp")
     ;handS
     (load* "compulsory-division\\main-utilities\\game-settings\\handS.clp")
+
+    ;data items
+    (load* "compulsory-division\\main-utilities\\data-items.clp")
 )
 
 (deffunction load-standard()
@@ -69,6 +69,12 @@
     (load* "compulsory-division\\standard-phases\\phase-2-3-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-4.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-3.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-4.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-5.clp")
+
 
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-2.clp")
@@ -94,7 +100,15 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw-0.clp")
 
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-1.clp")
-    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-3-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\faction-play-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\faction-play-2-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council-1-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council-2-1.clp")
     
 )
 

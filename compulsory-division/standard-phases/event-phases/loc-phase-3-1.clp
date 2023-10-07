@@ -1,11 +1,11 @@
-;/////////////////// LOCATION PHASE 1 2: JUGAR OBJETO, FACCION O ALIADO SI ES POSIBLE ////////////////////////
-(defmodule loc-phase-1-2 (import MAIN ?ALL))
+;/////////////////// LOCATION PHASE 3 1: JUGAR OBJETO MENOR ADICIONAL ////////////////////////
+(defmodule loc-phase-3-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Ejecucion ataques automaticos fase lugares))
+(debug Ejecucion ataques automaticos fase lugares)(halt))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -13,23 +13,22 @@
 
 
 
-(defrule play-item
+(defrule play-additional-minor-item (declare (salience ?*action-population-salience*))
 	(logical
-		(only-actions (phase loc-phase-1-2))
-		(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell) (loc ?loc))
-		(object (is-a LOCATION) (name ?loc) (state UNTAPPED) (playable-items $? ?item-type $?))
-		(object (is-a ?item-type) (player ?p&:(eq ?p ?*player*)) (state HAND) (name ?item))
+		(only-actions (phase loc-phase-3-1))
+		(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell))
+		(object (is-a MINOR-ITEM) (player ?p&:(eq ?p ?*player*)) (state HAND) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
+		(not (object (is-a E-item-play-only-minor)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def item-play)
-		(description (sym-cat "Play item " ?item " under " ?char " in " ?loc))
+		(event-def E-item-play-only-minor)
+		(description (sym-cat "Play additional minor item " ?item " under " ?char))
 		(data (create$ 
 		"( item [" ?item "])" 
-		"( owner ["?char "])")
-		"( loc ["?loc "])"))
+		"( owner ["?char "])")))
 	)
 )

@@ -9,7 +9,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 3))
     (slot mind (source composite) (default 9))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
 )
 
 (defclass EOMER (is-a CHARACTER)     
@@ -25,7 +25,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
 )
 
@@ -78,16 +78,32 @@
 
 ; RECURSOS (FACCIONES)
 
-(defclass RANGERS-OF-THE-NORTH (is-a FACTION)(slot instance-# (source composite)))
+(defclass RANGERS-OF-THE-NORTH (is-a FACTION)
+    (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$ [barrow--downs])));TODO
+    (slot influence-check (source composite) (default 9))
+    (multislot influence-modifiers (source composite) (default DUNEDAIN 1))
+)
 
-(defclass RIDERS-OF-ROHAN (is-a FACTION)(slot instance-# (source composite)))
+(defclass RIDERS-OF-ROHAN (is-a FACTION)(slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
+    (slot influence-check (source composite) (default 9))
+    (multislot influence-modifiers (source composite) (default HOBBIT 1 DUNEDAIN 1))
+)
 
-(defclass TOWER-GUARD-OF-MINAS-TIRITH (is-a FACTION)(slot instance-# (source composite)))
+(defclass TOWER-GUARD-OF-MINAS-TIRITH (is-a FACTION)(slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
+    (slot influence-check (source composite) (default 7))
+    (multislot influence-modifiers (source composite) (default DUNEDAIN 1))
+)
 
 
 ; RECURSOS (ALIADOS)
 
-(defclass QUICKBEAM (is-a ALLY) (slot instance-# (source composite)))
+(defclass QUICKBEAM (is-a ALLY)
+    (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default [barrow--downs]));TODO
+)
 
 
 ; RECURSOS (SUCESOS)
@@ -128,7 +144,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
 )
 
@@ -137,7 +153,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
 )
 
 (defclass KILI (is-a CHARACTER)     
@@ -162,7 +178,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
 )
 
 ; ADVERSIDADES (SUCESOS)
@@ -315,17 +331,27 @@
 ; RECURSOS (FACCIONES)
 (defclass DUNLENDINGS (is-a FACTION)
     (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
+    (slot influence-check (source composite) (default 9))
+    (multislot influence-modifiers (source composite) (default MAN -1 DUNEDAIN -1 DWARF -1))
 )
 (defclass WOOD--ELVES (is-a FACTION)
     (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
+    (slot influence-check (source composite) (default 8))
+    (multislot influence-modifiers (source composite) (default MAN -1 ELF 1 DWARF -2))
 )
 (defclass ENTS-OF-FANGORN (is-a FACTION)
     (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
+    (slot influence-check (source composite) (default 9))
+    (multislot influence-modifiers (source composite) (default HOBBIT 4))
 )
 
 ; RECURSOS (ALIADOS)
 (defclass GOLLUM (is-a ALLY)
     (slot instance-# (source composite))
+    (multislot playable-places (source composite) (default (create$)));TODO
 )
 
 ; RECURSOS (SUCESOS)
@@ -395,7 +421,7 @@
     (slot birthplace (source composite) (default TODO))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
-    (slot race (source composite) (default DUNADAN))
+    (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
 )
 

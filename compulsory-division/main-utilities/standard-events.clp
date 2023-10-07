@@ -47,21 +47,21 @@
 )
 
 
-; E-item-play-only-start
-(defclass MAIN::E-item-play-only-start (is-a EVENT)
+; E-item-play-only-minor
+(defclass MAIN::E-item-play-only-minor (is-a EVENT)
     (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
     (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 
-(defrule MAIN::E-item-play-only-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-play-only-start) (type IN)
+(defrule MAIN::E-item-play-only-minor (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-item-play-only-minor) (type IN)
 		(item ?item) (owner ?owner))
     =>
     (send ?e complete)
     (in-move ?item ?owner)
     (send ?item put-state UNTAPPED)
-    (debug Playing item ?item under ?owner in start only)
+    (debug Playing minor item ?item under ?owner)
 )
 
 
@@ -465,4 +465,55 @@
     (send ?e complete)
     (make-instance (gen-name EP-loc-phase) of EP-loc-phase (fell ?fell) (loc ?loc))
     (debug Beginning location phase for ?fell in ?loc)
+)
+
+
+; E-ally-play
+(defclass MAIN::E-ally-play (is-a EVENT)
+    (slot ally (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY))
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+
+(defrule MAIN::E-ally-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-ally-play) (type IN)
+		(ally ?ally) (char ?char) (loc ?loc))
+    =>
+    (send ?e complete)
+    (in-move ?ally ?char)
+    (send ?ally put-state UNTAPPED)
+    (send ?char put-state TAPPED)
+    (send ?loc put-state TAPPED)
+    (debug Playing ally ?ally under ?char)
+)
+
+
+; E-ally-play
+(defclass MAIN::E-faction-play (is-a EVENT)
+    (slot faction (type INSTANCE-NAME) (default ?NONE) (allowed-classes FACTION))
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+)
+
+
+(defrule MAIN::E-faction-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-faction-play) (type IN)
+		(faction ?faction) (char ?char) (loc ?loc))
+    =>
+    (send ?e complete)
+    (send ?char put-state TAPPED)
+    (make-instance (gen-name EP-faction-play) of EP-faction-play (faction ?faction) (char ?char) (loc ?loc))
+    (debug Influencing faction ?faction by ?char in ?loc)
+)
+
+
+; E-convoque-council
+(defclass MAIN::E-convoque-council (is-a EVENT))
+
+(defrule MAIN::E-convoque-council (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-convoque-council) (type IN))
+    =>
+    (send ?e complete)
+    (make-instance (gen-name EP-free-council) of EP-free-council)
 )

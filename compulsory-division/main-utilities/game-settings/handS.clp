@@ -83,8 +83,8 @@
 
     (debug Putting initial items of Saruman)
 
-    (make-instance (gen-name E-item-play-only-start) of E-item-play-only-start (item ?cloak) (owner ?elladan))
-    (make-instance (gen-name E-item-play-only-start) of E-item-play-only-start (item ?dagger) (owner ?pippin))
+    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?cloak) (owner ?elladan))
+    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?dagger) (owner ?pippin))
 
     ;ESTA REGLA SOLO SE DEBE LANZAR UNA VEZ
     (retract ?pd)

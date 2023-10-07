@@ -13,6 +13,11 @@ P-2-2-1
 P-2-3-1
 P-3-1-1
 P-4
+P-5-1-1
+P-5-2-1
+P-5-3
+P-5-4
+P-5-5
 FALSE
 
 START-both-players-draw
@@ -48,7 +53,18 @@ FALSE
 
 START-loc-phase
 loc-phase-1-1
-loc-phase-1-2
+loc-phase-2-1
+FALSE
+
+START-faction-play
+faction-play-1-1
+faction-play-2-1
+FALSE
+
+START-free-council
+free-council-1-0
+free-council-1-1
+free-council-2-1
 FALSE
 
 )
