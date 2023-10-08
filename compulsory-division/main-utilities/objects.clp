@@ -27,6 +27,10 @@
 	(slot strikes (type INTEGER) (default 1) (access initialize-only))
 )
 
+(defclass MAIN::MP-ABLE (is-a USER)
+	(slot mp (type INTEGER) (default 0))
+)
+
 ; CLASES ABSTRACTAS
 (defclass MAIN::PLAYER (is-a NUMERABLE)
     (slot instance-# (source composite))
@@ -74,7 +78,7 @@
 	(multislot route (type ?VARIABLE) (default nil) (access read-only))
 )
 
-(defclass MAIN::CHARACTER (is-a WOUNDABLE OWNABLE CARD)
+(defclass MAIN::CHARACTER (is-a MP-ABLE WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
 	(slot influence (type INTEGER) (default 0) (access read-write))
 	(slot mind (type INTEGER) (default 0) (access read-write))
@@ -83,7 +87,7 @@
 	(slot corruption (type INTEGER) (default 0) (access read-write))
 )
 
-(defclass MAIN::ALLY (is-a WOUNDABLE RESOURCE);TODO poner el allowed classes de playable-places
+(defclass MAIN::ALLY (is-a MP-ABLE WOUNDABLE RESOURCE);TODO poner el allowed classes de playable-places
 	(multislot playable-places (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 )
 
@@ -96,20 +100,20 @@
 (defclass MAIN::R-SHORT-EVENT (is-a RESOURCE))
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
-(defclass MAIN::FACTION(is-a RESOURCE)
+(defclass MAIN::FACTION(is-a MP-ABLE RESOURCE)
 	(multislot playable-places (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 	(slot influence-check (type INTEGER) (default ?NONE) (access initialize-only))
 	(multislot influence-modifiers (type ?VARIABLE) (default ?NONE) (access initialize-only) 
 		(allowed-values 1 2 3 4 5 6 7 8 9 -1 -2 -3 -4 -5 -6 -7 -8 -9 DUNEDAIN ELF DWARF HOBBIT MAN WIZARD))
 )
-(defclass MAIN::CREATURE(is-a ADVERSITY ATTACKABLE)
+(defclass MAIN::CREATURE(is-a MP-ABLE ADVERSITY ATTACKABLE)
 	(multislot regions (type ?VARIABLE) (default ?NONE) (access initialize-only) 
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
 	(multislot places (type SYMBOL) (default (create$)) (access initialize-only) 
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
 )
 
-(defclass MAIN::ITEM(is-a RESOURCE CORRUPTION))
+(defclass MAIN::ITEM(is-a MP-ABLE RESOURCE CORRUPTION))
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))

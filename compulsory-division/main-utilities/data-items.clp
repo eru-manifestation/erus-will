@@ -91,3 +91,59 @@
     (debug Se crea el dices item por ?char y ?faction)
     (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep-loc-phase) (value ?value))
 )
+
+
+; INFO ITEM PARA MP DE PLAYER DESDE CHARACTER
+(defrule MAIN::mp-player-data-item-population#character (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a CHARACTER) (name ?char) (state WOUNDED | TAPPED | UNTAPPED) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+    )
+    =>
+    (debug Se crea el mp item por ?char para ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+)
+
+
+; INFO ITEM PARA MP DE PLAYER DESDE FACTION
+(defrule MAIN::mp-player-data-item-population#faction (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a FACTION) (name ?f) (state MP) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+    )
+    =>
+    (debug Se crea el mp item por ?f para ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+)
+
+
+; INFO ITEM PARA MP DE PLAYER DESDE ITEM
+(defrule MAIN::mp-player-data-item-population#item (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a ITEM) (name ?i) (state TAPPED | UNTAPPED) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+    )
+    =>
+    (debug Se crea el mp item por ?i para ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+)
+
+
+; INFO ITEM PARA MP DE PLAYER DESDE ALLY
+(defrule MAIN::mp-player-data-item-population#ally (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a ALLY) (name ?a) (state TAPPED | UNTAPPED) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+        ;TODO: son los unicos estados?
+    )
+    =>
+    (debug Se crea el mp item por ?a para ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+)
+
+
+; INFO ITEM PARA MP DE PLAYER DESDE CREATURE
+(defrule MAIN::mp-player-data-item-population#creature (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a CREATURE) (name ?c) (state MP) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+    )
+    =>
+    (debug Se crea el mp item por ?c para ?p)
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target (enemy ?p)) (value ?mp))
+)
