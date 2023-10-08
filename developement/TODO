@@ -186,4 +186,7 @@ Si el personaje que controla el aliado abandona el juego, también tendrás que 
 
 Cinematica basada en imágenes superpuestas que facilitan la comprensión y dinamismo de las acciones y que se comporta correctamente con el planteamiento modular
 
-MP item para player
+DONE: MP item para player
+
+Sistema de apilado de fases eventuales o eventos en distintos tipos: unos tras otros, necesitando o no la compleción del predecesor para ejecutarse. Por ejemplo: para intentar jugarse una facción, primero se hace evento que gire al personaje "intento de jugar facción", luego otro que de completarse el anterior realice el chequeo de influencia "chequeo de influencia" y finalmente si se completa con éxito el anterior otro que ponga en juego la faccion "jugar faccion".
+Otro modelo es el paralelo, por ejemplo: ejecutar dos eventos de ataque automático, donde el resultado de uno no determina la actuación del siguiente.

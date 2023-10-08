@@ -10,6 +10,7 @@
     (slot influence (source composite) (default 3))
     (slot mind (source composite) (default 9))
     (slot race (source composite) (default DUNEDAIN))
+    (slot mp (source composite) (default 3))
 )
 
 (defclass EOMER (is-a CHARACTER)     
@@ -18,6 +19,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default MAN))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass BOROMIR-II (is-a CHARACTER)     
@@ -27,11 +29,13 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass SHIELD-OF-IRON--BOUND-ASH (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 (defclass MERRY (is-a CHARACTER)     
@@ -40,12 +44,14 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
+    (slot mp (source composite) (default 1))
 )
 
 
 (defclass ELVEN-CLOAK (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 ; RECURSOS (OBJETOS)
@@ -53,26 +59,31 @@
 (defclass SCROLL-OF-ISILDUR (is-a GREATER-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 3))
+    (slot mp (source composite) (default 4))
 )
 
 (defclass GREAT-SHIELD-OF-ROHAN (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass GLAMDRING (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass STAR--GLASS (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 (defclass RED-ARROW (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
+    (slot mp (source composite) (default 2))
 )
 
 
@@ -83,18 +94,21 @@
     (multislot playable-places (source composite) (default (create$ [barrow--downs])));TODO
     (slot influence-check (source composite) (default 9))
     (multislot influence-modifiers (source composite) (default DUNEDAIN 1))
+    (slot mp (source composite) (default 3))
 )
 
 (defclass RIDERS-OF-ROHAN (is-a FACTION)(slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$)));TODO
     (slot influence-check (source composite) (default 9))
     (multislot influence-modifiers (source composite) (default HOBBIT 1 DUNEDAIN 1))
+    (slot mp (source composite) (default 3))
 )
 
 (defclass TOWER-GUARD-OF-MINAS-TIRITH (is-a FACTION)(slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$)));TODO
     (slot influence-check (source composite) (default 7))
     (multislot influence-modifiers (source composite) (default DUNEDAIN 1))
+    (slot mp (source composite) (default 2))
 )
 
 
@@ -103,6 +117,7 @@
 (defclass QUICKBEAM (is-a ALLY)
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default [barrow--downs]));TODO
+    (slot mp (source composite) (default 2))
 )
 
 
@@ -146,6 +161,7 @@
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 (defclass FARAMIR (is-a CHARACTER)     
@@ -154,6 +170,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass KILI (is-a CHARACTER)     
@@ -163,6 +180,7 @@
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default DWARF))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass ERKENBRAND (is-a CHARACTER)     
@@ -171,6 +189,7 @@
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass BERETAR (is-a CHARACTER)     
@@ -179,6 +198,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
+    (slot mp (source composite) (default 2))
 )
 
 ; ADVERSIDADES (SUCESOS)
@@ -207,6 +227,7 @@
     (slot race (source composite) (default TROLL))
     (slot regions (source composite) (default (create$ WILDERNESS 2))) 
     (slot prowess (source composite) (default 13))   
+    (slot mp (source composite) (default 1))
 )
 
 (defclass GIANT (is-a CREATURE) 
@@ -214,6 +235,7 @@
     (slot race (source composite) (default GIANT))
     (slot regions (source composite) (default WILDERNESS 2)) 
     (slot prowess (source composite) (default 13))   
+    (slot mp (source composite) (default 1))
 )
 
 (defclass ORC-GUARD (is-a CREATURE) 
@@ -223,6 +245,7 @@
     (slot prowess (source composite) (default 8)) 
     (slot strikes (source composite) (default 5)) 
     (multislot places (source composite) (default SHADOW-HOLD DARK-HOLD)) 
+    (slot mp (source composite) (default 1))
 )
 
 (defclass ORC-LIEAUTENANT (is-a CREATURE) 
@@ -231,6 +254,7 @@
     (slot regions (source composite) (default (create$ WILDERNESS 1 SHADOW-LAND 1 DARK-LAND 1))) 
     (slot prowess (source composite) (default 7)) 
     (multislot places (source composite) (default RUINS SHADOW-HOLD DARK-HOLD))    
+    (slot mp (source composite) (default 1))
 )
 
 (defclass ORC-WARRIORS (is-a CREATURE) 
@@ -240,6 +264,7 @@
     (slot prowess (source composite) (default 7))   
     (slot strikes (source composite) (default 3)) 
     (multislot places (source composite) (default RUINS))    
+    (slot mp (source composite) (default 1))
 )
 
 (defclass BRIGANDS (is-a CREATURE) 
@@ -248,6 +273,7 @@
     (slot regions (source composite) (default (create$ WILDERNESS 1 BORDER-LAND 1))) 
     (slot prowess (source composite) (default 8))   
     (slot strikes (source composite) (default 2))    
+    (slot mp (source composite) (default 1))
 )
 
 (defclass CAVE-DRAKE (is-a CREATURE) 
@@ -256,7 +282,8 @@
     (slot regions (source composite) (default (create$ WILDERNESS 2))) 
     (slot prowess (source composite) (default 10))   
     (slot strikes (source composite) (default 2))      
-    (multislot places (source composite) (default RUINS))    
+    (multislot places (source composite) (default RUINS))  
+    (slot mp (source composite) (default 1))  
 )
 
 
@@ -269,6 +296,7 @@
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default DWARF))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass LEGOLAS (is-a CHARACTER)
@@ -277,6 +305,7 @@
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass ELLADAN (is-a CHARACTER)
@@ -285,6 +314,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass PIPPIN (is-a CHARACTER)
@@ -294,38 +324,45 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
     (slot corruption (source composite) (default -2))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass DAGGER-OF-WESTERNESS (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 
 ; RECURSOS (ITEMS)
-(defclass HAUBERK-OF-BRIGHT-MAIL (is-a MINOR-ITEM)
+(defclass HAUBERK-OF-BRIGHT-MAIL (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass ORCRIST (is-a GREATER-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
+    (slot mp (source composite) (default 4))
 )
 
 (defclass SWORD-OF-GONDOLIN (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
+    (slot mp (source composite) (default 4))
 )
 
 (defclass PALANTIR-OF-ORTHANC (is-a SPECIAL-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass HEALING-HERBS (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 ; RECURSOS (FACCIONES)
@@ -334,24 +371,28 @@
     (multislot playable-places (source composite) (default (create$)));TODO
     (slot influence-check (source composite) (default 9))
     (multislot influence-modifiers (source composite) (default MAN -1 DUNEDAIN -1 DWARF -1))
+    (slot mp (source composite) (default 2))
 )
 (defclass WOOD--ELVES (is-a FACTION)
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$)));TODO
     (slot influence-check (source composite) (default 8))
     (multislot influence-modifiers (source composite) (default MAN -1 ELF 1 DWARF -2))
+    (slot mp (source composite) (default 3))
 )
 (defclass ENTS-OF-FANGORN (is-a FACTION)
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$)));TODO
     (slot influence-check (source composite) (default 9))
     (multislot influence-modifiers (source composite) (default HOBBIT 4))
+    (slot mp (source composite) (default 3))
 )
 
 ; RECURSOS (ALIADOS)
 (defclass GOLLUM (is-a ALLY)
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$)));TODO
+    (slot mp (source composite) (default 2))
 )
 
 ; RECURSOS (SUCESOS)
@@ -398,6 +439,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default ELF))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass BARD-BOWMAN (is-a CHARACTER)     
@@ -406,6 +448,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default MAN))
+    (slot mp (source composite) (default 0))
 )
 
 (defclass ELROHIR (is-a CHARACTER)     
@@ -414,6 +457,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
+    (slot mp (source composite) (default 1))
 )
 
 (defclass BEREGOND (is-a CHARACTER)     
@@ -423,6 +467,7 @@
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
+    (slot mp (source composite) (default 0))
 )
 
 (defclass CELEBORN (is-a CHARACTER)     
@@ -431,6 +476,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
+    (slot mp (source composite) (default 2))
 )
 
 (defclass PEATH (is-a CHARACTER)     
@@ -439,6 +485,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))
+    (slot mp (source composite) (default 1))
 )
 
 
@@ -481,6 +528,7 @@
     (slot regions (source composite) (default (create$ WILDERNESS 1 BORDER-LAND 1 SHADOW-LAND 1))) 
     (slot prowess (source composite) (default 9))   
     (slot strikes (source composite) (default 2))      
+    (slot mp (source composite) (default 1))
 )
 
 (defclass WOLVES (is-a CREATURE) 
@@ -488,7 +536,8 @@
     (slot race (source composite) (default WOLF)) 
     (slot regions (source composite) (default (create$ WILDERNESS 1 BORDER-LAND 1))) 
     (slot prowess (source composite) (default 8))   
-    (slot strikes (source composite) (default 3))      
+    (slot strikes (source composite) (default 3))    
+    (slot mp (source composite) (default 1))  
 )
 
 (defclass GHOSTS (is-a CREATURE) 
@@ -497,7 +546,8 @@
     (slot regions (source composite) (default (create$ DARK-LAND 1 SHADOW-LAND 1))) 
     (slot prowess (source composite) (default 9))   
     (slot strikes (source composite) (default 3))      
-    (multislot places (source composite) (default SHADOW-HOLD DARK-HOLD))    
+    (multislot places (source composite) (default SHADOW-HOLD DARK-HOLD))   
+    (slot mp (source composite) (default 1)) 
 )
 
 (defclass LESSER-SPIDERS (is-a CREATURE) 
@@ -507,6 +557,7 @@
     (slot prowess (source composite) (default 7))   
     (slot strikes (source composite) (default 4))      
     (multislot places (source composite) (default RUINS))    
+    (slot mp (source composite) (default 1))
 )
 
 (defclass GHOULS (is-a CREATURE) 
@@ -516,6 +567,7 @@
     (slot prowess (source composite) (default 7))   
     (slot strikes (source composite) (default 5))      
     (multislot places (source composite) (default RUINS))    
+    (slot mp (source composite) (default 1))
 )
 
 (defclass OLD-MAN-WILLOW (is-a CREATURE) 
@@ -523,6 +575,7 @@
     (slot race (source composite) (default AWAKENED-PLANT)) 
     (slot regions (source composite) (default (create$ WILDERNESS 2))) 
     (slot prowess (source composite) (default 13))   
+    (slot mp (source composite) (default 1))
 )
 
 (defclass AMBUSHER (is-a CREATURE) 
@@ -531,5 +584,6 @@
     (slot regions (source composite) (default (create$ FREE-LAND 1 BORDER-LAND 1))) 
     (slot prowess (source composite) (default 10))   
     (slot strikes (source composite) (default 2))      
-    (multislot places (source composite) (default RUINS))    
+    (multislot places (source composite) (default RUINS)) 
+    (slot mp (source composite) (default 1))   
 )

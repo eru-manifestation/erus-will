@@ -70,6 +70,10 @@
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
 	?ep <- (object (is-a EVENT-PHASE) (type IN) (ep-name ?ep-name))
 	(not (object (is-a EVENT-PHASE) (type ONGOING) (ep-name ?ep-name)))
+	; Por defecto, pone a la espera cualquier otra fase eventual, por lo que se comporta bien con el
+	;  listado paralelo de 2 fases eventuales similares: Primero inicia y acaba una, luego inicia y acaba
+	;  la siguiente. En principio, de hacerse con más de 2 o con varias distintas, el comportamiento es
+	;  el de apilado de fases eventuales
 	=>
 	(jump ?ep-name)
 	(send ?ep put-type ONGOING)
