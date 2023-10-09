@@ -21,10 +21,13 @@
 )
 
 (defclass MAIN::ATTACKABLE (is-a USER)
+	; Los attackable son aquellos que pueden atacar, son las características mínimas para la fase de ataque. Son tanto
+	; ataques automáticos como criaturas
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols ANIMAL SPIDER AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MAN WOLF UNDEAD ORC TROLL NAZGUL))
-	(slot prowess (type INTEGER) (default ?NONE) (access initialize-only) (range 1 ?VARIABLE))
-	(slot strikes (type INTEGER) (default 1) (access initialize-only))
+	(slot prowess (type INTEGER) (default ?NONE) (access read-write) (range 1 ?VARIABLE))
+	(slot prowess (type ?VARIABLE) (default nil) (access read-write) (range 1 ?VARIABLE))
+	(slot strikes (type INTEGER) (default 1) (access read-write))
 )
 
 (defclass MAIN::MP-ABLE (is-a USER)
@@ -78,7 +81,7 @@
 	(multislot route (type ?VARIABLE) (default nil) (access read-only))
 )
 
-(defclass MAIN::CHARACTER (is-a MP-ABLE WOUNDABLE OWNABLE CARD)
+(defclass MAIN::CHARACTER (is-a ATTACKABLE MP-ABLE WOUNDABLE OWNABLE CARD)
 	(slot birthplace (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
 	(slot influence (type INTEGER) (default 0) (access read-write))
 	(slot mind (type INTEGER) (default 0) (access read-write))

@@ -67,6 +67,33 @@ free-council-1-1
 free-council-2-1
 FALSE
 
+START-attack
+attack-0
+attack-1
+attack-2-0
+attack-2-1
+attack-2-2
+attack-2-3
+attack-3
+attack-4
+attack-5
+FALSE
+
+START-strike
+strike-1-1
+strike-2
+strike-3-1
+strike-3-2
+strike-4
+FALSE
+
+START-resistance-check
+resistance-check-0
+resistance-check-1
+resistance-check-2
+resistance-check-3
+FALSE
+
 )
 	?*jumps* = 0
 )

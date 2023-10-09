@@ -65,6 +65,41 @@
 )
 
 
+; EP-attack
+(defclass MAIN::EP-attack (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-attack))
+
+	(slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+	(slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+	(slot state (type SYMBOL) (default UNKNOWN) (allowed-symbols UNKNOWN DEFEATED UNDEFEATED))
+)
+
+
+; EP-strike
+(defclass MAIN::EP-strike (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-strike))
+
+	(slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+	(slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+	(slot state (type SYMBOL) (default UNKNOWN) (allowed-symbols UNKNOWN DEFEATED UNDEFEATED SUCCESSFUL))
+
+	(slot hindered (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
+	(slot dices (type INTEGER) (default 0))
+)
+
+
+; EP-resistance-check
+(defclass MAIN::EP-resistance-check (is-a EVENT-PHASE)
+	(slot ep-name (type SYMBOL) (default START-resistance-check))
+
+	(slot attacker (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+	(slot assaulted (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+
+	(slot dices (type INTEGER) (default 0))
+	(slot result (type SYMBOL) (default UNKNOWN) (allowed-symbols PASSED NOT-PASSED UNKNOWN))
+)
+
+
 
 ;/////////////////// UNIFIED HANDLER //////////////////
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))

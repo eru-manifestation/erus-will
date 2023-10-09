@@ -109,6 +109,28 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\free-council-1-0.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\free-council-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\free-council-2-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-2-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-2-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-2-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-4.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack-5.clp")
+    
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike-3-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike-4.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check-3.clp")
+
     
 )
 

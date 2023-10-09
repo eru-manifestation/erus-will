@@ -147,3 +147,73 @@
     (debug Se crea el mp item por ?c para ?p)
     (make-instance (gen-name data-item) of data-item (target-slot mp) (target (enemy ?p)) (value ?mp))
 )
+
+
+; INFO ITEM PARA STRIKES DE ATTACKABLE
+(defrule MAIN::strikes-attackable-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a E-select-strike) (type IN) (char ?char) (attackable ?attackable))
+    )
+    =>
+    (debug Se crea el strike item por ?char para ?attackable)
+    (make-instance (gen-name data-item) of data-item (target-slot strikes) (target ?attackable) (value -1))
+)
+
+
+; INFO ITEM PARA DICES DE STRIKE
+(defrule MAIN::dices-strike-data-item-population#tapped (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char))
+        (object (is-a CHARACTER) (name ?char) (state TAPPED))
+    )
+    =>
+    (debug Se crea el dices item por ?char para ?ep)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep) (value -1))
+)
+
+
+; INFO ITEM PARA DICES DE STRIKE
+(defrule MAIN::dices-strike-data-item-population#wounded (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char))
+        (object (is-a CHARACTER) (name ?char) (state WOUNDED))
+    )
+    =>
+    (debug Se crea el dices item por ?char para ?ep)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep) (value -2))
+)
+
+
+; INFO ITEM PARA DICES DE STRIKE
+(defrule MAIN::dices-strike-data-item-population#additional (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char))
+        (object (is-a EP-strike) (name ?ep1) (type OUT) (char ?char))
+    )
+    =>
+    (debug Se crea el dices item por ?ep1 para ?ep)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep) (value -1))
+)
+
+
+; INFO ITEM PARA DICES DE STRIKE
+(defrule MAIN::dices-strike-data-item-population#hindered (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+        (object (is-a EP-strike) (name ?ep) (type ONGOING) (hindered TRUE))
+    )
+    =>
+    (debug Se crea el dices item por hindered para ?ep)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep) (value -3))
+)
+
+
+; INFO ITEM PARA DICES DE RESISTANCE-CHECK
+(defrule MAIN::dices-resistance-check-data-item-population#hurt (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
+    (logical
+	    (object (is-a EP-resistance-check) (name ?ep) (type ONGOING) (assaulted ?as))
+        (object (is-a CHARACTER) (name ?as) (state WOUNDED))
+    )
+    =>
+    (debug Se crea el dices item por hurt para ?ep)
+    (make-instance (gen-name data-item) of data-item (target-slot dices) (target ?ep) (value -1))
+)

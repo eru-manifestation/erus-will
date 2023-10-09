@@ -385,25 +385,6 @@
 )
 
 
-; E-creature-attack-fell
-(defclass MAIN::E-creature-attack-fell (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
-    (slot attack-at (type SYMBOL) (default ?NONE))
-)
-
-(defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-creature-attack-fell) (type IN) 
-        (fell ?fell) (creature ?creature) (attack-at ?attack-at))
-    =>
-    (send ?e complete)
-    (in-move ?creature ?fell)
-    (send ?creature put-state UNTAPPED)
-    ;TODO: HACER FASE EVENTUAL FELL-ATTACK
-    (debug Creature ?creature attacking ?fell at ?attack-at)
-)
-
-
 ; E-fell-change-loc
 (defclass MAIN::E-fell-change-loc (is-a EVENT)
     (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
@@ -516,4 +497,63 @@
     =>
     (send ?e complete)
     (make-instance (gen-name EP-free-council) of EP-free-council)
+)
+
+
+; E-creature-attack-fell
+(defclass MAIN::E-creature-attack-fell (is-a EVENT)
+    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
+    (slot attack-at (type SYMBOL) (default ?NONE))
+)
+
+(defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-creature-attack-fell) (type IN) 
+        (fell ?fell) (creature ?creature) (attack-at ?attack-at))
+    =>
+    (send ?e complete)
+    (in-move ?creature ?fell)
+    (send ?creature put-state UNTAPPED);TODO: controlar la finalziacion del ataque
+    (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))
+    (debug Creature ?creature attacking ?fell at ?attack-at)
+)
+
+
+; E-select-strike
+(defclass MAIN::E-select-strike (is-a EVENT)
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+)
+
+
+; E-select-strike
+(defclass MAIN::E-strike (is-a EVENT)
+    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-select-strike))
+)
+
+(defrule MAIN::E-strike (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-strike) (type IN) 
+        (char ?char) (attackable ?attackable) (decl-event ?decl))
+    =>
+    (send ?e complete)
+    (send ?decl complete)
+    (make-instance (gen-name EP-strike) of EP-strike (char ?char) (attackable ?attackable))
+    (debug Strike of ?attackable faced by ?char)
+)
+
+
+; E-select-strike
+(defclass MAIN::E-face-strike-hindered (is-a EVENT)
+    (slot strike (type INSTANCE-NAME) (default ?NONE) (allowed-classes EP-strike))
+)
+
+(defrule MAIN::E-face-strike-hindered (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-face-strike-hindered) (type IN) 
+        (strike ?ep-strike))
+    =>
+    (send ?e complete)
+    (send ?ep-strike put-hindered TRUE)
+    (debug ?*player* chose to face the strike hindered)
 )

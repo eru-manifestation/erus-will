@@ -190,3 +190,9 @@ DONE:   MP item para player
 
 Sistema de apilado de fases eventuales o eventos en distintos tipos: unos tras otros, necesitando o no la compleción del predecesor para ejecutarse. Por ejemplo: para intentar jugarse una facción, primero se hace evento que gire al personaje "intento de jugar facción", luego otro que de completarse el anterior realice el chequeo de influencia "chequeo de influencia" y finalmente si se completa con éxito el anterior otro que ponga en juego la faccion "jugar faccion".
 Otro modelo es el paralelo, por ejemplo: ejecutar dos eventos de ataque automático, donde el resultado de uno no determina la actuación del siguiente.
+
+Hacer que cuando se defusee o termine una fase eventual se termine y vaya hacia abajo en el focus stack
+
+Ordenar el focus stack para evitar que se intercalen focos de MAIN pero que se realicen con la prioridad que necesitan
+
+Hacer que una vez el ataque de una criatura sea vencido, ponerlo en MP

@@ -11,6 +11,8 @@
     (slot mind (source composite) (default 9))
     (slot race (source composite) (default DUNEDAIN))
     (slot mp (source composite) (default 3))
+    (slot prowess (source composite) (default 6))
+    (slot body (source composite) (default 9))
 )
 
 (defclass EOMER (is-a CHARACTER)     
@@ -20,6 +22,8 @@
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 3))
+    (slot body (source composite) (default 8))
 )
 
 (defclass BOROMIR-II (is-a CHARACTER)     
@@ -30,6 +34,8 @@
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 6))
+    (slot body (source composite) (default 7))
 )
 
 (defclass SHIELD-OF-IRON--BOUND-ASH (is-a MINOR-ITEM)
@@ -45,6 +51,8 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 1))
+    (slot body (source composite) (default 9))
 )
 
 
@@ -152,6 +160,8 @@
     (slot mind (source composite) (default 0))
     (slot race (source composite) (default WIZARD))
     (slot corruption (source composite) (default -1))
+    (slot prowess (source composite) (default 6))
+    (slot body (source composite) (default 9))
 )
 
 (defclass BEREGOND (is-a CHARACTER)     
@@ -162,6 +172,8 @@
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
+    (slot prowess (source composite) (default 4))
+    (slot body (source composite) (default 8))
 )
 
 (defclass FARAMIR (is-a CHARACTER)     
@@ -171,6 +183,8 @@
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 (defclass KILI (is-a CHARACTER)     
@@ -181,6 +195,8 @@
     (slot race (source composite) (default DWARF))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 3))
+    (slot body (source composite) (default 8))
 )
 
 (defclass ERKENBRAND (is-a CHARACTER)     
@@ -190,6 +206,8 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 6))
 )
 
 (defclass BERETAR (is-a CHARACTER)     
@@ -199,6 +217,8 @@
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 ; ADVERSIDADES (SUCESOS)
@@ -297,6 +317,8 @@
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default DWARF))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 (defclass LEGOLAS (is-a CHARACTER)
@@ -306,6 +328,8 @@
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 (defclass ELLADAN (is-a CHARACTER)
@@ -315,6 +339,8 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 (defclass PIPPIN (is-a CHARACTER)
@@ -325,6 +351,8 @@
     (slot race (source composite) (default HOBBIT))
     (slot corruption (source composite) (default -2))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 1))
+    (slot body (source composite) (default 9))
 )
 
 (defclass DAGGER-OF-WESTERNESS (is-a MINOR-ITEM)
@@ -431,6 +459,8 @@
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
     (slot race (source composite) (default WIZARD))
+    (slot prowess (source composite) (default 6))
+    (slot body (source composite) (default 9))
 )
 
 (defclass ANNALENA (is-a CHARACTER)     
@@ -440,6 +470,8 @@
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 3))
+    (slot body (source composite) (default 8))
 )
 
 (defclass BARD-BOWMAN (is-a CHARACTER)     
@@ -449,6 +481,8 @@
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 0))
+    (slot prowess (source composite) (default 3))
+    (slot body (source composite) (default 6))
 )
 
 (defclass ELROHIR (is-a CHARACTER)     
@@ -458,6 +492,8 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 5))
+    (slot body (source composite) (default 8))
 )
 
 (defclass BEREGOND (is-a CHARACTER)     
@@ -468,6 +504,8 @@
     (slot race (source composite) (default DUNEDAIN))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
+    (slot prowess (source composite) (default 4))
+    (slot body (source composite) (default 8))
 )
 
 (defclass CELEBORN (is-a CHARACTER)     
@@ -477,6 +515,8 @@
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 6))
+    (slot body (source composite) (default 9))
 )
 
 (defclass PEATH (is-a CHARACTER)     
@@ -486,6 +526,8 @@
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 1))
+    (slot prowess (source composite) (default 4))
+    (slot body (source composite) (default 7))
 )
 
 
