@@ -14,12 +14,12 @@
 
 
 
-(defrule action-E-select-strike (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+(defrule action-E-select-strike  (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase attack-3))
 
-		?e <- (object (is-a E-select-strike) (type IN) 
-        (char ?char) (attackable ?attackable))
+		(object (is-a E-select-strike) (name ?e) (type IN) 
+        (char ?char) (attackable ?at))
 	)   
     =>
 	(assert (action 
@@ -28,6 +28,7 @@
 		(description (sym-cat "Execute strike from " ?at " to " ?char))
 		(data (create$ 
 		"( char [" ?char "])" 
-		"( attackable [" ?at "])"))
+		"( attackable [" ?at "])"
+		"( decl-event [" ?e "])"))
 	))
 )

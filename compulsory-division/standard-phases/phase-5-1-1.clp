@@ -1,4 +1,4 @@
-;/////////////////////// FASE 5 1 1: EJECUCION ELEGIR SI ATACAR ///////////////////////
+;/////////////////////// FASE 5 1 1: EJECUCION ELEGIR SI DESCARTAR ///////////////////////
 (defmodule P-5-1-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
@@ -18,6 +18,7 @@
 	(logical
 		(only-actions (phase P-5-1-1))
 		(object (is-a CARD) (player ?p&:(eq ?p ?*player*)) (state HAND) (name ?c))
+		(not (object (is-a E-player-discard-from-hand)));TODO ES INESTABLE
 	)
 	=>
 	(assert (action 

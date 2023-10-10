@@ -1,4 +1,4 @@
-;/////////////////////// FASE 5 2 1: EJECUCION ELEGIR SI ATACAR ///////////////////////
+;/////////////////////// FASE 5 2 1: AMBOS ROBAN ANTES DEL FINAL DEL TURNO ///////////////////////
 (defmodule P-5-2-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))

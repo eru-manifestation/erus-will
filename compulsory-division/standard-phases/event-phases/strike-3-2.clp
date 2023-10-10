@@ -40,7 +40,7 @@
 )
 
 (defrule execute-strike#tap-unhindered
-	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered TRUE))
+	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
 	(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 	=>
 	(send ?char put-state TAPPED)

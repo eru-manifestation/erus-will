@@ -15,7 +15,8 @@
 
 
 (defrule end-strike
-	(object (is-a EP-strike) (name ?ep) (type ONGOING))
+	(object (is-a EP-strike) (name ?ep) (char ?char) (attackable ?at) (type ONGOING))
 	=>
 	(send ?ep complete)
+	(debug The strike has been (send ?ep get-state) since (send ?ep get-dices) in the roll and ?char has (send ?char get-prowess) prowess and ?at has (send ?at get-prowess) prowess)
 )

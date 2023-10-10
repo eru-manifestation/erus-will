@@ -26,7 +26,7 @@
 	(slot race (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols ANIMAL SPIDER AWAKENED-PLANT PUKEL-CREATURE DRAGON SLAYER GIANT MAN WOLF UNDEAD ORC TROLL NAZGUL))
 	(slot prowess (type INTEGER) (default ?NONE) (access read-write) (range 1 ?VARIABLE))
-	(slot prowess (type ?VARIABLE) (default nil) (access read-write) (range 1 ?VARIABLE))
+	(slot body (type ?VARIABLE) (default nil) (access read-write) (range 1 ?VARIABLE))
 	(slot strikes (type INTEGER) (default 1) (access read-write))
 )
 

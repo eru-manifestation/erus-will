@@ -19,7 +19,7 @@
 	(not (object (is-a EP-strike) (state SUCCESSFUL | UNDEFEATED)))
 	=>
 	(send ?ep-at put-state DEFEATED)
-	(declare Attack defeated)
+	(debug Attack defeated)
 )
 
 
@@ -29,5 +29,5 @@
 	(exists (object (is-a EP-strike) (state ?state&:(neq DEFEATED ?state))))
 	=>
 	(send ?ep-at put-state UNDEFEATED)
-	(declare Attack undefeated)
+	(debug Attack undefeated)
 )

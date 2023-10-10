@@ -32,14 +32,6 @@
 	(bind ?self:type OUT)
 )
 
-; RECOLECTOR DE BASURA
-(defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
-		(salience ?*garbage-collector-salience*))
-	; Destruye los eventos marcados como terminados
-	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
-	=>
-	(send ?e delete)
-)
 
 ; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT-PHASE HANDLER
 (defmessage-handler EVENT-PHASE complete()

@@ -148,6 +148,7 @@
 (init-handS)
 ;(watch rules)
 ;(run 40)
+(send [wolves1] put-state HAND)
 (run)
 
 

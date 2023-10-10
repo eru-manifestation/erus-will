@@ -196,3 +196,5 @@ Hacer que cuando se defusee o termine una fase eventual se termine y vaya hacia 
 Ordenar el focus stack para evitar que se intercalen focos de MAIN pero que se realicen con la prioridad que necesitan
 
 Hacer que una vez el ataque de una criatura sea vencido, ponerlo en MP
+
+Gestionar correctamente el borrado de eventos y fases eventuales terminadas, de forma que se eliminen justo antes de cambiar a la siguiente fase de igual o menor altura en la pila: debe durar para todas las subfases en su interior, pero no para la siguiente fase no subfase, es decir, debe durar mientras siga en el focus stack la fase donde inicio. Mejor eliminar literalmente en la ejecucion del reloj para evitar la ejecución del ciclo infinito en P-4

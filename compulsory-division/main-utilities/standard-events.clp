@@ -557,3 +557,14 @@
     (send ?ep-strike put-hindered TRUE)
     (debug ?*player* chose to face the strike hindered)
 )
+
+
+
+; RECOLECTOR DE BASURA
+(defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
+		(salience ?*garbage-collector-salience*))
+	; Destruye los eventos marcados como terminados
+	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
+	=>
+	(send ?e delete)
+)

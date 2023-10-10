@@ -13,7 +13,7 @@
 
 
 
-(defrule enemy-select-strike
+(defrule enemy-select-strike (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase attack-2-2))
 		(object (is-a EP-attack) (type ONGOING) (fell ?fell) (attackable ?at))
@@ -35,18 +35,18 @@
 
 
 
-(defrule enemy-select-spare-strike
+(defrule enemy-select-spare-strike (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase attack-2-2))
 		(object (is-a EP-attack) (type ONGOING) (fell ?fell) (attackable ?at))
 		(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
 		(object (is-a CHARACTER) (name ?char))
 		(in (over ?fell) (under ?char))
-		(not 
+		(not (exists
 			(object (is-a CHARACTER) (name ?char1))
 			(in (over ?fell) (under ?char1))
 			(not (object (is-a E-select-strike) (char ?char)))
-		)
+		))
 	)
 	=>
 	(assert (action ;TODO: hacer que este golpe esté a -1 de prowess el char

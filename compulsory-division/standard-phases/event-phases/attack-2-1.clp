@@ -13,7 +13,7 @@
 
 
 
-(defrule player-select-strike
+(defrule player-select-strike (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase attack-2-1))
 		(object (is-a EP-attack) (type ONGOING) (fell ?fell) (attackable ?at))

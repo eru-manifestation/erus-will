@@ -18,7 +18,7 @@
 	(logical
 		(only-actions (phase strike-1-1))
 		
-		(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char))
+		(object (is-a EP-strike) (name ?ep) (type ONGOING) (attackable ?at) (char ?char))
 		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 	)
 	=>
