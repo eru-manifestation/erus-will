@@ -5,7 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug ?*player* plays resources which modifies the strike))
+(debug Player plays resources which modifies the strike))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 

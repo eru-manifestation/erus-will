@@ -16,12 +16,13 @@
 (defrule action-fell-move (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-3-1-1))
+    	(player ?p)
 		(object (is-a E-fell-decl-move) (type IN)
 			(fell ?fell) (from ?from) (to ?to) (name ?event))
 	)
 	=>
 	(assert (action 
-		(player ?*player*)
+		(player ?p)
 		(event-def fell-move)
 		(description (sym-cat "Move fellowship " ?fell " from " ?from " to " ?to))
 		(data (create$ 
@@ -36,12 +37,13 @@
 (defrule action-fell-remain (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-3-1-1))
+    	(player ?p)
 		(object (is-a E-fell-decl-remain) (type IN)
 			(loc ?loc) (fell ?fell) (name ?event))
 	)
 	=>
 	(assert (action 
-		(player ?*player*)
+		(player ?p)
 		(event-def fell-move)
 		(description (sym-cat "Execute remain of " ?fell " in " ?loc))
 		(data (create$ 

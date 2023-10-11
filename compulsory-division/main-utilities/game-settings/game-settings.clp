@@ -5,11 +5,12 @@
     ;TODO: Para cuando acabe el turno, función para intercambiar jugador actual y enemigo
 
     ; IMPORTANTE: intercambiarse entre jugador y enemigos NO va a disparar el PATTERN MATCHING ENGINE
-    ?*player* = ?*player1*
-    ?*enemy* = ?*player2*
+    ; ?*player* = ?*player1*
+    ; ?*enemy* = ?*player2*
 
     ; Escribir nil para no saber de donde viene debug info y t para saber la traza
     ?*debug-traces* = t
     ; Escribir nil para no debug info y t para debug info
     ?*debug-info* = t
 )
+

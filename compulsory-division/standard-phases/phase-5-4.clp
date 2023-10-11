@@ -27,7 +27,8 @@
 (defrule arrange-council#mp (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-5-4))
-		(object (is-a PLAYER) (name ?p&:(eq ?p ?*player*)) (mp ?mp&:(<= 20 ?mp)))
+    	(player ?p)
+		(object (is-a PLAYER) (name ?p) (mp ?mp&:(<= 20 ?mp)))
 	)
 	=>
 	(assert (action 
@@ -42,7 +43,8 @@
 (defrule arrange-council#empty-deck (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-5-4))
-		(object (is-a PLAYER) (name ?p&:(eq ?p ?*player*)))
+    	(player ?p)
+
 		(not (exists 
 			(object (is-a OWNABLE) (name ?owned-card) (player ?p))
 			(object (is-a CARD) (name ?owned-card) (state DRAW))

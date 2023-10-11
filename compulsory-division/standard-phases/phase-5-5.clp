@@ -14,11 +14,12 @@
 
 
 (defrule new-turn
+	?fp<-(player ?player)
+	?fe<-(enemy ?enemy)
 	=>
-	(bind ?p1 ?*player*)
-	(bind ?*player* ?*enemy*)
-	(bind ?*enemy* ?p1)
-	(pop-focus)
+	(retract ?fp ?fe)
+	(assert (player ?enemy) (enemy ?player))
+	(pop-focus);TODO: FORMALIZAR
 	(jump START)
-	(debug Start new turn with player: ?*player* and enemy: ?*enemy*)
+	(debug Start new turn with player: ?enemy and enemy: ?player)
 )

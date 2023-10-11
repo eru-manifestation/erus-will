@@ -5,7 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug El jugador ?*player* llega al lugar, se descarta la anterior localizacion si es necesario))
+(debug The player gets to the location, discarding the previous if needed))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 

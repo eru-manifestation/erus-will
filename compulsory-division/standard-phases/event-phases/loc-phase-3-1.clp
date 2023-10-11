@@ -16,8 +16,9 @@
 (defrule play-additional-minor-item (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase loc-phase-3-1))
+    	(player ?p)
 		(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell))
-		(object (is-a MINOR-ITEM) (player ?p&:(eq ?p ?*player*)) (state HAND) (name ?item))
+		(object (is-a MINOR-ITEM) (player ?p) (state HAND) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
 		(not (object (is-a E-item-play-only-minor)))

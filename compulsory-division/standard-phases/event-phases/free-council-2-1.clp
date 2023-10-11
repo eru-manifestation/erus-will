@@ -14,13 +14,15 @@
 
 
 (defrule declare-winner
+    (player ?p)
+    (enemy ?e)
 	=>		
 	(halt)
-	(if (< (send ?*player* get-mp) (send ?*enemy* get-mp)) then
-		(debug THE WINNER OF THE COUNCIL IS ?*player*)
+	(if (< (send ?p get-mp) (send ?e get-mp)) then
+		(debug THE WINNER OF THE COUNCIL IS ?p)
 		else
-		(if (< (send ?*player* get-mp) (send ?*enemy* get-mp)) then
-			(debug THE WINNER OF THE COUNCIL IS ?*enemy*)
+		(if (< (send ?p get-mp) (send ?e get-mp)) then
+			(debug THE WINNER OF THE COUNCIL IS ?e)
 			else
 			(debug THERE IS A TIE)
 		)

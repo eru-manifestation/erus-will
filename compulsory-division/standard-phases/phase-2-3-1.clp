@@ -13,8 +13,9 @@
 
 ; EVENTO: DESCARTAR ADVERSIDADES DE SUCESO DURADERO
 (defrule long-event-adversity-discard
+    (enemy ?p)
 	; Dado una adversidad suceso duradero del contrincante
-	(object (is-a A-LONG-EVENT) (name ?le) (player ?p&:(eq ?p ?*enemy*))
+	(object (is-a A-LONG-EVENT) (name ?le) (player ?p)
 		(state TAPPED | UNTAPPED))
 	=>
 	(make-instance (gen-name E-a-long-event-discard) of E-a-long-event-discard

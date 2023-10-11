@@ -1,7 +1,8 @@
 (defglobal MAIN ?*phase-list* = (create$ 
-
+MAIN
 START-start-game
-start-game
+start-game-0
+start-game-1
 START
 P-0-1-1
 P-0-2-1
@@ -21,8 +22,8 @@ P-5-5
 FALSE
 
 START-both-players-draw
-both-players-draw
 both-players-draw-0
+both-players-draw-1
 FALSE
 
 START-corruption-check
@@ -54,6 +55,8 @@ FALSE
 START-loc-phase
 loc-phase-1-1
 loc-phase-2-1
+loc-phase-3-1
+loc-phase-4
 FALSE
 
 START-faction-play
@@ -101,7 +104,8 @@ FALSE
 (deftemplate only-actions (slot phase (type SYMBOL) (default ?NONE)))
 
 (deffunction update-only-actions (?jump-stage)
-	(do-for-fact ((?only-actions only-actions)) TRUE (modify ?only-actions (phase ?jump-stage)))
+	(do-for-fact ((?only-actions only-actions)) TRUE (retract ?only-actions)
+	(assert (only-actions (phase ?jump-stage))))
 )
 
 
@@ -120,17 +124,11 @@ FALSE
 	(update-only-actions ?jump-stage)
 )
 
-; REGLA DE INICIO DE JUEGO
-(defrule MAIN::start =>
-	(assert (only-actions (phase FALSE)))
-	(jump START-start-game) 
-	(assert (post-drawS))
-	(assert (post-drawG))
-	(assert (infinite))
-)
-
 ; FUNCION DE CAMBIO DE FASE
 (deffunction MAIN::tic (?stage)
+	(bind ?stage (get-focus))
+
+	; ACTUALIZA FOCOS
 	(bind ?jump-stage (stage-guide ?stage))
 	(if ?jump-stage then
 		(pop-focus)
@@ -138,7 +136,8 @@ FALSE
 		else
 		(if (eq (nth$ 2 (get-focus-stack)) MAIN) then
 			(if (< (length$ (get-focus-stack)) 3) then 
-				(debug Fin de la partida)
+				(debug Fin de la partida);PUEDE QUE SEA NECESARIO PQ NUNCA OCURRA
+				(halt)
 				else
 				(update-only-actions (nth$ 3 (get-focus-stack)))
 			)
@@ -146,4 +145,25 @@ FALSE
 			(update-only-actions (nth$ 2 (get-focus-stack)))
 		)
 	)
+	
+	; ELIMINA EVENTOS O FASES EVENTUALES TERMINADAS
+	(do-for-all-instances ((?e EVENT)) 
+		(and 
+			(eq ?e:type OUT) 
+			(not (str-index ?e:target-phase (implode$ (get-focus-stack))))
+		)
+		(debug DELETING ?e)
+		(send ?e delete)
+	)
+)
+
+
+
+; REGLA DE INICIO DE JUEGO
+(defrule MAIN::start =>
+	(assert (only-actions (phase FALSE)))
+	(tic 1)
+	(assert (infinite))
+	(assert (player ?*player1*))
+	(assert (enemy ?*player2*))
 )

@@ -363,9 +363,10 @@
 (defrule MAIN::E-fell-move-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
     ?e <- (object (is-a E-fell-move-player-draw) (type IN) 
         (fell-move ?fell-move))
+    (player ?p)
     =>
     (send ?e complete)
-    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?*player*))
+    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?p))
     (send ?fell-move put-player-draw (- (send ?fell-move get-player-draw) 1))
 )
 
@@ -378,9 +379,10 @@
 (defrule MAIN::E-fell-move-enemy-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
     ?e <- (object (is-a E-fell-move-enemy-draw) (type IN) 
         (fell-move ?fell-move))
+    (enemy ?enemy)
     =>
     (send ?e complete)
-    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?*enemy*))
+    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?enemy))
     (send ?fell-move put-enemy-draw (- (send ?fell-move get-enemy-draw) 1))
 )
 
@@ -552,19 +554,20 @@
 (defrule MAIN::E-face-strike-hindered (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
     ?e <- (object (is-a E-face-strike-hindered) (type IN) 
         (strike ?ep-strike))
+    (player ?p)
     =>
     (send ?e complete)
     (send ?ep-strike put-hindered TRUE)
-    (debug ?*player* chose to face the strike hindered)
+    (debug ?p chose to face the strike hindered)
 )
 
 
 
-; RECOLECTOR DE BASURA
-(defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
-		(salience ?*garbage-collector-salience*))
-	; Destruye los eventos marcados como terminados
-	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
-	=>
-	(send ?e delete)
-)
+; ; RECOLECTOR DE BASURA
+; (defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
+; 		(salience ?*garbage-collector-salience*))
+; 	; Destruye los eventos marcados como terminados
+; 	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
+; 	=>
+; 	(send ?e delete)
+; )

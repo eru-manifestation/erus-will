@@ -5,7 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug El jugador ?*player* decide si sigue robando, de poder robar))
+(debug Player decides whether to keep drawing, if possible))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -16,11 +16,12 @@
 (defrule action-player-draw
     (logical
 		(only-actions (phase fell-move-3-2))
+    	(player ?p)
 		(object (is-a EP-fell-move) (type ONGOING) (name ?e) (player-draw ?pd&:(< 0 ?pd)))
 	)
     =>
     (assert (action 
-		(player ?*player*)
+		(player ?p)
 		(event-def fell-move-player-draw)
 		(description (sym-cat "Draw 1"))
 		(data (create$ 

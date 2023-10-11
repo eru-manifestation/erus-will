@@ -15,8 +15,9 @@
 
 ; DECLARAR ESTANCIA PREVENTIVAMENTE
 (defrule action-fell-decl-remain (declare (salience ?*action-population-salience*))
+    (player ?p)
 	; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
-	(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+	(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
 
 	; Encuentro la localización de la compañía
 	(object (is-a LOCATION) (name ?loc))

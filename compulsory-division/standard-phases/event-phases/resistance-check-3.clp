@@ -13,8 +13,9 @@
 
 
 (defrule end-resistance-check
-	(object (is-a EP-resistance-check) (name ?ep) (type ONGOING))
+	(object (is-a EP-resistance-check) (name ?ep) (type ONGOING) (attacker ?attacker) (assaulted ?assaulted))
 	=>
 	(send ?ep complete)
+	(debug The resistance check has been (send ?ep get-result) since (send ?ep get-dices) in the roll and ?assaulted has (send ?assaulted get-prowess) prowess and ?attacker has (send ?attacker get-prowess) prowess)
 )
 

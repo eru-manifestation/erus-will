@@ -17,8 +17,9 @@
 (defrule action-fell-decl-mov#from-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-2-1))
+    	(player ?p)
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
 		(not (object (is-a E-fell-decl-move) (fell ?fell)))
 		
 		; Encuentro la localización de la compañía
@@ -45,8 +46,9 @@
 (defrule action-fell-decl-mov#haven-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-2-1))
+    	(player ?p)
 		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
 		(not (object (is-a E-fell-decl-move) (fell ?fell)))
 		
 		; Encuentro la localización de la compañía
@@ -79,8 +81,9 @@
 (defrule action-fell-decl-mov#no-haven (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-2-1))
+    	(player ?p)
 		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
 		(not (object (is-a E-fell-decl-move) (fell ?fell)))
 
 		; Encuentro la localización de la compañía

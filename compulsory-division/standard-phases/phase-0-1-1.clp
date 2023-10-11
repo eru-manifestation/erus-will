@@ -14,9 +14,10 @@
 
 ; EVENTO: En la fase Enderezamiento, enderezar todas las cartas no localizaciones del jugador
 (defrule untap
+    (player ?p)
 	;Aprovecho que dos CE pueden referenciar conjuntamente al mismo elemento, afinando el cribado
 	(object (is-a CARD) (name ?c) (state TAPPED))
-	(object (is-a OWNABLE) (name ?c) (player ?p&:(eq ?p ?*player*)))
+	(object (is-a OWNABLE) (name ?c) (player ?p))
 	(not (object (is-a LOCATION) (name ?c)))
 	=>
 	(make-instance (gen-name E-card-untap) of E-card-untap (card ?c))

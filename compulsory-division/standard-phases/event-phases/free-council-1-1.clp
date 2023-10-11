@@ -14,7 +14,8 @@
 
 
 (defrule enemy-corruption-check
-	(object (is-a CHARACTER) (player ?p&:(eq ?p ?*enemy*)) (state UNTAPPED | TAPPED | WOUNDED) (name ?char))
+    (enemy ?p)
+	(object (is-a CHARACTER) (player ?p) (state UNTAPPED | TAPPED | WOUNDED) (name ?char))
 	=>
 	(make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?char))
 )

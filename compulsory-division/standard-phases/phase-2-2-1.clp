@@ -14,8 +14,10 @@
 ; ACCIÓN: JUGAR RECURSOS DE SUCESOS DURADEROS
 (defrule action-long-event-play (declare (salience ?*action-population-salience*))
 	(logical
+		(only-actions (phase P-2-2-1))
+    	(player ?p)
 		; Dado un suceso duradero en la mano del jugador
-		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p&:(eq ?p ?*player*))
+		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p)
 			(state HAND))
 	)
 	=>

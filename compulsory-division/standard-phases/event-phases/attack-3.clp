@@ -5,7 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug ?*player* chooses the order in which strikes execute))
+(debug Player chooses the order in which strikes execute))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -17,13 +17,14 @@
 (defrule action-E-select-strike  (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase attack-3))
+    	(player ?p)
 
 		(object (is-a E-select-strike) (name ?e) (type IN) 
         (char ?char) (attackable ?at))
 	)   
     =>
 	(assert (action 
-		(player ?*player*)
+		(player ?p)
 		(event-def strike)
 		(description (sym-cat "Execute strike from " ?at " to " ?char))
 		(data (create$ 

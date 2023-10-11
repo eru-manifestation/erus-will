@@ -35,21 +35,19 @@
     ;fellowship manager
     (load* "compulsory-division\\main-utilities\\fellowships.clp")
 
-    ;clock manager
-    (load* "compulsory-division\\main-utilities\\clock.clp")
 
     ;events
     (load* "compulsory-division\\main-utilities\\events.clp")
+    
+    ;clock manager
+    (load* "compulsory-division\\main-utilities\\clock.clp")
+
+    ;standard-events
     (load* "compulsory-division\\main-utilities\\standard-event-phases.clp")
     (load* "compulsory-division\\main-utilities\\standard-events.clp")
 
     ;action manager
     (load* "compulsory-division\\main-utilities\\user-interaction\\actions.clp")
-
-    ;handG
-    (load* "compulsory-division\\main-utilities\\game-settings\\handG.clp")
-    ;handS
-    (load* "compulsory-division\\main-utilities\\game-settings\\handS.clp")
 
     ;data items
     (load* "compulsory-division\\main-utilities\\data-items.clp")
@@ -57,7 +55,8 @@
 
 (deffunction load-standard()
     (chdir ?*route*)
-    (load* "compulsory-division\\standard-phases\\start-game.clp")
+    (load* "compulsory-division\\standard-phases\\start-game-0.clp")
+    (load* "compulsory-division\\standard-phases\\start-game-1.clp")
 
     (load* "compulsory-division\\standard-phases\\phase-0-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-0-2-1.clp")
@@ -96,8 +95,8 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-6.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\fell-move-7.clp")
 
-    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw-1.clp")
 
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-2-1.clp")
@@ -143,12 +142,9 @@
 )
 
 (load-all)
-(init-locations)
-(init-handG)
-(init-handS)
 ;(watch rules)
+;(watch instances E-char-play E-item-play-only-minor)
 ;(run 40)
-(send [wolves1] put-state HAND)
+;(run 3)
+;(send [wolves1] put-state HAND) ;Testar el ataque
 (run)
-
-

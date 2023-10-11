@@ -17,8 +17,9 @@
 (defrule action-loc-phase (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-4))
+    	(player ?p)
 
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
 		(object (is-a LOCATION) (name ?loc))
 		(in (transitive FALSE) (over ?loc) (under ?fell))
 		(not (object (is-a E-loc-phase) (loc ?loc) (fell ?fell))) ;TODO ARREGLAR ESTO

@@ -20,8 +20,9 @@
 (defrule action-char-play#as-follower (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
+    	(player ?p)	
 		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p&:(eq ?p ?*player*)) 
+		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
 			(birthplace ?bp) (race ?race) (mind ?mind))
 		
 		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de
@@ -57,9 +58,10 @@
 (defrule action-char-play#under-fell (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
+    	(player ?p)
 		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen
 		; necesaria para jugarlo)
-		(object (is-a PLAYER) (name ?p&:(eq ?p ?*player*)) (general-influence ?gen-inf))
+		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
 			(birthplace ?bp) (race ?race) (mind ?mind&:(<= ?mind ?gen-inf)))
 		
@@ -97,8 +99,9 @@
 (defrule action-item-transfer (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
+    	(player ?p)
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
-		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a ITEM) (name ?i) (player ?p))
 		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer) (player ?p))
 		(in (transitive FALSE) (over ?disposer) (under ?i))
 
@@ -127,8 +130,9 @@
 (defrule action-item-store (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
+    	(player ?p)
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
-		(object (is-a ITEM) (name ?i) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a ITEM) (name ?i) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
 		(in (over ?loc) (under ?i))
 
@@ -154,20 +158,21 @@
 (defrule action-loc-organize (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
+    	(player ?p)
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
 		(exists 
-			(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
+			(object (is-a CHARACTER) (name ?char) (player ?p))
 			(in (over ?loc) (under ?char))
 		)
 	)
 	=>
 	(assert (action 
-		(player ?*player*)
+		(player ?p)
 		(event-def loc-organize)
 		(description (sym-cat "Organize fellowship in " ?loc))
 		(data (create$ 
-		"( player [" ?*player* "])" 
+		"( player [" ?p "])" 
 		"( loc [" ?loc "])"))
 	))
 )
@@ -181,9 +186,10 @@
 (defrule action-char-discard (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
+    	(player ?p)
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
-		(object (is-a CHARACTER) (name ?char) (player ?p&:(eq ?p ?*player*)))
+		(object (is-a CHARACTER) (name ?char) (player ?p))
 		(in (over ?loc) (under ?char))
 	)
 	=>

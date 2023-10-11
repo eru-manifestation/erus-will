@@ -5,7 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug El jugador ?*enemy* juega adversidades))
+(debug Enemy plays adversities))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -16,8 +16,9 @@
 (defrule action-play-creature#by-regions (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase fell-move-4-1))
+    	(enemy ?p)
 		?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (route $? ?region ?n&:(numberp ?n) $?))
-		(object (is-a CREATURE) (player ?p&:(eq ?p ?*enemy*)) (state HAND) (name ?creature) (regions $? ?region ?n2&:(<= ?n2 ?n) $?))
+		(object (is-a CREATURE) (player ?p) (state HAND) (name ?creature) (regions $? ?region ?n2&:(<= ?n2 ?n) $?))
 	)
 	=>
 	(assert (action 
@@ -36,8 +37,9 @@
 (defrule action-play-creature#by-place (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase fell-move-4-1))
+    	(enemy ?p)
 		?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (to ?to))
-		(object (is-a CREATURE) (player ?p&:(eq ?p ?*enemy*)) (state HAND) (name ?creature) 
+		(object (is-a CREATURE) (player ?p) (state HAND) (name ?creature) 
 			(places $? ?place&:(eq ?place (send ?to get-place)) $?))
 	)
 	=>
