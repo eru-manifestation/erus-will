@@ -101,6 +101,7 @@
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-2-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase-4.clp")
 
     (load* "compulsory-division\\standard-phases\\event-phases\\faction-play-1-1.clp")
     (load* "compulsory-division\\standard-phases\\event-phases\\faction-play-2-1.clp")

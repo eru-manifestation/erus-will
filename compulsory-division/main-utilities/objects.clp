@@ -17,7 +17,7 @@
 )
 
 (defclass MAIN::NUMERABLE (is-a USER)
-    (slot instance-# (type INTEGER) (default 2) (storage shared))
+    (slot instance-# (type INTEGER) (default 2) (storage shared) (pattern-match non-reactive))
 )
 
 (defclass MAIN::ATTACKABLE (is-a USER)

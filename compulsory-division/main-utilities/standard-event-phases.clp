@@ -83,7 +83,7 @@
 
 ;/////////////////// UNIFIED HANDLER //////////////////
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-	(object (is-a EVENT-PHASE) (name ?ep) (type IN))
+	(object (is-a EVENT) (name ?ep) (type IN))
 	(object (is-a ?class) (name ?ep) (type IN))
 	(not (object (is-a ?class) (type ONGOING)))
 	; Por defecto, pone a la espera cualquier otra fase eventual, por lo que se comporta bien con el

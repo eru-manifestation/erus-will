@@ -14,20 +14,6 @@
 )
 
 
-; (defclass EVENT (is-a USER))
-; (defclass EVENTUNO (is-a EVENT))
-; (make-instance of EVENTUNO)
-; (defrule r1
-; 	(object (is-a EVENT) (name ?c))
-; 	(object (is-a ?class) (name ?c))
-; 	(not (object (is-a ?class) (name ?c1&:(neq ?c ?c1))))
-; 	=>
-; )
-
-
-
-
-
 
 ; DEFINICIÓN DE TEMPLATE EVENTO
 (defclass MAIN::EVENT (is-a NUMERABLE)
@@ -37,17 +23,15 @@
 	; Revisar en los que capturen datos de eventos que se especifique defused FALSE
 	; para evitar pattern matching innecesario
 	(slot defused (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
-		(pattern-match non-reactive))
+		(pattern-match non-reactive) (visibility public))
 )
 
 
 ; DEFINICION DEL EVENTO DE FASE EVENTUAL
-(defclass MAIN::EVENT-PHASE (is-a NUMERABLE)
+(defclass MAIN::EVENT-PHASE (is-a EVENT)
     (slot instance-# (source composite))
 	(slot target-phase (type SYMBOL))
 	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT ONGOING))
-	(slot defused (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
-		(pattern-match non-reactive))
 )
 
 ; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT HANDLER
