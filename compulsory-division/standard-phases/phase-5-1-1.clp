@@ -17,9 +17,9 @@
 (defrule action-discard-one (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-5-1-1))
-    	(player ?p)
+    	(object (is-a PLAYER) (name ?p))
 		(object (is-a CARD) (player ?p) (state HAND) (name ?c))
-		(not (object (is-a E-player-discard-from-hand)));TODO ES INESTABLE
+		(not (object (is-a E-player-discard-from-hand) (player ?p)));TODO ES INESTABLE?
 	)
 	=>
 	(assert (action 

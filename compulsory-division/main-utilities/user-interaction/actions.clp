@@ -22,17 +22,17 @@
 		(bind ?datas (insert$ ?datas 1 (str-cat (expand$ ?action:data))))
 	)
 	(bind ?choice (obtain-number ?p))
-	(if (= 0 ?choice) then
-		(do-for-all-facts ((?action action)) (eq ?p ?action:player)
-			(retract ?action))
-		else
-		(bind ?choice (- ?total (- ?choice 1)))
-		(while (not (and (<= 1 ?choice) (>= ?total ?choice)))
-			(bind ?choice (obtain-number ?p "Invalid action, choose a correct action:")))
-		(bind ?event-def (nth$ ?choice ?event-defs))
-		(bind ?data (nth$ ?choice ?datas))
+	(if (= 0 ?choice) then (do-for-all-facts ((?action action)) (eq ?p ?action:player) (retract ?action)) (return))
+	
+	(bind ?choice (- ?total (- ?choice 1)))
+	(while (not (and (<= 1 ?choice) (>= ?total ?choice)))
+		(bind ?choice (obtain-number ?p "Invalid action, choose a correct action:"))
+		(if (= 0 ?choice) then (do-for-all-facts ((?action action)) (eq ?p ?action:player) (retract ?action)) (return))
+		(bind ?choice (- ?total (- ?choice 1))))
+		
+	(bind ?event-def (nth$ ?choice ?event-defs))
+	(bind ?data (nth$ ?choice ?datas))
 
-		(bind ?command (str-cat "(make-instance (gen-name E-" ?event-def ") of E-" ?event-def " " ?data ")"))
-		(eval ?command)
-	)
+	(bind ?command (str-cat "(make-instance (gen-name E-" ?event-def ") of E-" ?event-def " " ?data ")"))
+	(eval ?command)
 )

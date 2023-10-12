@@ -15,12 +15,7 @@
 
 (defrule face-automatic-attacks
 	(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell) (loc ?loc))
+	(object (is-a LOCATION) (name ?loc) (automatic-attacks $? ?attack $?))
 	=>
-	(foreach ?attackable (send ?loc get-automatic-attacks)
-		; TODO:
-		(debug TODO: Crear ataque automatico en ?loc a ?fell
-			de raza (send ?attackable get-race) y de (send ?attackable get-strikes)
-			golpes y (send ?attackable get-prowess) poder)
-		;(make-instance (gen-name EP-automatic-attack) of EP-automatic-attack (fell ?fell) (automatic-attack ?attackable))
-	)
+	(make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?attack))
 )

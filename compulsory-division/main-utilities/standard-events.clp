@@ -507,6 +507,7 @@
     (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
     (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
     (slot attack-at (type SYMBOL) (default ?NONE))
+    (slot attack (type INSTANCE-NAME) (allowed-classes EP-attack))
 )
 
 (defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -515,9 +516,27 @@
     =>
     (send ?e complete)
     (in-move ?creature ?fell)
-    (send ?creature put-state UNTAPPED);TODO: controlar la finalziacion del ataque
-    (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))
+    (send ?creature put-state UNTAPPED)
+    (send ?e put-attack (instance-name (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))))
     (debug Creature ?creature attacking ?fell at ?attack-at)
+)
+
+(defrule MAIN::E-creature-attack-fell#defeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-creature-attack-fell) (type OUT) 
+        (creature ?creature) (attack ?at))
+    (object (is-a EP-attack) (type OUT) (name ?at) (state DEFEATED))
+    =>
+    (send ?creature put-state MP)
+    (debug Creature ?creature has been defeated, moving it to the player's MP)
+)
+
+(defrule MAIN::E-creature-attack-fell#undefeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
+    ?e <- (object (is-a E-creature-attack-fell) (type OUT) 
+        (creature ?creature) (attack ?at))
+    (object (is-a EP-attack) (type OUT) (name ?at) (state UNDEFEATED))
+    =>
+    (send ?creature put-state DISCARD)
+    (debug Creature ?creature has not been defeated, moving it to enemy's DISCARD)
 )
 
 

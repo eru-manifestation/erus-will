@@ -200,3 +200,5 @@ Hacer que una vez el ataque de una criatura sea vencido, ponerlo en MP
 Gestionar correctamente el borrado de eventos y fases eventuales terminadas, de forma que se eliminen justo antes de cambiar a la siguiente fase de igual o menor altura en la pila: debe durar para todas las subfases en su interior, pero no para la siguiente fase no subfase, es decir, debe durar mientras siga en el focus stack la fase donde inicio. Mejor eliminar literalmente en la ejecucion del reloj para evitar la ejecución del ciclo infinito en P-4
 
 Representar las fases eventuales como posicionamiento espacial en el tablero
+
+Nota: El poder de un personaje también se puede modificar al jugar ciertas cartas, pero solo se puede jugar una carta que requierauna habilidad en concreto (por ejemplo, una carta para Guerreros) contra un mismo golpe. Hacerlo mediante info items de sustraccion de caracter 
