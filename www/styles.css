@@ -1,0 +1,62 @@
+body {
+    /* width: 90%;
+    max-width: 900px; */
+    margin: 2em auto;
+    font:
+      0.9em/1.2 Arial,
+      Helvetica,
+      sans-serif;
+  }
+  
+  .location, .fellowship, .character {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgb(50, 175, 115);
+    border: 2px solid rgb(79, 185, 227);
+  }
+  
+  .loc-block{
+    border-radius: 5px;
+    padding: 10px;
+    background-color: rgb(122, 231, 204);
+  }
+  .container {
+    display: grid;
+    grid-template-rows: repeat(1, 1fr 4fr);
+    gap: 10px;
+    grid-auto-flow: column;
+    /* grid-template-columns: 100px 100px; */
+  }
+  .loc-block {
+    display: grid;
+    grid-template-rows: repeat(1, 1fr 4fr);
+    gap: 10px;
+    grid-auto-flow: column;
+    /* grid-template-columns: 100px 100px; */
+  }
+
+  .fell-block {
+    display: grid;
+    justify-items: center;
+    /* grid-template-rows: auto; */
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    /* grid-auto-flow: row; */
+    /* grid-template-columns: 100px 100px; */
+  }
+
+  .character{
+    margin: 1rem;
+    width: 6rem;
+    height: 6rem;
+  }
+  
+  /* #subgrid {
+    grid-column: 1 / 4;
+    grid-row: 2 / 4;
+    display: grid;
+    gap: inherit;
+    grid-template-columns: subgrid;
+    grid-template-rows: 2fr 1fr;
+  }
+   */
