@@ -366,7 +366,7 @@
     (slot body (source composite) (default 9))
 )
 
-(defclass DAGGER-OF-WESTERNESS (is-a MINOR-ITEM)
+(defclass DAGGER-OF-WESTERNESSE (is-a MINOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))

@@ -9,6 +9,7 @@
 
 ; Jugar la acción deseada
 (deffunction MAIN::play-actions (?p)
+	(update-index)
 	(bind ?event-defs (create$))
 	(bind ?datas (create$))
 	(bind ?total 0)

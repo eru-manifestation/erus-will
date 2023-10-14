@@ -47,6 +47,7 @@
     (load* "compulsory-division\\main-utilities\\standard-events.clp")
 
     ;action manager
+    (load* "compulsory-division\\main-utilities\\user-interaction\\index-writer.clp")
     (load* "compulsory-division\\main-utilities\\user-interaction\\actions.clp")
 
     ;data items

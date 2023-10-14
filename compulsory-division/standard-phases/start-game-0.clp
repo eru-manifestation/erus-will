@@ -24,7 +24,7 @@
     (init-card ELLADAN 1 2)
     (init-card ELVEN-CLOAK 1 2)
     (init-card PIPPIN 1 2)
-    (init-card DAGGER-OF-WESTERNESS 1 2)
+    (init-card DAGGER-OF-WESTERNESSE 1 2)
     (init-card HAUBERK-OF-BRIGHT-MAIL 1 2)
     (init-card ORCRIST 1 2)
     (init-card SWORD-OF-GONDOLIN 2 2)
@@ -134,7 +134,7 @@
     (object (is-a ELLADAN) (name ?elladan) (player ?p))
     (object (is-a PIPPIN) (name ?pippin) (player ?p))
     (object (is-a ELVEN-CLOAK) (name ?cloak) (player ?p))
-    (object (is-a DAGGER-OF-WESTERNESS) (name ?dagger) (player ?p))
+    (object (is-a DAGGER-OF-WESTERNESSE) (name ?dagger) (player ?p))
 
     (object (is-a RIVENDELL) (name ?rivendell))
     (object (is-a FELLOWSHIP) (name ?fell) (player ?p))

@@ -1,43 +1,36 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>CSS Grid starting point</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-
-<body>
-    <h1>Simple grid example</h1>
-
-    <div class="container">
-        <div class="location game-element" style="background-image: url('../tw/Rivendell.jpg');">
-            <div class="fellowship">
-                <div class="character">Char1</div>
-                <div class="character">Char2</div>
-                <div class="character">Char3</div>
-            </div>
-            <div class="fellowship">
-                <div class="character">Char4</div>
-                <div class="character">Char5</div>
-            </div>
-        </div>
-        <div class="location game-element" style="background-image: url('../tw/Barrowdowns.jpg');">
-            <div class="fellowship">
-                <div class="character">Char6</div>
-                <div class="character">Char7</div>
-                <div class="character">Char8</div>
-            </div>
-        </div>
-        <div class="location game-element" style="background-image: url('../tw/Lorien.jpg');">
-            <div class="fellowship">
-                <div class="character">Char9</div>
-            </div>
-            <div class="fellowship">
-                <div class="character">Char10</div>
-            </div>
-        </div>
-    </div>
-</body>
-
-</html>
+<!DOCTYPE html> <html lang='en-us'> <head> <meta charset='utf-8'> <meta name='viewport' content='width=device-width'> <title>CSS Grid starting point</title> <link rel='stylesheet' href='styles.css'> </head> <body> <h1>Simple grid example</h1> <div class='container'>
+<div class='level-0 game-element' style="background-image: url('../tw/Rivendell.jpg');">
+	<div class='level-1 FELLOWSHIP'>
+		<div class='level-2 ARAGORN-II game-element'style="background-image: url('../tw/AragornIi.jpg');">
+		</div>
+		<div class='level-2 EOMER game-element'style="background-image: url('../tw/Eomer.jpg');">
+		</div>
+		<div class='level-2 BOROMIR-II game-element'style="background-image: url('../tw/BoromirIi.jpg');">
+			<div class='level-3 SHIELD-OF-IRON--BOUND-ASH game-element'style="background-image: url('../tw/ShieldofIronboundAsh.jpg');">
+			</div>
+		</div>
+		<div class='level-2 MERRY game-element'style="background-image: url('../tw/Merry.jpg');">
+			<div class='level-3 ELVEN-CLOAK game-element'style="background-image: url('../tw/ElvenCloak.jpg');">
+			</div>
+		</div>
+	</div>
+	<div class='level-1 FELLOWSHIP'>
+		<div class='level-2 GIMLI game-element'style="background-image: url('../tw/Gimli.jpg');">
+		</div>
+		<div class='level-2 LEGOLAS game-element'style="background-image: url('../tw/Legolas.jpg');">
+		</div>
+		<div class='level-2 ELLADAN game-element'style="background-image: url('../tw/Elladan.jpg');">
+			<div class='level-3 ELVEN-CLOAK game-element'style="background-image: url('../tw/ElvenCloak.jpg');">
+			</div>
+		</div>
+		<div class='level-2 PIPPIN game-element'style="background-image: url('../tw/Pippin.jpg');">
+			<div class='level-3 DAGGER-OF-WESTERNESSE game-element'style="background-image: url('../tw/DaggerofWesternesse.jpg');">
+			</div>
+		</div>
+	</div>
+	<div class='level-1 FELLOWSHIP'>
+	</div>
+	<div class='level-1 FELLOWSHIP'>
+	</div>
+</div>
+</div> </body> </html>
