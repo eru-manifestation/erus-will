@@ -1,36 +1,69 @@
-<!DOCTYPE html> <html lang='en-us'> <head> <meta charset='utf-8'> <meta name='viewport' content='width=device-width'> <title>CSS Grid starting point</title> <link rel='stylesheet' href='styles.css'> </head> <body> <h1>Simple grid example</h1> <div class='container'>
-<div class='level-0 game-element' style="background-image: url('../tw/Rivendell.jpg');">
-	<div class='level-1 FELLOWSHIP'>
-		<div class='level-2 ARAGORN-II game-element'style="background-image: url('../tw/AragornIi.jpg');">
+<!DOCTYPE html> <html lang='en-us'> <head> <meta charset='utf-8'> <meta name='viewport' content='width=device-width'>
+<link rel='stylesheet' href='styles.css'>
+</head>
+<body>
+<div class='container'>
+<div class='top-bar'>
+<div class='mp-counter player1'>7</div>
+<div class='mp-counter player2'>6</div>
+</div><div class='panel'><div class='level-0 game-element' style="background-image: url('../tw/Rivendell.jpg');">
+	<div class='level-1 fellowship ownable numerable user object'>
+		<div class='level-2 gimli character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Gimli.jpg');">
 		</div>
-		<div class='level-2 EOMER game-element'style="background-image: url('../tw/Eomer.jpg');">
+		<div class='level-2 legolas character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Legolas.jpg');">
 		</div>
-		<div class='level-2 BOROMIR-II game-element'style="background-image: url('../tw/BoromirIi.jpg');">
-			<div class='level-3 SHIELD-OF-IRON--BOUND-ASH game-element'style="background-image: url('../tw/ShieldofIronboundAsh.jpg');">
+		<div class='level-2 elladan character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Elladan.jpg');">
+			<div class='level-3 elven-cloak minor-item item mp-able resource ownable card statable numerable corruption user object game-element'style="background-image: url('../tw/icons/ElvenCloak.jpg');">
 			</div>
 		</div>
-		<div class='level-2 MERRY game-element'style="background-image: url('../tw/Merry.jpg');">
-			<div class='level-3 ELVEN-CLOAK game-element'style="background-image: url('../tw/ElvenCloak.jpg');">
-			</div>
-		</div>
-	</div>
-	<div class='level-1 FELLOWSHIP'>
-		<div class='level-2 GIMLI game-element'style="background-image: url('../tw/Gimli.jpg');">
-		</div>
-		<div class='level-2 LEGOLAS game-element'style="background-image: url('../tw/Legolas.jpg');">
-		</div>
-		<div class='level-2 ELLADAN game-element'style="background-image: url('../tw/Elladan.jpg');">
-			<div class='level-3 ELVEN-CLOAK game-element'style="background-image: url('../tw/ElvenCloak.jpg');">
-			</div>
-		</div>
-		<div class='level-2 PIPPIN game-element'style="background-image: url('../tw/Pippin.jpg');">
-			<div class='level-3 DAGGER-OF-WESTERNESSE game-element'style="background-image: url('../tw/DaggerofWesternesse.jpg');">
+		<div class='level-2 pippin character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Pippin.jpg');">
+			<div class='level-3 dagger-of-westernesse minor-item item mp-able resource ownable card statable numerable corruption user object game-element'style="background-image: url('../tw/icons/DaggerofWesternesse.jpg');">
 			</div>
 		</div>
 	</div>
-	<div class='level-1 FELLOWSHIP'>
+	<div class='level-1 fellowship ownable numerable user object'>
 	</div>
-	<div class='level-1 FELLOWSHIP'>
+	<div class='level-1 fellowship ownable numerable user object'>
 	</div>
 </div>
-</div> </body> </html>
+<div class='level-0 game-element' style="background-image: url('../tw/Lorien.jpg');">
+	<div class='level-1 fellowship ownable numerable user object'>
+	</div>
+	<div class='level-1 fellowship ownable numerable user object'>
+	</div>
+	<div class='level-1 fellowship ownable numerable user object'>
+		<div class='level-2 aragorn-ii character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/AragornIi.jpg');">
+			<div class='level-3 eomer character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Eomer.jpg');">
+			</div>
+		</div>
+		<div class='level-2 boromir-ii character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/BoromirIi.jpg');">
+			<div class='level-3 shield-of-iron--bound-ash minor-item item mp-able resource ownable card statable numerable corruption user object game-element'style="background-image: url('../tw/icons/ShieldofIronboundAsh.jpg');">
+			</div>
+		</div>
+		<div class='level-2 merry character attackable mp-able woundable ownable card statable numerable user object game-element'style="background-image: url('../tw/icons/Merry.jpg');">
+			<div class='level-3 elven-cloak minor-item item mp-able resource ownable card statable numerable corruption user object game-element'style="background-image: url('../tw/icons/ElvenCloak.jpg');">
+			</div>
+		</div>
+	</div>
+</div>
+</div><div class='sidebar sidebar-left'>
+	<div class='quickbeam ally mp-able woundable resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Quickbeam.jpg');"></div>
+	<div class='lucky-strike r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/LuckyStrike.jpg');"></div>
+	<div class='lucky-strike r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/LuckyStrike.jpg');"></div>
+	<div class='lucky-strike r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/LuckyStrike.jpg');"></div>
+	<div class='new-friendship r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/NewFriendship.jpg');"></div>
+	<div class='new-friendship r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/NewFriendship.jpg');"></div>
+	<div class='concealment r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Concealment.jpg');"></div>
+	<div class='concealment r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Concealment.jpg');"></div>
+	<div class='concealment r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Concealment.jpg');"></div>
+	<div class='halfling-strength r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/HalflingStrength.jpg');"></div>
+</div><div class='sidebar sidebar-right'>	<div class='gollum ally mp-able woundable resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Gollum.jpg');"></div>
+	<div class='block r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Block.jpg');"></div>
+	<div class='block r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Block.jpg');"></div>
+	<div class='block r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/Block.jpg');"></div>
+	<div class='risky-blow r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/RiskyBlow.jpg');"></div>
+	<div class='risky-blow r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/RiskyBlow.jpg');"></div>
+	<div class='risky-blow r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/RiskyBlow.jpg');"></div>
+	<div class='halfling-stealth r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/HalflingStealth.jpg');"></div>
+	<div class='halfling-stealth r-short-event resource ownable card statable numerable user object game-element'style="background-image: url('../tw/HalflingStealth.jpg');"></div>
+</div></div> </body> </html>

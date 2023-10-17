@@ -148,7 +148,7 @@
 
 (defclass NEW-FRIENDSHIP (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
 
-(defclass CONCEALEMENT (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
+(defclass CONCEALMENT (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
 
 (defclass HALFLING-STRENGTH (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
 

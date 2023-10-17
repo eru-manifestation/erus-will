@@ -88,7 +88,7 @@
     (init-card DODGE 3 1)
     (init-card LUCKY-STRIKE 3 1)
     (init-card NEW-FRIENDSHIP 2 1)
-    (init-card CONCEALEMENT 3 1)
+    (init-card CONCEALMENT 3 1)
     (init-card HALFLING-STRENGTH 2 1)
     (init-card ESCAPE 2 1)
     (init-card FORD 2 1)

@@ -266,9 +266,9 @@ CLIPS> (instances)
 [lucky-strike3] of LUCKY-STRIKE
 [new-friendship1] of NEW-FRIENDSHIP
 [new-friendship2] of NEW-FRIENDSHIP
-[concealement1] of CONCEALEMENT
-[concealement2] of CONCEALEMENT
-[concealement3] of CONCEALEMENT
+[concealement1] of CONCEALMENT
+[concealement2] of CONCEALMENT
+[concealement3] of CONCEALMENT
 [halfling-strength1] of HALFLING-STRENGTH
 [halfling-strength2] of HALFLING-STRENGTH
 [escape1] of ESCAPE

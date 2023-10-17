@@ -17,6 +17,5 @@
 	?ep <- (object (is-a EP-corruption-check) (type ONGOING) (character ?char) (dices ?dices))
 	=>
 	(send ?ep complete)
-
 	(debug Termina el chequeo de corrupcion de ?char con (send ?char get-corruption) corruption tras haber sacado un ?dices)
 )
