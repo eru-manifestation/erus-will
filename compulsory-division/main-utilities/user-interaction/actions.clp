@@ -5,6 +5,7 @@
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
 	(multislot data (type STRING) (default ""))
+	;(slot type (type SYMBOL) (default E) (allowed-values EP E))
 )
 
 ; Jugar la acción deseada
