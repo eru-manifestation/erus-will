@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A0B2F6A5-3382-377B-825E-3E20B3788127}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>addon</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props"/>
+  <ImportGroup Label="ExtensionSettings"/>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"/>
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\..\bin\;$(MSBuildProjectDirectory)\..\bin\</ExecutablePath>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    <IntDir>$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.node</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.node</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.node</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.node</TargetExt>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName).node</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\include\node;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\src;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\config;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\openssl\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\uv\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\zlib;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\v8\include;C:\Users\Pablo\Documents\GitHub\erus-will\node_modules\node-addon-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus -std:c++17 %(AdditionalOptions)</AdditionalOptions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4800;4251;4275;4244;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>false</OmitFramePointers>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=addon;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;NAPI_DISABLE_CPP_EXCEPTIONS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;V8_ENABLE_CHECKS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StringPooling>true</StringPooling>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\Pablo\\AppData\\Local\\node-gyp\\Cache\\18.18.0\\x64\\node.lib&quot;</AdditionalDependencies>
+      <AdditionalOptions>/LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName).node</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetExt>.node</TargetExt>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\include\node;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\src;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\config;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\openssl\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\uv\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\zlib;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\v8\include;C:\Users\Pablo\Documents\GitHub\erus-will\node_modules\node-addon-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=addon;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;NAPI_DISABLE_CPP_EXCEPTIONS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;DEBUG;_DEBUG;V8_ENABLE_CHECKS;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\include\node;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\src;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\config;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\openssl\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\uv\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\zlib;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\v8\include;C:\Users\Pablo\Documents\GitHub\erus-will\node_modules\node-addon-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Zc:__cplusplus -std:c++17 %(AdditionalOptions)</AdditionalOptions>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <DisableSpecificWarnings>4351;4355;4800;4251;4275;4244;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>true</OmitFramePointers>
+      <Optimization>Full</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=addon;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;NAPI_DISABLE_CPP_EXCEPTIONS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <StringPooling>true</StringPooling>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Lib>
+      <AdditionalOptions>/LTCG:INCREMENTAL %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;DelayImp.lib;&quot;C:\\Users\\Pablo\\AppData\\Local\\node-gyp\\Cache\\18.18.0\\x64\\node.lib&quot;</AdditionalDependencies>
+      <AdditionalOptions>/LTCG:INCREMENTAL /ignore:4199 %(AdditionalOptions)</AdditionalOptions>
+      <DelayLoadDLLs>node.exe;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName).node</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetExt>.node</TargetExt>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\include\node;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\src;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\config;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\openssl\openssl\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\uv\include;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\zlib;C:\Users\Pablo\AppData\Local\node-gyp\Cache\18.18.0\deps\v8\include;C:\Users\Pablo\Documents\GitHub\erus-will\node_modules\node-addon-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NODE_GYP_MODULE_NAME=addon;USING_UV_SHARED=1;USING_V8_SHARED=1;V8_DEPRECATION_WARNINGS=1;V8_DEPRECATION_WARNINGS;V8_IMMINENT_DEPRECATION_WARNINGS;_GLIBCXX_USE_CXX11_ABI=1;WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_HAS_EXCEPTIONS=0;OPENSSL_NO_PINSHARED;OPENSSL_THREADS;NAPI_DISABLE_CPP_EXCEPTIONS;BUILDING_NODE_EXTENSION;HOST_BINARY=&quot;node.exe&quot;;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\binding.gyp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\clipswrapper.h"/>
+    <ClInclude Include="..\clips\agenda.h"/>
+    <ClInclude Include="..\clips\analysis.h"/>
+    <ClInclude Include="..\clips\argacces.h"/>
+    <ClInclude Include="..\clips\bload.h"/>
+    <ClInclude Include="..\clips\bmathfun.h"/>
+    <ClInclude Include="..\clips\bsave.h"/>
+    <ClInclude Include="..\clips\classcom.h"/>
+    <ClInclude Include="..\clips\classexm.h"/>
+    <ClInclude Include="..\clips\classfun.h"/>
+    <ClInclude Include="..\clips\classinf.h"/>
+    <ClInclude Include="..\clips\classini.h"/>
+    <ClInclude Include="..\clips\classpsr.h"/>
+    <ClInclude Include="..\clips\clips.h"/>
+    <ClInclude Include="..\clips\clsltpsr.h"/>
+    <ClInclude Include="..\clips\commline.h"/>
+    <ClInclude Include="..\clips\conscomp.h"/>
+    <ClInclude Include="..\clips\constant.h"/>
+    <ClInclude Include="..\clips\constrct.h"/>
+    <ClInclude Include="..\clips\constrnt.h"/>
+    <ClInclude Include="..\clips\crstrtgy.h"/>
+    <ClInclude Include="..\clips\cstrcbin.h"/>
+    <ClInclude Include="..\clips\cstrccmp.h"/>
+    <ClInclude Include="..\clips\cstrccom.h"/>
+    <ClInclude Include="..\clips\cstrcpsr.h"/>
+    <ClInclude Include="..\clips\cstrnbin.h"/>
+    <ClInclude Include="..\clips\cstrnchk.h"/>
+    <ClInclude Include="..\clips\cstrncmp.h"/>
+    <ClInclude Include="..\clips\cstrnops.h"/>
+    <ClInclude Include="..\clips\cstrnpsr.h"/>
+    <ClInclude Include="..\clips\cstrnutl.h"/>
+    <ClInclude Include="..\clips\default.h"/>
+    <ClInclude Include="..\clips\defins.h"/>
+    <ClInclude Include="..\clips\developr.h"/>
+    <ClInclude Include="..\clips\dffctbin.h"/>
+    <ClInclude Include="..\clips\dffctbsc.h"/>
+    <ClInclude Include="..\clips\dffctcmp.h"/>
+    <ClInclude Include="..\clips\dffctdef.h"/>
+    <ClInclude Include="..\clips\dffctpsr.h"/>
+    <ClInclude Include="..\clips\dffnxbin.h"/>
+    <ClInclude Include="..\clips\dffnxcmp.h"/>
+    <ClInclude Include="..\clips\dffnxexe.h"/>
+    <ClInclude Include="..\clips\dffnxfun.h"/>
+    <ClInclude Include="..\clips\dffnxpsr.h"/>
+    <ClInclude Include="..\clips\dfinsbin.h"/>
+    <ClInclude Include="..\clips\dfinscmp.h"/>
+    <ClInclude Include="..\clips\drive.h"/>
+    <ClInclude Include="..\clips\emathfun.h"/>
+    <ClInclude Include="..\clips\engine.h"/>
+    <ClInclude Include="..\clips\entities.h"/>
+    <ClInclude Include="..\clips\envrnbld.h"/>
+    <ClInclude Include="..\clips\envrnmnt.h"/>
+    <ClInclude Include="..\clips\evaluatn.h"/>
+    <ClInclude Include="..\clips\expressn.h"/>
+    <ClInclude Include="..\clips\exprnbin.h"/>
+    <ClInclude Include="..\clips\exprnops.h"/>
+    <ClInclude Include="..\clips\exprnpsr.h"/>
+    <ClInclude Include="..\clips\extnfunc.h"/>
+    <ClInclude Include="..\clips\factbin.h"/>
+    <ClInclude Include="..\clips\factbld.h"/>
+    <ClInclude Include="..\clips\factcmp.h"/>
+    <ClInclude Include="..\clips\factcom.h"/>
+    <ClInclude Include="..\clips\factfile.h"/>
+    <ClInclude Include="..\clips\factfun.h"/>
+    <ClInclude Include="..\clips\factgen.h"/>
+    <ClInclude Include="..\clips\facthsh.h"/>
+    <ClInclude Include="..\clips\factlhs.h"/>
+    <ClInclude Include="..\clips\factmch.h"/>
+    <ClInclude Include="..\clips\factmngr.h"/>
+    <ClInclude Include="..\clips\factprt.h"/>
+    <ClInclude Include="..\clips\factqpsr.h"/>
+    <ClInclude Include="..\clips\factqury.h"/>
+    <ClInclude Include="..\clips\factrete.h"/>
+    <ClInclude Include="..\clips\factrhs.h"/>
+    <ClInclude Include="..\clips\filecom.h"/>
+    <ClInclude Include="..\clips\filertr.h"/>
+    <ClInclude Include="..\clips\fileutil.h"/>
+    <ClInclude Include="..\clips\generate.h"/>
+    <ClInclude Include="..\clips\genrcbin.h"/>
+    <ClInclude Include="..\clips\genrccmp.h"/>
+    <ClInclude Include="..\clips\genrccom.h"/>
+    <ClInclude Include="..\clips\genrcexe.h"/>
+    <ClInclude Include="..\clips\genrcfun.h"/>
+    <ClInclude Include="..\clips\genrcpsr.h"/>
+    <ClInclude Include="..\clips\globlbin.h"/>
+    <ClInclude Include="..\clips\globlbsc.h"/>
+    <ClInclude Include="..\clips\globlcmp.h"/>
+    <ClInclude Include="..\clips\globlcom.h"/>
+    <ClInclude Include="..\clips\globldef.h"/>
+    <ClInclude Include="..\clips\globlpsr.h"/>
+    <ClInclude Include="..\clips\immthpsr.h"/>
+    <ClInclude Include="..\clips\incrrset.h"/>
+    <ClInclude Include="..\clips\inherpsr.h"/>
+    <ClInclude Include="..\clips\inscom.h"/>
+    <ClInclude Include="..\clips\insfile.h"/>
+    <ClInclude Include="..\clips\insfun.h"/>
+    <ClInclude Include="..\clips\insmngr.h"/>
+    <ClInclude Include="..\clips\insmoddp.h"/>
+    <ClInclude Include="..\clips\insmult.h"/>
+    <ClInclude Include="..\clips\inspsr.h"/>
+    <ClInclude Include="..\clips\insquery.h"/>
+    <ClInclude Include="..\clips\insqypsr.h"/>
+    <ClInclude Include="..\clips\iofun.h"/>
+    <ClInclude Include="..\clips\lgcldpnd.h"/>
+    <ClInclude Include="..\clips\match.h"/>
+    <ClInclude Include="..\clips\memalloc.h"/>
+    <ClInclude Include="..\clips\miscfun.h"/>
+    <ClInclude Include="..\clips\modulbin.h"/>
+    <ClInclude Include="..\clips\modulbsc.h"/>
+    <ClInclude Include="..\clips\modulcmp.h"/>
+    <ClInclude Include="..\clips\moduldef.h"/>
+    <ClInclude Include="..\clips\modulpsr.h"/>
+    <ClInclude Include="..\clips\modulutl.h"/>
+    <ClInclude Include="..\clips\msgcom.h"/>
+    <ClInclude Include="..\clips\msgfun.h"/>
+    <ClInclude Include="..\clips\msgpass.h"/>
+    <ClInclude Include="..\clips\msgpsr.h"/>
+    <ClInclude Include="..\clips\multifld.h"/>
+    <ClInclude Include="..\clips\multifun.h"/>
+    <ClInclude Include="..\clips\network.h"/>
+    <ClInclude Include="..\clips\objbin.h"/>
+    <ClInclude Include="..\clips\objcmp.h"/>
+    <ClInclude Include="..\clips\object.h"/>
+    <ClInclude Include="..\clips\objrtbin.h"/>
+    <ClInclude Include="..\clips\objrtbld.h"/>
+    <ClInclude Include="..\clips\objrtcmp.h"/>
+    <ClInclude Include="..\clips\objrtfnx.h"/>
+    <ClInclude Include="..\clips\objrtgen.h"/>
+    <ClInclude Include="..\clips\objrtmch.h"/>
+    <ClInclude Include="..\clips\parsefun.h"/>
+    <ClInclude Include="..\clips\pattern.h"/>
+    <ClInclude Include="..\clips\pprint.h"/>
+    <ClInclude Include="..\clips\prccode.h"/>
+    <ClInclude Include="..\clips\prcdrfun.h"/>
+    <ClInclude Include="..\clips\prcdrpsr.h"/>
+    <ClInclude Include="..\clips\prdctfun.h"/>
+    <ClInclude Include="..\clips\prntutil.h"/>
+    <ClInclude Include="..\clips\proflfun.h"/>
+    <ClInclude Include="..\clips\reorder.h"/>
+    <ClInclude Include="..\clips\reteutil.h"/>
+    <ClInclude Include="..\clips\retract.h"/>
+    <ClInclude Include="..\clips\router.h"/>
+    <ClInclude Include="..\clips\rulebin.h"/>
+    <ClInclude Include="..\clips\rulebld.h"/>
+    <ClInclude Include="..\clips\rulebsc.h"/>
+    <ClInclude Include="..\clips\rulecmp.h"/>
+    <ClInclude Include="..\clips\rulecom.h"/>
+    <ClInclude Include="..\clips\rulecstr.h"/>
+    <ClInclude Include="..\clips\ruledef.h"/>
+    <ClInclude Include="..\clips\ruledlt.h"/>
+    <ClInclude Include="..\clips\rulelhs.h"/>
+    <ClInclude Include="..\clips\rulepsr.h"/>
+    <ClInclude Include="..\clips\scanner.h"/>
+    <ClInclude Include="..\clips\setup.h"/>
+    <ClInclude Include="..\clips\sortfun.h"/>
+    <ClInclude Include="..\clips\strngfun.h"/>
+    <ClInclude Include="..\clips\strngrtr.h"/>
+    <ClInclude Include="..\clips\symblbin.h"/>
+    <ClInclude Include="..\clips\symblcmp.h"/>
+    <ClInclude Include="..\clips\symbol.h"/>
+    <ClInclude Include="..\clips\sysdep.h"/>
+    <ClInclude Include="..\clips\textpro.h"/>
+    <ClInclude Include="..\clips\tmpltbin.h"/>
+    <ClInclude Include="..\clips\tmpltbsc.h"/>
+    <ClInclude Include="..\clips\tmpltcmp.h"/>
+    <ClInclude Include="..\clips\tmpltdef.h"/>
+    <ClInclude Include="..\clips\tmpltfun.h"/>
+    <ClInclude Include="..\clips\tmpltlhs.h"/>
+    <ClInclude Include="..\clips\tmpltpsr.h"/>
+    <ClInclude Include="..\clips\tmpltrhs.h"/>
+    <ClInclude Include="..\clips\tmpltutl.h"/>
+    <ClInclude Include="..\clips\userdata.h"/>
+    <ClInclude Include="..\clips\usrsetup.h"/>
+    <ClInclude Include="..\clips\utility.h"/>
+    <ClInclude Include="..\clips\watch.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\addon.cc">
+      <ObjectFileName>$(IntDir)\addon.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clipswrapper.cc">
+      <ObjectFileName>$(IntDir)\clipswrapper.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\agenda.cpp">
+      <ObjectFileName>$(IntDir)\clips\agenda.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\analysis.cpp">
+      <ObjectFileName>$(IntDir)\clips\analysis.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\argacces.cpp">
+      <ObjectFileName>$(IntDir)\clips\argacces.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\bload.cpp">
+      <ObjectFileName>$(IntDir)\clips\bload.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\bmathfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\bmathfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\bsave.cpp">
+      <ObjectFileName>$(IntDir)\clips\bsave.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classcom.cpp">
+      <ObjectFileName>$(IntDir)\clips\classcom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classexm.cpp">
+      <ObjectFileName>$(IntDir)\clips\classexm.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\classfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classinf.cpp">
+      <ObjectFileName>$(IntDir)\clips\classinf.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classini.cpp">
+      <ObjectFileName>$(IntDir)\clips\classini.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\classpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\classpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\clsltpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\clsltpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\commline.cpp">
+      <ObjectFileName>$(IntDir)\clips\commline.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\conscomp.cpp">
+      <ObjectFileName>$(IntDir)\clips\conscomp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\constrct.cpp">
+      <ObjectFileName>$(IntDir)\clips\constrct.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\constrnt.cpp">
+      <ObjectFileName>$(IntDir)\clips\constrnt.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\crstrtgy.cpp">
+      <ObjectFileName>$(IntDir)\clips\crstrtgy.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrcbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrcbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrccom.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrccom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrcpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrcpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrnbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrnbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrnchk.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrnchk.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrncmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrncmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrnops.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrnops.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrnpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrnpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\cstrnutl.cpp">
+      <ObjectFileName>$(IntDir)\clips\cstrnutl.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\default.cpp">
+      <ObjectFileName>$(IntDir)\clips\default.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\defins.cpp">
+      <ObjectFileName>$(IntDir)\clips\defins.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\developr.cpp">
+      <ObjectFileName>$(IntDir)\clips\developr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffctbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffctbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffctbsc.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffctbsc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffctcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffctcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffctdef.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffctdef.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffctpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffctpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffnxbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffnxbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffnxcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffnxcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffnxexe.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffnxexe.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffnxfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffnxfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dffnxpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\dffnxpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dfinsbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\dfinsbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\dfinscmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\dfinscmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\drive.cpp">
+      <ObjectFileName>$(IntDir)\clips\drive.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\emathfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\emathfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\engine.cpp">
+      <ObjectFileName>$(IntDir)\clips\engine.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\envrnbld.cpp">
+      <ObjectFileName>$(IntDir)\clips\envrnbld.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\envrnmnt.cpp">
+      <ObjectFileName>$(IntDir)\clips\envrnmnt.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\evaluatn.cpp">
+      <ObjectFileName>$(IntDir)\clips\evaluatn.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\expressn.cpp">
+      <ObjectFileName>$(IntDir)\clips\expressn.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\exprnbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\exprnbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\exprnops.cpp">
+      <ObjectFileName>$(IntDir)\clips\exprnops.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\exprnpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\exprnpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\extnfunc.cpp">
+      <ObjectFileName>$(IntDir)\clips\extnfunc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\factbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factbld.cpp">
+      <ObjectFileName>$(IntDir)\clips\factbld.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\factcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factcom.cpp">
+      <ObjectFileName>$(IntDir)\clips\factcom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factfile.cpp">
+      <ObjectFileName>$(IntDir)\clips\factfile.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\factfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factgen.cpp">
+      <ObjectFileName>$(IntDir)\clips\factgen.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\facthsh.cpp">
+      <ObjectFileName>$(IntDir)\clips\facthsh.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factlhs.cpp">
+      <ObjectFileName>$(IntDir)\clips\factlhs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factmch.cpp">
+      <ObjectFileName>$(IntDir)\clips\factmch.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factmngr.cpp">
+      <ObjectFileName>$(IntDir)\clips\factmngr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factprt.cpp">
+      <ObjectFileName>$(IntDir)\clips\factprt.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factqpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\factqpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factqury.cpp">
+      <ObjectFileName>$(IntDir)\clips\factqury.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factrete.cpp">
+      <ObjectFileName>$(IntDir)\clips\factrete.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\factrhs.cpp">
+      <ObjectFileName>$(IntDir)\clips\factrhs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\filecom.cpp">
+      <ObjectFileName>$(IntDir)\clips\filecom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\filertr.cpp">
+      <ObjectFileName>$(IntDir)\clips\filertr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\fileutil.cpp">
+      <ObjectFileName>$(IntDir)\clips\fileutil.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\generate.cpp">
+      <ObjectFileName>$(IntDir)\clips\generate.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrcbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrcbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrccmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrccmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrccom.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrccom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrcexe.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrcexe.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrcfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrcfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\genrcpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\genrcpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globlbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\globlbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globlbsc.cpp">
+      <ObjectFileName>$(IntDir)\clips\globlbsc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globlcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\globlcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globlcom.cpp">
+      <ObjectFileName>$(IntDir)\clips\globlcom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globldef.cpp">
+      <ObjectFileName>$(IntDir)\clips\globldef.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\globlpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\globlpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\immthpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\immthpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\incrrset.cpp">
+      <ObjectFileName>$(IntDir)\clips\incrrset.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\inherpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\inherpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\inscom.cpp">
+      <ObjectFileName>$(IntDir)\clips\inscom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insfile.cpp">
+      <ObjectFileName>$(IntDir)\clips\insfile.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\insfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insmngr.cpp">
+      <ObjectFileName>$(IntDir)\clips\insmngr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insmoddp.cpp">
+      <ObjectFileName>$(IntDir)\clips\insmoddp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insmult.cpp">
+      <ObjectFileName>$(IntDir)\clips\insmult.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\inspsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\inspsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insquery.cpp">
+      <ObjectFileName>$(IntDir)\clips\insquery.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\insqypsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\insqypsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\iofun.cpp">
+      <ObjectFileName>$(IntDir)\clips\iofun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\lgcldpnd.cpp">
+      <ObjectFileName>$(IntDir)\clips\lgcldpnd.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\memalloc.cpp">
+      <ObjectFileName>$(IntDir)\clips\memalloc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\miscfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\miscfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\modulbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\modulbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\modulbsc.cpp">
+      <ObjectFileName>$(IntDir)\clips\modulbsc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\modulcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\modulcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\moduldef.cpp">
+      <ObjectFileName>$(IntDir)\clips\moduldef.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\modulpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\modulpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\modulutl.cpp">
+      <ObjectFileName>$(IntDir)\clips\modulutl.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\msgcom.cpp">
+      <ObjectFileName>$(IntDir)\clips\msgcom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\msgfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\msgfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\msgpass.cpp">
+      <ObjectFileName>$(IntDir)\clips\msgpass.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\msgpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\msgpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\multifld.cpp">
+      <ObjectFileName>$(IntDir)\clips\multifld.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\multifun.cpp">
+      <ObjectFileName>$(IntDir)\clips\multifun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\objbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\objcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtbld.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtbld.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtfnx.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtfnx.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtgen.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtgen.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\objrtmch.cpp">
+      <ObjectFileName>$(IntDir)\clips\objrtmch.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\parsefun.cpp">
+      <ObjectFileName>$(IntDir)\clips\parsefun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\pattern.cpp">
+      <ObjectFileName>$(IntDir)\clips\pattern.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\pprint.cpp">
+      <ObjectFileName>$(IntDir)\clips\pprint.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\prccode.cpp">
+      <ObjectFileName>$(IntDir)\clips\prccode.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\prcdrfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\prcdrfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\prcdrpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\prcdrpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\prdctfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\prdctfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\prntutil.cpp">
+      <ObjectFileName>$(IntDir)\clips\prntutil.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\proflfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\proflfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\reorder.cpp">
+      <ObjectFileName>$(IntDir)\clips\reorder.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\reteutil.cpp">
+      <ObjectFileName>$(IntDir)\clips\reteutil.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\retract.cpp">
+      <ObjectFileName>$(IntDir)\clips\retract.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\router.cpp">
+      <ObjectFileName>$(IntDir)\clips\router.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulebin.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulebin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulebld.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulebld.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulebsc.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulebsc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulecmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulecmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulecom.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulecom.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulecstr.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulecstr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\ruledef.cpp">
+      <ObjectFileName>$(IntDir)\clips\ruledef.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\ruledlt.cpp">
+      <ObjectFileName>$(IntDir)\clips\ruledlt.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulelhs.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulelhs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\rulepsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\rulepsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\scanner.cpp">
+      <ObjectFileName>$(IntDir)\clips\scanner.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\sortfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\sortfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\strngfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\strngfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\strngrtr.cpp">
+      <ObjectFileName>$(IntDir)\clips\strngrtr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\symblbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\symblbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\symblcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\symblcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\symbol.cpp">
+      <ObjectFileName>$(IntDir)\clips\symbol.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\sysdep.cpp">
+      <ObjectFileName>$(IntDir)\clips\sysdep.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\textpro.cpp">
+      <ObjectFileName>$(IntDir)\clips\textpro.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltbin.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltbin.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltbsc.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltbsc.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltcmp.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltcmp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltdef.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltdef.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltfun.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltfun.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltlhs.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltlhs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltpsr.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltpsr.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltrhs.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltrhs.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\tmpltutl.cpp">
+      <ObjectFileName>$(IntDir)\clips\tmpltutl.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\userdata.cpp">
+      <ObjectFileName>$(IntDir)\clips\userdata.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\userfunctions.cpp">
+      <ObjectFileName>$(IntDir)\clips\userfunctions.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\utility.cpp">
+      <ObjectFileName>$(IntDir)\clips\utility.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\clips\watch.cpp">
+      <ObjectFileName>$(IntDir)\clips\watch.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="C:\Program Files\nodejs\node_modules\npm\node_modules\node-gyp\src\win_delay_load_hook.cc"/>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets"/>
+  <ImportGroup Label="ExtensionTargets"/>
+</Project>
