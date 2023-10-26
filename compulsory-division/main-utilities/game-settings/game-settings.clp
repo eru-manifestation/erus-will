@@ -8,9 +8,13 @@
     ; ?*player* = ?*player1*
     ; ?*enemy* = ?*player2*
 
-    ; Escribir nil para no saber de donde viene debug info y t para saber la traza
-    ?*debug-traces* = t
-    ; Escribir nil para no debug info y t para debug info
-    ?*debug-info* = t
+    ; ; Escribir nil para no saber de donde viene debug info y t para saber la traza
+    ; ?*debug-traces* = t
+    ; ; Escribir nil para no debug info y t para debug info
+    ; ?*debug-info* = t
+
+    ?*announce* = ""
+    ?*debug* = ""
+    ?*obtain* = ""
 )
 

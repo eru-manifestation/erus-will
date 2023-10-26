@@ -55,7 +55,6 @@
         ; si ademas se viene de un refugio
         (if (eq HAVEN (send ?from get-place)) then
             ; ahora queda elegir que representa la conexion, si A o B
-            (println (send ?from get-site-pathA) ?to)
 
             (if (eq (send ?from get-site-pathA) ?to) then
                 (send ?e put-route (send ?from get-routeA))

@@ -1,5 +1,3 @@
-(defglobal ?*route* = "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
-(set-strategy breadth)
 ;(set-dynamic-constraint-checking TRUE)
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
@@ -9,7 +7,7 @@
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
-    (chdir ?*route*)
+    (chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
     (load* "compulsory-division\\main-utilities\\innit.clp")
     (load* "compulsory-division\\main-utilities\\object-prelude.clp")
     (load* "compulsory-division\\main-utilities\\objects.clp")
@@ -55,7 +53,7 @@
 )
 
 (deffunction load-standard()
-    (chdir ?*route*)
+    (chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
     (load* "compulsory-division\\standard-phases\\start-game-0.clp")
     (load* "compulsory-division\\standard-phases\\start-game-1.clp")
 
@@ -137,16 +135,18 @@
 
 ; Cargo todas los archivos
 (deffunction load-all ()
-    (chdir ?*route*)
+    (set-strategy breadth)
+
+    (chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
     (load-utilities)
     (load-standard)
     
+
+    ;(watch rules)
+    ;(watch instances E-char-play E-item-play-only-minor)
+    ;(run 40)
+    ; (run 3)
+    ; (send [wolves1] put-state HAND) ;Testar el ataque
+    ; (run)
 )
 
-(load-all)
-;(watch rules)
-;(watch instances E-char-play E-item-play-only-minor)
-;(run 40)
-(run 3)
-(send [wolves1] put-state HAND) ;Testar el ataque
-(run)
