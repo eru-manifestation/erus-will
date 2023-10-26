@@ -3,6 +3,9 @@
 
 #include <napi.h>
 #include "clips/clips.h"
+#include <string> 
+
+using namespace std; 
 
 class ClipsWrapper : public Napi::ObjectWrap<ClipsWrapper> {
  public:
@@ -11,9 +14,12 @@ class ClipsWrapper : public Napi::ObjectWrap<ClipsWrapper> {
 
  private:
   Napi::Value GetFacts(const Napi::CallbackInfo& info);
-  Napi::Value Assert(const Napi::CallbackInfo& info);
+  Napi::Value GetDebugBuffer(const Napi::CallbackInfo& info);
+  Napi::Value GetAnnounceBuffer(const Napi::CallbackInfo& info);
+  Napi::Value GetObtainBuffer(const Napi::CallbackInfo& info);
 
   Environment *clips_env_;
+  //string announce_ = "";
 };
 
 #endif

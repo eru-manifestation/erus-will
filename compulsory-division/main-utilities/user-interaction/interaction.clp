@@ -1,12 +1,13 @@
 (deffunction MAIN::announce (?player $?message)
-	(bind ?*announce* (str-cat ?*announce* "-->\\t" ?player ": " (implode$ ?message) "\\n" crlf))
+	;(printout announce "-->" tab ?player ": " (implode$ ?message) crlf)
+	(bind ?*announce* (str-cat ?*announce* "--> " ?player ": " (implode$ ?message) crlf))
 )
 
 (deffunction MAIN::debug ($?message)
-	(bind ?*debug* (str-cat ?*debug* "DEBUG MESSAGE_________________________________\\n"))
-	(bind ?*debug* (str-cat ?*debug* "-->\\tTRACE FROM:\\t" (implode$ (get-focus-stack)) "\\n"))
-	(bind ?*debug* (str-cat ?*debug* "-->\\tDEBUG:\\t" (implode$ ?message) "\\n"))
-	(bind ?*debug* (str-cat ?*debug* "----------------------------------------------\\n\\n"))
+	(bind ?*debug* (str-cat ?*debug* "DEBUG MESSAGE_________________________________" crlf))
+	(bind ?*debug* (str-cat ?*debug* "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))
+	(bind ?*debug* (str-cat ?*debug* "--> DEBUG: " (implode$ ?message) crlf))
+	(bind ?*debug* (str-cat ?*debug* "----------------------------------------------" crlf crlf))
 )
 
 ; (deffunction MAIN::obtain (?player $?message)
@@ -23,7 +24,7 @@
 		then
 		(announce ?player $?message)
 	)
-	(bind ?*obtain* (str-cat ?*obtain* "<--\\t" ?player "\\n"))
+	(bind ?*obtain* (str-cat ?*obtain* "<--" ?player crlf))
 	(halt)
 	;(read-number)
 )
