@@ -66,7 +66,8 @@ Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
                   {InstanceMethod("getFacts", &ClipsWrapper::GetFacts),
                     InstanceMethod("getDebugBuffer", &ClipsWrapper::GetDebugBuffer),
                     InstanceMethod("getAnnounceBuffer", &ClipsWrapper::GetAnnounceBuffer),
-                    InstanceMethod("getObtainBuffer", &ClipsWrapper::GetObtainBuffer)});
+                    InstanceMethod("getObtainBuffer", &ClipsWrapper::GetObtainBuffer),
+                    InstanceMethod("wrapEval", &ClipsWrapper::WrapEval)});
 
   Napi::FunctionReference* constructor = new Napi::FunctionReference();
   *constructor = Napi::Persistent(func);
@@ -137,4 +138,34 @@ Napi::Value ClipsWrapper::GetObtainBuffer(const Napi::CallbackInfo& info) {
   string res = cv.lexemeValue->contents;
   Eval(this->clips_env_, "(bind ?*obtain* \"\")",NULL);
   return Napi::String::New(info.Env(), res);
+}
+
+Napi::Value ClipsWrapper::WrapEval(const Napi::CallbackInfo& info) {
+  Napi::String command;
+  if (info.Length() <= 0 || !info[0].IsString()) {
+    command = Napi::String::New(info.Env(), "");
+  } else {
+    command = info[0].As<Napi::String>();
+  }
+
+  CLIPSValue cv;
+  Napi::Value napiValue;
+  Eval(this->clips_env_, command.Utf8Value().c_str() ,&cv);
+  switch(cv.header->type){
+    case STRING_TYPE:
+    case SYMBOL_TYPE:
+      napiValue = Napi::String::New(info.Env(), cv.lexemeValue->contents);
+      break;
+    case FLOAT_TYPE:
+      napiValue = Napi::Number::New(info.Env(), cv.floatValue->contents);
+      break;
+    case INTEGER_TYPE:
+      napiValue = Napi::Number::New(info.Env(), cv.integerValue->contents);
+      break;
+    default:
+      napiValue = Napi::Boolean::New(info.Env(), true);
+      break;
+  }
+
+  return napiValue;
 }
