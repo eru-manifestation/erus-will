@@ -1,81 +1,75 @@
-var WebSocketServer = require("websocket").server;
-var http = require('http');
 var addon = require('bindings')('addon');
+const uuid = require("uuid");
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 var CLIPSEnvs = new Map();
-var port = 8080;
+//var port = 8080;
 
-function clientID(connection){
-    return connection.socket.remoteAddress+":"+connection.socket.remotePort;
-}
 
 function initializeClipsEnv(origin){
     var obj = new addon.ClipsWrapper();
     CLIPSEnvs.set(origin, obj);
-    console.log("CLIPS enviroment created for "+origin);
-
-    console.log( obj.getDebugBuffer().replaceAll("crlf","\n") );
-    console.log("\n\n");
-    console.log( obj.getAnnounceBuffer().replaceAll("crlf","\n") );
-    console.log( obj.getAnnounceBuffer().replaceAll("crlf","\n") );
-    console.log( obj.getFacts() );
-    console.log( obj.getFacts() );
-    console.log( obj.getFacts() );
-    console.log( obj.wrapEval("(instances)"));
+    console.log("CLIPS enviroment created for " + origin);
+    console.log("There are %d enviroments",CLIPSEnvs.size);
+    return obj;
 }
 
+// const io = new Server(port, { /* options */ });
 
-var server = http.createServer(function(request, response) {
-    console.log((new Date()) + ' Received request for ' + request.url);
-    response.writeHead(404);
-    response.end();
-});
-server.listen(port, function() {
-    console.log((new Date()) + ' Server is listening on port '+port);
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/www/index.html');
 });
 
-
-wsServer = new WebSocketServer({
-    httpServer: server,
-    // You should not use autoAcceptConnections for production
-    // applications, as it defeats all standard cross-origin protection
-    // facilities built into the protocol and the browser.  You should
-    // *always* verify the connection's origin and decide whether or not
-    // to accept it.
-    autoAcceptConnections: false
+app.get('/:resource', (req, res) => {
+    var resource = req.params.resource;
+    res.sendFile(__dirname + '/www/' + resource);
 });
 
-function originIsAllowed(origin) {
-  // put logic here to detect whether the specified origin is allowed.
-  return true;
-}
+app.get('/tw/:img', (req, res) => {
+    var img = req.params.img;
+    res.sendFile(__dirname + '/tw/' + img);
+});
 
-wsServer.on('request', function(request) {
-    if (!originIsAllowed(request.origin)) {
-      // Make sure we only accept requests from an allowed origin
-      request.reject();
-      console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
-      return;
-    }
-    
-    var connection = request.accept('echo-protocol', request.origin);
-    console.log((new Date()) + ' Connection accepted.');
+app.get('/tw/icons/:icon', (req, res) => {
+    var icon = req.params.icon;
+    res.sendFile(__dirname + '/tw/icons/' + icon);
+});
 
-    initializeClipsEnv(clientID(connection));
+io.engine.generateId = (req) => {
+    return uuid.v4(); // must be unique across all Socket.IO servers
+  }
 
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log('Received Message: ' + message.utf8Data);
-            connection.sendUTF(message.utf8Data);
-        }
-        else if (message.type === 'binary') {
-            console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-            connection.sendBytes(message.binaryData);
-        }
+io.on('connection', (socket) => {
+    console.log('a user connected: '+socket.id);
+    var env = initializeClipsEnv(socket.id);
+
+    socket.emit("log",env.getDebugBuffer().replaceAll("crlf","\n"));
+    socket.emit("log",env.getAnnounceBuffer().replaceAll("crlf","\n"));
+
+    socket.on("orders", (orders) => {
+        socket.emit("log", "\nEval result:"+env.wrapEval(orders));
+        socket.emit("log", "\nDebug buffer"+env.getDebugBuffer().replaceAll("crlf","\n"));
+        socket.emit("log", "\nAnnounce buffer"+env.getAnnounceBuffer().replaceAll("crlf","\n"));
+        console.log(orders);
     });
-    connection.on('close', function(reasonCode, description) {
-        CLIPSEnvs.delete(clientID(connection));
-        console.log("CLIPS enviroment deleted for " + clientID(connection));
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+
+    socket.on("disconnecting", (reason) => {
+        console.log("Disconnecting "+socket.id);
+        if(env.wrapDestroyEnvironment()){
+            console.log("Environment of %s successfully destroyed",socket.id);
+        }else{
+            console.log("Environment of %s not destroyed",socket.id);
+        }
+        CLIPSEnvs.delete(socket.id);
     });
+
+});
+
+server.listen(3000, () => {
+  console.log('listening on *:3000');
 });

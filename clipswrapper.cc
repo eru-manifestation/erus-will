@@ -67,6 +67,7 @@ Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
                     InstanceMethod("getDebugBuffer", &ClipsWrapper::GetDebugBuffer),
                     InstanceMethod("getAnnounceBuffer", &ClipsWrapper::GetAnnounceBuffer),
                     InstanceMethod("getObtainBuffer", &ClipsWrapper::GetObtainBuffer),
+                    InstanceMethod("wrapDestroyEnvironment", &ClipsWrapper::WrapDestroyEnvironment),
                     InstanceMethod("wrapEval", &ClipsWrapper::WrapEval)});
 
   Napi::FunctionReference* constructor = new Napi::FunctionReference();
@@ -83,7 +84,7 @@ ClipsWrapper::ClipsWrapper(const Napi::CallbackInfo& info)
 
 
   this->clips_env_ = CreateEnvironment();
-  printf("salida\n");
+  //printf("salida\n");
   // AddRouter(this->clips_env_,
   //   "announce", /* Router name */
   //   50, /* Priority */
@@ -113,10 +114,6 @@ Napi::Value ClipsWrapper::GetFacts(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
-  //TODO: Añadir string como hecho a base de hechos
-  //AssertString(this->clips_env_, "(colores rojo azul amarillo)");
-  //return Napi::String::New(info.Env(), "Fact asserted ...");
-
   CLIPSValue cv;
   Eval(this->clips_env_, "?*announce*",&cv);
   string res = cv.lexemeValue->contents;
@@ -138,6 +135,10 @@ Napi::Value ClipsWrapper::GetObtainBuffer(const Napi::CallbackInfo& info) {
   string res = cv.lexemeValue->contents;
   Eval(this->clips_env_, "(bind ?*obtain* \"\")",NULL);
   return Napi::String::New(info.Env(), res);
+}
+
+Napi::Value ClipsWrapper::WrapDestroyEnvironment(const Napi::CallbackInfo& info) {
+  return Napi::Boolean::New(info.Env(), DestroyEnvironment(this->clips_env_));
 }
 
 Napi::Value ClipsWrapper::WrapEval(const Napi::CallbackInfo& info) {

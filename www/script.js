@@ -1,44 +1,26 @@
 //var W3CWebSocket = require('websocket').w3cwebsocket;
+var socket = io();
 
-var client = new WebSocket('ws://localhost:8080/', 'echo-protocol');
+document.addEventListener("DOMContentLoaded", ()=>{
+    var log = document.getElementById("log");
+    var orders = document.getElementById("orders");
+    var button = document.getElementById("send");
 
-client.onerror = function() {
-    console.log('Connection Error');
-};
+    button.onclick=()=>{
+        var data = orders.value;
+        console.log(data);
+        socket.emit("orders",data);
+        orders.value="";
+    };
 
-client.onopen = function() {
-    console.log('WebSocket Client Connected');
-
-    function sendNumber() {
-        if (client.readyState === client.OPEN) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
-            client.send(number.toString());
-            setTimeout(sendNumber, 1000);
-        }
-    }
-    sendNumber();
-};
-
-client.onclose = function() {
-    console.log('echo-protocol Client Closed');
-};
-
-client.onmessage = function(e) {
-    if (typeof e.data === 'string') {
-        console.log("Received: '" + e.data + "'");
-    }
-};
+    socket.on("log", (data)=>{
+        console.log("mensaje");
+        log.innerText+=data;
+    });
+});
 
 
-// // Create WebSocket connection.
-// const socket = new WebSocket("ws://localhost:8080");
 
-// // Connection opened
-// socket.addEventListener("open", (event) => {
-//   socket.send("Hello Server!");
-// });
-
-// // Listen for messages
-// socket.addEventListener("message", (event) => {
-//   console.log("Message from server ", event.data);
+// socket.on('connect', function (data) {
+//     socket.emit('storeClientInfo', { customId:"000CustomIdHere0000" });
 // });
