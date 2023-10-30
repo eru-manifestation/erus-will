@@ -13,8 +13,8 @@
     ; ; Escribir nil para no debug info y t para debug info
     ; ?*debug-info* = t
 
-    ?*announce* = ""
-    ?*debug* = ""
+    ?*announce* = (create$)
+    ?*debug* = (create$)
     ?*obtain* = ""
 )
 

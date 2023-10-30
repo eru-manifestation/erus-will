@@ -115,25 +115,25 @@ Napi::Value ClipsWrapper::GetFacts(const Napi::CallbackInfo& info) {
 
 Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
   CLIPSValue cv;
-  Eval(this->clips_env_, "?*announce*",&cv);
+  Eval(this->clips_env_, "(str-cat (expand$ ?*announce*))",&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*announce* \"\")",NULL);
+  Eval(this->clips_env_, "(bind ?*announce* (create$))",NULL);
   return Napi::String::New(info.Env(), res);
 }
 
 Napi::Value ClipsWrapper::GetDebugBuffer(const Napi::CallbackInfo& info) {
   CLIPSValue cv;
-  Eval(this->clips_env_, "?*debug*",&cv);
+  Eval(this->clips_env_, "(str-cat (expand$ ?*debug*))",&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*debug* \"\")",NULL);
+  Eval(this->clips_env_, "(bind ?*debug* (create$))",NULL);
   return Napi::String::New(info.Env(), res);
 }
 
 Napi::Value ClipsWrapper::GetObtainBuffer(const Napi::CallbackInfo& info) {
   CLIPSValue cv;
-  Eval(this->clips_env_, "?*obtain*",&cv);
+  Eval(this->clips_env_, "(str-cat (expand$ ?*obtain*))",&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*obtain* \"\")",NULL);
+  Eval(this->clips_env_, "(bind ?*obtain* (create$))",NULL);
   return Napi::String::New(info.Env(), res);
 }
 

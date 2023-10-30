@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     };
 
     socket.on("log", (data)=>{
-        console.log("mensaje");
+        console.log("Mensaje recibido:\n"+data);
         log.innerText+=data;
     });
 });

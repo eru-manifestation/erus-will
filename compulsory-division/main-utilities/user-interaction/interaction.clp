@@ -1,13 +1,19 @@
+(deffunction MAIN::print-content (?multifield)
+	(foreach ?field ?multifield
+		(printout t ?field)
+	)
+	(println)
+)
+
 (deffunction MAIN::announce (?player $?message)
-	;(printout announce "-->" tab ?player ": " (implode$ ?message) crlf)
-	(bind ?*announce* (str-cat ?*announce* "--> " ?player ": " (implode$ ?message) crlf))
+	(bind ?*announce* (insert$ ?*announce* (+ 1 (length$ ?*announce*)) "--> " ?player ": " (implode$ ?message) crlf))
 )
 
 (deffunction MAIN::debug ($?message)
-	(bind ?*debug* (str-cat ?*debug* "DEBUG MESSAGE_________________________________" crlf))
-	(bind ?*debug* (str-cat ?*debug* "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))
-	(bind ?*debug* (str-cat ?*debug* "--> DEBUG: " (implode$ ?message) crlf))
-	(bind ?*debug* (str-cat ?*debug* "----------------------------------------------" crlf crlf))
+	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "DEBUG MESSAGE_________________________________" crlf))
+	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))
+	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> DEBUG: " (implode$ ?message) crlf))
+	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "----------------------------------------------" crlf crlf))
 )
 
 ; (deffunction MAIN::obtain (?player $?message)
