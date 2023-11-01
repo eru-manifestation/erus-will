@@ -9,28 +9,13 @@
 	(bind ?*announce* (insert$ ?*announce* (+ 1 (length$ ?*announce*)) "--> " ?player ": " (implode$ ?message) crlf))
 )
 
+(deffunction MAIN::choose (?player $?message)
+	(bind ?*choose* (insert$ ?*choose* (+ 1 (length$ ?*choose*)) "--> " ?player ": " (implode$ ?message) crlf))
+)
+
 (deffunction MAIN::debug ($?message)
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "DEBUG MESSAGE_________________________________" crlf))
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> DEBUG: " (implode$ ?message) crlf))
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "----------------------------------------------" crlf crlf))
-)
-
-; (deffunction MAIN::obtain (?player $?message)
-; 	(if (< 0 (length$ ?message))
-; 		then
-; 		(announce ?player $?message)
-; 	)
-; 	(printout t "<--" tab ?player ": ")
-; 	(readline)
-; )
-
-(deffunction MAIN::obtain-number (?player $?message)
-	(if (< 0 (length$ ?message))
-		then
-		(announce ?player $?message)
-	)
-	(bind ?*obtain* (str-cat ?*obtain* "<--" ?player crlf))
-	(halt)
-	;(read-number)
 )

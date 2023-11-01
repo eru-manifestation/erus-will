@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -29,8 +29,10 @@
 		(player ?p)
 		(event-def loc-phase)
 		(description (sym-cat "Begin location phase for " ?fell " in " ?loc))
+		(identifier ?fell)
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( loc [" ?loc "])"))
+		(blocking TRUE)
 	))
 )

@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 ; ACCIÓN: JUGAR RECURSOS DE SUCESOS DURADEROS
 (defrule action-long-event-play (declare (salience ?*action-population-salience*))
@@ -25,6 +25,7 @@
 		(player ?p)
 		(event-def r-long-event-play)
 		(description (sym-cat "Play long event resource " ?rle))
+		(identifier ?rle)
 		(data (create$ "( r-long-event [" ?rle "])"))
 	))
 )

@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -27,6 +27,7 @@
 		(player ?p)
 		(event-def face-strike-hindered)
 		(description (sym-cat "Face strike from " ?at " to " ?char " hindered"))
+		(identifier ?char)
 		(data (create$ 
 		"( strike [" ?ep "])"))
 	))

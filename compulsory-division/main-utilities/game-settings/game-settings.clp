@@ -15,6 +15,7 @@
 
     ?*announce* = (create$)
     ?*debug* = (create$)
-    ?*obtain* = ""
+    ?*debug-state* = FALSE
+    ?*choose* = (create$)
 )
 

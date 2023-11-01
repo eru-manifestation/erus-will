@@ -1,5 +1,9 @@
 //var W3CWebSocket = require('websocket').w3cwebsocket;
-var socket = io();
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const room = urlParams.get('room');
+console.log(room);
+var socket = io.connect(window.location.origin,{query:"room="+room});
 
 document.addEventListener("DOMContentLoaded", ()=>{
     var log = document.getElementById("log");

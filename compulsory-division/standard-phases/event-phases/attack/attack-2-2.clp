@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -28,9 +28,11 @@
 		(player ?p)
 		(event-def select-strike)
 		(description (sym-cat "Assign strike from " ?at " to " ?char))
+		(identifier ?at ?char)
 		(data (create$ 
 		"( char [" ?char "])" 
 		"( attackable [" ?at "])"))
+		(blocking TRUE)
 	))
 )
 
@@ -55,8 +57,10 @@
 		(player ?p)
 		(event-def select-strike)
 		(description (sym-cat "Assign spare strike from " ?at " to " ?char))
+		(identifier ?at ?char)
 		(data (create$ 
 		"( char [" ?char "])" 
 		"( attackable [" ?at "])"))
+		(blocking TRUE)
 	))
 )

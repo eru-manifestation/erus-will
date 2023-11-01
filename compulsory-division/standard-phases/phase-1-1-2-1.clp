@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -34,6 +34,7 @@
 		(player ?p)
 		(event-def fell-decl-move)
 		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?to))
+		(identifier ?fell ?to)
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"
@@ -60,6 +61,7 @@
 		(player ?p)
 		(event-def fell-decl-move)
 		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathA))
+		(identifier ?fell ?pathA)
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"
@@ -69,6 +71,7 @@
 		(player ?p)
 		(event-def fell-decl-move)
 		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathB))
+		(identifier ?fell ?pathB)
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"
@@ -95,6 +98,7 @@
 		(player ?p)
 		(event-def fell-decl-move)
 		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?cl-haven))
+		(identifier ?fell ?cl-haven)
 		(data (create$ 
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"

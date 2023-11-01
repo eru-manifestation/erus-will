@@ -22,7 +22,7 @@ function initializeClipsEnv(origin){
 // const io = new Server(port, { /* options */ });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/www/index.html');
+    res.sendFile(__dirname + '/www/room.html');
 });
 
 app.get('/:resource', (req, res) => {
@@ -45,17 +45,33 @@ io.engine.generateId = (req) => {
   }
 
 io.on('connection', (socket) => {
-    console.log('a user connected: '+socket.id);
-    var env = initializeClipsEnv(socket.id);
+    console.log('A user connected: '+socket.id);
+    var env, player, room;
+    if(socket.handshake.query["room"] == "null"){
+        console.log("player1 connected");
+        player = "player1 ";
+        room = socket.id;
+        env = initializeClipsEnv(room);
+    }else{
+        console.log("player2 connected");
+        player = "player2 ";
+        room = socket.handshake.query.room;
+        env = CLIPSEnvs.get(room);
+    }
+    console.log("Room: "+room);
+    socket.join(room);
 
-    socket.emit("log",env.getDebugBuffer().replaceAll("crlf","\n"));
-    socket.emit("log",env.getAnnounceBuffer().replaceAll("crlf","\n"));
+
+    io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
+    io.sockets.in(room).emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer().replaceAll("crlf","\n"));
+    io.sockets.in(room).emit("log", "\nChoose buffer\n"+env.getChooseBuffer().replaceAll("crlf","\n"));
 
     socket.on("orders", (orders) => {
-        socket.emit("log", "\nEval result:"+env.wrapEval(orders));
-        socket.emit("log", "\nDebug buffer"+env.getDebugBuffer().replaceAll("crlf","\n"));
-        socket.emit("log", "\nAnnounce buffer"+env.getAnnounceBuffer().replaceAll("crlf","\n"));
-        console.log(orders);
+        io.sockets.in(room).emit("log", "\nChoose result:\n"+env.wrapEval("(play-action "+player+orders+")"));
+        io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
+        io.sockets.in(room).emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer().replaceAll("crlf","\n"));
+        io.sockets.in(room).emit("log", "\nChoose buffer\n"+env.getChooseBuffer().replaceAll("crlf","\n"));
+        console.log("Player "+player+"commands: "+orders);
     });
 
     socket.on("disconnecting", (reason) => {

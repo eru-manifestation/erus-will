@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 ; ACCIÓN: MOVER PERSONAJE DE UNA COMPAÑÍA A OTRA
@@ -37,6 +37,7 @@
 		(player ?p)
 		(event-def char-move)
 		(description (sym-cat "Move " ?char " from " ?ini-fell " to " ?fell))
+		(identifier ?char ?fell)
 		(data (create$ 
 		"( char [" ?char "])" 
 		"( fell [" ?fell "])"))
@@ -76,6 +77,7 @@
 		(player ?p)
 		(event-def char-follow)
 		(description (sym-cat "Make " ?follower " a follower of " ?char))
+		(identifier ?follower ?char)
 		(data (create$ 
 		"( followed [" ?char "])" 
 		"( follower [" ?follower "])"))
@@ -112,6 +114,7 @@
 		(player ?p)
 		(event-def char-unfollow)
 		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
+		(identifier ?follower ?fell)
 		(data (create$ 
 		"( fell [" ?fell "])" 
 		"( follower [" ?follower "])"))

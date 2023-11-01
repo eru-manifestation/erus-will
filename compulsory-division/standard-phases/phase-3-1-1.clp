@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 ; ACCIÓN: Ejecutar movimiento declarado por el propio evento
@@ -25,11 +25,13 @@
 		(player ?p)
 		(event-def fell-move)
 		(description (sym-cat "Move fellowship " ?fell " from " ?from " to " ?to))
+		(identifier ?fell)
 		(data (create$ 
 		"( decl-event [" ?event "])"
 		"( fell [" ?fell "])"
 		"( from [" ?from "])"
 		"( to [" ?to "])"))
+		(blocking TRUE)
 	))
 )
 
@@ -46,10 +48,12 @@
 		(player ?p)
 		(event-def fell-move)
 		(description (sym-cat "Execute remain of " ?fell " in " ?loc))
+		(identifier ?fell)
 		(data (create$ 
 		"( decl-event [" ?event "])"
 		"( fell [" ?fell "])"
 		"( from [" ?loc "])"
 		"( to [" ?loc "])"))
+		(blocking TRUE)
 	))
 )

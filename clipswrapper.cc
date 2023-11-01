@@ -5,60 +5,6 @@
 
 using namespace std;
 
-// string getDebugBuffer(Environment *env){
-//   CLIPSValue cv;
-//   Eval(env, "?*debug*",&cv);
-//   string res = cv.lexemeValue->contents;
-//   Eval(env, "(bind ?*debug* \"\")",NULL);
-//   return res;
-// }
-// string getObtainBuffer(Environment *env){
-//   CLIPSValue cv;
-//   Eval(env, "?*obtain*",&cv);
-//   string res = cv.lexemeValue->contents;
-//   Eval(env, "(bind ?*obtain* \"\")",NULL);
-//   return res;
-// }
-// string getAnnounceBuffer(Environment *env){
-//   CLIPSValue cv;
-//   Eval(env, "?*announce*",&cv);
-//   string res = cv.lexemeValue->contents;
-//   Eval(env, "(bind ?*announce* \"\")",NULL);
-//   return res;
-// }
-
-
-// #define DRIBBLE_DATA USER_ENVIRONMENT_DATA + 0
-// struct dribbleData
-// {
-//   char *announce;
-// };
-
-// //#define DribbleData(theEnv) \ ((struct dribbleData *) GetEnvironmentData(theEnv,DRIBBLE_DATA))
-
-// bool QueryAnnounceCallback(Environment *,const char *,void *);
-// void WriteAnnounceCallback(Environment *,const char *,const char *,void *);
-
-// bool QueryAnnounceCallback(
-//   Environment *environment,
-//   const char *logicalName,
-//   void *context)
-// {
-//   if (strcmp(logicalName,"announce") == 0) return(true);
-//   return(false);
-// }
-
-// void WriteAnnounceCallback(
-//   Environment *environment,
-//   const char *logicalName,
-//   const char *str,
-//   void *context)
-// {
-//   //Adds the string to the local variable
-//   printf(str);
-// }
-
-
 Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
   Napi::Function func =
       DefineClass(env,
@@ -66,7 +12,7 @@ Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
                   {InstanceMethod("getFacts", &ClipsWrapper::GetFacts),
                     InstanceMethod("getDebugBuffer", &ClipsWrapper::GetDebugBuffer),
                     InstanceMethod("getAnnounceBuffer", &ClipsWrapper::GetAnnounceBuffer),
-                    InstanceMethod("getObtainBuffer", &ClipsWrapper::GetObtainBuffer),
+                    InstanceMethod("getChooseBuffer", &ClipsWrapper::GetChooseBuffer),
                     InstanceMethod("wrapDestroyEnvironment", &ClipsWrapper::WrapDestroyEnvironment),
                     InstanceMethod("wrapEval", &ClipsWrapper::WrapEval)});
 
@@ -84,16 +30,6 @@ ClipsWrapper::ClipsWrapper(const Napi::CallbackInfo& info)
 
 
   this->clips_env_ = CreateEnvironment();
-  //printf("salida\n");
-  // AddRouter(this->clips_env_,
-  //   "announce", /* Router name */
-  //   50, /* Priority */
-  //   QueryAnnounceCallback, /* Query function */
-  //   WriteAnnounceCallback, /* Write function */
-  //   NULL, /* Read function */
-  //   NULL, /* Unread function */
-  //   NULL, /* Exit function */
-  //   NULL); /* Context */
 
   Load(this->clips_env_, "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\load.clp");
   Eval(this->clips_env_, "(load-all)", NULL);
@@ -129,11 +65,11 @@ Napi::Value ClipsWrapper::GetDebugBuffer(const Napi::CallbackInfo& info) {
   return Napi::String::New(info.Env(), res);
 }
 
-Napi::Value ClipsWrapper::GetObtainBuffer(const Napi::CallbackInfo& info) {
+Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
   CLIPSValue cv;
-  Eval(this->clips_env_, "(str-cat (expand$ ?*obtain*))",&cv);
+  Eval(this->clips_env_, "(str-cat (expand$ ?*choose*))",&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*obtain* (create$))",NULL);
+  Eval(this->clips_env_, "(bind ?*choose* (create$))",NULL);
   return Napi::String::New(info.Env(), res);
 }
 

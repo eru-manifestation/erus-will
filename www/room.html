@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang='en-us'> 
+	<script>
+		function create_room(event){
+			window.location.href = '/index.html';
+		}
+		function join_room(event){
+			window.location.href = '/index.html?room='+document.getElementById("room").value;
+		}
+
+	</script>
+	<head>
+		<meta charset='utf-8'>
+		<meta name='viewport' content='width=device-width'>
+		<link rel='stylesheet' href='/styles.css'>
+	</head>
+	<body>
+		<div class='container'>
+			<button id="create-room" onclick="create_room()">Create New Room</button>
+			<input id="room"></input>
+			<button id="search-room" onclick="join_room()">Join Room</button>
+		</div>
+	</body>
+</html>
