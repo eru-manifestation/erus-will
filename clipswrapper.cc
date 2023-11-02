@@ -50,26 +50,62 @@ Napi::Value ClipsWrapper::GetFacts(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
+  string multifield;
+  if (info.Length() <= 0 || !info[0].IsString()) {
+    Napi::TypeError::New(info.Env(), "Player name expected").ThrowAsJavaScriptException();
+    return Napi::Boolean::New(info.Env(),false);
+  } else {
+    string player = info[0].As<Napi::String>().Utf8Value();
+    if(strcmp(player.c_str(),"player1")==0){
+      multifield = "?*announce-p1*";
+    }else if (strcmp(player.c_str(),"player2")==0){
+      multifield = "?*announce-p2*";
+    }else{
+      Napi::TypeError::New(info.Env(), "Invalid player name").ThrowAsJavaScriptException();
+      return Napi::Boolean::New(info.Env(),false);
+    }
+  }
+
+  string command1 = "(get-content " + multifield + ")";
+  string command2 = "(bind " + multifield + " (create$))";
   CLIPSValue cv;
-  Eval(this->clips_env_, "(str-cat (expand$ ?*announce*))",&cv);
+  Eval(this->clips_env_, command1.c_str() ,&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*announce* (create$))",NULL);
+  Eval(this->clips_env_, command2.c_str() ,NULL);
   return Napi::String::New(info.Env(), res);
 }
 
 Napi::Value ClipsWrapper::GetDebugBuffer(const Napi::CallbackInfo& info) {
   CLIPSValue cv;
-  Eval(this->clips_env_, "(str-cat (expand$ ?*debug*))",&cv);
+  Eval(this->clips_env_, "(get-content ?*debug*)",&cv);
   string res = cv.lexemeValue->contents;
   Eval(this->clips_env_, "(bind ?*debug* (create$))",NULL);
   return Napi::String::New(info.Env(), res);
 }
 
 Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
+  string multifield;
+  if (info.Length() <= 0 || !info[0].IsString()) {
+    Napi::TypeError::New(info.Env(), "Player name expected").ThrowAsJavaScriptException();
+    return Napi::Boolean::New(info.Env(),false);
+  } else {
+    string player = info[0].As<Napi::String>().Utf8Value();
+    if(strcmp(player.c_str(),"player1")==0){
+      multifield = "?*choose-p1*";
+    }else if (strcmp(player.c_str(),"player2")==0){
+      multifield = "?*choose-p2*";
+    }else{
+      Napi::TypeError::New(info.Env(), "Invalid player name").ThrowAsJavaScriptException();
+      return Napi::Boolean::New(info.Env(),false);
+    }
+  }
+
+  string command1 = "(get-content " + multifield + ")";
+  string command2 = "(bind " + multifield + " (create$))";
   CLIPSValue cv;
-  Eval(this->clips_env_, "(str-cat (expand$ ?*choose*))",&cv);
+  Eval(this->clips_env_, command1.c_str() ,&cv);
   string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*choose* (create$))",NULL);
+  Eval(this->clips_env_, command2.c_str() ,NULL);
   return Napi::String::New(info.Env(), res);
 }
 

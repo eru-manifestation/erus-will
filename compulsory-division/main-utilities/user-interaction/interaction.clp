@@ -5,12 +5,40 @@
 	(println)
 )
 
+(deffunction MAIN::get-content (?multifield)
+	(if (neq 0 (length$ ?multifield)) then
+		(str-cat (expand$ ?multifield))
+		else
+		""
+	)
+)
+
 (deffunction MAIN::announce (?player $?message)
-	(bind ?*announce* (insert$ ?*announce* (+ 1 (length$ ?*announce*)) "--> " ?player ": " (implode$ ?message) crlf))
+	(switch ?player
+		(case (symbol-to-instance-name player1) then 
+			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) "--> " ?player ": " (implode$ ?message) crlf))
+			(return TRUE)
+		)
+		(case (symbol-to-instance-name player2) then 
+			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) "--> " ?player ": " (implode$ ?message) crlf))
+			(return TRUE)
+		)
+		(default FALSE)
+	)
 )
 
 (deffunction MAIN::choose (?player $?message)
-	(bind ?*choose* (insert$ ?*choose* (+ 1 (length$ ?*choose*)) "--> " ?player ": " (implode$ ?message) crlf))
+	(switch ?player
+		(case (symbol-to-instance-name player1) then 
+			(bind ?*choose-p1* (insert$ ?*choose-p1* (+ 1 (length$ ?*choose-p1*)) "--> " ?player ": " (implode$ ?message) crlf))
+			(return TRUE)
+		)
+		(case (symbol-to-instance-name player2) then 
+			(bind ?*choose-p2* (insert$ ?*choose-p2* (+ 1 (length$ ?*choose-p2*)) "--> " ?player ": " (implode$ ?message) crlf))
+			(return TRUE)
+		)
+		(default FALSE)
+	)
 )
 
 (deffunction MAIN::debug ($?message)
