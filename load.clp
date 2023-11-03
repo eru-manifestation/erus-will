@@ -7,128 +7,126 @@
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
-    ;(chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\innit.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\object-prelude.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\objects.clp")
+    (load* "compulsory-division/main-utilities/innit.clp")
+    (load* "compulsory-division/main-utilities/object-prelude.clp")
+    (load* "compulsory-division/main-utilities/objects.clp")
 
     ;global-constants
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\game-settings\\global-constants.clp")
+    (load* "compulsory-division/main-utilities/game-settings/global-constants.clp")
 
     ;game-settings
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\game-settings\\game-settings.clp")
+    (load* "compulsory-division/main-utilities/game-settings/game-settings.clp")
 
     ;interactions and debug
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\user-interaction\\interaction.clp")
+    (load* "compulsory-division/main-utilities/user-interaction/interaction.clp")
 
     ;locations
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\game-settings\\locations.clp")
+    (load* "compulsory-division/main-utilities/game-settings/locations.clp")
 
     ;handGDEF
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\game-settings\\cards-def.clp")
+    (load* "compulsory-division/main-utilities/game-settings/cards-def.clp")
 
     ;in manager
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\in.clp")
+    (load* "compulsory-division/main-utilities/in.clp")
 
     ;fellowship manager
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\fellowships.clp")
+    (load* "compulsory-division/main-utilities/fellowships.clp")
 
 
     ;events
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\events.clp")
+    (load* "compulsory-division/main-utilities/events.clp")
     
     ;clock manager
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\clock.clp")
+    (load* "compulsory-division/main-utilities/clock.clp")
 
     ;standard-events
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\standard-event-phases.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\standard-events.clp")
+    (load* "compulsory-division/main-utilities/standard-event-phases.clp")
+    (load* "compulsory-division/main-utilities/standard-events.clp")
 
     ;action manager
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\user-interaction\\index-writer.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\user-interaction\\actions.clp")
+    (load* "compulsory-division/main-utilities/user-interaction/index-writer.clp")
+    (load* "compulsory-division/main-utilities/user-interaction/actions.clp")
 
     ;data items
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\main-utilities\\data-items.clp")
+    (load* "compulsory-division/main-utilities/data-items.clp")
 )
 
 (deffunction load-standard()
-    ;(chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\start-game-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\start-game-1.clp")
+    (load* "compulsory-division/standard-phases/start-game-0.clp")
+    (load* "compulsory-division/standard-phases/start-game-1.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-0-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-0-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-1-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-1-1-2-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-1-1-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-2-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-2-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-2-3-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-3-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-4.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-5-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-5-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-5-3.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-5-4.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\phase-5-5.clp")
+    (load* "compulsory-division/standard-phases/phase-0-1-1.clp")
+    (load* "compulsory-division/standard-phases/phase-0-2-1.clp")
+    (load* "compulsory-division/standard-phases/phase-1-1-1.clp")
+    (load* "compulsory-division/standard-phases/phase-1-1-2-0.clp")
+    (load* "compulsory-division/standard-phases/phase-1-1-2-1.clp")
+    (load* "compulsory-division/standard-phases/phase-2-1-1.clp")
+    (load* "compulsory-division/standard-phases/phase-2-2-1.clp")
+    (load* "compulsory-division/standard-phases/phase-2-3-1.clp")
+    (load* "compulsory-division/standard-phases/phase-3-1-1.clp")
+    (load* "compulsory-division/standard-phases/phase-4.clp")
+    (load* "compulsory-division/standard-phases/phase-5-1-1.clp")
+    (load* "compulsory-division/standard-phases/phase-5-2-1.clp")
+    (load* "compulsory-division/standard-phases/phase-5-3.clp")
+    (load* "compulsory-division/standard-phases/phase-5-4.clp")
+    (load* "compulsory-division/standard-phases/phase-5-5.clp")
 
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-1-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-1-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1-1-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-2.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-organize\\loc-organize-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-organize\\loc-organize-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-organize/loc-organize-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-organize/loc-organize-2.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-3.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-5-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-5-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-6.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-7.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-3.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-6.clp")
+    (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-7.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\both-players-draw\\both-players-draw-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\both-players-draw\\both-players-draw-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/both-players-draw/both-players-draw-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/both-players-draw/both-players-draw-1.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-3-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-4.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-1-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-2-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-3-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-4.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\faction-play\\faction-play-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\faction-play\\faction-play-2-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-1-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-2-1.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-1-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-2-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-1-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-1-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-2-1.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-3.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-3.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-4.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\attack\\attack-5.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-3.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-3.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-4.clp")
+    (load* "compulsory-division/standard-phases/event-phases/attack/attack-5.clp")
     
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\strike\\strike-1-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\strike\\strike-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\strike\\strike-3-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\strike\\strike-3-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\strike\\strike-4.clp")
+    (load* "compulsory-division/standard-phases/event-phases/strike/strike-1-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/strike/strike-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/strike/strike-3-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/strike/strike-3-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/strike/strike-4.clp")
 
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-0.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-1.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-2.clp")
-    (load* "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-3.clp")
+    (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-0.clp")
+    (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-2.clp")
+    (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-3.clp")
 
     
 )
@@ -137,7 +135,6 @@
 (deffunction load-all ()
     (set-strategy breadth)
 
-    ;(chdir "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will")
     (load-utilities)
     (load-standard)
     

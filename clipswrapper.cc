@@ -32,7 +32,7 @@ ClipsWrapper::ClipsWrapper(const Napi::CallbackInfo& info)
 
   this->clips_env_ = CreateEnvironment();
 
-  Load(this->clips_env_, "C:\\Users\\Pablo\\Documents\\GitHub\\erus-will\\load.clp");
+  Load(this->clips_env_, "load.clp");
   Eval(this->clips_env_, "(load-all)", NULL);
   Run(this->clips_env_, -1);
 
