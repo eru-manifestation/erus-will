@@ -68,6 +68,8 @@ io.on('connection', (socket) => {
         if(value.length===2){
             var env = initializeClipsEnv(room);
             io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player2").emit("state", "\nState buffer\n"+env.getStateBuffer("player1").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player1").emit("state", "\nState buffer\n"+env.getStateBuffer("player2").replaceAll("crlf","\n"));
             io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
             io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
             io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));
@@ -79,6 +81,8 @@ io.on('connection', (socket) => {
         var env = CLIPSEnvs.get(room);
         io.sockets.in(room).emit("log", "\nChoose result:\n"+env.wrapEval("(play-action "+player+" "+orders+")"));
         io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
+        io.sockets.in(room).except("player2").emit("state", "\nState buffer\n"+env.getStateBuffer("player1").replaceAll("crlf","\n"));
+        io.sockets.in(room).except("player1").emit("state", "\nState buffer\n"+env.getStateBuffer("player2").replaceAll("crlf","\n"));
         io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
         io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
         io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));

@@ -13,6 +13,7 @@ Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
                     InstanceMethod("getDebugBuffer", &ClipsWrapper::GetDebugBuffer),
                     InstanceMethod("getAnnounceBuffer", &ClipsWrapper::GetAnnounceBuffer),
                     InstanceMethod("getChooseBuffer", &ClipsWrapper::GetChooseBuffer),
+                    InstanceMethod("getStateBuffer", &ClipsWrapper::GetStateBuffer),
                     InstanceMethod("wrapDestroyEnvironment", &ClipsWrapper::WrapDestroyEnvironment),
                     InstanceMethod("wrapEval", &ClipsWrapper::WrapEval)});
 
@@ -102,6 +103,35 @@ Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
 
   string command1 = "(get-content " + multifield + ")";
   string command2 = "(bind " + multifield + " (create$))";
+  CLIPSValue cv;
+  Eval(this->clips_env_, command1.c_str() ,&cv);
+  string res = cv.lexemeValue->contents;
+  Eval(this->clips_env_, command2.c_str() ,NULL);
+  return Napi::String::New(info.Env(), res);
+}
+
+Napi::Value ClipsWrapper::GetStateBuffer(const Napi::CallbackInfo& info) {
+  string multifield, player;
+  if (info.Length() <= 0 || !info[0].IsString()) {
+    Napi::TypeError::New(info.Env(), "Player name expected").ThrowAsJavaScriptException();
+    return Napi::Boolean::New(info.Env(),false);
+  } else {
+    player = info[0].As<Napi::String>().Utf8Value();
+    if(strcmp(player.c_str(),"player1")==0){
+      multifield = "?*state-p1*";
+    }else if (strcmp(player.c_str(),"player2")==0){
+      multifield = "?*state-p2*";
+    }else{
+      Napi::TypeError::New(info.Env(), "Invalid player name").ThrowAsJavaScriptException();
+      return Napi::Boolean::New(info.Env(),false);
+    }
+  }
+
+  string command0 = "(update-index (symbol-to-instance-name "+player+"))";
+  string command1 = "(get-content " + multifield + ")";
+  string command2 = "(bind " + multifield + " (create$))";
+
+  Eval(this->clips_env_, command0.c_str() ,NULL);
   CLIPSValue cv;
   Eval(this->clips_env_, command1.c_str() ,&cv);
   string res = cv.lexemeValue->contents;

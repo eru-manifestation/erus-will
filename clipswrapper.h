@@ -17,6 +17,7 @@ class ClipsWrapper : public Napi::ObjectWrap<ClipsWrapper> {
   Napi::Value GetDebugBuffer(const Napi::CallbackInfo& info);
   Napi::Value GetAnnounceBuffer(const Napi::CallbackInfo& info);
   Napi::Value GetChooseBuffer(const Napi::CallbackInfo& info);
+  Napi::Value GetStateBuffer(const Napi::CallbackInfo& info);
   Napi::Value WrapDestroyEnvironment(const Napi::CallbackInfo& info);
   Napi::Value WrapEval(const Napi::CallbackInfo& info);
 

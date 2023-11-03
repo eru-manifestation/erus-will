@@ -19,5 +19,8 @@
     ?*debug-state* = FALSE
     ?*choose-p1* = (create$)
     ?*choose-p2* = (create$)
+
+    ?*state-p1* = (create$)
+    ?*state-p2* = (create$)
 )
 

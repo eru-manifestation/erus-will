@@ -9,10 +9,13 @@
 	</head>
 	<body>
 		<div class='container'>
-		<div>
-			<div id="log"></div>
-			<textarea id="orders"></textarea>
-			<button id="send">Enviar datos</button>
+		<div style="display:grid; grid-template-columns: 60% 40%;">
+			<div id="game-space" style="grid-column: 1;"></div>
+            <div style="overflow:scroll; height:80vh; grid-column: 2; grid-row: 1;">
+                <div id="log"></div>
+            </div>
+            <textarea id="orders" style="grid-column: 2; grid-row: 2;"></textarea>
+            <button id="send" style="grid-column: 2; grid-row: 3;">Enviar datos</button>
 		</div>
 	</body>
 </html>

@@ -41,6 +41,25 @@
 	)
 )
 
+(deffunction MAIN::state (?player $?message)
+	(switch ?player
+		(case (symbol-to-instance-name player1) then 
+			(bind ?*state-p1* (insert$ ?*state-p1* (+ 1 (length$ ?*state-p1*)) $?message))
+			(return TRUE)
+		)
+		(case (symbol-to-instance-name player2) then 
+			(bind ?*state-p2* (insert$ ?*state-p2* (+ 1 (length$ ?*state-p2*)) $?message))
+			(return TRUE)
+		)
+		(case all then
+			(bind ?*state-p1* (insert$ ?*state-p1* (+ 1 (length$ ?*state-p1*)) $?message))
+			(bind ?*state-p2* (insert$ ?*state-p2* (+ 1 (length$ ?*state-p2*)) $?message))
+			(return TRUE)
+		)
+		(default FALSE)
+	)
+)
+
 (deffunction MAIN::debug ($?message)
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "DEBUG MESSAGE_________________________________" crlf))
 	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))

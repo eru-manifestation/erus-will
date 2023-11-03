@@ -11,6 +11,8 @@
     (send ?c put-state UNTAPPED)
 
     (debug Untapping ?c)
+    (announce [player1] Untap ?c)
+    (announce [player2] Untap ?c)
 )
 
 ; E-cure
@@ -26,6 +28,8 @@
     (send ?c put-state TAPPED)
 
     (debug Healing ?c)
+    (announce [player1] Heal ?c)
+    (announce [player2] Heal ?c)
 )
 
 
@@ -44,6 +48,8 @@
     (in-move ?c ?u)
     (send ?c put-state UNTAPPED)
     (debug Playing character ?c under ?u)
+    (announce [player1] Play character ?c ?u)
+    (announce [player2] Play character ?c ?u)
 )
 
 
@@ -62,6 +68,8 @@
     (in-move ?item ?owner)
     (send ?item put-state UNTAPPED)
     (debug Playing minor item ?item under ?owner)
+    (announce [player1] Play minor item ?item ?owner)
+    (announce [player2] Play minor item ?item ?owner)
 )
 
 
@@ -83,6 +91,8 @@
     (send ?owner put-state TAPPED)
     (send ?loc put-state TAPPED)
     (debug Playing item ?item under ?owner)
+    (announce [player1] Play item ?item ?owner)
+    (announce [player2] Play item ?item ?owner)
 )
 
 
@@ -103,6 +113,8 @@
     (in-move ?item ?rec)
 
     (debug Transfering item ?item from ?disp to ?rec)
+    (announce [player1] Transfer item ?item ?rec)
+    (announce [player2] Transfer item ?item ?rec)
 )
 
 
@@ -122,6 +134,8 @@
     (send ?item put-state MP)
 
     (debug Storing item ?item in ?haven by ?bearer)
+    (announce [player1] Store ?item ?haven)
+    (announce [player2] Store ?item ?haven)
 )
 
 
@@ -138,6 +152,8 @@
     (send ?e complete)
     (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
     (debug Organizing fellowships of player ?p in ?loc)
+    (announce [player1] Organize ?loc)
+    (announce [player2] Organize ?loc)
 )
 
 
@@ -154,6 +170,8 @@
     (send ?rle put-state DISCARD)
 
     (debug Discarding long-event resoure ?rle)
+    (announce [player1] Discard long-event resource ?rle)
+    (announce [player2] Discard long-event resource ?rle)
 )
 
 
@@ -171,6 +189,8 @@
     (send ?rle put-state UNTAPPED)
 
     (debug Playing long-event resoure ?rle)
+    (announce [player1] Play long-event resource ?rle)
+    (announce [player2] Play long-event resource ?rle)
 )
 
 
@@ -188,6 +208,8 @@
     (send ?ale put-state DISCARD)
 
     (debug Discarding long-event adversity ?ale)
+    (announce [player1] Discard long-event adversity ?ale)
+    (announce [player2] Discard long-event adversity ?ale)
 )
 
 
@@ -223,6 +245,8 @@
     (send ?c put-state DISCARD)
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
     (debug Discarding character ?c)
+    (announce [player1] Discard character ?c)
+    (announce [player2] Discard character ?c)
 )
 
 
@@ -240,6 +264,8 @@
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Destroying character ?c)
+    (announce [player1] Destroy character ?c)
+    (announce [player2] Destroy character ?c)
 )
 
 
@@ -256,6 +282,8 @@
     (send ?e complete)
     (in-move ?c ?fell)
     (debug Moving character ?c to ?fell)
+    (announce [player1] Move character ?c ?fell)
+    (announce [player2] Move character ?c ?fell)
 )
 
 
@@ -272,6 +300,8 @@
     (send ?e complete)
     (in-move ?follower ?followed)
     (debug Making character ?follower follower of ?followed)
+    (announce [player1] Make follower ?follower ?followed)
+    (announce [player2] Make follower ?follower ?followed)
 )
 
 
@@ -288,6 +318,8 @@
     (send ?e complete)
     (in-move ?follower ?fell)
     (debug Making the follower ?follower an usual character in ?fell)
+    (announce [player1] Unmake follower ?follower ?fell)
+    (announce [player2] Unmake follower ?follower ?fell)
 )
 
 
