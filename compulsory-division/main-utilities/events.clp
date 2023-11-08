@@ -18,20 +18,20 @@
 ; DEFINICIÓN DE TEMPLATE EVENTO
 (defclass MAIN::EVENT (is-a NUMERABLE)
     (slot instance-# (source composite))
-	(slot target-phase (type SYMBOL))
-	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT))
+	(slot target-phase (visibility public) (type SYMBOL))
+	(slot type (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN OUT))
 	; Revisar en los que capturen datos de eventos que se especifique defused FALSE
 	; para evitar pattern matching innecesario
-	(slot defused (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
-		(pattern-match non-reactive) (visibility public))
+	(slot defused (visibility public) (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
+		(pattern-match non-reactive))
 )
 
 
 ; DEFINICION DEL EVENTO DE FASE EVENTUAL
 (defclass MAIN::EVENT-PHASE (is-a EVENT)
     (slot instance-# (source composite))
-	(slot target-phase (type SYMBOL))
-	(slot type (type SYMBOL) (default IN) (allowed-symbols IN OUT ONGOING))
+	(slot target-phase (visibility public) (type SYMBOL))
+	(slot type (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN OUT ONGOING))
 )
 
 ; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT HANDLER

@@ -6,6 +6,13 @@
     (lowcase (str-cat (class ?instance) " " (implode$ (class-superclasses (class ?instance) inherit))))
 )
 
+(defmessage-handler USER get-slots ()
+    ;Devolver una cadena con la asociacion entre slot y valor
+    (bind ?res "")
+    (foreach ?slot (class-slots (class ?self) inherit) (bind ?res (str-cat ?res ?slot "='" (implode$ (insert$ (create$) 1 (dynamic-get ?slot))) "'")))
+    (return ?res)
+)
+
 (deffunction MAIN::instance-name-to-file (?instance)
     ;Elimina numero, utilizo el nombre de la clase
     (bind ?instance (lowcase (class ?instance)))
@@ -30,75 +37,114 @@
     (return (str-replace ?res " " ""))
 )
 
-(deffunction MAIN::bgstyle-icon (?card)
-    (if (not (member$ (class ?card) (create$ FELLOWSHIP PLAYER))) then
-        return (str-cat "style=\"background-image: url('../tw/icons/" (instance-name-to-file ?card) ".jpg');\"")
-        else 
-        return ""
-    )
-)
-
-(deffunction MAIN::bgstyle-card (?card)
-    (if (not (member$ (class ?card) (create$ FELLOWSHIP PLAYER))) then
-        return (str-cat "style=\"background-image: url('../tw/" (instance-name-to-file ?card) ".jpg');\"")
+(deffunction MAIN::bgstyle (?card)
+    (if (str-index "card" (classes ?card)) then
+        return (str-cat " style=background-image:url('../tw/icons/" (instance-name-to-file ?card) ".jpg') ")
         else 
         return ""
     )
 )
 
 
-
-(deffunction MAIN::update-under (?player ?card ?level)
+(deffunction MAIN::update-under (?player ?card)
     (do-for-all-facts ((?in in)) 
         (and
             (eq ?in:transitive FALSE)
             (eq ?in:over ?card)
         )
-        (bind ?game-element "")
-        (bind ?style "")
-        (if (not (member$ (class ?in:under) (create$ FELLOWSHIP PLAYER))) then 
-            (bind ?game-element " game-element"))
-        ;(loop-for-count ?level (state ?player tab))
-        (state ?player (str-cat "<div class='level-" ?level " " (classes ?in:under) ?game-element "'" (bgstyle-icon ?in:under) ">") crlf) 
-        (update-under ?player ?in:under (+ 1 ?level))
-        ;(loop-for-count ?level (state ?player tab))
+        (state ?player (str-cat "<div id='[" ?in:under "]' class='" (classes ?in:under) "' " (bgstyle ?in:under) (send ?in:under get-slots) " draggable=true >")) 
+        (update-under ?player ?in:under)
         (state ?player "</div>" crlf)
     )
 )
 
-(deffunction MAIN::write-sidebars (?player)
-    (state ?player "<div class='sidebar sidebar-left'>" crlf)
-    (do-for-all-instances ((?card CARD) (?ownable CARD)) 
-        (and (eq ?card ?ownable) 
-            (eq (send ?card get-state) HAND) 
-            (eq (send ?card get-player) (symbol-to-instance-name player1))
-        )
-        (state ?player (str-cat "<div class='" (classes ?card) " game-element'" (bgstyle-card ?card) "></div>") crlf)
-    )
-    (state ?player "</div>")
-    (state ?player "<div class='sidebar sidebar-right'>")
-    (do-for-all-instances ((?card CARD) (?ownable CARD)) 
-        (and (eq ?card ?ownable) 
-            (eq (send ?card get-state) HAND) 
-            (eq (send ?card get-player) (symbol-to-instance-name player2))
-        )
-        (state ?player (str-cat "<div class='" (classes ?card) " game-element'" (bgstyle-card ?card) "></div>") crlf)
-    )
-    (state ?player "</div>")
+
+(deffunction MAIN::draw (?player ?instance)
+    (state ?player (str-cat "<div id='[" ?instance "]' class='" (classes ?instance) "' " (bgstyle ?instance) (send ?instance get-slots) " draggable=true >") crlf) 
+    (update-under ?player ?instance)
+    (state ?player "</div>" crlf)
 )
 
 
-; Escribe el archivo index.html
+; Main function
 (deffunction MAIN::update-index (?player)
-    (state ?player "<div class='game'>" crlf)
-    (state ?player "<div class='top-bar'>" crlf "<div class='mp-counter player1'>" (send [player1] get-mp) "</div>" crlf "<div class='mp-counter player2'>" (send [player2] get-mp) "</div>" crlf "</div>")
-    (state ?player "<div class='panel'>")
-    (do-for-all-instances ((?loc LOCATION)) (any-factp ((?in in)) (and (eq ?in:transitive FALSE) (eq ?in:over (instance-name ?loc)) (eq (send ?in:under get-empty) FALSE)))
-        (state ?player "<div class='level-0 game-element' " (bgstyle-card ?loc) ">" crlf) 
-        (update-under ?player (instance-name ?loc) 1)
-        (state ?player "</div>" crlf)
+    (state ?player "<div class='game'>")
+
+    ; Dibujar jugadores
+    (draw ?player [player1])
+    (draw ?player [player2])
+
+    ; Dibujar localizaciones
+    (state ?player "<div class='locations'>")
+    (do-for-all-instances ((?instance LOCATION)) TRUE
+        (draw ?player ?instance)
     )
-    (state ?player "</div>")
-    (write-sidebars ?player)
+    (state ?player "</div>" crlf)
+
+    ; Dibujar mazos, manos etc
+    (state ?player "<div class='player_hand'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state HAND) (eq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='enemy_hand'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state HAND) (neq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='player_draw'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DRAW) (eq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='enemy_draw'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DRAW) (neq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='player_discard'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DISCARD) (eq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='enemy_discard'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DISCARD) (neq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='player_mp'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state MP) (eq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='enemy_mp'>")
+    (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state MP) (neq ?instance:player ?player))
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+    (state ?player "<div class='out_of_game'>")
+    (do-for-all-instances ((?instance CARD)) (eq ?instance:state OUT-OF-GAME)
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
+
+    ; Dibujar information items TODO
+
+    ; Dibujar eventos
+    (state ?player "<div class='events'>")
+    (do-for-all-instances ((?instance EVENT)) TRUE
+        (draw ?player ?instance)
+    )
+    (state ?player "</div>" crlf)
+
     (state ?player "</div>" crlf)
 )

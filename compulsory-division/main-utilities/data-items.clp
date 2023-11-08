@@ -1,9 +1,9 @@
 (defclass MAIN::data-item (is-a NUMERABLE)
     (slot instance-# (source composite))
-    (slot active (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
-    (slot target (type SYMBOL) (default ?NONE))
-    (slot target-slot (type SYMBOL) (default ?NONE))
-    (slot value (type INTEGER) (default ?NONE))
+    (slot active (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
+    (slot target (visibility public) (type SYMBOL) (default ?NONE))
+    (slot target-slot (visibility public) (type SYMBOL) (default ?NONE))
+    (slot value (visibility public) (type INTEGER) (default ?NONE))
 )
 (defmessage-handler data-item init after ()
     (eval (str-cat 
