@@ -15,14 +15,6 @@ body {
     Helvetica,
     sans-serif;
 }
-.container {
-  display:grid; grid-template-columns: 80% auto;
-}
-
-#log { overflow:scroll; height:90vh; grid-column: 2; grid-row: 1;}
-#game-space{ grid-column: 1;}
-#orders {grid-column: 2; grid-row: 2;}
-#send {grid-column: 2; grid-row: 3;}
 
 .card {
   background-repeat: no-repeat;
@@ -32,14 +24,23 @@ body {
 
 .game {
   display: grid;
+  gap: 5rem;
 }
+
+.game > *:not(.locations){
+  /* TODO: IMPRIMIR CADA UNO A SU MANERA */
+  display: none;
+}
+
 
 .locations{
   grid-row: 2 / 12;
-  display: grid;
-  justify-content: center;
-  gap: 10px;
-  overflow: scroll;
+  display:grid;
+  grid-template-columns:repeat(auto, 35rem);
+  grid-template-rows: 1;
+  justify-items: center;
+  gap: 5rem;
+  overflow-x: scroll;
 }
 
 .player_draw, .enemy_draw, .player_discar, .enemy_discard, .player_hand, .enemy_hand
@@ -49,6 +50,7 @@ body {
 
 /* TIENE AL MENOS DOS HIJOS VISIBLES IMPLICA QUE HAY ALGO MÁS QUE SU PROPIA IMÁGEN */
 .location:has( .card) {
+  grid-row: 1;
   width: clamp(600px, 40%, 60%);
   display: flex;
   flex-direction: row;

@@ -7,26 +7,17 @@ var socket = io.connect(window.location.origin,{query:"room="+room});
 
 
 document.addEventListener("DOMContentLoaded", ()=>{
-    var log = document.getElementById("log");
-    var orders = document.getElementById("orders");
-    var button = document.getElementById("send");
     var game_space = document.getElementById("game-space");
 
 
     function send_orders(orders){
         console.log(orders);
-        log.innerText += "\nOrders sent:\n"+orders
         socket.emit("orders",orders);
         orders.value="";
     }
 
-    button.onclick=()=>{
-        send_orders(orders.value);
-    };
-
     socket.on("log", (data)=>{
         console.log("Mensaje recibido:\n"+data);
-        log.innerText+=data;
     });
 
     socket.on("state", (data)=>{
