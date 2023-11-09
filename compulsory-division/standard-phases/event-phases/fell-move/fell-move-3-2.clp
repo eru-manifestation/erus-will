@@ -24,7 +24,7 @@
 		(player ?p)
 		(event-def fell-move-player-draw)
 		(description (sym-cat "Draw 1"))
-		(identifier DRAW)
+		(identifier PLAYERDRAW)
 		(data (create$ 
 		"( fell-move [" ?e "])"))
 	))

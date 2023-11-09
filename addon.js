@@ -79,15 +79,20 @@ io.on('connection', (socket) => {
 
     socket.on("orders", (orders) => {
         var env = CLIPSEnvs.get(room);
-        io.sockets.in(room).emit("log", "\nChoose result:\n"+env.wrapEval("(play-action "+player+" "+orders+")"));
-        io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("state", env.getStateBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("state", env.getStateBuffer("player2").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player2").replaceAll("crlf","\n"));
+        var result = env.wrapEval("(play-action "+player+" "+orders+")");
         console.log("Player "+player+" commands: {"+orders+"}");
+        io.sockets.in(room).emit("log", "\nChoose result:\n"+result);
+        if(result=="TRUE"){
+            io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player2").emit("state", env.getStateBuffer("player1").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player1").emit("state", env.getStateBuffer("player2").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));
+            io.sockets.in(room).except("player1").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player2").replaceAll("crlf","\n"));
+        }else{
+            console.log("\t^-- The command is rejected");
+        }
     });
 
     socket.on("disconnecting", (reason) => {

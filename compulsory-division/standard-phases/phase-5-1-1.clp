@@ -26,7 +26,7 @@
 		(player ?p)
 		(event-def player-discard-from-hand)
 		(description (sym-cat "Discard card " ?c " from player " ?p "'s hand"))
-		(identifier ?c DISCARD)
+		(identifier ?c PLAYERDISCARD)
 		(data (create$ 
 		"( card [" ?c "])" 
 		"( player [" ?p "])"))

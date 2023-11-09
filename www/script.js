@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
     function send_orders(orders){
-        console.log(orders);
+        console.log("Orders: {"+orders+"}");
         socket.emit("orders",orders);
         orders.value="";
     }
@@ -26,6 +26,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
         document.querySelectorAll("*[draggable=true]").forEach(
             (draggable) => {
+                draggable.addEventListener("click", (event) =>{
+                    send_orders(draggable.id);
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+
                 draggable.addEventListener("dragstart", (event) => {
                     event.dataTransfer.setData("text/plain", draggable.id);
                     event.stopPropagation();
@@ -50,7 +57,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
                     if (event.dataTransfer.types.includes("text/plain")){
                         data = event.dataTransfer.getData("text/plain")+" "+draggable.id;
                         send_orders(data);
-                        console.log("drop");
                         event.stopPropagation();
                     }
                     event.preventDefault();

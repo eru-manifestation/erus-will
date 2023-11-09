@@ -14,14 +14,20 @@
 	(assert (in (over ?a) (under ?c) (transitive TRUE)))
 )
 
-(deffunction MAIN::in-move (?element ?to)
+(deffunction MAIN::in-unchain (?element)
+	; Desencadena el elemento de cualquier elemento superior
 	; Elimina el primer elemento in no transitivo que defina lo que tenga arriba ?c
 	; (solo debería haber uno)
 	(do-for-fact ((?rm in)) (and (eq ?rm:transitive FALSE) (eq ?element ?rm:under))
 		(retract ?rm)
 	)
+)
+
+(deffunction MAIN::in-move (?element ?to)
+	(in-unchain ?element)
 	(assert (in (over ?to) (under ?element)))
 )
+
 
 (defrule MAIN::in-exit-game1 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
 	(object (is-a STATABLE) (state HAND | DRAW | DISCARD | MP) (name ?exit))
