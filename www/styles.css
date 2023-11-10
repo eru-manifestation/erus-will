@@ -23,6 +23,19 @@
   content: attr(id);
 }
 
+/* ICONOS Y SUS ESTILOS */
+.data-item {background-image: url(info-icon.png);}
+.attackable {background-image: url(attackable.png);}
+
+.attackable, .data-item{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none !important;
+  color: darkslategrey !important;
+}
+
+
 .card {
   background-repeat: no-repeat;
   background-size: cover;
@@ -59,14 +72,7 @@
 
 .fellowship{background-color: rgba(209, 183, 153, 0.32);}
 
-.data-item{
-  background-image: url(info-icon.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  border: none !important;
-  color: darkslategrey !important;
-}
+
 
 
 *[player="[player1]"]{
@@ -81,4 +87,11 @@
 }
 *[id="[player2]"] {
   background-color:red;
+}
+
+.choosable{
+  box-shadow: 0 0 30px rgb(212, 255, 0);
+}
+.choosable-final{
+  box-shadow: 0 0 30px rgb(0, 21, 255);
 }

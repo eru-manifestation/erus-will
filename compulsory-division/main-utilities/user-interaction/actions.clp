@@ -12,9 +12,7 @@
 
 ; Parar la ejecución y mostrar las posibilidades
 (deffunction MAIN::collect-actions (?p)
-	(announce ?p Possible actions:)
 	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
-		(announce ?p ?action:description)
 		(choose ?p ?action:identifier -- ?action:description)
 	)
 	(if (not (any-factp ((?action action)) (and (eq ?p ?action:player) ?action:blocking))) then
@@ -23,10 +21,9 @@
 		(bind ?event-def nil)
 		(bind ?blocking TRUE)
 		(assert (action (player ?p) (identifier ?identifier) (description ?description) (event-def ?event-def) (blocking ?blocking)))
-		(announce ?p ?description)
 		(choose ?p ?identifier -- ?description)
 	)
-	(announce ?p No more actions)
+
 	(if ?*debug-state* then
 		(print-content ?*debug*)
 		(bind ?*debug* (create$))

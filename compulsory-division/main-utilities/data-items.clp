@@ -11,7 +11,6 @@
         "(send [" ?self:target "] put-" ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
 (defmessage-handler data-item delete before ()
-    (in-unchain (instance-name ?self))
     (eval (str-cat 
         "(send [" ?self:target "] put-" ?self:target-slot " (- (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )

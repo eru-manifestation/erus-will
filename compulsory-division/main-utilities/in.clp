@@ -42,3 +42,18 @@
 	=>
 	(retract ?in)
 )
+
+
+;///////////////////////// DEFMESSAGE-HANDLER
+
+(defmessage-handler LOCATION init after ()
+	(foreach ?attackable ?self:automatic-attacks
+		(in-move ?attackable (instance-name ?self))
+	)
+)
+
+(defmessage-handler USER delete before()
+	(do-for-all-facts ((?in in)) (or (eq ?in:over (instance-name ?self)) (eq ?in:under (instance-name ?self)))
+		(retract ?in)
+	)
+)
