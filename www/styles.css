@@ -75,14 +75,14 @@
 
 
 
-*[player="[player1]"]{
+.ownable[player="[player1]"]{
   border: 2px solid blue !important;
 }
 *[id="[player1]"] {
   background-color:blue;
 }
 
-*[player="[player2]"]{
+.ownable[player="[player2]"]{
   border: 2px solid red !important;
 }
 *[id="[player2]"] {
