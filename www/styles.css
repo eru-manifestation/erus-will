@@ -21,6 +21,8 @@
 
 .game div::after{
   content: attr(id);
+  grid-column: 1/3;
+  grid-row: 1;
 }
 
 /* ICONOS Y SUS ESTILOS */
