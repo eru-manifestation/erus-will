@@ -51,3 +51,22 @@
 (watch rules)
 (run 8)
 (run 1)
+
+
+
+(defclass C1 (is-a USER) (slot value (type INTEGER)))
+(make-instance c of C1 (value 2))
+
+(defclass item (is-a USER) (slot value (type INTEGER)))
+(defmessage-handler item init after ()
+	(send [c] put-value (+ (send [c] get-value) ?self:value))
+)
+(defmessage-handler item delete before ()
+	(send [c] put-value (- (send [c] get-value) ?self:value))
+)
+
+(defrule r1
+	(logical (action))
+	=>
+	(make-instance of item (value 1))
+)

@@ -2,7 +2,7 @@
 (defmodule P-0-2-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////CAST
+;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
 (debug Cura personajes en refugios))
@@ -13,7 +13,8 @@
 
 ; EVENTO: Curar personajes y aliados heridos en refugios que sean del jugador actual
 (defrule heal
-	(object (is-a WOUNDABLE) (name ?c) (state WOUNDED) (player ?p&:(eq ?p ?*player*)))
+    (player ?p)
+	(object (is-a WOUNDABLE) (name ?c) (state WOUNDED) (player ?p))
 	(object (is-a HAVEN) (name ?loc))
 	(in (over ?loc) (under ?c))
 	=>

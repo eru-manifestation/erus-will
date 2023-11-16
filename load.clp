@@ -4,10 +4,8 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-;(get-defrule-list [<module-name>])
-;(refresh <rule-name>)
 
-;(refresh-agenda [<module-name>])
+;(class [instance-name])
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
@@ -29,50 +27,112 @@
     (load* "compulsory-division\\main-utilities\\game-settings\\locations.clp")
 
     ;handGDEF
-    (load* "compulsory-division\\main-utilities\\game-settings\\handGDEF.clp")
+    (load* "compulsory-division\\main-utilities\\game-settings\\cards-def.clp")
 
     ;in manager
     (load* "compulsory-division\\main-utilities\\in.clp")
 
-    ;data items
-    (load* "compulsory-division\\main-utilities\\data-items.clp")
-
     ;fellowship manager
     (load* "compulsory-division\\main-utilities\\fellowships.clp")
 
-    ;clock manager
-    (load* "compulsory-division\\main-utilities\\clock.clp")
 
     ;events
     (load* "compulsory-division\\main-utilities\\events.clp")
+    
+    ;clock manager
+    (load* "compulsory-division\\main-utilities\\clock.clp")
+
+    ;standard-events
     (load* "compulsory-division\\main-utilities\\standard-event-phases.clp")
     (load* "compulsory-division\\main-utilities\\standard-events.clp")
 
     ;action manager
+    (load* "compulsory-division\\main-utilities\\user-interaction\\index-writer.clp")
     (load* "compulsory-division\\main-utilities\\user-interaction\\actions.clp")
 
-    ;handG
-    (load* "compulsory-division\\main-utilities\\game-settings\\handG.clp")
+    ;data items
+    (load* "compulsory-division\\main-utilities\\data-items.clp")
 )
 
 (deffunction load-standard()
     (chdir ?*route*)
+    (load* "compulsory-division\\standard-phases\\start-game-0.clp")
+    (load* "compulsory-division\\standard-phases\\start-game-1.clp")
+
     (load* "compulsory-division\\standard-phases\\phase-0-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-0-2-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-1-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-1-1-2-0.clp")
+    (load* "compulsory-division\\standard-phases\\phase-1-1-2-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-2-1-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-2-2-1.clp")
     (load* "compulsory-division\\standard-phases\\phase-2-3-1.clp")
-    ;(load* "compulsory-division\\standard-phases\\phase-3-1-0.clp")
     (load* "compulsory-division\\standard-phases\\phase-3-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-4.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-3.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-4.clp")
+    (load* "compulsory-division\\standard-phases\\phase-5-5.clp")
 
-    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-1-1.clp")
-    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-1-2.clp")
-    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check-2.clp")
-)
 
-(deffunction load-handG()
-    (chdir ?*route*)
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-1-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-1-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\corruption-check\\corruption-check-2.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize\\loc-organize-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-organize\\loc-organize-2.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-3-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-4-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-5-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-5-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-6.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\fell-move\\fell-move-7.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw\\both-players-draw-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\both-players-draw\\both-players-draw-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\loc-phase\\loc-phase-4.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\faction-play\\faction-play-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\faction-play\\faction-play-2-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-1-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\free-council\\free-council-2-1.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-2-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-3.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-4.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\attack\\attack-5.clp")
+    
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike\\strike-1-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike\\strike-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike\\strike-3-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike\\strike-3-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\strike\\strike-4.clp")
+
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-0.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-1.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-2.clp")
+    (load* "compulsory-division\\standard-phases\\event-phases\\resistance-check\\resistance-check-3.clp")
+
+    
 )
 
 ; Cargo todas los archivos
@@ -80,15 +140,13 @@
     (chdir ?*route*)
     (load-utilities)
     (load-standard)
-    (load-handG)
     
 )
 
 (load-all)
-(init-locations)
-(init-handG)
-(watch rules)
-(run 40)
-
-
-
+;(watch rules)
+;(watch instances E-char-play E-item-play-only-minor)
+;(run 40)
+(run 3)
+(send [wolves1] put-state HAND) ;Testar el ataque
+(run)

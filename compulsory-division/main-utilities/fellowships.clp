@@ -1,4 +1,3 @@
-;TODO
 ; Conseguir que se de:
 ;   * En cada localización debe haber siempre una ÚNICA compañía vacía (para cada jugador):
 ;       - Al añadir un individuo a una compañía vacía, debe crearse otra vacía

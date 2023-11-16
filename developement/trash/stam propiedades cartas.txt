@@ -1,0 +1,2 @@
+Name	Birthplace	Influence	Mind	Race
+aragorn-ii	todo	3	9	dunedain

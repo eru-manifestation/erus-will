@@ -153,16 +153,52 @@ como no se devuelve al acabar la función por regla general, ocurre que a pesar 
 
 Hay eventos complejos que deben sucederse unos detrás de otros, donde la finalización de uno implica el inicio del siguiente. Ocurre que si una única regla aserta las instancias de eventos, puede ocurrir que cierto evento sea cancelado y que ocurra después otro que para tener consistencia, necesite del anterior. Ahora mismo, los eventos son incorrelados. Hacer un campo con la info de los eventos subyacentes comprimidos, que se activen automáticamente al completar el evento que los contiene. Así se puede conseguir una correlación entre los eventos que ahora mismo sólo se diseña con la estrategia de resolución de conflictos
 
-Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
+DONE:   Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
 
-Manejar que no existan dos eventos de tipo move-fellowship (mediante un message-handler en init?) para una misma compañía
+DONE:   Manejar que no existan dos eventos de tipo move-fellowship (eliminar la anterior en la consecuencia de crear la segunda) para una misma compañía
 
-Terminar módulo para un chequeo de corrupción (compleción del evento)
+DONE:   Terminar módulo para un chequeo de corrupción (compleción del evento)
 
-Módulo para la organización de una compañía
+DONE:   Módulo para la organización de una compañía
 
 DONE:   Especificación de clase refugio
 
 Formalizar la plantilla "action-only", que sirve como parche para que los action se retracten una vez lanzados cuando su modulo forma parte de la pila de ejecución
 
 Detallar las pautas para el tratamiento de los datos cualitativos
+
+(gen-name) ------> name + (gen-sym* - "sym")
+
+DONE:   En P-1-1-1 falta jugar personaje como seguidor
+
+Generar una especie de evento de problema si se detecta que cambia alguna condicion necesaria del juego? Como que por cierto evento pierdas influencia en un personaje y por ende no pueda hacerse cargo de un seguidor de buenas a primeras
+
+DONE:   Hacer division entre event phase a realizar ahora mismo (corruption check, organization ...) y los que son manejados más tarde (move-fellowship)
+SOLUCION: lanzar el EVENT en el instante y dejar el handler para el momento de activacion del EVENT-PHASE del mismo nombre
+
+DONE:   Revisar que antes de jugar un personaje, la compañia tenga siempre espacio
+
+Definir dos tipos de reglas: las de unicidad (que se ejecutan una única vez por módulo) y las que están diseñadas para ejecutarse las veces necesarias mientras se cumplan las condiciones
+
+Verificar que se haya puesto saliencia correcta en los event handler correspondientes
+
+Si el personaje que controla el aliado abandona el juego, también tendrás que descartarlo.
+
+Cinematica basada en imágenes superpuestas que facilitan la comprensión y dinamismo de las acciones y que se comporta correctamente con el planteamiento modular
+
+DONE:   MP item para player
+
+Sistema de apilado de fases eventuales o eventos en distintos tipos: unos tras otros, necesitando o no la compleción del predecesor para ejecutarse. Por ejemplo: para intentar jugarse una facción, primero se hace evento que gire al personaje "intento de jugar facción", luego otro que de completarse el anterior realice el chequeo de influencia "chequeo de influencia" y finalmente si se completa con éxito el anterior otro que ponga en juego la faccion "jugar faccion".
+Otro modelo es el paralelo, por ejemplo: ejecutar dos eventos de ataque automático, donde el resultado de uno no determina la actuación del siguiente.
+
+Hacer que cuando se defusee o termine una fase eventual se termine y vaya hacia abajo en el focus stack
+
+Ordenar el focus stack para evitar que se intercalen focos de MAIN pero que se realicen con la prioridad que necesitan
+
+Hacer que una vez el ataque de una criatura sea vencido, ponerlo en MP
+
+Gestionar correctamente el borrado de eventos y fases eventuales terminadas, de forma que se eliminen justo antes de cambiar a la siguiente fase de igual o menor altura en la pila: debe durar para todas las subfases en su interior, pero no para la siguiente fase no subfase, es decir, debe durar mientras siga en el focus stack la fase donde inicio. Mejor eliminar literalmente en la ejecucion del reloj para evitar la ejecución del ciclo infinito en P-4
+
+Representar las fases eventuales como posicionamiento espacial en el tablero
+
+Nota: El poder de un personaje también se puede modificar al jugar ciertas cartas, pero solo se puede jugar una carta que requierauna habilidad en concreto (por ejemplo, una carta para Guerreros) contra un mismo golpe. Hacerlo mediante info items de sustraccion de caracter 
