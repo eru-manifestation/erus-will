@@ -1,0 +1,11 @@
+El reloj lo lleva el módulo de utilidades MAIN y recorre una lista predefinida
+de nombres de MÓDULOS de fases, tanto standard como eventuales.
+
+Esta lista se debe completar seguidas de las fases eventuales añadidas según las cartas
+en juego. Cada conjunto de módulos debe sucederse de un signo de terminación, que
+indique su fin y que el foco debe devolverse.
+
+La función de reloj se activara en auto-focus (interrumpiendo la función de cualquier
+módulo en funcionamiento) con saliencia de reloj (siendo siempre la última, justo antes
+de dar paso a otro módulo) y se valdrá de un contador de activaciones de carácter
+informativo para perpetuar el ciclo de vida del reloj.

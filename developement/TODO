@@ -27,7 +27,7 @@
     se pregunte).
     - Las peticiones de información o intento de acceso de lectura a las variables cualitativas deben SIEMPRE
     llevarse a cabo mediante el manejador de mensajes get- asociado. Este será el que coleccione e interprete
-    los ítem de información y el valor crudo el objeto para elaborar una respuesta final.
+    los ítem de información y el valor crudo del objeto para elaborar una respuesta final.
     - Como toda modificación de los valores crudos se representa como un ítem de información asociado a la
     variable, TODOS los campos de los objetos deben ser CONSTANTES.
     Implementación:
@@ -55,7 +55,7 @@
     - R-LONG-EVENT  player
     - LOCATION      player-draw
     - CHARACTER     race
-    - ~LOCATION     tap                 (TAPPED)
+    - CARD          tap                 (TAPPED)
     - CHARACTER     tap                 (TAPPED WOUNDED)
     - ALLY          tap                 (TAPPED WOUNDED)
 
@@ -131,3 +131,38 @@ entre saliencias de distintos hilos de ejecución del mismo módulo, mientras se
 preferencia de saliencias definidas para clock, event-handler, phase-rules, action-population...)
 
 * Crear plantilla para modelo de mini-reloj personalizado para cada módulo
+
+
+
+
+
+
+
+DONE:   Gestionar elemento de jugador actual y enemigo actual, hasta ahora se está sustituyendo por [player1] y      [player2] respectivamente
+
+DONE: Reglas para que cuando un objeto salga del juego (esté en mano, baraja, MP o descarte) desaparezca su localizador IN directo correspondiente
+
+DONE:   Eliminar el archivo phase-2-3-0.clp, ya que su evento ha sido sustituido por otro
+
+DONE:   En la regla post-draw, revisar que todas las cartas sean del jugador [player1]
+
+DONE: Hacer que se resuelvan los eventos, primero los primeros que entren, para que tenga sentido la escritura secuencial de los eventos, cambiando la estrategia de resolución de conflictos
+
+Una ventaja de hacer módulos que dividan las competencias de MAIN es que sí podría darse la combinación in-transitive/"some-phase-rule"/event-handler. Ahora mismo, al cambiar el foco,
+como no se devuelve al acabar la función por regla general, ocurre que a pesar de tener una saliencia hipotéticamente inferior, el event-handler ocurriría antes que el "some-phase-rule", ya que no necesita del AUTO-FOCUS, que sí respeta el foco original
+
+Hay eventos complejos que deben sucederse unos detrás de otros, donde la finalización de uno implica el inicio del siguiente. Ocurre que si una única regla aserta las instancias de eventos, puede ocurrir que cierto evento sea cancelado y que ocurra después otro que para tener consistencia, necesite del anterior. Ahora mismo, los eventos son incorrelados. Hacer un campo con la info de los eventos subyacentes comprimidos, que se activen automáticamente al completar el evento que los contiene. Así se puede conseguir una correlación entre los eventos que ahora mismo sólo se diseña con la estrategia de resolución de conflictos
+
+Todos los slots de cada clase deberían tener la etiqueta (source composite) para que se hereden facetas de la clase padre
+
+Manejar que no existan dos eventos de tipo move-fellowship (mediante un message-handler en init?) para una misma compañía
+
+Terminar módulo para un chequeo de corrupción (compleción del evento)
+
+Módulo para la organización de una compañía
+
+DONE:   Especificación de clase refugio
+
+Formalizar la plantilla "action-only", que sirve como parche para que los action se retracten una vez lanzados cuando su modulo forma parte de la pila de ejecución
+
+Detallar las pautas para el tratamiento de los datos cualitativos

@@ -33,3 +33,21 @@
 	(gen-event HAND-multiple-draw player (enemy ?player) max ?enemy-draw-limit)
 )
 	
+
+
+
+
+(load-all)
+(init-handG)
+(send [eomer1] put-tap TAPPED)
+(watch instances)
+(run)
+(send [eomer1] get-tap)
+
+
+(load-all)
+(init-locations)
+(init-handG)
+(watch rules)
+(run 8)
+(run 1)
