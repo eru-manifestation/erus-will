@@ -1,6 +1,6 @@
 ; E-card-untap
 (defclass MAIN::E-card-untap (is-a EVENT)
-    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes CARD))
+    (slot card (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CARD))
 )
 
 (defrule MAIN::E-card-untap (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -11,11 +11,13 @@
     (send ?c put-state UNTAPPED)
 
     (debug Untapping ?c)
+    (announce [player1] Untap ?c)
+    (announce [player2] Untap ?c)
 )
 
 ; E-cure
 (defclass MAIN::E-cure (is-a EVENT)
-    (slot card (type INSTANCE-NAME) (default ?NONE))
+    (slot card (visibility public) (type INSTANCE-NAME) (default ?NONE))
 )
 
 (defrule MAIN::E-cure (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -26,13 +28,15 @@
     (send ?c put-state TAPPED)
 
     (debug Healing ?c)
+    (announce [player1] Heal ?c)
+    (announce [player2] Heal ?c)
 )
 
 
 ; E-char-play
 (defclass MAIN::E-char-play (is-a EVENT)
-    (slot character (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot under (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP CHARACTER))
+    (slot character (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot under (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP CHARACTER))
 )
 
 
@@ -44,13 +48,15 @@
     (in-move ?c ?u)
     (send ?c put-state UNTAPPED)
     (debug Playing character ?c under ?u)
+    (announce [player1] Play character ?c ?u)
+    (announce [player2] Play character ?c ?u)
 )
 
 
 ; E-item-play-only-minor
 (defclass MAIN::E-item-play-only-minor (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot item (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot owner (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 
@@ -62,14 +68,16 @@
     (in-move ?item ?owner)
     (send ?item put-state UNTAPPED)
     (debug Playing minor item ?item under ?owner)
+    (announce [player1] Play minor item ?item ?owner)
+    (announce [player2] Play minor item ?item ?owner)
 )
 
 
 ; E-item-play
 (defclass MAIN::E-item-play (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot item (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot owner (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 
@@ -83,14 +91,16 @@
     (send ?owner put-state TAPPED)
     (send ?loc put-state TAPPED)
     (debug Playing item ?item under ?owner)
+    (announce [player1] Play item ?item ?owner)
+    (announce [player2] Play item ?item ?owner)
 )
 
 
 ; E-item-transfer
 (defclass MAIN::E-item-transfer (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot disposer (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot receiver (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot item (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot disposer (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot receiver (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
     ; TODO: Puede un aliado tener un objeto??
 )
 
@@ -103,14 +113,16 @@
     (in-move ?item ?rec)
 
     (debug Transfering item ?item from ?disp to ?rec)
+    (announce [player1] Transfer item ?item ?rec)
+    (announce [player2] Transfer item ?item ?rec)
 )
 
 
 ; E-item-store
 (defclass MAIN::E-item-store (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot bearer (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot haven (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot item (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
+    (slot bearer (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot haven (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-item-store (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -122,13 +134,15 @@
     (send ?item put-state MP)
 
     (debug Storing item ?item in ?haven by ?bearer)
+    (announce [player1] Store ?item ?haven)
+    (announce [player2] Store ?item ?haven)
 )
 
 
 ; E-loc-organize
 (defclass MAIN::E-loc-organize (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot player (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-loc-organize (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -138,12 +152,14 @@
     (send ?e complete)
     (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
     (debug Organizing fellowships of player ?p in ?loc)
+    (announce [player1] Organize ?loc)
+    (announce [player2] Organize ?loc)
 )
 
 
 ; E-r-long-event-discard
 (defclass MAIN::E-r-long-event-discard (is-a EVENT)
-    (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
+    (slot r-long-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
 )
 
 (defrule MAIN::E-r-long-event-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -154,12 +170,14 @@
     (send ?rle put-state DISCARD)
 
     (debug Discarding long-event resoure ?rle)
+    (announce [player1] Discard long-event resource ?rle)
+    (announce [player2] Discard long-event resource ?rle)
 )
 
 
 ; E-r-long-event-play
 (defclass MAIN::E-r-long-event-play (is-a EVENT)
-    (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
+    (slot r-long-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
 )
 
 (defrule MAIN::E-r-long-event-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -171,12 +189,14 @@
     (send ?rle put-state UNTAPPED)
 
     (debug Playing long-event resoure ?rle)
+    (announce [player1] Play long-event resource ?rle)
+    (announce [player2] Play long-event resource ?rle)
 )
 
 
 ; E-a-long-event-discard
 (defclass MAIN::E-a-long-event-discard (is-a EVENT)
-    (slot a-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
+    (slot a-long-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
 )
 
 (defrule MAIN::E-a-long-event-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -188,21 +208,23 @@
     (send ?ale put-state DISCARD)
 
     (debug Discarding long-event adversity ?ale)
+    (announce [player1] Discard long-event adversity ?ale)
+    (announce [player2] Discard long-event adversity ?ale)
 )
 
 
 ; E-fell-decl-remain
 (defclass MAIN::E-fell-decl-remain (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 
 ; E-fell-decl-move
 (defclass MAIN::E-fell-decl-move (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot from (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot to (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 (defmessage-handler E-fell-decl-move init after ()
 	; Defuseo el evento de permanencia en el lugar de la compañía
@@ -212,7 +234,7 @@
 
 ; E-char-discard
 (defclass MAIN::E-char-discard (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 (defrule MAIN::E-char-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -223,12 +245,14 @@
     (send ?c put-state DISCARD)
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
     (debug Discarding character ?c)
+    (announce [player1] Discard character ?c)
+    (announce [player2] Discard character ?c)
 )
 
 
 ; E-char-destroy
 (defclass MAIN::E-char-destroy (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 (defrule MAIN::E-char-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -240,13 +264,15 @@
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Destroying character ?c)
+    (announce [player1] Destroy character ?c)
+    (announce [player2] Destroy character ?c)
 )
 
 
 ; E-char-move
 (defclass MAIN::E-char-move (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
 )
 
 (defrule MAIN::E-char-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -256,13 +282,15 @@
     (send ?e complete)
     (in-move ?c ?fell)
     (debug Moving character ?c to ?fell)
+    (announce [player1] Move character ?c ?fell)
+    (announce [player2] Move character ?c ?fell)
 )
 
 
 ; E-char-follow
 (defclass MAIN::E-char-follow (is-a EVENT)
-    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot followed (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot follower (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot followed (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
 )
 
 (defrule MAIN::E-char-follow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -272,13 +300,15 @@
     (send ?e complete)
     (in-move ?follower ?followed)
     (debug Making character ?follower follower of ?followed)
+    (announce [player1] Make follower ?follower ?followed)
+    (announce [player2] Make follower ?follower ?followed)
 )
 
 
 ; E-char-unfollow
 (defclass MAIN::E-char-unfollow (is-a EVENT)
-    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot follower (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
 )
 
 (defrule MAIN::E-char-unfollow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -288,15 +318,17 @@
     (send ?e complete)
     (in-move ?follower ?fell)
     (debug Making the follower ?follower an usual character in ?fell)
+    (announce [player1] Unmake follower ?follower ?fell)
+    (announce [player2] Unmake follower ?follower ?fell)
 )
 
 
 ; E-fell-move
 (defclass MAIN::E-fell-move (is-a EVENT)
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot decl-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot from (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot to (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-fell-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -312,9 +344,9 @@
 
 ; E-fell-remain
 (defclass MAIN::E-fell-remain (is-a EVENT)
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot decl-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-fell-remain (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -330,8 +362,8 @@
 
 ; E-player-draw
 (defclass MAIN::E-player-draw (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot draw-ammount (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
+    (slot player (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot draw-ammount (visibility public) (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
 )
 
 (defrule MAIN::E-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -357,7 +389,7 @@
 
 ; E-fell-move-player-draw
 (defclass MAIN::E-fell-move-player-draw (is-a EVENT)
-    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
+    (slot fell-move (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
 )
 
 (defrule MAIN::E-fell-move-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -373,7 +405,7 @@
 
 ; E-fell-move-enemy-draw
 (defclass MAIN::E-fell-move-enemy-draw (is-a EVENT)
-    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
+    (slot fell-move (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
 )
 
 (defrule MAIN::E-fell-move-enemy-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -389,9 +421,9 @@
 
 ; E-fell-change-loc
 (defclass MAIN::E-fell-change-loc (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot from (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot to (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-fell-change-loc (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -406,7 +438,7 @@
 
 ; E-loc-destroy
 (defclass MAIN::E-loc-destroy (is-a EVENT)
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-loc-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -421,8 +453,8 @@
 
 ; E-player-discard-from-hand
 (defclass MAIN::E-player-discard-from-hand (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes OWNABLE))
+    (slot player (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
+    (slot card (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes OWNABLE))
 )
 
 (defrule MAIN::E-player-discard-from-hand (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -437,8 +469,8 @@
 
 ; E-loc-phase
 (defclass MAIN::E-loc-phase (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 (defrule MAIN::E-loc-phase (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -453,9 +485,9 @@
 
 ; E-ally-play
 (defclass MAIN::E-ally-play (is-a EVENT)
-    (slot ally (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY))
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot ally (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 
@@ -474,9 +506,9 @@
 
 ; E-ally-play
 (defclass MAIN::E-faction-play (is-a EVENT)
-    (slot faction (type INSTANCE-NAME) (default ?NONE) (allowed-classes FACTION))
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
+    (slot faction (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FACTION))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
 
@@ -504,10 +536,10 @@
 
 ; E-creature-attack-fell
 (defclass MAIN::E-creature-attack-fell (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
-    (slot attack-at (type SYMBOL) (default ?NONE))
-    (slot attack (type INSTANCE-NAME) (allowed-classes EP-attack))
+    (slot fell (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
+    (slot creature (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
+    (slot attack-at (visibility public) (type SYMBOL) (default ?NONE))
+    (slot attack (visibility public) (type INSTANCE-NAME) (allowed-classes EP-attack))
 )
 
 (defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -542,16 +574,16 @@
 
 ; E-select-strike
 (defclass MAIN::E-select-strike (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot attackable (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
 )
 
 
 ; E-select-strike
 (defclass MAIN::E-strike (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-select-strike))
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+    (slot attackable (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
+    (slot decl-event (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-select-strike))
 )
 
 (defrule MAIN::E-strike (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -567,7 +599,7 @@
 
 ; E-select-strike
 (defclass MAIN::E-face-strike-hindered (is-a EVENT)
-    (slot strike (type INSTANCE-NAME) (default ?NONE) (allowed-classes EP-strike))
+    (slot strike (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes EP-strike))
 )
 
 (defrule MAIN::E-face-strike-hindered (declare (auto-focus TRUE) (salience ?*event-handler-salience*))

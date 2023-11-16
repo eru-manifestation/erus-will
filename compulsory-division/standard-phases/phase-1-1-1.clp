@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -48,6 +48,7 @@
 		(player ?p)
 		(event-def char-play)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
+		(identifier ?play-under ?char)
 		(data (create$ 
 		"( character [" ?char "])" 
 		"( under ["?play-under "])"))
@@ -85,6 +86,7 @@
 		(player ?p)
 		(event-def char-play)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
+		(identifier ?fell ?char)
 		(data (create$ 
 		"( character [" ?char "])" 
 		"( under ["?fell "])"))
@@ -118,6 +120,7 @@
 		(player ?p)
 		(event-def item-transfer)
 		(description (sym-cat "Transfer item " ?i " from " ?disposer " to " ?receiver))
+		(identifier ?i ?receiver)
 		(data (create$ 
 		"(item [" ?i "])"
 		"(disposer [" ?disposer "])" 
@@ -144,6 +147,7 @@
 		(player ?p)
 		(event-def item-store)
 		(description (sym-cat "Store item " ?i " from " ?bearer " in " ?loc))
+		(identifier ?i ?loc)
 		(data (create$ 
 		"( item [" ?i "])"
 		"( bearer [" ?bearer "])"
@@ -171,6 +175,7 @@
 		(player ?p)
 		(event-def loc-organize)
 		(description (sym-cat "Organize fellowship in " ?loc))
+		(identifier ?loc)
 		(data (create$ 
 		"( player [" ?p "])" 
 		"( loc [" ?loc "])"))
@@ -197,6 +202,7 @@
 		(player ?p)
 		(event-def char-discard)
 		(description (sym-cat "Discard character " ?char))
+		(identifier ?char DISCARD)
 		(data (create$ 
 		"( char [" ?char "])"))
 	))

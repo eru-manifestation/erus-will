@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -25,6 +25,7 @@
 		(player ?p)
 		(event-def creature-attack-fell)
 		(description (sym-cat "Play creature " ?creature " to attack " ?fell " in " ?region " region"))
+		(identifier ?creature ?fell)
 		(data (create$ 
 		"( creature [" ?creature "])" 
 		"( attack-at [" ?region "])" 
@@ -47,6 +48,7 @@
 		(player ?p)
 		(event-def creature-attack-fell)
 		(description (sym-cat "Play creature " ?creature " to attack " ?fell " in " ?place " place"))
+		(identifier ?creature ?fell)
 		(data (create$ 
 		"( creature [" ?creature "])" 
 		"( attack-at [" ?place "])" 

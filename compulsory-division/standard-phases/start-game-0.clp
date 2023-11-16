@@ -14,7 +14,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 (deffunction init-handS()
     (debug Creating inital card of Saruman)
@@ -107,11 +107,11 @@
     (init-card WEARINESS-OF-THE-HEART 2 1)
     (init-card NEW-MOON 2 1)
     (init-card TWILIGHT 2 1)
-    (init-card TOM 1 1)
+    (init-card TOM-TUMA 1 1)
     (init-card GIANT 2 1)
-    (init-card ORC-GUARD 2 1)
-    (init-card ORC-LIEAUTENANT 2 1)
-    (init-card ORC-WARRIORS 3 1)
+    (init-card ORC--GUARD 2 1)
+    (init-card ORC--LIEUTENANT 2 1)
+    (init-card ORC--WARRIORS 3 1)
     (init-card BRIGANDS 3 1)
     (init-card CAVE-DRAKE 2 1)
     

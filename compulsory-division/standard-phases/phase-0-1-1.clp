@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 ; EVENTO: En la fase Enderezamiento, enderezar todas las cartas no localizaciones del jugador

@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -26,6 +26,7 @@
 		(player ?p)
 		(event-def player-discard-from-hand)
 		(description (sym-cat "Discard card " ?c " from player " ?p "'s hand"))
+		(identifier ?c DISCARD)
 		(data (create$ 
 		"( card [" ?c "])" 
 		"( player [" ?p "])"))

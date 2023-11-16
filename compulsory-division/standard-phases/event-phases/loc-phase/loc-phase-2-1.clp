@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
@@ -28,6 +28,7 @@
 		(player ?p)
 		(event-def item-play)
 		(description (sym-cat "Play minor item " ?item " under " ?char " in " ?loc))
+		(identifier ?item ?char)
 		(data (create$ 
 		"( item [" ?item "])" 
 		"( owner ["?char "])"
@@ -52,6 +53,7 @@
 		(player ?p)
 		(event-def item-play)
 		(description (sym-cat "Play greater item " ?item " under " ?char " in " ?loc))
+		(identifier ?item ?char)
 		(data (create$ 
 		"( item [" ?item "])" 
 		"( owner ["?char "])"
@@ -76,6 +78,7 @@
 		(player ?p)
 		(event-def item-play)
 		(description (sym-cat "Play major item " ?item " under " ?char " in " ?loc))
+		(identifier ?item ?loc)
 		(data (create$ 
 		"( item [" ?item "])" 
 		"( owner ["?char "])"
@@ -100,6 +103,7 @@
 		(player ?p)
 		(event-def ally-play)
 		(description (sym-cat "Play ally " ?ally " under " ?char " in " ?loc))
+		(identifier ?ally ?char)
 		(data (create$ 
 		"( ally [" ?ally "])" 
 		"( char ["?char "])"
@@ -124,6 +128,7 @@
 		(player ?p)
 		(event-def faction-play)
 		(description (sym-cat "Influence faction " ?faction " with " ?char " in " ?loc))
+		(identifier ?faction ?char)
 		(data (create$ 
 		"( faction [" ?faction "])" 
 		"( char ["?char "])"

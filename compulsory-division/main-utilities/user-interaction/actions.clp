@@ -2,39 +2,65 @@
 (deftemplate MAIN::action
 	; Plantilla básica de acción
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE))
+	(multislot identifier (type ?VARIABLE) (default ?NONE))
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
 	(multislot data (type STRING) (default ""))
 	;(slot type (type SYMBOL) (default E) (allowed-values EP E))
+	(slot blocking (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
+)
+
+; Parar la ejecución y mostrar las posibilidades
+(deffunction MAIN::collect-actions (?p)
+	(announce ?p Possible actions:)
+	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
+		(announce ?p ?action:description)
+		(choose ?p ?action:identifier -- ?action:description)
+	)
+	(if (not (any-factp ((?action action)) (and (eq ?p ?action:player) ?action:blocking))) then
+		(announce ?p Pass)
+		(choose ?p (create$) -- Pass)
+		(assert (action (player ?p) (identifier (create$)) (description "Pass") (event-def nil) (blocking TRUE)))
+	)
+	(announce ?p No more actions)
+	(if ?*debug-state* then
+		(print-content ?*debug*)
+		(bind ?*debug* (create$))
+		(print-content ?*announce-p1*)
+		(bind ?*announce-p1* (create$))
+		(print-content ?*announce-p2*)
+		(bind ?*announce-p2* (create$))
+		(print-content ?*choose-p1*)
+		(bind ?*choose-p1* (create$))
+		(print-content ?*choose-p2*)
+		(bind ?*choose-p2* (create$))
+	)
+	(halt)
 )
 
 ; Jugar la acción deseada
-(deffunction MAIN::play-actions (?p)
-	(update-index)
-	(bind ?event-defs (create$))
-	(bind ?datas (create$))
-	(bind ?total 0)
-	
-	(announce ?p Possible actions:)
-	(announce ?p 0 .- Pass actions)
-	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
-		(bind ?total (+ 1 ?total))
-		(announce ?p ?total .- ?action:description)
-		(bind ?event-defs (insert$ ?event-defs 1 ?action:event-def))
-		(bind ?datas (insert$ ?datas 1 (str-cat (expand$ ?action:data))))
+(deffunction MAIN::play-action (?p $?identifier)
+	;TODO: controlar cuando haya dos acciones con el mismo identificador
+	(bind ?p (symbol-to-instance-name ?p))
+	(do-for-fact ((?action action)) (and (eq ?p ?action:player) (eq $?identifier ?action:identifier))
+		(debug ?p Se ha seleccionado: ?action:description)
+		(if (eq 0 (length$ ?identifier)) then
+			; La elección ha sido pasar
+			(do-for-all-facts ((?a action)) (eq ?p ?a:player) (retract ?a))
+			(retract ?action)
+		else
+			(eval (str-cat "(make-instance (gen-name E-" ?action:event-def ") of E-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
+		)
+		(do-for-fact ((?a action)) (and (eq ?a:identifier (create$)) (eq ?p ?a:player))
+			(retract ?a)
+		)
+		(run)
+		(return TRUE)
 	)
-	(bind ?choice (obtain-number ?p))
-	(if (= 0 ?choice) then (do-for-all-facts ((?action action)) (eq ?p ?action:player) (retract ?action)) (return))
-	
-	(bind ?choice (- ?total (- ?choice 1)))
-	(while (not (and (<= 1 ?choice) (>= ?total ?choice)))
-		(bind ?choice (obtain-number ?p "Invalid action, choose a correct action:"))
-		(if (= 0 ?choice) then (do-for-all-facts ((?action action)) (eq ?p ?action:player) (retract ?action)) (return))
-		(bind ?choice (- ?total (- ?choice 1))))
-		
-	(bind ?event-def (nth$ ?choice ?event-defs))
-	(bind ?data (nth$ ?choice ?datas))
-
-	(bind ?command (str-cat "(make-instance (gen-name E-" ?event-def ") of E-" ?event-def " " ?data ")"))
-	(eval ?command)
 )
+
+; (load-all)
+; (bind ?*debug-state* TRUE)
+; (run)
+; (play-action player1 "[elven-cloak1] [aragorn-ii1]")
+;(play-action player1 "[rivendell]")

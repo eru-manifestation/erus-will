@@ -253,7 +253,7 @@
 
 ; ADVERSIDADES (CRIATURAS)
 
-(defclass TOM (is-a CREATURE) 
+(defclass TOM-TUMA (is-a CREATURE) 
     (slot instance-# (source composite))
     (slot race (source composite) (default TROLL))
     (slot regions (source composite) (default (create$ WILDERNESS 2))) 
@@ -269,7 +269,7 @@
     (slot mp (source composite) (default 1))
 )
 
-(defclass ORC-GUARD (is-a CREATURE) 
+(defclass ORC--GUARD (is-a CREATURE) 
     (slot instance-# (source composite))
     (slot race (source composite) (default ORC))   
     (slot regions (source composite) (default SHADOW-LAND 1 DARK-LAND 1)) 
@@ -279,7 +279,7 @@
     (slot mp (source composite) (default 1))
 )
 
-(defclass ORC-LIEAUTENANT (is-a CREATURE) 
+(defclass ORC--LIEUTENANT (is-a CREATURE) 
     (slot instance-# (source composite))
     (slot race (source composite) (default ORC))  
     (slot regions (source composite) (default (create$ WILDERNESS 1 SHADOW-LAND 1 DARK-LAND 1))) 
@@ -288,7 +288,7 @@
     (slot mp (source composite) (default 1))
 )
 
-(defclass ORC-WARRIORS (is-a CREATURE) 
+(defclass ORC--WARRIORS (is-a CREATURE) 
     (slot instance-# (source composite))
     (slot race (source composite) (default ORC))   
     (slot regions (source composite) (default (create$ WILDERNESS 1 BORDER-LAND 1))) 

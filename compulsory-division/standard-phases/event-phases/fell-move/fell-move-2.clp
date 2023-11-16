@@ -9,7 +9,7 @@
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 (defrule calculate-adversity-limit
@@ -55,7 +55,6 @@
         ; si ademas se viene de un refugio
         (if (eq HAVEN (send ?from get-place)) then
             ; ahora queda elegir que representa la conexion, si A o B
-            (println (send ?from get-site-pathA) ?to)
 
             (if (eq (send ?from get-site-pathA) ?to) then
                 (send ?e put-route (send ?from get-routeA))
