@@ -38,7 +38,7 @@
 )
 
 (deffunction MAIN::bgstyle (?card)
-    (if (str-index "card" (classes ?card)) then
+    (if (str-index " card " (classes ?card)) then
         return (str-cat " style=background-image:url('../tw/icons/" (instance-name-to-file ?card) ".jpg') ")
         else 
         return ""
@@ -71,8 +71,12 @@
     (state ?player "<div class='game'>")
 
     ; Dibujar jugadores
-    (draw ?player [player1])
-    (draw ?player [player2])
+    (state ?player "<div class='player'>")
+    (draw ?player ?player)
+    (state ?player "</div>" crlf)
+    (state ?player "<div class='enemy'>")
+    (draw ?player (enemy ?player))
+    (state ?player "</div>" crlf)
 
     ; Dibujar localizaciones
     (state ?player "<div class='locations'>")
@@ -82,62 +86,59 @@
     (state ?player "</div>" crlf)
 
     ; Dibujar mazos, manos etc
-    (state ?player "<div class='player_hand'>")
+    (state ?player "<div id='PLAYERHAND' class='player_hand' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state HAND) (eq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='enemy_hand'>")
+    (state ?player "<div id='ENEMYHAND' class='enemy_hand' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state HAND) (neq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='player_draw'>")
+    (state ?player "<div id='PLAYERDRAW' class='player_draw' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DRAW) (eq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='enemy_draw'>")
+    (state ?player "<div id='ENEMYDRAW' class='enemy_draw' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DRAW) (neq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='player_discard'>")
+    (state ?player "<div id='PLAYERDISCARD' class='player_discard' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DISCARD) (eq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='enemy_discard'>")
+    (state ?player "<div id='ENEMYDISCARD' class='enemy_discard' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state DISCARD) (neq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='player_mp'>")
+    (state ?player "<div id='PLAYERMP' class='player_mp' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state MP) (eq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='enemy_mp'>")
+    (state ?player "<div id='ENEMYMP' class='enemy_mp' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (and (eq ?instance:state MP) (neq ?instance:player ?player))
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
 
-    (state ?player "<div class='out_of_game'>")
+    (state ?player "<div id='OUTOFGAME' class='out_of_game' draggable=true >")
     (do-for-all-instances ((?instance CARD)) (eq ?instance:state OUT-OF-GAME)
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
-
-
-    ; Dibujar information items TODO
 
     ; Dibujar eventos
     (state ?player "<div class='events'>")
@@ -145,6 +146,11 @@
         (draw ?player ?instance)
     )
     (state ?player "</div>" crlf)
+
+    (state ?player "<div id='PASS' class='pass' draggable=true ></div>" crlf)
+
+    ;TODO: COUNCIL
+
 
     (state ?player "</div>" crlf)
 )

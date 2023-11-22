@@ -202,7 +202,7 @@
 		(player ?p)
 		(event-def char-discard)
 		(description (sym-cat "Discard character " ?char))
-		(identifier ?char DISCARD)
+		(identifier ?char PLAYERDISCARD)
 		(data (create$ 
 		"( char [" ?char "])"))
 	))

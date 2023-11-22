@@ -6,6 +6,7 @@
     (slot value (visibility public) (type INTEGER) (default ?NONE))
 )
 (defmessage-handler data-item init after ()
+    (in-move (instance-name ?self) ?self:target)
     (eval (str-cat 
         "(send [" ?self:target "] put-" ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )

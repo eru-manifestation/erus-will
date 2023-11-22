@@ -12,17 +12,18 @@
 
 ; Parar la ejecución y mostrar las posibilidades
 (deffunction MAIN::collect-actions (?p)
-	(announce ?p Possible actions:)
 	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
-		(announce ?p ?action:description)
 		(choose ?p ?action:identifier -- ?action:description)
 	)
 	(if (not (any-factp ((?action action)) (and (eq ?p ?action:player) ?action:blocking))) then
-		(announce ?p Pass)
-		(choose ?p (create$) -- Pass)
-		(assert (action (player ?p) (identifier (create$)) (description "Pass") (event-def nil) (blocking TRUE)))
+		(bind ?description "Pass")
+		(bind ?identifier PASS)
+		(bind ?event-def nil)
+		(bind ?blocking TRUE)
+		(assert (action (player ?p) (identifier ?identifier) (description ?description) (event-def ?event-def) (blocking ?blocking)))
+		(choose ?p ?identifier -- ?description)
 	)
-	(announce ?p No more actions)
+
 	(if ?*debug-state* then
 		(print-content ?*debug*)
 		(bind ?*debug* (create$))
@@ -40,18 +41,19 @@
 
 ; Jugar la acción deseada
 (deffunction MAIN::play-action (?p $?identifier)
+	(bind ?pass-identifier (create$ PASS))
 	;TODO: controlar cuando haya dos acciones con el mismo identificador
 	(bind ?p (symbol-to-instance-name ?p))
 	(do-for-fact ((?action action)) (and (eq ?p ?action:player) (eq $?identifier ?action:identifier))
 		(debug ?p Se ha seleccionado: ?action:description)
-		(if (eq 0 (length$ ?identifier)) then
+		(if (eq ?identifier ?pass-identifier) then
 			; La elección ha sido pasar
 			(do-for-all-facts ((?a action)) (eq ?p ?a:player) (retract ?a))
 			(retract ?action)
 		else
 			(eval (str-cat "(make-instance (gen-name E-" ?action:event-def ") of E-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
 		)
-		(do-for-fact ((?a action)) (and (eq ?a:identifier (create$)) (eq ?p ?a:player))
+		(do-for-fact ((?a action)) (and (eq ?a:identifier ?pass-identifier) (eq ?p ?a:player))
 			(retract ?a)
 		)
 		(run)

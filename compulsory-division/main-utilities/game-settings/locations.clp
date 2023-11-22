@@ -85,14 +85,14 @@
     
     ; ATAQUES AUTOMATICOS
 
-    (make-instance attackable-amon-hen of ATTACKABLE (race UNDEAD) (prowess 6))
+    (make-instance attackable-amon-hen1 of ATTACKABLE (race UNDEAD) (prowess 6))
 
-    (make-instance attackable-bandit-lair of ATTACKABLE (race MAN) (prowess 6) (strikes 3))
+    (make-instance attackable-bandit-lair1 of ATTACKABLE (race MAN) (prowess 6) (strikes 3))
 
     (make-instance attackable-barad-dur1 of ATTACKABLE (race ORC) (prowess 7) (strikes 4))
     (make-instance attackable-barad-dur2 of ATTACKABLE (race TROLL) (prowess 9) (strikes 3))
 
-    (make-instance attackable-barrow--downs of ATTACKABLE (race UNDEAD) (prowess 8))
+    (make-instance attackable-barrow--downs1 of ATTACKABLE (race UNDEAD) (prowess 8))
 
     ; LOCALIZACIONES
 
@@ -101,11 +101,11 @@
     (make-instance grey-havens of GREY-HAVENS)
     (make-instance lorien of LORIEN)
 
-    (make-instance amon-hen of AMON-HEN (automatic-attacks [attackable-amon-hen]))
+    (make-instance amon-hen of AMON-HEN (automatic-attacks [attackable-amon-hen1]))
     (make-instance bag-end of BAG-END)
-    (make-instance bandit-lair of BANDIT-LAIR (automatic-attacks [attackable-bandit-lair1] [attackable-bandit-lair2]))
-    (make-instance barad-dur of BARAD-DUR (automatic-attacks [attackable-barad-dur]))
-    (make-instance barrow--downs of BARROW--DOWNS (automatic-attacks [attackable-barrow--downs]))
+    (make-instance bandit-lair of BANDIT-LAIR (automatic-attacks [attackable-bandit-lair1]))
+    (make-instance barad-dur of BARAD-DUR (automatic-attacks [attackable-barad-dur1] [attackable-barad-dur2]))
+    (make-instance barrow--downs of BARROW--DOWNS (automatic-attacks [attackable-barrow--downs1]))
     (make-instance beorns-house of BEORNS-HOUSE)
 
     (debug Locations started)

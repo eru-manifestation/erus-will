@@ -10,6 +10,30 @@ const io = new Server(server);
 var CLIPSEnvs = new Map();
 //var port = 8080;
 
+function enemy(player){
+    var res;
+    if (player === "player1"){
+        res = "player2";
+    }else if (player === "player2"){
+        res = "player1";
+    }
+    return res;
+}
+
+function updatePlayer(player, env, room){
+    var data;
+    data =env.getDebugBuffer().replaceAll("crlf","\n");
+    if (data != "") io.sockets.in(room).except(enemy(player)).emit("log", "Debug buffer\n"+data);
+
+    data = env.getStateBuffer(player).replaceAll("crlf","\n");
+    if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data)
+    
+    data = env.getAnnounceBuffer(player).replaceAll("crlf","\n");
+    if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data)
+    
+    data = env.getChooseBuffer(player).replaceAll("crlf","\n");
+    if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
+}
 
 function initializeClipsEnv(origin){
     var obj = new addon.ClipsWrapper();
@@ -45,62 +69,60 @@ io.engine.generateId = (req) => {
   }
 
 io.on('connection', (socket) => {
-    console.log('A user connected: '+socket.id);
-    var player, room;
-    if(socket.handshake.query["room"] == "null"){
-        console.log("player1 connected");
+    console.log('\nA user connected on socket '+socket.id);
+    var player, room, dev=false;
+    if(socket.handshake.query["room"] == "null" || socket.handshake.query["room"] == undefined){
         player = "player1";
         room = socket.id;
         socket.join("player1");
-        //env = initializeClipsEnv(room);
+        console.log("player1 connected");
     }else{
-        console.log("player2 connected");
         player = "player2";
         room = socket.handshake.query.room;
         socket.join("player2");
-        //env = CLIPSEnvs.get(room);
+        console.log("player2 connected");
     }
-    console.log("Room: "+room);
+    if(socket.handshake.query["dev"] === "true"){
+        dev=true;
+        console.log("Connected as dev");
+    }
     socket.join(room);
+    console.log("On room: "+room);
 
     io.sockets.in(room).fetchSockets().then((value)=>{
         //Si ambos jugadores ya están conectados
         if(value.length===2){
             var env = initializeClipsEnv(room);
-            io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player2").emit("state", env.getStateBuffer("player1").replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player1").emit("state", env.getStateBuffer("player2").replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));
-            io.sockets.in(room).except("player1").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player2").replaceAll("crlf","\n"));
+            updatePlayer("player1", env, room);
+            updatePlayer("player2", env, room);
         }
     });
 
     socket.on("orders", (orders) => {
         var env = CLIPSEnvs.get(room);
-        io.sockets.in(room).emit("log", "\nChoose result:\n"+env.wrapEval("(play-action "+player+" "+orders+")"));
-        io.sockets.in(room).emit("log", "\nDebug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("state", env.getStateBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("state", env.getStateBuffer("player2").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("log", "\nAnnounce buffer\n"+env.getAnnounceBuffer("player2").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player2").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player1").replaceAll("crlf","\n"));
-        io.sockets.in(room).except("player1").emit("log", "\nChoose buffer\n"+env.getChooseBuffer("player2").replaceAll("crlf","\n"));
-        console.log("Player "+player+" commands: {"+orders+"}");
+        var result = env.wrapEval("(play-action "+player+" "+orders+")");
+        console.log("\nPlayer "+player+" commands: {"+orders+"}");
+        if(result=="TRUE"){
+            updatePlayer("player1", env, room);
+            updatePlayer("player2", env, room);
+        }else{
+            console.log("\t^-- The command is rejected");
+            io.sockets.in(room).except(enemy(player)).emit("satm_error", orders);
+        }
     });
 
     socket.on("disconnecting", (reason) => {
-        console.log("Disconnecting "+socket.id);
+        console.log("\nDisconnecting "+socket.id);
         var env = CLIPSEnvs.get(room);
         if(env==undefined){
             console.log("User exited");
         }else if(env.wrapDestroyEnvironment()){
             console.log("Environment of %s successfully destroyed",socket.id);
+            CLIPSEnvs.delete(socket.id);
         }else{
             console.log("Environment of %s not destroyed",socket.id);
         }
-        CLIPSEnvs.delete(socket.id);
+        console.log("There are %d enviroments",CLIPSEnvs.size);
     });
 
 });
