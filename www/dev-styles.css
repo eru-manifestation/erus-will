@@ -1,0 +1,99 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family:monospace;
+  /* outline: 1px solid red; */
+}
+
+
+.game div {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: center;
+  padding: 1rem;
+  margin: .5rem;
+  border: 4px solid grey;
+  text-align: center;
+  color: yellow;
+}
+
+.game div::after{
+  content: attr(id);
+  grid-column: 1/3;
+  grid-row: 1;
+}
+
+/* ICONOS Y SUS ESTILOS */
+.data-item {background-image: url(info-icon.png);}
+.attackable {background-image: url(attackable.png);}
+
+.attackable, .data-item{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none !important;
+  color: darkslategrey !important;
+}
+
+
+.card {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.game {
+  display: grid;
+  grid-template-areas:
+  "player         pass        enemy           "
+  "player-hand    locations   enemy-hand      "
+  "player-draw    locations   enemy-draw      "
+  "player-discard locations   enemy-discard   "
+  "player-mp      locations   enemy-mp        "
+  "events         locations   out             "
+  ;
+  justify-items: center;
+}
+
+.player           {grid-area: player;}
+.enemy            {grid-area: enemy;}
+.locations        {background-color:rgb(139, 135, 135); grid-area: locations;}
+.player_hand      {background-color:#5b3d2d; grid-area: player-hand;}
+.enemy_hand       {background-color:#5b3d2d; grid-area: enemy-hand;}
+.player_draw      {background-color:#3D3A4B; grid-area: player-draw;}
+.enemy_draw       {background-color:#3D3A4B; grid-area: enemy-draw;}
+.player_discard   {background-color:#D3C0CD; grid-area: player-discard;}
+.enemy_discard    {background-color:#D3C0CD; grid-area: enemy-discard;}
+.player_mp        {background-color:#5A9367; grid-area: player-mp;}
+.enemy_mp         {background-color:#5A9367; grid-area: enemy-mp;}
+.out_of_game      {background-color:black;   grid-area: out;}
+.events           {background-color:#5CAB7D; grid-area: events;}
+.pass             {background-color: #FFF275;grid-area: pass;}
+
+.fellowship{background-color: rgba(209, 183, 153, 0.32);}
+
+
+
+
+.ownable[player="[player1]"]{
+  border: 2px solid blue !important;
+}
+*[id="[player1]"] {
+  background-color:blue;
+}
+
+.ownable[player="[player2]"]{
+  border: 2px solid red !important;
+}
+*[id="[player2]"] {
+  background-color:red;
+}
+
+.choosable{
+  box-shadow: 0 0 30px rgb(212, 255, 0);
+}
+.choosable-final{
+  box-shadow: 0 0 30px rgb(0, 21, 255);
+}

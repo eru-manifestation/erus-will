@@ -22,6 +22,9 @@ function enemy(player){
 
 function updatePlayer(player, env, room){
     var data;
+    data =env.getDebugBuffer().replaceAll("crlf","\n");
+    if (data != "") io.sockets.in(room).except(enemy(player)).emit("log", "Debug buffer\n"+data);
+
     data = env.getStateBuffer(player).replaceAll("crlf","\n");
     if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data)
     
@@ -66,21 +69,25 @@ io.engine.generateId = (req) => {
   }
 
 io.on('connection', (socket) => {
-    console.log('A user connected: '+socket.id);
-    var player, room;
-    if(socket.handshake.query["room"] == "null"){
-        console.log("player1 connected");
+    console.log('\nA user connected on socket '+socket.id);
+    var player, room, dev=false;
+    if(socket.handshake.query["room"] == "null" || socket.handshake.query["room"] == undefined){
         player = "player1";
         room = socket.id;
         socket.join("player1");
+        console.log("player1 connected");
     }else{
-        console.log("player2 connected");
         player = "player2";
         room = socket.handshake.query.room;
         socket.join("player2");
+        console.log("player2 connected");
     }
-    console.log("Room: "+room);
+    if(socket.handshake.query["dev"] === "true"){
+        dev=true;
+        console.log("Connected as dev");
+    }
     socket.join(room);
+    console.log("On room: "+room);
 
     io.sockets.in(room).fetchSockets().then((value)=>{
         //Si ambos jugadores ya están conectados
@@ -94,9 +101,8 @@ io.on('connection', (socket) => {
     socket.on("orders", (orders) => {
         var env = CLIPSEnvs.get(room);
         var result = env.wrapEval("(play-action "+player+" "+orders+")");
-        console.log("Player "+player+" commands: {"+orders+"}");
+        console.log("\nPlayer "+player+" commands: {"+orders+"}");
         if(result=="TRUE"){
-            io.sockets.in(room).emit("log", "Debug buffer\n"+env.getDebugBuffer().replaceAll("crlf","\n"));
             updatePlayer("player1", env, room);
             updatePlayer("player2", env, room);
         }else{
@@ -106,16 +112,17 @@ io.on('connection', (socket) => {
     });
 
     socket.on("disconnecting", (reason) => {
-        console.log("Disconnecting "+socket.id);
+        console.log("\nDisconnecting "+socket.id);
         var env = CLIPSEnvs.get(room);
         if(env==undefined){
             console.log("User exited");
         }else if(env.wrapDestroyEnvironment()){
             console.log("Environment of %s successfully destroyed",socket.id);
+            CLIPSEnvs.delete(socket.id);
         }else{
             console.log("Environment of %s not destroyed",socket.id);
         }
-        CLIPSEnvs.delete(socket.id);
+        console.log("There are %d enviroments",CLIPSEnvs.size);
     });
 
 });

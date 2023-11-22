@@ -1,10 +1,11 @@
 //var W3CWebSocket = require('websocket').w3cwebsocket;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const room = urlParams.get('room');
-console.log(room);
-var socket = io.connect(window.location.origin,{query:"room="+room});
+const socket = io.connect(window.location.origin,{query:urlParams.toString()});
+const dev = urlParams.get("dev");
 var choice = [[]];
+
+document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
 function fire(title,text,icon){
     Swal.fire({
