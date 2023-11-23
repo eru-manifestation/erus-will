@@ -85,16 +85,14 @@ io.on('connection', (socket) => {
         //Si ambos jugadores ya están conectados
         if(value.length===2){
             var wrap = new addon.ClipsWrapper();
-            console.log(wrap.createEnvironment());
+            wrap.createEnvironment().then((value)=>{
                 console.log(value);
                 CLIPSEnvs.set(room, wrap);
                 console.log("CLIPS enviroment created for " + room);
                 console.log("There are %d enviroments",CLIPSEnvs.size);
-                console.log("LLega aqui");
-                console.log(wrap.getDebugBuffer());
                 updatePlayer("player1", wrap, room);
                 updatePlayer("player2", wrap, room);
-            
+            });
         }
     });
 

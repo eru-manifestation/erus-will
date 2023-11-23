@@ -165,4 +165,4 @@ FALSE
 	(tic 1)
 	(assert (infinite) (player ?*player1*) (enemy ?*player2*))
 )
-;(defrule MAIN::infiniterule (declare (salience 100)) ?c<-(infinite) => (retract ?c) (assert (infinite)))
+(defrule MAIN::infiniterule (declare (salience 100)) ?c<-(infinite) => (retract ?c) (assert (infinite)))

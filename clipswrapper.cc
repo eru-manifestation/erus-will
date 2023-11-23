@@ -31,38 +31,13 @@ ClipsWrapper::ClipsWrapper(const Napi::CallbackInfo& info)
     : Napi::ObjectWrap<ClipsWrapper>(info) {}
 
 Napi::Value ClipsWrapper::PromiseCreateEnvironment(const Napi::CallbackInfo& info){
-  cout << "informacion";
-  *(this->result) = string("");
-  cout << "Pointer antes\t";
-  cout << this->clips_env_;
-  cout << endl;
-  cout << "Result antes\t";
-  cout << *(this->result);
-  cout << endl;
-  this->clips_env_ = CreateEnvironment();
-  cout << Load(this->clips_env_, "load.clp");
-  cout << Eval(this->clips_env_, "(load-all)", NULL);
-  cout << Run(this->clips_env_, -1);
-  
-  cout << "Pointer antes de la llamada\t";
-  cout << this->clips_env_;
-  cout << endl;
-  cout << "Result antes de la llamada\t";
-  cout << *(this->result);
-  cout << endl;
-  
-  return Napi::Number::New(info.Env(), 1);
-
-  // CreateEnvironmentWorker* worker = new CreateEnvironmentWorker(info.Env(), this->clips_env_, this->result);
-  // worker->Queue();
-  // return worker->GetPromise();
+  CreateEnvironmentWorker* worker = new CreateEnvironmentWorker(info.Env(), &(this->clips_env_));
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::GetFacts(const Napi::CallbackInfo& info) {
-  //String num = this->CLIPSenv;
-  //TODO: Devolver hechos
   CLIPSValue cv;
-  // Eval(this->clips_env_, "(do-for-)")
   Eval(this->clips_env_,"(random 0 99)",&cv);
   return Napi::Number::New(info.Env(), cv.integerValue->contents);
 }
@@ -94,28 +69,10 @@ Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value ClipsWrapper::GetDebugBuffer(const Napi::CallbackInfo& info) {
-  cout << "Pointer despues\t";
-  cout << this->clips_env_;
-  cout << endl;
-  cout << "Result despues\t";
-  cout << *(this->result);
-  cout << endl;
-
-  string command1 = "(get-content ?*announce-p1*)";
   CLIPSValue cv;
-  Eval(this->clips_env_, command1.c_str() ,&cv);
-  cout << cv.lexemeValue->contents;
-  cout << endl;
-
-  // CLIPSValue cv;
-  cout << "Inicia el debug buffer\n";
-  cout << this->clips_env_;
   Eval(this->clips_env_, "(get-content ?*debug*)",&cv);
-  cout << "Finaliza primera orden del debug buffer\n";
   string res = cv.lexemeValue->contents;
-  cout << "Finaliza segunda orden del debug buffer\n";
   Eval(this->clips_env_, "(bind ?*debug* (create$))",NULL);
-  cout << "Finaliza tercira y ultima orden del debug buffer\n";
   return Napi::String::New(info.Env(), res);
 }
 

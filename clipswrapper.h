@@ -11,8 +11,6 @@ class ClipsWrapper : public Napi::ObjectWrap<ClipsWrapper> {
  public:
   static Napi::Object Init(Napi::Env env, Napi::Object exports);
   ClipsWrapper(const Napi::CallbackInfo& info);
-  Environment *clips_env_;
-  string *result;
 
  private:
   Napi::Value PromiseCreateEnvironment(const Napi::CallbackInfo& info);
@@ -24,17 +22,17 @@ class ClipsWrapper : public Napi::ObjectWrap<ClipsWrapper> {
   Napi::Value WrapDestroyEnvironment(const Napi::CallbackInfo& info);
   Napi::Value WrapEval(const Napi::CallbackInfo& info);
 
+  Environment *clips_env_;
 };
 
 #include <iostream>
 
 class CreateEnvironmentWorker : public Napi::AsyncWorker {
  public:
-  CreateEnvironmentWorker(const Napi::Env& env, Environment* clipsEnv, string* result)
+  CreateEnvironmentWorker(const Napi::Env& env, Environment** clipsEnv)
       : Napi::AsyncWorker{env, "CreateEnvironmentWorker"},
         m_deferred{env},
-        clipsEnv{clipsEnv},
-        result{result} {
+        clipsEnv{clipsEnv} {
           //SuppressDestruct();
         }
 
@@ -48,35 +46,17 @@ class CreateEnvironmentWorker : public Napi::AsyncWorker {
    * Simulate heavy math work
    */
   void Execute() {
-    
-    cout << "Pointer al entrar la llamada\t";
-    cout << clipsEnv;
-    cout << endl;
-    cout << "Result al entrar la llamada\t";
-    cout << *result;
-    cout << endl;
-
-    string command1 = "(get-content ?*announce-p1*)";
-    CLIPSValue cv;
-    Eval(clipsEnv, command1.c_str() ,&cv);
-    cout << cv.lexemeValue->contents;
-    cout << endl;
-
-    
-
-    *result = string("Environment created");
-    cout << "Pointer justo despues\t";
-    cout << clipsEnv;
-    cout << endl;
-    cout << "Result justo despues\t";
-    cout << *result;
-    cout << endl;
+    *clipsEnv = CreateEnvironment();
+    Load(*clipsEnv, "load.clp");
+    Eval(*clipsEnv, "(load-all)", NULL);
+    Run(*clipsEnv, -1);
+    result = string("Environment created");
   }
 
   /**
    * Resolve the promise with the result
    */
-  void OnOK() { m_deferred.Resolve(Napi::String::New(Env(), *result)); }
+  void OnOK() { m_deferred.Resolve(Napi::String::New(Env(), result)); }
 
   /**
    * Reject the promise with errors
@@ -85,8 +65,8 @@ class CreateEnvironmentWorker : public Napi::AsyncWorker {
 
  private:
   Napi::Promise::Deferred m_deferred;
-  Environment *clipsEnv;
-  string* result;
+  Environment **clipsEnv;
+  string result;
 };
 
 #endif
