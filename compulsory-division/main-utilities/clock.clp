@@ -163,7 +163,6 @@ FALSE
 (defrule MAIN::start =>
 	(assert (only-actions (phase FALSE)))
 	(tic 1)
-	(assert (infinite))
-	(assert (player ?*player1*))
-	(assert (enemy ?*player2*))
+	(assert (infinite) (player ?*player1*) (enemy ?*player2*))
 )
+;(defrule MAIN::infiniterule (declare (salience 100)) ?c<-(infinite) => (retract ?c) (assert (infinite)))

@@ -1,4 +1,4 @@
-var addon = require('bindings')('addon');
+var addon = require('bindings')('addon.node');
 const uuid = require("uuid");
 const express = require('express');
 const app = express();
@@ -33,14 +33,6 @@ function updatePlayer(player, env, room){
     
     data = env.getChooseBuffer(player).replaceAll("crlf","\n");
     if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
-}
-
-function initializeClipsEnv(origin){
-    var obj = new addon.ClipsWrapper();
-    CLIPSEnvs.set(origin, obj);
-    console.log("CLIPS enviroment created for " + origin);
-    console.log("There are %d enviroments",CLIPSEnvs.size);
-    return obj;
 }
 
 // const io = new Server(port, { /* options */ });
@@ -92,9 +84,17 @@ io.on('connection', (socket) => {
     io.sockets.in(room).fetchSockets().then((value)=>{
         //Si ambos jugadores ya están conectados
         if(value.length===2){
-            var env = initializeClipsEnv(room);
-            updatePlayer("player1", env, room);
-            updatePlayer("player2", env, room);
+            var wrap = new addon.ClipsWrapper();
+            console.log(wrap.createEnvironment());
+                console.log(value);
+                CLIPSEnvs.set(room, wrap);
+                console.log("CLIPS enviroment created for " + room);
+                console.log("There are %d enviroments",CLIPSEnvs.size);
+                console.log("LLega aqui");
+                console.log(wrap.getDebugBuffer());
+                updatePlayer("player1", wrap, room);
+                updatePlayer("player2", wrap, room);
+            
         }
     });
 
