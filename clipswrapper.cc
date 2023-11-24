@@ -11,7 +11,6 @@ Napi::Object ClipsWrapper::Init(Napi::Env env, Napi::Object exports) {
       DefineClass(env,
                   "ClipsWrapper",
                   {InstanceMethod("createEnvironment", &ClipsWrapper::PromiseCreateEnvironment),
-                    InstanceMethod("getFacts", &ClipsWrapper::GetFacts),
                     InstanceMethod("getDebugBuffer", &ClipsWrapper::GetDebugBuffer),
                     InstanceMethod("getAnnounceBuffer", &ClipsWrapper::GetAnnounceBuffer),
                     InstanceMethod("getChooseBuffer", &ClipsWrapper::GetChooseBuffer),
@@ -31,15 +30,17 @@ ClipsWrapper::ClipsWrapper(const Napi::CallbackInfo& info)
     : Napi::ObjectWrap<ClipsWrapper>(info) {}
 
 Napi::Value ClipsWrapper::PromiseCreateEnvironment(const Napi::CallbackInfo& info){
-  CreateEnvironmentWorker* worker = new CreateEnvironmentWorker(info.Env(), &(this->clips_env_));
+  CreateEnvironmentWorker* worker = 
+    new CreateEnvironmentWorker(info.Env(), &(this->_clips_env));
   worker->Queue();
   return worker->GetPromise();
 }
 
-Napi::Value ClipsWrapper::GetFacts(const Napi::CallbackInfo& info) {
-  CLIPSValue cv;
-  Eval(this->clips_env_,"(random 0 99)",&cv);
-  return Napi::Number::New(info.Env(), cv.integerValue->contents);
+Napi::Value ClipsWrapper::WrapDestroyEnvironment(const Napi::CallbackInfo& info) {
+  DestroyEnvironmentWorker* worker = 
+    new DestroyEnvironmentWorker(info.Env(), &(this->_clips_env));
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
@@ -59,21 +60,17 @@ Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
     }
   }
 
-  string command1 = "(get-content " + multifield + ")";
-  string command2 = "(bind " + multifield + " (create$))";
-  CLIPSValue cv;
-  Eval(this->clips_env_, command1.c_str() ,&cv);
-  string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, command2.c_str() ,NULL);
-  return Napi::String::New(info.Env(), res);
+  GetContentWorker *worker = 
+    new GetContentWorker(info.Env(),&(this->_clips_env),multifield);
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::GetDebugBuffer(const Napi::CallbackInfo& info) {
-  CLIPSValue cv;
-  Eval(this->clips_env_, "(get-content ?*debug*)",&cv);
-  string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, "(bind ?*debug* (create$))",NULL);
-  return Napi::String::New(info.Env(), res);
+  GetContentWorker *worker = 
+    new GetContentWorker(info.Env(),&(this->_clips_env),string("?*debug*"));
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
@@ -93,13 +90,10 @@ Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
     }
   }
 
-  string command1 = "(get-content " + multifield + ")";
-  string command2 = "(bind " + multifield + " (create$))";
-  CLIPSValue cv;
-  Eval(this->clips_env_, command1.c_str() ,&cv);
-  string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, command2.c_str() ,NULL);
-  return Napi::String::New(info.Env(), res);
+  GetContentWorker *worker = 
+    new GetContentWorker(info.Env(),&(this->_clips_env),multifield);
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::GetStateBuffer(const Napi::CallbackInfo& info) {
@@ -119,48 +113,23 @@ Napi::Value ClipsWrapper::GetStateBuffer(const Napi::CallbackInfo& info) {
     }
   }
 
-  string command0 = "(update-index (symbol-to-instance-name "+player+"))";
-  string command1 = "(get-content " + multifield + ")";
-  string command2 = "(bind " + multifield + " (create$))";
-
-  Eval(this->clips_env_, command0.c_str() ,NULL);
-  CLIPSValue cv;
-  Eval(this->clips_env_, command1.c_str() ,&cv);
-  string res = cv.lexemeValue->contents;
-  Eval(this->clips_env_, command2.c_str() ,NULL);
-  return Napi::String::New(info.Env(), res);
-}
-
-Napi::Value ClipsWrapper::WrapDestroyEnvironment(const Napi::CallbackInfo& info) {
-  return Napi::Boolean::New(info.Env(), DestroyEnvironment(this->clips_env_));
+  GetStateWorker *worker = 
+    new GetStateWorker(info.Env(), &(this->_clips_env), player, multifield);
+  worker->Queue();
+  return worker->GetPromise();
 }
 
 Napi::Value ClipsWrapper::WrapEval(const Napi::CallbackInfo& info) {
-  Napi::String command;
+  string command;
   if (info.Length() <= 0 || !info[0].IsString()) {
-    command = Napi::String::New(info.Env(), "");
+    Napi::TypeError::New(info.Env(), "Invalid argument, the evaluated order must be a string").ThrowAsJavaScriptException();
+    return Napi::Boolean::New(info.Env(),false);
   } else {
-    command = info[0].As<Napi::String>();
+    command = info[0].As<Napi::String>().Utf8Value();
   }
 
-  CLIPSValue cv;
-  Napi::Value napiValue;
-  Eval(this->clips_env_, command.Utf8Value().c_str() ,&cv);
-  switch(cv.header->type){
-    case STRING_TYPE:
-    case SYMBOL_TYPE:
-      napiValue = Napi::String::New(info.Env(), cv.lexemeValue->contents);
-      break;
-    case FLOAT_TYPE:
-      napiValue = Napi::Number::New(info.Env(), cv.floatValue->contents);
-      break;
-    case INTEGER_TYPE:
-      napiValue = Napi::Number::New(info.Env(), cv.integerValue->contents);
-      break;
-    default:
-      napiValue = Napi::Boolean::New(info.Env(), true);
-      break;
-  }
-
-  return napiValue;
+  WrapEvalWorker *worker = 
+    new WrapEvalWorker(info.Env(), &(this->_clips_env), command);
+  worker->Queue();
+  return worker->GetPromise();
 }

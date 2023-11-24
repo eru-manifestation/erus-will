@@ -22,17 +22,23 @@ function enemy(player){
 
 function updatePlayer(player, env, room){
     var data;
-    data =env.getDebugBuffer().replaceAll("crlf","\n");
-    if (data != "") io.sockets.in(room).except(enemy(player)).emit("log", "Debug buffer\n"+data);
+    env.getDebugBuffer().then((debug)=>{
+        data = debug.replaceAll("crlf","\n");
+        if (data != "") io.sockets.in(room).except(enemy(player)).emit("log", "Debug buffer\n"+data);
+        env.getStateBuffer(player).then((state)=>{    
+            data =state.replaceAll("crlf","\n");
+            if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
+            env.getAnnounceBuffer(player).then((announce)=>{
+                data = announce.replaceAll("crlf","\n");
+                if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data)
+                env.getChooseBuffer(player).then((choose)=>{
+                   data = choose.replaceAll("crlf","\n");
+                   if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
+                })
+            })
+        })
+    })
 
-    data = env.getStateBuffer(player).replaceAll("crlf","\n");
-    if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data)
-    
-    data = env.getAnnounceBuffer(player).replaceAll("crlf","\n");
-    if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data)
-    
-    data = env.getChooseBuffer(player).replaceAll("crlf","\n");
-    if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
 }
 
 // const io = new Server(port, { /* options */ });
@@ -91,7 +97,7 @@ io.on('connection', (socket) => {
                 console.log("CLIPS enviroment created for " + room);
                 console.log("There are %d enviroments",CLIPSEnvs.size);
                 updatePlayer("player1", wrap, room);
-                updatePlayer("player2", wrap, room);
+                //updatePlayer("player2", wrap, room);
             });
         }
     });
