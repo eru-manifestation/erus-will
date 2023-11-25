@@ -21,35 +21,53 @@ function enemy(player){
 }
 
 function updatePlayer(player, env, room){
-    return new Promise((resolve,reject)=>
-        env.wrapEval("(get-content ?*debug*)")
-        
+    return new Promise((resolve,reject)=>{
+        var content;
+        env.wrapEval("(get-debug)")
         .then((debug)=>{
             //TODO: fix that the debug buffer is shared, so it mustn't be emptied when one player
             //      reads it
             var data = debug.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).emit("log", "Debug buffer\n"+data);
-            return env.wrapEval("(update-index [player1])");
+            return env.wrapEval("(update-index (symbol-to-instance-name "+player+"))");
         })
         .then(()=>{
-            return env.wrapEval("(get-content ?*state-p1*)")
+            content = (player==="player1")? "state-p1" : "state-p2";
+            return env.wrapEval("(get-"+content+")");
         })
+        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((state)=>{    
             var data =state.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
-            return env.wrapEval("(get-content ?*announce-p1*)");
+            content = (player==="player1")? "announce-p1" : "announce-p2";
+            return env.wrapEval("(get-"+content+")");
         })
+        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((announce)=>{
             var data = announce.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data);
-            return env.wrapEval("(get-content ?*choose-p1*)");
+            content = (player==="player1")? "choose-p1" : "choose-p2";
+            return env.wrapEval("(get-"+content+")");
         })
+        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((choose)=>{
             var data = choose.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
             resolve("Player "+player+"'s of room "+room+" update successful")
         })
-        .catch(reject));
+        .catch(reject);
+    });
+}
+
+function updateBothPlayers(wrap,room){
+    return new Promise((resolve,reject)=>
+        updatePlayer("player1", wrap, room)
+        .then(()=>{
+            return updatePlayer("player2", wrap, room);
+        })
+        .then(()=>resolve("Both players updated"))
+        .catch((error)=>reject(error))
+    );
 }
 
 // const io = new Server(port, { /* options */ });
@@ -102,39 +120,38 @@ io.on('connection', (socket) => {
         //Si ambos jugadores ya están conectados
         if(value.length===2){
             var wrap = new addon.ClipsWrapper();
-            setTimeout(()=>{
-            wrap.createEnvironment().then((value)=>{
+            wrap.createEnvironment()
+            .then((value)=>{
                 console.log(value);
                 CLIPSEnvs.set(room, wrap);
                 console.log("CLIPS enviroment created for " + room);
                 console.log("There are %d enviroments",CLIPSEnvs.size);
-                //wrap.wrapEval("(get-content ?*debug*)")
-                updatePlayer("player1", wrap, room)
-                .then((value)=>{
-                    console.log(value);
-                    //return updatePlayer("player2", wrap, room);
-                })
-                //.then(console.log)
-                .catch(console.error);
-            });
-            },1000);
+                return updateBothPlayers(wrap, room);
+            })
+            .then(console.log)
+            .catch(console.error);
         }
     });
 
     socket.on("orders", (orders) => {
         var env = CLIPSEnvs.get(room);
-        var result = env.wrapEval("(play-action "+player+" "+orders+")");
         console.log("\nPlayer "+player+" commands: {"+orders+"}");
-        if(result=="TRUE"){
-            // updatePlayer("player1", env, room);
-            // updatePlayer("player2", env, room);
-        }else{
-            console.log("\t^-- The command is rejected");
-            io.sockets.in(room).except(enemy(player)).emit("satm_error", orders);
-        }
+        env.wrapEval("(play-action "+player+" "+orders+")")
+        .then((result)=>{
+            if(result=="TRUE"){
+                updateBothPlayers(env,room)
+                .then(console.log)
+                .catch(console.error);
+            }else{
+                console.log("\t^-- The command is rejected");
+                io.sockets.in(room).except(enemy(player)).emit("satm_error", orders);
+            }
+        })
+        .catch(console.error);
     });
 
     socket.on("disconnecting", (reason) => {
+        //TODO: HACER LA COMPROBACION CON HAS
         console.log("\nDisconnecting "+socket.id);
         var env = CLIPSEnvs.get(room);
         if(env==undefined){

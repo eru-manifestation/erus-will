@@ -5,9 +5,71 @@
 	(println)
 )
 
-(deffunction MAIN::get-content (?multifield)
-	(if (neq 0 (length$ ?multifield)) then
-		(str-cat (expand$ ?multifield))
+(deffunction MAIN::get-debug ()
+	(if (neq 0 (length$ ?*debug*)) then
+		(bind ?res (str-cat (expand$ ?*debug*)))
+		(bind ?*debug* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-state-p1 ()
+	(if (neq 0 (length$ ?*state-p1*)) then
+		(bind ?res (str-cat (expand$ ?*state-p1*)))
+		(bind ?*state-p1* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-state-p2 ()
+	(if (neq 0 (length$ ?*state-p2*)) then
+		(bind ?res (str-cat (expand$ ?*state-p2*)))
+		(bind ?*state-p2* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-announce-p1 ()
+	(if (neq 0 (length$ ?*announce-p1*)) then
+		(bind ?res (str-cat (expand$ ?*announce-p1*)))
+		(bind ?*announce-p1* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-announce-p2 ()
+	(if (neq 0 (length$ ?*announce-p2*)) then
+		(bind ?res (str-cat (expand$ ?*announce-p2*)))
+		(bind ?*announce-p2* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-choose-p1 ()
+	(if (neq 0 (length$ ?*choose-p1*)) then
+		(bind ?res (str-cat (expand$ ?*choose-p1*)))
+		(bind ?*choose-p1* (create$))
+		?res
+		else
+		""
+	)
+)
+
+(deffunction MAIN::get-choose-p2 ()
+	(if (neq 0 (length$ ?*choose-p2*)) then
+		(bind ?res (str-cat (expand$ ?*choose-p2*)))
+		(bind ?*choose-p2* (create$))
+		?res
 		else
 		""
 	)
