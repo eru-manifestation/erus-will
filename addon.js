@@ -22,24 +22,27 @@ function enemy(player){
 
 function updatePlayer(player, env, room){
     return new Promise((resolve,reject)=>
-        env.getDebugBuffer()
+        env.wrapEval("(get-content ?*debug*)")
         
         .then((debug)=>{
             //TODO: fix that the debug buffer is shared, so it mustn't be emptied when one player
             //      reads it
             var data = debug.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).emit("log", "Debug buffer\n"+data);
-            return env.getStateBuffer(player);
+            return env.wrapEval("(update-index [player1])");
+        })
+        .then(()=>{
+            return env.wrapEval("(get-content ?*state-p1*)")
         })
         .then((state)=>{    
             var data =state.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
-            return env.getAnnounceBuffer(player);
+            return env.wrapEval("(get-content ?*announce-p1*)");
         })
         .then((announce)=>{
             var data = announce.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data);
-            return env.getChooseBuffer(player);
+            return env.wrapEval("(get-content ?*choose-p1*)");
         })
         .then((choose)=>{
             var data = choose.replaceAll("crlf","\n");
@@ -105,13 +108,13 @@ io.on('connection', (socket) => {
                 CLIPSEnvs.set(room, wrap);
                 console.log("CLIPS enviroment created for " + room);
                 console.log("There are %d enviroments",CLIPSEnvs.size);
-                wrap.getDebugBuffer()
-                //updatePlayer("player1", wrap, room)
-                // .then((value)=>{
-                //     console.log(value);
-                //     return updatePlayer("player2", wrap, room);
-                // })
-                .then(console.log)
+                //wrap.wrapEval("(get-content ?*debug*)")
+                updatePlayer("player1", wrap, room)
+                .then((value)=>{
+                    console.log(value);
+                    //return updatePlayer("player2", wrap, room);
+                })
+                //.then(console.log)
                 .catch(console.error);
             });
             },1000);

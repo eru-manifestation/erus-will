@@ -129,8 +129,8 @@ Napi::Value ClipsWrapper::WrapEval(const Napi::CallbackInfo& info) {
   }
   cout << command << endl;
 
-  WrapEvalWorker *worker = 
-    new WrapEvalWorker(info.Env(), &(this->_clips_env), string(command));
+  GetContentWorker *worker = 
+    new GetContentWorker(info.Env(),&(this->_clips_env),string(command));
   worker->Queue();
   return worker->GetPromise();
 }

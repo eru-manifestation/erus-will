@@ -102,11 +102,10 @@ class GetContentWorker : public Napi::AsyncWorker {
   void Execute() {
     cout << "INICIA EJECUCION GETCONTENT" << content << endl;
     CLIPSValue cv;
-    string command1 = "(get-content " + content + ")";
-    string command2 = "(bind " + content + " (create$))";
-    Eval(*_clips_env, command1.c_str() ,&cv);
+    Eval(*_clips_env, content.c_str() ,&cv);
+    cout << "TRAS EJECUCION EVAL WORKER" << endl;
+    cout << cv.lexemeValue->contents << endl;
     result = string(cv.lexemeValue->contents);
-    Eval(*_clips_env, command2.c_str() ,NULL);
 
     // string command0 = "(update-index (symbol-to-instance-name player1))";
     // command1 = "(get-content ?*state-p1*)";
@@ -188,7 +187,10 @@ class WrapEvalWorker : public Napi::AsyncWorker {
       : Napi::AsyncWorker{env, "WrapEvalWorker"},
         m_deferred{env},
         _clips_env{_clips_env},
-        orders{orders} {}
+        orders{orders} {
+
+          cout << "INICIALIZACION EVAL WORKER" << endl;
+        }
 
   /**
    * GetPromise associated with _deferred for return to JS
@@ -197,9 +199,12 @@ class WrapEvalWorker : public Napi::AsyncWorker {
 
  protected:
   void Execute() {
-    cout << "PUNTERO A CLIPS: " << *_clips_env << endl;
+    cout << "EJECUCION EVAL WORKER" << endl;
+    cout << "EVAL: PUNTERO A CLIPS: " << *_clips_env << endl;
     CLIPSValue cv;
     Eval(*_clips_env, orders.c_str() ,&cv);
+    cout << "TRAS EJECUCION EVAL WORKER" << endl;
+    cout << cv.lexemeValue->contents << endl;
     switch(cv.header->type){
       case STRING_TYPE:
       case SYMBOL_TYPE:
@@ -216,7 +221,10 @@ class WrapEvalWorker : public Napi::AsyncWorker {
         break;
     }
   }
-  void OnOK() { m_deferred.Resolve(result); }
+  void OnOK() { 
+    cout << "OK EVAL WORKER" << endl;
+    
+    m_deferred.Resolve(result); }
   void OnError(const Napi::Error& err) { m_deferred.Reject(err.Value()); }
 
  private:
