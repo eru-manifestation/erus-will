@@ -61,7 +61,7 @@ Napi::Value ClipsWrapper::GetAnnounceBuffer(const Napi::CallbackInfo& info) {
   }
 
   GetContentWorker *worker = 
-    new GetContentWorker(info.Env(),&(this->_clips_env),multifield);
+    new GetContentWorker(info.Env(),&(this->_clips_env),string(multifield));
   worker->Queue();
   return worker->GetPromise();
 }
@@ -91,7 +91,7 @@ Napi::Value ClipsWrapper::GetChooseBuffer(const Napi::CallbackInfo& info) {
   }
 
   GetContentWorker *worker = 
-    new GetContentWorker(info.Env(),&(this->_clips_env),multifield);
+    new GetContentWorker(info.Env(),&(this->_clips_env),string(multifield));
   worker->Queue();
   return worker->GetPromise();
 }
@@ -114,7 +114,7 @@ Napi::Value ClipsWrapper::GetStateBuffer(const Napi::CallbackInfo& info) {
   }
 
   GetStateWorker *worker = 
-    new GetStateWorker(info.Env(), &(this->_clips_env), player, multifield);
+    new GetStateWorker(info.Env(), &(this->_clips_env), string(player), string(multifield));
   worker->Queue();
   return worker->GetPromise();
 }
@@ -127,9 +127,10 @@ Napi::Value ClipsWrapper::WrapEval(const Napi::CallbackInfo& info) {
   } else {
     command = info[0].As<Napi::String>().Utf8Value();
   }
+  cout << command << endl;
 
   WrapEvalWorker *worker = 
-    new WrapEvalWorker(info.Env(), &(this->_clips_env), command);
+    new WrapEvalWorker(info.Env(), &(this->_clips_env), string(command));
   worker->Queue();
   return worker->GetPromise();
 }

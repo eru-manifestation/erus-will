@@ -4,6 +4,7 @@
 #include <napi.h>
 #include "clips/clips.h"
 #include <string> 
+#include <iostream>
 
 using namespace std; 
 
@@ -39,10 +40,13 @@ class CreateEnvironmentWorker : public Napi::AsyncWorker {
 
  protected:
   void Execute() {
+    cout << "PUNTERO A CLIPS: " << *_clips_env << endl;
     *_clips_env = CreateEnvironment();
+    cout << "PUNTERO A CLIPS: " << *_clips_env << endl;
     Load(*_clips_env, "load.clp");
     Eval(*_clips_env, "(load-all)", NULL);
     Run(*_clips_env, -1);
+    cout << "PUNTERO A CLIPS: " << *_clips_env << endl;
     result = string("Environment created");
   }
   void OnOK() { m_deferred.Resolve(Napi::String::New(Env(), result)); }
@@ -96,14 +100,27 @@ class GetContentWorker : public Napi::AsyncWorker {
 
  protected:
   void Execute() {
+    cout << "INICIA EJECUCION GETCONTENT" << content << endl;
     CLIPSValue cv;
     string command1 = "(get-content " + content + ")";
     string command2 = "(bind " + content + " (create$))";
     Eval(*_clips_env, command1.c_str() ,&cv);
     result = string(cv.lexemeValue->contents);
     Eval(*_clips_env, command2.c_str() ,NULL);
+
+    // string command0 = "(update-index (symbol-to-instance-name player1))";
+    // command1 = "(get-content ?*state-p1*)";
+
+    // EvalError l1 = Eval(*_clips_env, command0.c_str() ,NULL);
+    // EvalError l2 = Eval(*_clips_env, command1.c_str() ,&cv);
+    // string res = string(cv.lexemeValue->contents);
+    // cout << l1 << l2 << endl;
+    // cout << res << endl << endl << endl;
+    cout << "FINALIZA EJECUCION GETCONTENT" << content << endl;
   }
-  void OnOK() { m_deferred.Resolve(Napi::String::New(Env(), result)); }
+  void OnOK() { 
+    cout << "DA EL OK EJECUCION GETCONTENT" << content << endl;
+    m_deferred.Resolve(Napi::String::New(Env(), result)); }
   void OnError(const Napi::Error& err) { m_deferred.Reject(err.Value()); }
 
  private:
@@ -130,17 +147,30 @@ class GetStateWorker : public Napi::AsyncWorker {
 
  protected:
   void Execute() {
+    cout << "INICIA EJECUCION GETSTATE" << endl;
+
     string command0 = "(update-index (symbol-to-instance-name "+player+"))";
     string command1 = "(get-content " + content + ")";
     string command2 = "(bind " + content + " (create$))";
 
     CLIPSValue cv;
-    Eval(*_clips_env, command0.c_str() ,NULL);
-    Eval(*_clips_env, command1.c_str() ,&cv);
-    Eval(*_clips_env, command2.c_str() ,NULL);
+    EvalError l1 = Eval(*_clips_env, command0.c_str() ,NULL);
+    EvalError l2 = Eval(*_clips_env, command1.c_str() ,&cv);
+    // l2 = Eval(*_clips_env, command1.c_str() ,&cv);
+    EvalError l3 = Eval(*_clips_env, command2.c_str() ,NULL);
     result = string(cv.lexemeValue->contents);
+    // cout << l1 << l2 << l3 << endl;
+    // cout << player << endl;
+    // cout << content << endl;
+    // cout << result << endl;
+
+    cout << "FINALIZA EJECUCION GETSTATE" << endl;
+
   }
-  void OnOK() { m_deferred.Resolve(Napi::String::New(Env(), result)); }
+  void OnOK() { 
+    cout << "DA EL OK EJECUCION GETSTATE" << endl;
+    
+    m_deferred.Resolve(Napi::String::New(Env(), result)); }
   void OnError(const Napi::Error& err) { m_deferred.Reject(err.Value()); }
 
  private:
@@ -167,6 +197,7 @@ class WrapEvalWorker : public Napi::AsyncWorker {
 
  protected:
   void Execute() {
+    cout << "PUNTERO A CLIPS: " << *_clips_env << endl;
     CLIPSValue cv;
     Eval(*_clips_env, orders.c_str() ,&cv);
     switch(cv.header->type){

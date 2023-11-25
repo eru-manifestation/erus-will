@@ -21,24 +21,32 @@ function enemy(player){
 }
 
 function updatePlayer(player, env, room){
-    var data;
-    env.getDebugBuffer().then((debug)=>{
-        data = debug.replaceAll("crlf","\n");
-        if (data != "") io.sockets.in(room).except(enemy(player)).emit("log", "Debug buffer\n"+data);
-        env.getStateBuffer(player).then((state)=>{    
-            data =state.replaceAll("crlf","\n");
-            if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
-            env.getAnnounceBuffer(player).then((announce)=>{
-                data = announce.replaceAll("crlf","\n");
-                if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data)
-                env.getChooseBuffer(player).then((choose)=>{
-                   data = choose.replaceAll("crlf","\n");
-                   if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
-                })
-            })
+    return new Promise((resolve,reject)=>
+        env.getDebugBuffer()
+        
+        .then((debug)=>{
+            //TODO: fix that the debug buffer is shared, so it mustn't be emptied when one player
+            //      reads it
+            var data = debug.replaceAll("crlf","\n");
+            if (data != "") io.sockets.in(room).emit("log", "Debug buffer\n"+data);
+            return env.getStateBuffer(player);
         })
-    })
-
+        .then((state)=>{    
+            var data =state.replaceAll("crlf","\n");
+            if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
+            return env.getAnnounceBuffer(player);
+        })
+        .then((announce)=>{
+            var data = announce.replaceAll("crlf","\n");
+            if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data);
+            return env.getChooseBuffer(player);
+        })
+        .then((choose)=>{
+            var data = choose.replaceAll("crlf","\n");
+            if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
+            resolve("Player "+player+"'s of room "+room+" update successful")
+        })
+        .catch(reject));
 }
 
 // const io = new Server(port, { /* options */ });
@@ -91,14 +99,22 @@ io.on('connection', (socket) => {
         //Si ambos jugadores ya están conectados
         if(value.length===2){
             var wrap = new addon.ClipsWrapper();
+            setTimeout(()=>{
             wrap.createEnvironment().then((value)=>{
                 console.log(value);
                 CLIPSEnvs.set(room, wrap);
                 console.log("CLIPS enviroment created for " + room);
                 console.log("There are %d enviroments",CLIPSEnvs.size);
-                updatePlayer("player1", wrap, room);
-                //updatePlayer("player2", wrap, room);
+                wrap.getDebugBuffer()
+                //updatePlayer("player1", wrap, room)
+                // .then((value)=>{
+                //     console.log(value);
+                //     return updatePlayer("player2", wrap, room);
+                // })
+                .then(console.log)
+                .catch(console.error);
             });
+            },1000);
         }
     });
 
@@ -107,8 +123,8 @@ io.on('connection', (socket) => {
         var result = env.wrapEval("(play-action "+player+" "+orders+")");
         console.log("\nPlayer "+player+" commands: {"+orders+"}");
         if(result=="TRUE"){
-            updatePlayer("player1", env, room);
-            updatePlayer("player2", env, room);
+            // updatePlayer("player1", env, room);
+            // updatePlayer("player2", env, room);
         }else{
             console.log("\t^-- The command is rejected");
             io.sockets.in(room).except(enemy(player)).emit("satm_error", orders);
