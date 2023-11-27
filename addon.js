@@ -129,7 +129,7 @@ io.on('connection', (socket) => {
                 return updateBothPlayers(wrap, room);
             })
             .then(console.log)
-            .catch(console.error);
+            .catch((err)=>console.log("[ADDON ERROR]:\t"+err));
         }
     });
 
