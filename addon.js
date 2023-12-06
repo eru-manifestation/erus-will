@@ -151,18 +151,20 @@ io.on('connection', (socket) => {
     });
 
     socket.on("disconnecting", (reason) => {
-        //TODO: HACER LA COMPROBACION CON HAS
         console.log("\nDisconnecting "+socket.id);
-        var env = CLIPSEnvs.get(room);
-        if(env==undefined){
+        if(!CLIPSEnvs.has(room))
             console.log("User exited");
-        }else if(env.wrapDestroyEnvironment()){
-            console.log("Environment of %s successfully destroyed",socket.id);
-            CLIPSEnvs.delete(socket.id);
-        }else{
-            console.log("Environment of %s not destroyed",socket.id);
-        }
-        console.log("There are %d enviroments",CLIPSEnvs.size);
+        else
+            CLIPSEnvs.get(room).wrapDestroyEnvironment()
+            .then(()=>{
+                console.log("Environment of %s successfully destroyed",socket.id);
+                CLIPSEnvs.delete(room);
+            })
+            .catch((err)=>{
+                console.error("Environment of %s not destroyed",socket.id);
+                console.error(err);
+            })
+            .finally(()=>console.log("There are %d enviroments",CLIPSEnvs.size));
     });
 
 });
