@@ -85,6 +85,11 @@
 			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) crlf))
 			(return TRUE)
 		)
+		(case all then
+			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) (implode$ ?message) crlf))
+			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) crlf))
+			(return TRUE)
+		)
 		(default FALSE)
 	)
 )

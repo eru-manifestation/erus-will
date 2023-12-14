@@ -35,21 +35,18 @@ function updatePlayer(player, env, room){
             content = (player==="player1")? "state-p1" : "state-p2";
             return env.wrapEval("(get-"+content+")");
         })
-        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((state)=>{    
             var data =state.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
             content = (player==="player1")? "announce-p1" : "announce-p2";
             return env.wrapEval("(get-"+content+")");
         })
-        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((announce)=>{
             var data = announce.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data);
             content = (player==="player1")? "choose-p1" : "choose-p2";
             return env.wrapEval("(get-"+content+")");
         })
-        //.then(()=>{return env.wrapEval("(bind "+content+" (create$))");})
         .then((choose)=>{
             var data = choose.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
