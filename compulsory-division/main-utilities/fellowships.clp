@@ -18,7 +18,7 @@
     ; Cuidado, cualquier cosa que haya bajo una compañía lo invalida, no personajes solo
     (not (in (over ?fell)))
     =>
-    (send ?fell put-empty TRUE)
+    (send ?fell modify empty TRUE)
 )
 
 (defrule MAIN::empty-fell-untagging (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
@@ -26,7 +26,7 @@
     ; Cuidado, cualquier cosa que haya bajo una compañía lo invalida, no personajes solo
     (exists (in (over ?fell)))
     =>
-    (send ?fell put-empty FALSE)
+    (send ?fell modify empty FALSE)
 )
 
 

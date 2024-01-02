@@ -18,9 +18,9 @@
     (in (over ?fell) (under ?char))
     =>
     (if (eq ?race HOBBIT) then
-        (send ?e put-adversity-limit (+ 0.5 (send ?e get-adversity-limit)))
+        (send ?e modify adversity-limit (+ 0.5 (send ?e get-adversity-limit)))
         else
-        (send ?e put-adversity-limit (+ 1 (send ?e get-adversity-limit)))
+        (send ?e modify adversity-limit (+ 1 (send ?e get-adversity-limit)))
     )
 )
 
@@ -28,8 +28,8 @@
 ; (defrule calculate-cards-to-draw#stay
 ;     ?e<-(object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (from ?from) (to ?to&:(eq ?to ?from)))
 ;     =>
-;     (send ?e put-player-draw 0)
-;     (send ?e put-enemy-draw 0)
+;     (send ?e modify player-draw 0)
+;     (send ?e modify enemy-draw 0)
 ; )
 
 
@@ -38,11 +38,11 @@
     ?e<-(object (is-a EP-fell-move) (type ONGOING) (from ?from) (to ?to&:(neq ?to ?from)))
     =>
     (if (eq HAVEN (send ?to get-place)) then
-        (send ?e put-player-draw (send ?from get-player-draw))
-        (send ?e put-enemy-draw (send ?from get-enemy-draw))
+        (send ?e modify player-draw (send ?from get-player-draw))
+        (send ?e modify enemy-draw (send ?from get-enemy-draw))
         else
-        (send ?e put-player-draw (send ?to get-player-draw))
-        (send ?e put-enemy-draw (send ?to get-enemy-draw))
+        (send ?e modify player-draw (send ?to get-player-draw))
+        (send ?e modify enemy-draw (send ?to get-enemy-draw))
     )
 )
 
@@ -57,16 +57,16 @@
             ; ahora queda elegir que representa la conexion, si A o B
 
             (if (eq (send ?from get-site-pathA) ?to) then
-                (send ?e put-route (send ?from get-routeA))
+                (send ?e modify route (send ?from get-routeA))
                 else
-                (send ?e put-route (send ?from get-routeB))  
+                (send ?e modify route (send ?from get-routeB))  
             )
             else
             ; se va por la ruta de la carta fuente
-            (send ?e put-route (send ?from get-route))
+            (send ?e modify route (send ?from get-route))
         )
         else  
         ; se va por la ruta de la carta destino      
-        (send ?e put-route (send ?to get-route))
+        (send ?e modify route (send ?to get-route))
     )
 )

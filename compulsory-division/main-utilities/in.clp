@@ -15,9 +15,7 @@
 )
 
 (deffunction MAIN::in-unchain (?element)
-	; Desencadena el elemento de cualquier elemento superior
-	; Elimina el primer elemento in no transitivo que defina lo que tenga arriba ?c
-	; (solo debería haber uno)
+	; Llamar pasando el elemento para desacoplar ese elemento del arbol de posicionamiento
 	(do-for-fact ((?rm in)) (and (eq ?rm:transitive FALSE) (eq ?element ?rm:under))
 		(retract ?rm)
 	)
@@ -28,17 +26,21 @@
 	(assert (in (over ?to) (under ?element)))
 )
 
-
+; TODO: testear el arbol de posicion en cuanto a eliminar: subarboles eliminados flotantes, etc.
 (defrule MAIN::in-exit-game1 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
-	(object (is-a STATABLE) (state HAND | DRAW | DISCARD | MP) (name ?exit))
 	?in <- (in (transitive FALSE) (over ?exit))
+	(or (not (object (name ?exit)))
+		(object (name ?exit) (is-a STATABLE) (state HAND | DRAW | DISCARD | MP))
+	)
 	=>
 	(retract ?in)
 )
 
 (defrule MAIN::in-exit-game2 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
-	(object (is-a STATABLE) (state HAND | DRAW | DISCARD | MP) (name ?exit))
 	?in <- (in (transitive FALSE) (under ?exit))
+	(or (not (object (name ?exit)))
+		(object (name ?exit) (is-a STATABLE) (state HAND | DRAW | DISCARD | MP))
+	)
 	=>
 	(retract ?in)
 )
@@ -46,14 +48,8 @@
 
 ;///////////////////////// DEFMESSAGE-HANDLER
 
-(defmessage-handler LOCATION init after ()
+(defmessage-handler LOCATION init after () ; TODO: actualizar cada vez que se modifique
 	(foreach ?attackable ?self:automatic-attacks
 		(in-move ?attackable (instance-name ?self))
-	)
-)
-
-(defmessage-handler USER delete before()
-	(do-for-all-facts ((?in in)) (or (eq ?in:over (instance-name ?self)) (eq ?in:under (instance-name ?self)))
-		(retract ?in)
 	)
 )

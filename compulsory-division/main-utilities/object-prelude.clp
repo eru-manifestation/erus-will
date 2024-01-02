@@ -1,3 +1,21 @@
+(deffunction MAIN::JSONformat (?data)
+	(if (or (numberp ?data) (stringp ?data)) then
+		(return ?data))
+	(if (symbolp ?data) then
+		(if (eq TRUE ?data) then
+			(return "true")
+		else if (eq FALSE ?data) then
+			(return "false")
+		else
+			(return (str-cat ?data))))
+	(if (multifieldp ?data) then
+		(return (implode$ ?data)))
+	(if (instance-namep ?data) then
+		(return (str-cat (instance-name-to-symbol ?data))))
+	(return "ERROR")
+)
+
+
 ; GENERADOR DE NOMBRES
 (deffunction MAIN::gen-name (?class)
 	; Función generadora de nombres referenciada en el make-instance
@@ -8,4 +26,45 @@
         (send ?cualquiera put-instance-# (+ 1 ?instance-#)))
 
 	(sym-cat (lowcase ?class) ?instance-#)
+)
+
+(defmessage-handler USER modify (?slotname ?value)
+	; TODO HACER ANNOUNCE MODIFY AQUI
+	(bind ?instance-name (instance-name ?self))
+	(announce all { "operation" : "modify" ,
+		"id" : (str-cat (instance-name-to-symbol ?instance-name)) , 
+		(str-cat ?slotname) : (JSONformat ?value) }
+	)
+	(send ?instance-name (sym-cat put- ?slotname) ?value)
+)
+
+(defmessage-handler USER init after ()
+	; TODO HACER ANNOUNCE CREATE
+	(bind ?class (class ?self))
+	(bind ?superclasses (class-superclasses ?class inherit))
+	(bind ?values (create$))
+    (foreach ?slot (class-slots ?class inherit) 
+		(bind ?values (insert$ ?values 1000 (create$ , (str-cat ?slot) : (JSONformat (dynamic-get ?slot)))))
+	)
+	(bind ?format (create$))
+	(foreach ?unfclass ?superclasses
+		(bind ?format (insert$ ?format 1000 (create$ , (str-cat (lowcase ?unfclass)))))
+	)
+	(bind ?classes
+    	(create$ [ (implode$ (create$ (lowcase ?class))) ?format ] )
+	)
+    (announce all { "operation" : "create" ,
+		; Nombre de la instancia
+		"id" : (str-cat (instance-name ?self)) ,
+		; Clases de la instancia
+		; La coma de cierre aparece en values
+		"classes" : $?classes
+		; Valores de la instancia
+		?values }
+	)
+)
+
+(defmessage-handler USER delete before ()
+	; TODO HACER ANNOUNCE DESTROY
+	(announce all { "operation" : "delete" , "id" : (str-cat (instance-name ?self)) })
 )

@@ -166,6 +166,5 @@ FALSE
 	(assert (infinite) (player ?*player1*) (enemy ?*player2*))
 
 	(debug Start game)
-	(announce all Comienzo juego)
 )
 ;(defrule MAIN::infiniterule (declare (salience 100)) ?c<-(infinite) => (retract ?c) (assert (infinite)))

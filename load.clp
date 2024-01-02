@@ -7,6 +7,9 @@
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
+    ;interactions and debug
+    (load* "compulsory-division/main-utilities/user-interaction/interaction.clp")
+
     (load* "compulsory-division/main-utilities/innit.clp")
     (load* "compulsory-division/main-utilities/object-prelude.clp")
     (load* "compulsory-division/main-utilities/objects.clp")
@@ -16,9 +19,6 @@
 
     ;game-settings
     (load* "compulsory-division/main-utilities/game-settings/game-settings.clp")
-
-    ;interactions and debug
-    (load* "compulsory-division/main-utilities/user-interaction/interaction.clp")
 
     ;locations
     (load* "compulsory-division/main-utilities/game-settings/locations.clp")
@@ -143,7 +143,7 @@
     ;(watch instances E-char-play E-item-play-only-minor)
     ;(run 40)
     ; (run 3)
-    ; (send [wolves1] put-state HAND) ;Testar el ataque
+    ; (send [wolves1] modify state HAND) ;Testar el ataque
     ; (run)
 )
 

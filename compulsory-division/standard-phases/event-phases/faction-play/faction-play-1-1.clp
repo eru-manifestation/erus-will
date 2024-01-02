@@ -16,5 +16,5 @@
 (defrule dice-roll
 	?ep<-(object (is-a EP-faction-play) (type ONGOING))
 	=>
-	(send ?ep put-dices (+ (random 1 6) (random 1 6)))
+	(send ?ep modify dices (+ (random 1 6) (random 1 6)))
 )

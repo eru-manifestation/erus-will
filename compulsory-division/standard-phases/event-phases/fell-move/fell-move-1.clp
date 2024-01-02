@@ -16,4 +16,5 @@
     (enemy ?enemy)
     (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (from ?from) (to ?to&:(neq ?to ?from)))
     =>
-    (announce ?enemy Fellowship ?fell is moving from ?from to ?to))
+    ;TODO REVELAR
+)

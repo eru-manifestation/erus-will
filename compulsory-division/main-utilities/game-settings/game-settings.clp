@@ -13,14 +13,5 @@
     ; ; Escribir nil para no debug info y t para debug info
     ; ?*debug-info* = t
 
-    ?*announce-p1* = (create$)
-    ?*announce-p2* = (create$)
-    ?*debug* = (create$)
-    ?*debug-state* = FALSE
-    ?*choose-p1* = (create$)
-    ?*choose-p2* = (create$)
-
-    ?*state-p1* = (create$)
-    ?*state-p2* = (create$)
 )
 

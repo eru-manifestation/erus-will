@@ -43,7 +43,7 @@ function updatePlayer(player, env, room){
         })
         .then((announce)=>{
             var data = announce.replaceAll("crlf","\n");
-            if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", data);
+            if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce", "[ "+data+" null ]");
             content = (player==="player1")? "choose-p1" : "choose-p2";
             return env.wrapEval("(get-"+content+")");
         })

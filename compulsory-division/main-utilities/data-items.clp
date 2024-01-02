@@ -8,11 +8,11 @@
 (defmessage-handler data-item init after ()
     (in-move (instance-name ?self) ?self:target)
     (eval (str-cat 
-        "(send [" ?self:target "] put-" ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
+        "(send [" ?self:target "] modify " ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
 (defmessage-handler data-item delete before ()
     (eval (str-cat 
-        "(send [" ?self:target "] put-" ?self:target-slot " (- (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
+        "(send [" ?self:target "] modify " ?self:target-slot " (- (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
 
 ; INFO ITEM DE CORRUPTION PARA CHARACTER

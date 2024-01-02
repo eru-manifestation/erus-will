@@ -16,9 +16,9 @@
 	(object (is-a EP-resistance-check) (name ?ep) (type ONGOING) (assaulted ?assaulted))
 	=>
 	(if (<  (send ?ep get-dices) (send ?assaulted get-body)) then
-		(send ?ep put-result NOT-PASSED)
+		(send ?ep modify result NOT-PASSED)
 		else
-		(send ?ep put-result PASSED)
+		(send ?ep modify result PASSED)
 	)
 )
 

@@ -94,5 +94,5 @@
 	(pop-focus)
 	(jump (sym-cat START (sub-string 3 (str-length ?class) ?class)))
 	(focus MAIN)
-	(send ?ep put-type ONGOING)
+	(send ?ep modify type ONGOING)
 )

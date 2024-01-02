@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 
     socket.on("announce", (data)=>{
-        console.log("Anuncio:\n"+data);
+        console.log(JSON.parse(data));
         data.trimEnd().split("\n").forEach((value,index) => {
             setTimeout(() => fire("Announce", value, "info"),index*1700);
         });

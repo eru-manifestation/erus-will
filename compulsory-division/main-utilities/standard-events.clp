@@ -8,10 +8,9 @@
 		(card ?c))
     =>
     (send ?e complete)
-    (send ?c put-state UNTAPPED)
+    (send ?c modify state UNTAPPED)
 
     (debug Untapping ?c)
-    (announce all Untap ?c)
 )
 
 ; E-cure
@@ -24,10 +23,9 @@
 		(card ?c))
     =>
     (send ?e complete)
-    (send ?c put-state TAPPED)
+    (send ?c modify state TAPPED)
 
     (debug Healing ?c)
-    (announce all Heal ?c)
 )
 
 
@@ -44,10 +42,9 @@
     =>
     (send ?e complete)
     (in-move ?c ?u)
-    (send ?c put-state UNTAPPED)
+    (send ?c modify state UNTAPPED)
 
     (debug Playing character ?c under ?u)
-    (announce all Play character ?c ?u)
 )
 
 
@@ -64,10 +61,9 @@
     =>
     (send ?e complete)
     (in-move ?item ?owner)
-    (send ?item put-state UNTAPPED)
+    (send ?item modify state UNTAPPED)
 
     (debug Playing minor item ?item under ?owner)
-    (announce all Play minor item ?item ?owner)
 )
 
 
@@ -85,12 +81,11 @@
     =>
     (send ?e complete)
     (in-move ?item ?owner)
-    (send ?item put-state UNTAPPED)
-    (send ?owner put-state TAPPED)
-    (send ?loc put-state TAPPED)
+    (send ?item modify state UNTAPPED)
+    (send ?owner modify state TAPPED)
+    (send ?loc modify state TAPPED)
 
     (debug Playing item ?item under ?owner)
-    (announce all Play item ?item ?owner)
 )
 
 
@@ -111,7 +106,6 @@
     (in-move ?item ?rec)
 
     (debug Transfering item ?item from ?disp to ?rec)
-    (announce all Transfer item ?item ?rec)
 )
 
 
@@ -128,10 +122,9 @@
     =>
     (send ?e complete)
     (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?bearer))
-    (send ?item put-state MP)
+    (send ?item modify state MP)
 
     (debug Storing item ?item in ?haven by ?bearer)
-    (announce all Store ?item ?haven)
 )
 
 
@@ -149,7 +142,6 @@
     (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
 
     (debug Organizing fellowships of player ?p in ?loc)
-    (announce all Organize ?loc)
 )
 
 
@@ -163,10 +155,9 @@
         (r-long-event ?rle))
     =>
     (send ?e complete)
-    (send ?rle put-state DISCARD)
+    (send ?rle modify state DISCARD)
 
     (debug Discarding long-event resoure ?rle)
-    (announce all Discard long-event resource ?rle)
 )
 
 
@@ -181,10 +172,9 @@
     =>
     (send ?e complete)
     ; TODO: Qué siginifica jugar un r-long event?
-    (send ?rle put-state UNTAPPED)
+    (send ?rle modify state UNTAPPED)
 
     (debug Playing long-event resoure ?rle)
-    (announce all Play long-event resource ?rle)
 )
 
 
@@ -199,10 +189,9 @@
     =>
     (send ?e complete)
     ; TODO: Qué siginifica jugar un r-long event?
-    (send ?ale put-state DISCARD)
+    (send ?ale modify state DISCARD)
 
     (debug Discarding long-event adversity ?ale)
-    (announce all Discard long-event adversity ?ale)
 )
 
 
@@ -226,7 +215,6 @@
         (send ?e defuse)
         
         (debug Decaring move of ?self:fell from ?self:from to ?self:to)
-        (announce all Decare move ?self:fell ?self:from ?self:to)
     )
 )
 
@@ -241,11 +229,10 @@
         (char ?c))
     =>
     (send ?e complete)
-    (send ?c put-state DISCARD)
+    (send ?c modify state DISCARD)
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Discarding character ?c)
-    (announce all Discard character ?c)
 )
 
 
@@ -259,11 +246,10 @@
         (char ?c))
     =>
     (send ?e complete)
-    (send ?c put-state OUT-OF-GAME)
+    (send ?c modify state OUT-OF-GAME)
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Destroying character ?c)
-    (announce all Destroy character ?c)
 )
 
 
@@ -281,7 +267,6 @@
     (in-move ?c ?fell)
 
     (debug Moving character ?c to ?fell)
-    (announce all Move character ?c ?fell)
 )
 
 
@@ -299,7 +284,6 @@
     (in-move ?follower ?followed)
 
     (debug Making character ?follower follower of ?followed)
-    (announce all Make follower ?follower ?followed)
 )
 
 
@@ -317,7 +301,6 @@
     (in-move ?follower ?fell)
 
     (debug Making the follower ?follower an usual character in ?fell)
-    (announce all Unmake follower ?follower ?fell)
 )
 
 
@@ -338,7 +321,6 @@
     (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?from) (to ?to) (fell ?fell))
 
     (debug Executing ?fell movement from ?from to ?to)
-    (announce all Execute movement ?fell ?from ?to)
 )
 
 
@@ -358,7 +340,6 @@
     (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?loc) (to ?loc) (fell ?fell))
 
     (debug Executing the remain of ?fell in ?loc)
-    (announce all Execute remain of ?fell in ?loc)
 )
 
 
@@ -381,15 +362,13 @@
         (if (< 0 ?n) then
             (bind ?chosen (insert$ ?chosen 1 ?card))
             (bind ?n (- ?n 1))
-            (send ?card put-state HAND)
+            (send ?card modify state HAND)
             else
             break
         )
     )
 
     (debug Player ?p draws (implode$ ?chosen))
-    (announce ?p Player draw ?p ?chosen)
-    (announce (enemy ?p) Enemy draw ?p (length$ ?chosen))
 )
 
 
@@ -406,7 +385,7 @@
     (send ?e complete)
     ;TODO: No es coherente escribir que se ha completado si se ha completado solo parcialmente. En principio solo se roba una carta
     (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?p))
-    (send ?fell-move put-player-draw (- (send ?fell-move get-player-draw) 1))
+    (send ?fell-move modify player-draw (- (send ?fell-move get-player-draw) 1))
 )
 
 
@@ -423,7 +402,7 @@
     (send ?e complete)
     ;TODO: No es coherente escribir que se ha completado si se ha completado solo parcialmente. En principio solo se roba una carta
     (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?enemy))
-    (send ?fell-move put-enemy-draw (- (send ?fell-move get-enemy-draw) 1))
+    (send ?fell-move modify enemy-draw (- (send ?fell-move get-enemy-draw) 1))
 )
 
 
@@ -442,7 +421,6 @@
     (in-move ?fell ?to)
 
     (debug Changing location of fellowship ?fell from ?from to ?to)
-    (announce all Change fell location ?fell ?from ?to)
 )
 
 
@@ -456,10 +434,9 @@
         (loc ?loc))
     =>
     (send ?e complete)
-    (send ?loc put-state OUT-OF-GAME)
+    (send ?loc modify state OUT-OF-GAME)
 
     (debug Taking ?loc out of the game)
-    (announce all Destroy location ?loc)
 )
 
 
@@ -474,11 +451,9 @@
         (player ?p) (card ?c))
     =>
     (send ?e complete)
-    (send ?c put-state DISCARD)
+    (send ?c modify state DISCARD)
 
     (debug Discarding ?c of ?p from hand)
-    (announce ?p Discard from hand ?c ?p)
-    (announce (enemy ?p) Discard one from hand (enemy ?p))
 )
 
 
@@ -496,7 +471,6 @@
     (make-instance (gen-name EP-loc-phase) of EP-loc-phase (fell ?fell) (loc ?loc))
 
     (debug Beginning location phase for ?fell in ?loc)
-    (announce all Location phase ?fell ?loc)
 )
 
 
@@ -514,12 +488,11 @@
     =>
     (send ?e complete)
     (in-move ?ally ?char)
-    (send ?ally put-state UNTAPPED)
-    (send ?char put-state TAPPED)
-    (send ?loc put-state TAPPED)
+    (send ?ally modify state UNTAPPED)
+    (send ?char modify state TAPPED)
+    (send ?loc modify state TAPPED)
 
     (debug Playing ally ?ally under ?char)
-    (announce all Play ally ?ally ?char)
 )
 
 
@@ -536,11 +509,10 @@
 		(faction ?faction) (char ?char) (loc ?loc))
     =>
     (send ?e complete)
-    (send ?char put-state TAPPED)
+    (send ?char modify state TAPPED)
     (make-instance (gen-name EP-faction-play) of EP-faction-play (faction ?faction) (char ?char) (loc ?loc))
 
     (debug Influencing faction ?faction by ?char in ?loc)
-    (announce Play faction ?faction ?char)
 )
 
 
@@ -554,7 +526,6 @@
     (make-instance (gen-name EP-free-council) of EP-free-council)
 
     (debug The free council has been convoqued)
-    (announce all Convoque council)
 )
 
 
@@ -572,11 +543,10 @@
     =>
     (send ?e complete)
     (in-move ?creature ?fell)
-    (send ?creature put-state UNTAPPED)
-    (send ?e put-attack (instance-name (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))))
+    (send ?creature modify state UNTAPPED)
+    (send ?e modify attack (instance-name (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))))
     
     (debug Creature ?creature attacking ?fell at ?attack-at)
-    (announce all Creature attack ?creature ?fell)
 )
 
 (defrule MAIN::E-creature-attack-fell#defeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -584,10 +554,9 @@
         (creature ?creature) (attack ?at))
     (object (is-a EP-attack) (type OUT) (name ?at) (state DEFEATED))
     =>
-    (send ?creature put-state MP)
+    (send ?creature modify state MP)
 
     (debug Creature ?creature has been defeated, moving it to the player's MP)
-    (announce all Creature defeated ?creature)
 )
 
 (defrule MAIN::E-creature-attack-fell#undefeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
@@ -595,10 +564,9 @@
         (creature ?creature) (attack ?at))
     (object (is-a EP-attack) (type OUT) (name ?at) (state UNDEFEATED))
     =>
-    (send ?creature put-state DISCARD)
+    (send ?creature modify state DISCARD)
 
     (debug Creature ?creature has not been defeated, moving it to enemy's DISCARD)
-    (announce all Creature undefeated ?creature)
 )
 
 
@@ -625,7 +593,6 @@
     (make-instance (gen-name EP-strike) of EP-strike (char ?char) (attackable ?attackable))
     
     (debug Strike of ?attackable faced by ?char)
-    (announce all Strike face ?attackable ?char)
 )
 
 
@@ -640,10 +607,9 @@
     (player ?p)
     =>
     (send ?e complete)
-    (send ?ep-strike put-hindered TRUE)
+    (send ?ep-strike modify hindered TRUE)
 
     (debug ?p chose to face the strike hindered)
-    (announce all Choose hindered ?p ?ep-strike)
 )
 
 

@@ -1,3 +1,16 @@
+(defglobal MAIN
+    ?*announce-p1* = (create$)
+    ?*announce-p2* = (create$)
+    ?*debug* = (create$)
+    ?*debug-state* = FALSE
+    ?*choose-p1* = (create$)
+    ?*choose-p2* = (create$)
+
+    ?*state-p1* = (create$)
+    ?*state-p2* = (create$)
+)
+
+
 (deffunction MAIN::print-content (?multifield)
 	(foreach ?field ?multifield
 		(printout t ?field)
@@ -78,16 +91,16 @@
 (deffunction MAIN::announce (?player $?message)
 	(switch ?player
 		(case (symbol-to-instance-name player1) then 
-			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) (implode$ ?message) crlf))
+			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) (implode$ ?message) , crlf))
 			(return TRUE)
 		)
 		(case (symbol-to-instance-name player2) then 
-			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) crlf))
+			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) , crlf))
 			(return TRUE)
 		)
 		(case all then
-			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) (implode$ ?message) crlf))
-			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) crlf))
+			(bind ?*announce-p1* (insert$ ?*announce-p1* (+ 1 (length$ ?*announce-p1*)) (implode$ ?message) , crlf))
+			(bind ?*announce-p2* (insert$ ?*announce-p2* (+ 1 (length$ ?*announce-p2*)) (implode$ ?message) , crlf))
 			(return TRUE)
 		)
 		(default FALSE)

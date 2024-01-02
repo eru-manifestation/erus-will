@@ -25,16 +25,16 @@
 
 	(if (< ?at-prowess (+ (send ?ep get-dices) ?prowess)) then
 		(if (eq ?at-body nil) then
-			(send ?ep put-state DEFEATED)
+			(send ?ep modify state DEFEATED)
 			else
 			(make-instance (gen-name EP-resistance-check) of EP-resistance-check (attacker ?char) (assaulted ?at))
 		)
 		else
 		(if (= ?at-prowess (+ (send ?ep get-dices) ?prowess)) then
-			(send ?ep put-state UNDEFEATED)
+			(send ?ep modify state UNDEFEATED)
 			else
 			(make-instance (gen-name EP-resistance-check) of EP-resistance-check (attacker ?at) (assaulted ?char))
-			(send ?ep put-state SUCCESSFUL)		
+			(send ?ep modify state SUCCESSFUL)		
 		)
 	)
 )
@@ -43,7 +43,7 @@
 	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
 	(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 	=>
-	(send ?char put-state TAPPED)
+	(send ?char modify state TAPPED)
 )
 
 
@@ -52,10 +52,10 @@
 	(object (is-a EP-resistance-check) (type OUT) (attacker ?char) (assaulted ?at) (result ?res))
 	=>
 	(if (eq ?res PASSED) then
-		(send ?ep put-state UNDEFEATED)
+		(send ?ep modify state UNDEFEATED)
 		else
 		(if (eq ?res NOT-PASSED) then
-			(send ?ep put-state UNDEFEATED)
+			(send ?ep modify state UNDEFEATED)
 		)
 	)
 )

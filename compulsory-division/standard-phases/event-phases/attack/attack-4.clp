@@ -18,7 +18,7 @@
 	?ep-at <- (object (is-a EP-attack) (type ONGOING))
 	(not (object (is-a EP-strike) (state SUCCESSFUL | UNDEFEATED)))
 	=>
-	(send ?ep-at put-state DEFEATED)
+	(send ?ep-at modify state DEFEATED)
 	(debug Attack defeated)
 )
 
@@ -28,6 +28,6 @@
 	?ep-at <- (object (is-a EP-attack) (type ONGOING))
 	(exists (object (is-a EP-strike) (state ?state&:(neq DEFEATED ?state))))
 	=>
-	(send ?ep-at put-state UNDEFEATED)
+	(send ?ep-at modify state UNDEFEATED)
 	(debug Attack undefeated)
 )

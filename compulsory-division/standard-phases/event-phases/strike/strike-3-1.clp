@@ -16,5 +16,5 @@
 (defrule roll-dices
 	(object (is-a EP-strike) (name ?ep) (type ONGOING))
 	=>
-	(send ?ep put-dices (+ (random 1 6) (random 1 6)))
+	(send ?ep modify dices (+ (random 1 6) (random 1 6)))
 )
