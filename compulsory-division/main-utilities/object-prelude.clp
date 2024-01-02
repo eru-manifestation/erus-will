@@ -3,9 +3,9 @@
 		(return ?data))
 	(if (symbolp ?data) then
 		(if (eq TRUE ?data) then
-			(return "true")
+			(return true)
 		else if (eq FALSE ?data) then
-			(return "false")
+			(return false)
 		else
 			(return (str-cat ?data))))
 	(if (multifieldp ?data) then

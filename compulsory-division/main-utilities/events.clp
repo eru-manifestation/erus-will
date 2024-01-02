@@ -37,29 +37,29 @@
 ; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT HANDLER
 (defmessage-handler EVENT complete()
 	; Lo marca como terminado
-	(bind ?self:type OUT)
-	(bind ?self:target-phase (get-target-phase))
+	(send ?self modify type OUT)
+	(send ?self modify target-phase (get-target-phase))
 )
 
 ; MÉTODO PARA QUE NO SE LLEVE A CABO EL EVENTO
 (defmessage-handler EVENT defuse ()
 	; Desactiva el evento y lo marca como terminado
-	(bind ?self:defused TRUE)
-	(bind ?self:type OUT)
-	(bind ?self:target-phase (get-target-phase))
+	(send ?self modify defused TRUE)
+	(send ?self modify type OUT)
+	(send ?self modify target-phase (get-target-phase))
 )
 
 
 ; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT-PHASE HANDLER
 (defmessage-handler EVENT-PHASE complete()
-	(bind ?self:type OUT)
-	(bind ?self:target-phase (get-target-phase))
+	(send ?self modify type OUT)
+	(send ?self modify target-phase (get-target-phase))
 )
 
 ; MÉTODO PARA QUE NO SE LLEVE A CABO EL EVENT-PHASE (o se pare)
 (defmessage-handler EVENT-PHASE defuse ()
-	(bind ?self:defused TRUE)
-	(bind ?self:type OUT)
-	(bind ?self:target-phase (get-target-phase))
+	(send ?self modify defused TRUE)
+	(send ?self modify type OUT)
+	(send ?self modify target-phase (get-target-phase))
 	; TODO: que ocurre cuando defuseas un EVENT-PHASE?
 )
