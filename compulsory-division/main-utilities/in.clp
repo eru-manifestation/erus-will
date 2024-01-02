@@ -24,6 +24,7 @@
 (deffunction MAIN::in-move (?element ?to)
 	(in-unchain ?element)
 	(assert (in (over ?to) (under ?element)))
+	(announce all { "operation" : "move" , "id" : (JSONformat ?element) , "to" : (JSONformat ?to) })
 )
 
 ; TODO: testear el arbol de posicion en cuanto a eliminar: subarboles eliminados flotantes, etc.
