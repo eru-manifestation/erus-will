@@ -77,17 +77,17 @@
 
 
 
-.ownable[player="[player1]"]{
+.ownable[player="player1"]{
   border: 2px solid blue !important;
 }
-*[id="[player1]"] {
+*[id="player1"] {
   background-color:blue;
 }
 
-.ownable[player="[player2]"]{
+.ownable[player="player2"]{
   border: 2px solid red !important;
 }
-*[id="[player2]"] {
+*[id="player2"] {
   background-color:red;
 }
 
