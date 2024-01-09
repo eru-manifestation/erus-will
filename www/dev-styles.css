@@ -8,7 +8,7 @@
 }
 
 
-.game div {
+#game-space div {
   display: grid;
   grid-template-columns: repeat(2, auto);
   justify-items: center;
@@ -19,7 +19,7 @@
   color: yellow;
 }
 
-.game div::after{
+#game-space div::after{
   content: attr(id);
   grid-column: 1/3;
   grid-row: 1;
@@ -44,7 +44,7 @@
 }
 
 
-.game {
+#game-space {
   display: grid;
   grid-template-areas:
   "player         pass        enemy           "
@@ -77,17 +77,17 @@
 
 
 
-.ownable[player="player1"]{
+.ownable[player="[player1]"]{
   border: 2px solid blue !important;
 }
-*[id="player1"] {
+*[id="[player1]"] {
   background-color:blue;
 }
 
-.ownable[player="player2"]{
+.ownable[player="[player2]"]{
   border: 2px solid red !important;
 }
-*[id="player2"] {
+*[id="[player2]"] {
   background-color:red;
 }
 

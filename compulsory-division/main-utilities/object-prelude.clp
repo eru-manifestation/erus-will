@@ -4,14 +4,16 @@
 	(if (symbolp ?data) then
 		(if (eq TRUE ?data) then
 			(return true)
-		else if (eq FALSE ?data) then
-			(return false)
+		else 
+			(if (eq FALSE ?data) then
+				(return false)
+			)
 		else
 			(return (str-cat ?data))))
 	(if (multifieldp ?data) then
 		(return (implode$ ?data)))
 	(if (instance-namep ?data) then
-		(return (str-cat (instance-name-to-symbol ?data))))
+		(return (str-cat "[" (instance-name-to-symbol ?data) "]")))
 	(return "ERROR")
 )
 
@@ -32,7 +34,7 @@
 	; TODO HACER ANNOUNCE MODIFY AQUI
 	(bind ?instance-name (instance-name ?self))
 	(announce all { "operation" : "modify" ,
-		"id" : (str-cat (instance-name-to-symbol ?instance-name)) , 
+		"id" : (JSONformat ?instance-name) , 
 		"slot" : (str-cat ?slotname) ,
 		"value" : (JSONformat ?value) }
 	)
@@ -56,7 +58,7 @@
 	)
     (announce all { "operation" : "create" ,
 		; Nombre de la instancia
-		"id" : (str-cat (instance-name ?self)) ,
+		"id" : (JSONformat (instance-name ?self)) ,
 		; Clases de la instancia
 		; La coma de cierre aparece en values
 		"classes" : $?classes
@@ -67,5 +69,5 @@
 
 (defmessage-handler USER delete before ()
 	; TODO HACER ANNOUNCE DESTROY
-	(announce all { "operation" : "delete" , "id" : (str-cat (instance-name ?self)) })
+	(announce all { "operation" : "delete" , "id" : (JSONformat (instance-name ?self)) })
 )
