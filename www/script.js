@@ -152,15 +152,21 @@ function completeComplexChoice(event){
     if (event.dataTransfer.types.includes("text/plain")){
         var data = event.dataTransfer.getData("text/plain")+" "+event.target.id;
         send_orders(data);
-        event.stopPropagation();
     }
+    event.stopPropagation();
     event.preventDefault();
+}
+
+function prevention(event){
+    event.preventDefault();
+    event.stopPropagation();
 }
 
 function send_orders(orders){
     console.log("Orders: {"+orders+"}");
     socket.emit("orders",orders);
     orders.value="";
+    disableChoices();
 }
 
 
@@ -172,6 +178,9 @@ function disableChoices(){
             draggable.removeEventListener("click", emitSimpleChoice);
             draggable.removeEventListener("dragstart", startComplexChoice);
             draggable.removeEventListener("dragend", restartStyles);
+            draggable.removeEventListener("dragenter", prevention);
+            draggable.removeEventListener("dragover", prevention);
+            draggable.removeEventListener("dragleave", prevention);
             draggable.removeEventListener("drop", completeComplexChoice);
         }
     );
@@ -179,7 +188,6 @@ function disableChoices(){
 
 function enableChoices(){
     choice.forEach((singleChoice)=>{
-        console.log(singleChoice);
         if(singleChoice.length===1) document.getElementById(singleChoice[0]).classList.add("choosable-final");
         else document.getElementById(singleChoice[0]).classList.add("choosable");
     });
@@ -189,6 +197,9 @@ function enableChoices(){
             draggable.addEventListener("click", emitSimpleChoice);
             draggable.addEventListener("dragstart", startComplexChoice);
             draggable.addEventListener("dragend", restartStyles);
+            draggable.addEventListener("dragenter", prevention);
+            draggable.addEventListener("dragover", prevention);
+            draggable.addEventListener("dragleave", prevention);
             draggable.addEventListener("drop", completeComplexChoice);
         }
     );
@@ -201,29 +212,23 @@ function animate(announces){
         if(announce!=null)
         switch(announce.operation){
             case "create":
-                console.log("created");
                 insertElement(announce);
                 break;
             case "modify":
-                console.log("modified");
                 modifyElement(announce);
                 break;
             case "delete":
-                console.log("deleted");
                 document.getElementById(announce.id).remove();
                 break;
             case "move":
-                console.log("moved");
                 document.getElementById(announce.to).appendChild(document.getElementById(announce.id));
                 break;
             default:
                 console.error("error in operation type");
                 break;
         }
-        else {
-            // disableChoices();
-            // enableChoices();
-        }
+        else enableChoices();
+        
     },index++*50));
 }
 
@@ -252,6 +257,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     socket.on("satm_error", (data)=>{
         console.log("STAM error:\n"+data);
         fire("Invalid action", data, "error");
+        enableChoices();
     });
 
     socket.on("choose", (data)=>{
