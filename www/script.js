@@ -76,8 +76,8 @@ function insertElement(announce){
 }
 
 function modifyElement(announce){
-    if(announce.slot="state"){
-        var element = document.getElementById(announce.id);
+    var element = document.getElementById(announce.id);
+    if(announce.slot=="state"){
         var player = element.getAttribute("player");
         var destination=null;
         switch(announce.value){

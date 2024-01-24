@@ -35,7 +35,7 @@
 	(bind ?instance-name (instance-name ?self))
 	(announce all { "operation" : "modify" ,
 		"id" : (JSONformat ?instance-name) , 
-		"slot" : (str-cat ?slotname) ,
+		"slot" : (JSONformat ?slotname) ,
 		"value" : (JSONformat ?value) }
 	)
 	(send ?instance-name (sym-cat put- ?slotname) ?value)
