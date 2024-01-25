@@ -50,7 +50,7 @@
 
 (deffunction MAIN::get-announce-p1 ()
 	(if (neq 0 (length$ ?*announce-p1*)) then
-		(bind ?res (str-cat (expand$ ?*announce-p1*)))
+		(bind ?res (str-cat "[ " (expand$ ?*announce-p1*) " null ]"))
 		(bind ?*announce-p1* (create$))
 		?res
 		else
@@ -60,7 +60,7 @@
 
 (deffunction MAIN::get-announce-p2 ()
 	(if (neq 0 (length$ ?*announce-p2*)) then
-		(bind ?res (str-cat (expand$ ?*announce-p2*)))
+		(bind ?res (str-cat "[ " (expand$ ?*announce-p2*) " null ]"))
 		(bind ?*announce-p2* (create$))
 		?res
 		else

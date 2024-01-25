@@ -76,9 +76,6 @@
     (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1-2.clp")
     (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-2.clp")
 
-    (load* "compulsory-division/standard-phases/event-phases/loc-organize/loc-organize-1.clp")
-    (load* "compulsory-division/standard-phases/event-phases/loc-organize/loc-organize-2.clp")
-
     (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-1.clp")
     (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-2.clp")
     (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-1.clp")

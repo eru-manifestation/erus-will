@@ -23,7 +23,8 @@
     	(player ?p)
 
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object E-char-play))
+		(not (object (is-a E-char-play)))
+
 
 		; Hay un personaje en la mano del jugador dueño del turno
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
@@ -65,8 +66,8 @@
     	(player ?p)
 		
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object E-char-play))
-		
+		(not (object (is-a E-char-play)))
+
 		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen necesaria para jugarlo)
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
