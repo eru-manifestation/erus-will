@@ -20,13 +20,16 @@
 (defrule action-char-play#as-follower (declare (salience ?*action-population-salience*))
 	(logical 
 		(only-actions (phase P-1-1-1))
-    	(player ?p)	
+    	(player ?p)
+
+		; Sólo se puede jugar un personaje por turno en fase de organización
+		(not (object E-char-play))
+
 		; Hay un personaje en la mano del jugador dueño del turno
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
 			(birthplace ?bp) (race ?race) (mind ?mind))
 		
-		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de
-		; una compañía) y la compañía tiene espacio
+		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de una compañía) y la compañía tiene espacio
 		(object (is-a CHARACTER) (player ?p) (name ?play-under) (influence ?influence&:(<= ?mind ?influence)))
 		(object (is-a FELLOWSHIP) (player ?p) (name ?fell) (companions ?comp&:(< ?comp 7)))
 		(in (transitive FALSE) (over ?fell) (under ?play-under))
@@ -60,8 +63,11 @@
 	(logical 
 		(only-actions (phase P-1-1-1))
     	(player ?p)
-		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen
-		; necesaria para jugarlo)
+		
+		; Sólo se puede jugar un personaje por turno en fase de organización
+		(not (object E-char-play))
+		
+		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen necesaria para jugarlo)
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
 		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
 			(birthplace ?bp) (race ?race) (mind ?mind&:(<= ?mind ?gen-inf)))
@@ -79,9 +85,7 @@
 		))
 	)
 	=>
-	; Asertar la acción "Jugar al personaje en esa compañía" (tener en cuenta la
-	; condición de que una localización debe tener siempre una compañía vacía
-	; asociada)
+	; Asertar la acción "Jugar al personaje en esa compañía" (tener en cuenta la condición de que una localización debe tener siempre una compañía vacía asociada)
 	(assert (action 
 		(player ?p)
 		(event-def char-play)
@@ -95,9 +99,7 @@
 
 
 ; ACCIÓN: TRANSFERIR OBJETO
-; Puedes intercambiar objetos entre tus personajes si están en
-; el mismo lugar, pero antes, el portador de cada objeto deberá
-; hacer un chequeo de corrupción
+; Puedes intercambiar objetos entre tus personajes si están en el mismo lugar, pero antes, el portador de cada objeto deberá hacer un chequeo de corrupción
 (defrule action-item-transfer (declare (salience ?*action-population-salience*))
 	(logical
 		(only-actions (phase P-1-1-1))
@@ -156,36 +158,8 @@
 )
 
 
-; ACCIÓN: REORGANIZAR COMPAÑÍAS EN UN LUGAR
-; Si tus personajes están en el mismo refugio puedes dividirlos en
-; cualquier número de compañías
-(defrule action-loc-organize (declare (salience ?*action-population-salience*))
-	(logical
-		(only-actions (phase P-1-1-1))
-    	(player ?p)
-		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
-		(object (is-a HAVEN) (name ?loc))
-		(exists 
-			(object (is-a CHARACTER) (name ?char) (player ?p))
-			(in (over ?loc) (under ?char))
-		)
-	)
-	=>
-	(assert (action 
-		(player ?p)
-		(event-def loc-organize)
-		(description (sym-cat "Organize fellowship in " ?loc))
-		(identifier ?loc)
-		(data (create$ 
-		"( player [" ?p "])" 
-		"( loc [" ?loc "])"))
-	))
-)
-
-
 ; ACCIÓN: DESCARTAR UN PERSONAJE
-; Como parche para la opcion que deja la guia de organizar compañia de modo que descartes los
-; personajes que no te quepan en la compañia
+; Como parche para la opcion que deja la guia de organizar compañia de modo que descartes los personajes que no te quepan en la compañia
 
 ; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
 (defrule action-char-discard (declare (salience ?*action-population-salience*))
@@ -205,5 +179,119 @@
 		(identifier ?char PLAYERDISCARD)
 		(data (create$ 
 		"( char [" ?char "])"))
+	))
+)
+
+
+
+; ACCIÓN: MOVER PERSONAJE DE UNA COMPAÑÍA A OTRA
+; Siempre puedes mover a un personaje a otra compañia del lugar a menos que ya tenga 7 integrantes
+(defrule action-char-move#change-fell (declare (salience ?*action-population-salience*))
+	(logical
+		(only-actions (phase P-1-1-1))
+		(object (is-a HAVEN) (name ?loc))
+		(player ?p)
+
+		; Dado un personaje directamente bajo una compañía del lugar (no es seguidor), y otra compañía del lugar
+      (object (is-a FELLOWSHIP) (name ?ini-fell) (player ?p))
+		(in (transitive FALSE) (over ?loc) (under ?ini-fell))
+
+		(object (is-a CHARACTER) (name ?char) (player ?p))
+		(in (transitive FALSE) (over ?ini-fell) (under ?char))
+
+      ;Testear que la compañía destino no tenga 7 o más integrantes
+      (object (is-a FELLOWSHIP) (name ?fell&:(neq ?ini-fell ?fell))
+			(companions ?cn&:(< ?cn 7)) (player ?p))
+		(in (transitive FALSE) (over ?loc) (under ?fell))
+
+	)
+	=>
+	; Asertar la acción "Mover personaje de una compañia a otra"
+	(assert (action 
+		(player ?p)
+		(event-def char-move)
+		(description (sym-cat "Move " ?char " from " ?ini-fell " to " ?fell))
+		(identifier ?char ?fell)
+		(data (create$ 
+		"( char [" ?char "])" 
+		"( fell [" ?fell "])"))
+	))
+)
+
+
+; ACCIÓN: HACER PERSONAJE UN SEGUIDOR
+; Siempre que un personaje tenga suficiente influencia puedes hacer de un personaje seguidor
+(defrule action-char-follow (declare (salience ?*action-population-salience*))
+	(logical 
+		(only-actions (phase P-1-1-1))
+		(object (is-a HAVEN) (name ?loc))
+		(player ?p)
+
+		;Dado un personaje en la localizacion con mente inferior a la influencia de otro en juego (que no es seguidor)
+		(object (is-a CHARACTER) (name ?headchar) (player ?p) (influence ?influence))
+		(in (over ?loc) (under ?headchar))
+
+		;Encuentro la compañia del personaje (uso transitive FALSE para verificar que ?headchar no es seguidor)
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+		(in (transitive FALSE) (over ?fell) (under ?headchar))
+
+		; Encuentro otro personaje en la compañia (no en la localizacion porque puedo pasarme del limite de la compañia) y verifico que ?headchar tenga influencia para poder con ?tobefollower
+		(object (is-a CHARACTER) (player ?p) (mind ?mind&:(<= ?mind ?influence))
+			(name ?tobefollower&:(neq ?headchar ?tobefollower)))
+		(in (over ?fell) (under ?tobefollower))
+
+		; Verifico que es otro personaje no tenga a su vez seguidores
+		(not (exists
+			(object (is-a CHARACTER) (name ?underchar) (player ?p))
+			(in (over ?tobefollower) (under ?underchar))
+		))
+	)
+	=>
+	; Asertar la acción "Hacer personaje seguidor"
+	(assert (action 
+		(player ?p)
+		(event-def char-follow)
+		(description (sym-cat "Make " ?tobefollower " a follower of " ?headchar))
+		(identifier ?tobefollower ?headchar)
+		(data (create$ 
+		"( followed [" ?headchar "])" 
+		"( follower [" ?tobefollower "])"))
+	))
+)
+
+
+; ACCIÓN: PASAR DE SEGUIDOR A PERSONAJE
+; Siempre que el jugador tenga suficiente influencia general y que haya espacio en la compañía puedo bajarlo
+(defrule action-char-unfollow (declare (salience ?*action-population-salience*))
+	(logical 
+		(only-actions (phase P-1-1-1))
+		(object (is-a HAVEN) (name ?loc))
+		(player ?p)
+
+		;Compruebo que el jugador tenga influencia general suficiente
+		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
+
+		;Dado un personaje en la localizacion que sea seguidor (bajo otro personaje)
+		(object (is-a CHARACTER) (name ?followed) (player ?p))
+		(in (over ?loc) (under ?followed))
+
+		;Compruebo que sea seguidor
+		(object (is-a CHARACTER) (name ?follower) (player ?p) (mind ?mind&:(<= ?mind ?gen-inf)))
+		(in (over ?followed) (under ?follower))
+
+		;Encuentro una compañía con espacio en el lugar
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
+		(in (transitive FALSE) (over ?loc) (under ?fell))
+	)
+	=>
+	; Asertar la acción "Hacer seguidor un personaje en cierta compañía"
+	(assert (action 
+		(player ?p)
+		(event-def char-unfollow)
+		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
+		(identifier ?follower ?fell)
+		(data (create$ 
+		"( fell [" ?fell "])" 
+		"( follower [" ?follower "])"))
 	))
 )

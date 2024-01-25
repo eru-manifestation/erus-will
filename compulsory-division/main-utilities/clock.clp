@@ -32,11 +32,6 @@ corruption-check-1-2
 corruption-check-2
 FALSE
 
-START-loc-organize
-loc-organize-1
-loc-organize-2
-FALSE
-
 START-fell-move
 fell-move-1
 fell-move-2
