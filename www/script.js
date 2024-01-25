@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     socket.on("announce", (data)=>{
         var announces = JSON.parse(data);
-        console.log(announces);
+        console.log("Announces:", announces);
         animate(announces);
         // data.trimEnd().split("\n").forEach((value,index) => {
         //     setTimeout(() => fire("Announce", value, "info"),index*1700);
