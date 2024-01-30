@@ -22,34 +22,26 @@ function enemy(player){
 
 function updatePlayer(player, env, room){
     return new Promise((resolve,reject)=>{
-        var content;
+        var content, announce, choice;
         env.wrapEval("(get-debug)")
         .then((debug)=>{
             //TODO: fix that the debug buffer is shared, so it mustn't be emptied when one player
             //      reads it
             var data = debug.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).emit("log", "Debug buffer\n"+data);
-            return env.wrapEval("(update-index (symbol-to-instance-name "+player+"))");
         })
         .then(()=>{
-            content = (player==="player1")? "state-p1" : "state-p2";
-            return env.wrapEval("(get-"+content+")");
-        })
-        .then((state)=>{    
-            var data =state.replaceAll("crlf","\n");
-            if (data != "") io.sockets.in(room).except(enemy(player)).emit("state", data);
             content = (player==="player1")? "announce-p1" : "announce-p2";
             return env.wrapEval("(get-"+content+")");
         })
-        .then((announce)=>{
-            var data = announce.replaceAll("crlf","\n");
-            if (data != "") io.sockets.in(room).except(enemy(player)).emit("announce",data);
+        .then((rawAnnounce)=>{
+            announce = rawAnnounce.replaceAll("crlf","\n");
             content = (player==="player1")? "choose-p1" : "choose-p2";
             return env.wrapEval("(get-"+content+")");
         })
-        .then((choose)=>{
-            var data = choose.replaceAll("crlf","\n");
-            if (data != "") io.sockets.in(room).except(enemy(player)).emit("choose", data);
+        .then((rawChoose)=>{
+            choice = rawChoose.replaceAll("crlf","\n");
+            io.sockets.in(room).except(enemy(player)).emit("satm_ok", `{ "announces" : ${announce} , "choice" : ${choice} }`);
             resolve("Player "+player+"'s of room "+room+" update successful")
         })
         .catch(reject);

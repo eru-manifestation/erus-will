@@ -7,10 +7,11 @@
 
 ; Cargo el modulo main
 (deffunction load-utilities ()
+    (load* "compulsory-division/main-utilities/innit.clp")
+
     ;interactions and debug
     (load* "compulsory-division/main-utilities/user-interaction/interaction.clp")
 
-    (load* "compulsory-division/main-utilities/innit.clp")
     (load* "compulsory-division/main-utilities/object-prelude.clp")
     (load* "compulsory-division/main-utilities/objects.clp")
 

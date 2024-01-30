@@ -24,7 +24,7 @@
 		(player ?enemy)
 		(event-def fell-move-enemy-draw)
 		(description (sym-cat "Draw 1"))
-		(identifier PLAYERDRAW)
+		(identifier (drawsymbol ?p))
 		(data (create$ 
 		"( fell-move [" ?e "])"))
 	))

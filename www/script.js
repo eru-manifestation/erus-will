@@ -3,7 +3,7 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
-var choice = [[]];
+var choice = [];
 
 var game_space,
     player, enemy, 
@@ -131,8 +131,8 @@ function startComplexChoice(event){
     event.dataTransfer.setData("text/plain", draggable.id);
     removeChoiceStyles();
 
-    choice.filter((singleChoice)=>singleChoice[0]===draggable.id & singleChoice.length===2).forEach((singleChoice)=>{
-        document.getElementById(singleChoice[1]).classList.add("choosable-final");
+    choice.filter((singleChoice)=>singleChoice.vector[0]===draggable.id & singleChoice.vector.length===2).forEach((singleChoice)=>{
+        document.getElementById(singleChoice.vector[1]).classList.add("choosable-final");
         //TODO: Activar aquí el listener?
     });
     event.stopPropagation();
@@ -142,8 +142,8 @@ function restartStyles(event){
     removeChoiceStyles();
 
     choice.forEach((singleChoice)=>{
-        if(singleChoice.length===1) document.getElementById(singleChoice[0]).classList.add("choosable-final");
-        else document.getElementById(singleChoice[0]).classList.add("choosable");
+        if(singleChoice.vector.length===1) document.getElementById(singleChoice.vector[0]).classList.add("choosable-final");
+        else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
     });
     event.stopPropagation();
 }
@@ -188,8 +188,8 @@ function disableChoices(){
 
 function enableChoices(){
     choice.forEach((singleChoice)=>{
-        if(singleChoice.length===1) document.getElementById(singleChoice[0]).classList.add("choosable-final");
-        else document.getElementById(singleChoice[0]).classList.add("choosable");
+        if(singleChoice.vector.length===1) document.getElementById(singleChoice.vector[0]).classList.add("choosable-final");
+        else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
     });
 
     document.querySelectorAll("*[draggable=true]").forEach(
@@ -208,28 +208,28 @@ function enableChoices(){
 
 function animate(announces){
     var index = 0;
-    announces.forEach((announce) => setTimeout(()=>{
+    var msdelay = 50;
+    announces.forEach((announce) => {
         if(announce!=null)
-        switch(announce.operation){
-            case "create":
-                insertElement(announce);
-                break;
-            case "modify":
-                modifyElement(announce);
-                break;
-            case "delete":
-                document.getElementById(announce.id).remove();
-                break;
-            case "move":
-                document.getElementById(announce.to).appendChild(document.getElementById(announce.id));
-                break;
-            default:
-                console.error("error in operation type");
-                break;
-        }
-        else enableChoices();
-        
-    },index++*50));
+            switch(announce.operation){
+                case "create":
+                    setTimeout(()=>insertElement(announce),index++*msdelay);
+                    break;
+                case "modify":
+                    setTimeout(()=>modifyElement(announce),index++*msdelay);
+                    break;
+                case "delete":
+                    setTimeout(()=>document.getElementById(announce.id).remove(),index++*msdelay);
+                    break;
+                case "move":
+                    setTimeout(()=>document.getElementById(announce.to).appendChild(document.getElementById(announce.id)),index++*msdelay);
+                    break;
+                default:
+                    console.error("error in operation type");
+                    break;
+            }
+        else setTimeout(()=>enableChoices(),index++*msdelay);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -237,15 +237,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
     player = document.getElementById("player");
     enemy = document.getElementById("enemy");
     locations = document.getElementById("locations");
-    player_hand = document.getElementById("PLAYERHAND");
-    enemy_hand = document.getElementById("ENEMYHAND");
-    player_draw = document.getElementById("PLAYERDRAW");
-    enemy_draw = document.getElementById("ENEMYDRAW");
-    player_discard = document.getElementById("PLAYERDISCARD");
-    enemy_discard = document.getElementById("ENEMYDISCARD");
-    player_mp = document.getElementById("PLAYERMP");
-    enemy_mp = document.getElementById("ENEMYMP");
-    out_of_game = document.getElementById("OUTOFGAME");
+    player_hand = document.getElementById("[PLAYERHAND]");
+    enemy_hand = document.getElementById("[ENEMYHAND]");
+    player_draw = document.getElementById("[PLAYERDRAW]");
+    enemy_draw = document.getElementById("[ENEMYDRAW]");
+    player_discard = document.getElementById("[PLAYERDISCARD]");
+    enemy_discard = document.getElementById("[ENEMYDISCARD]");
+    player_mp = document.getElementById("[PLAYERMP]");
+    enemy_mp = document.getElementById("[ENEMYMP]");
+    out_of_game = document.getElementById("[OUTOFGAME]");
     events = document.querySelector(".events");
 
 
@@ -260,18 +260,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
         enableChoices();
     });
 
-    socket.on("choose", (data)=>{
-        console.log("Choose:\n"+data);
-        choice = data.trimEnd().split("\n").map((string)=>string.split(" -- ")[0].trimEnd().split(" "));
-    });
-
-    socket.on("announce", (data)=>{
-        var announces = JSON.parse(data);
-        console.log("Announces:", announces);
-        animate(announces);
-        // data.trimEnd().split("\n").forEach((value,index) => {
-        //     setTimeout(() => fire("Announce", value, "info"),index*1700);
-        // });
+    socket.on("satm_ok", (data)=>{
+        data = JSON.parse(data);
+        choice = data.choice.slice(0,-1);
+        
+        console.log("Choose:", data.choice);
+        console.log("Announces:", data.announces);
+        animate(data.announces);
     });
 
 });

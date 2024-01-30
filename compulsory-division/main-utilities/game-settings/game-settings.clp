@@ -15,3 +15,35 @@
 
 )
 
+(deffunction handsymbol (?player)
+    (switch ?player
+        (case [player1] then [PLAYERHAND])
+        (case [player2] then [ENEMYHAND])
+        (default FALSE)
+    )
+)
+
+(deffunction drawsymbol (?player)
+    (switch ?player
+        (case [player1] then [PLAYERDRAW])
+        (case [player2] then [ENEMYDRAW])
+        (default FALSE)
+    )
+)
+
+(deffunction discardsymbol (?player)
+    (switch ?player
+        (case [player1] then [PLAYERDISCARD])
+        (case [player2] then [ENEMYDISCARD])
+        (default FALSE)
+    )
+)
+
+(deffunction mpsymbol (?player)
+    (switch ?player
+        (case [player1] then [PLAYERMP])
+        (case [player2] then [ENEMYMP])
+        (default FALSE)
+    )
+)
+

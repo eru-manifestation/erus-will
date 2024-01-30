@@ -13,7 +13,15 @@
 ; Parar la ejecución y mostrar las posibilidades
 (deffunction MAIN::collect-actions (?p)
 	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
-		(choose ?p ?action:identifier -- ?action:description)
+		(if (eq (length$ ?action:identifier) 1) then
+			(choose ?p { 
+				"vector" : [ (implode$ ?action:identifier) ] , 
+				"description" : (JSONformat ?action:description) })
+			else
+			(choose ?p { 
+				"vector" : [ (str-cat "[" (nth$ 1 ?action:identifier) "]") , (str-cat "[" (nth$ 2 ?action:identifier)"]" ) ] ,
+				"description" : (JSONformat ?action:description) })
+		)
 	)
 	(if (not (any-factp ((?action action)) (and (eq ?p ?action:player) ?action:blocking))) then
 		(bind ?description "Pass")
@@ -21,7 +29,9 @@
 		(bind ?event-def nil)
 		(bind ?blocking TRUE)
 		(assert (action (player ?p) (identifier ?identifier) (description ?description) (event-def ?event-def) (blocking ?blocking)))
-		(choose ?p ?identifier -- ?description)
+		(choose ?p { 
+			"vector" : [ (str-cat ?identifier) ] , 
+			"description" : (JSONformat ?description) })
 	)
 
 	(if ?*debug-state* then
