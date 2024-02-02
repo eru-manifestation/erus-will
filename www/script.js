@@ -6,7 +6,6 @@ const dev = urlParams.get("dev");
 var choice = [];
 
 var closeUp, game_space,
-    player, enemy, 
     locations, 
     player_hand, enemy_hand, 
     player_draw, enemy_draw, 
@@ -60,10 +59,8 @@ function makeElement(announce){
 
 function insertElement(announce){
     var destination = game_space;
-    if(announce.id=="[player1]"){
-        destination=player;
-    }else if(announce.id=="[player2]"){
-        destination=enemy;
+    if(announce.id=="[player1]" || announce.id=="[player2]"){
+        destination=game_space;
     }else if(announce.classes.includes("location")){
         destination=locations;
     }else if(announce.classes.includes("card")){
@@ -266,8 +263,6 @@ function closeUpListener(e){
 document.addEventListener("DOMContentLoaded", ()=>{
     closeUp = document.getElementById("close-up");
     game_space = document.getElementById("game-space");
-    player = document.getElementById("player");
-    enemy = document.getElementById("enemy");
     locations = document.getElementById("locations");
     player_hand = document.getElementById("[PLAYERHAND]");
     enemy_hand = document.getElementById("[ENEMYHAND]");

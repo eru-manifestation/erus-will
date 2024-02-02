@@ -94,6 +94,10 @@
   background-size: cover;
 }
 
+.player{
+  width: 20%;
+}
+
 #close-up {
 	display: none;
 	position: fixed;
@@ -120,8 +124,8 @@
   justify-items: center;
 }
 
-.player           {grid-area: player;}
-.enemy            {grid-area: enemy;}
+#\[player1\]      {background-color:blue;   grid-area: player;}
+#\[player2\]      {background-color:red;    grid-area: enemy;}
 .locations        {background-color:rgb(139, 135, 135); grid-area: locations;}
 .player_hand      {background-color:#5b3d2d; grid-area: player-hand;}
 .enemy_hand       {background-color:#5b3d2d; grid-area: enemy-hand;}
@@ -143,15 +147,9 @@
 .ownable[player="[player1]"]{
   border: 2px solid blue !important;
 }
-*[id="[player1]"] {
-  background-color:blue;
-}
 
 .ownable[player="[player2]"]{
   border: 2px solid red !important;
-}
-*[id="[player2]"] {
-  background-color:red;
 }
 
 .choosable{
