@@ -5,7 +5,7 @@ const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
 var choice = [];
 
-var game_space,
+var closeUp, game_space,
     player, enemy, 
     locations, 
     player_hand, enemy_hand, 
@@ -28,7 +28,9 @@ function fire(title,text,icon){
         timer:3000
     })
 }
-
+function showChoiceDescription(e){
+    fire("Choose to:", e.target.getAttribute("choiceDescription"), "info");
+}
 
 function upcaseFirst(str){
     if (["a","an","and","of","the","or","in","out"].includes(str))
@@ -41,17 +43,18 @@ function classToImg(cls){
 }
 
 function makeElement(announce){
-    var res = `<div id=${announce.id} class="${announce.classes.reduce((a,b)=>a+" "+b,"")}"`
+    var id = announce.id;
+    var res = `<div id=${id} class="${announce.classes.reduce((a,b)=>a+" "+b,"")}"`
     if(announce.classes.includes("card"))
         res+=`style=background-image:url('../tw/icons/${classToImg(announce.classes[0])}.jpg'`
-    res+=` draggable=true`;
+    res+=` draggable=true>`;
     announce = new Map(Object.entries(announce));
     announce.delete("operation");
     announce.delete("id");
     announce.delete("classes");
     announce.delete("instance-#");
-    announce.forEach((value,key) => res+=` ${key}="${value}"`)
-    res += "></div>"
+    announce.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}"><span>${value}</span></div>`)
+    res += "</div>"
     return res;
 }
 
@@ -76,10 +79,10 @@ function insertElement(announce){
 }
 
 function modifyElement(announce){
-    var element = document.getElementById(announce.id);
     if(announce.slot=="state"){
-        var player = element.getAttribute("player");
-        var destination=null;
+        var element = document.getElementById(announce.id);
+        var player = document.getElementById(announce.id+"__player").textContent;
+        var destination = null;
         switch(announce.value){
             case "HAND":
                 if(player=="[player1]") destination = player_hand;
@@ -107,7 +110,9 @@ function modifyElement(announce){
                 break;
         }
     }
-    element.setAttribute(announce.slot,announce.value);
+    var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
+    elementAtt.textContent = announce.value;
+    
 }
 
 
@@ -119,32 +124,52 @@ function emitSimpleChoice(event){
 }
 
 
-function removeChoiceStyles(){
+function removeAllChoiceStyles(){
     document.querySelectorAll(".choosable")
         .forEach((choosable)=>choosable.classList.remove("choosable"));
     document.querySelectorAll(".choosable-final")
-        .forEach((choosable)=>choosable.classList.remove("choosable-final"));
+        .forEach((choosable)=>{
+            choosable.classList.remove("choosable-final");
+            choosable.removeAttribute("choiceDescription");
+            choosable.removeEventListener("dragenter", showChoiceDescription);
+            choosable.removeEventListener("mouseenter", showChoiceDescription);
+        });
 }
 
 function startComplexChoice(event){
     var draggable = event.target;
     event.dataTransfer.setData("text/plain", draggable.id);
-    removeChoiceStyles();
+    removeAllChoiceStyles();
 
-    choice.filter((singleChoice)=>singleChoice.vector[0]===draggable.id & singleChoice.vector.length===2).forEach((singleChoice)=>{
-        document.getElementById(singleChoice.vector[1]).classList.add("choosable-final");
-        //TODO: Activar aquí el listener?
+    choice
+    .filter((singleChoice) => singleChoice.vector[0]===draggable.id & singleChoice.vector.length===2)
+    .forEach((singleChoice) => {
+        var complexChoiceTarget = document.getElementById(singleChoice.vector[1])
+        complexChoiceTarget.classList.add("choosable-final");
+        complexChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
+        complexChoiceTarget.addEventListener("dragenter", showChoiceDescription);
+
+        //TODO: Activar aquí el listener sólo para los que les interese?
     });
     event.stopPropagation();
 }
 
-function restartStyles(event){
-    removeChoiceStyles();
-
-    choice.forEach((singleChoice)=>{
-        if(singleChoice.vector.length===1) document.getElementById(singleChoice.vector[0]).classList.add("choosable-final");
+function applyStyles(){
+    choice
+    .forEach((singleChoice)=>{
+        if(singleChoice.vector.length===1) {
+            var simpleChoiceTarget = document.getElementById(singleChoice.vector[0]);
+            simpleChoiceTarget.classList.add("choosable-final");
+            simpleChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
+            simpleChoiceTarget.addEventListener("mouseenter", showChoiceDescription);
+        }
         else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
     });
+}
+
+function restartStyles(event){
+    removeAllChoiceStyles();
+    applyStyles();
     event.stopPropagation();
 }
 
@@ -171,7 +196,7 @@ function send_orders(orders){
 
 
 function disableChoices(){
-    removeChoiceStyles();
+    removeAllChoiceStyles();
 
     document.querySelectorAll("*[draggable=true]").forEach(
         (draggable) => {
@@ -187,10 +212,7 @@ function disableChoices(){
 }
 
 function enableChoices(){
-    choice.forEach((singleChoice)=>{
-        if(singleChoice.vector.length===1) document.getElementById(singleChoice.vector[0]).classList.add("choosable-final");
-        else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
-    });
+    applyStyles();
 
     document.querySelectorAll("*[draggable=true]").forEach(
         (draggable) => {
@@ -208,7 +230,7 @@ function enableChoices(){
 
 function animate(announces){
     var index = 0;
-    var msdelay = 50;
+    var msdelay = 20;
     announces.forEach((announce) => {
         if(announce!=null)
             switch(announce.operation){
@@ -232,7 +254,17 @@ function animate(announces){
     });
 }
 
+function closeUpListener(e){
+    if(closeUp.style.display === "block"){
+        closeUp.style.display = "none";
+    } else if(e.button === 2 && e.target.classList.contains("card")){
+        closeUp.style.backgroundImage = `url("../tw/${classToImg(e.target.classList[0])}.jpg")`;
+        closeUp.style.display = "block";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", ()=>{
+    closeUp = document.getElementById("close-up");
     game_space = document.getElementById("game-space");
     player = document.getElementById("player");
     enemy = document.getElementById("enemy");
@@ -248,7 +280,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     out_of_game = document.getElementById("[OUTOFGAME]");
     events = document.querySelector(".events");
 
-
+    window.addEventListener("mousedown", closeUpListener)
+    document.addEventListener("contextmenu", (e)=>e?.cancelable && e.preventDefault())
 
     socket.on("log", (data)=>{
         console.log("Mensaje recibido:\n"+data);
