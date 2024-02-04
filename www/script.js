@@ -6,6 +6,7 @@ const dev = urlParams.get("dev");
 var choice = [];
 
 var closeUp, game_space,
+    invisible,
     locations, 
     player_hand, enemy_hand, 
     player_draw, enemy_draw, 
@@ -57,8 +58,11 @@ function makeElement(announce){
     return res;
 }
 
-function insertElement(announce){
-    var destination = game_space;
+function insertingData(announce){
+    var destination = invisible;
+    var msDelay = 20;
+    var animationFunction = () => destination.insertAdjacentHTML("beforeend", makeElement(announce));
+
     if(announce.id=="[player1]" || announce.id=="[player2]"){
         destination=game_space;
     }else if(announce.classes.includes("location")){
@@ -69,47 +73,58 @@ function insertElement(announce){
         }else{
             destination=enemy_draw;
         }
-    }else{
-        destination=events;
+    }else if(announce.classes.includes("event")){
+        destination = events;
+        msDelay = 5000;
+        animationFunction = () => {
+            destination.insertAdjacentHTML("beforeend", makeElement(announce))
+            var element = document.getElementById(announce.id);
+            // element.textContent += JSON.stringify(announce);
+            element.classList.add("eventppanimation");
+            setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
+        };
     }
-    destination.insertAdjacentHTML("beforeend", makeElement(announce));
+    return {msDelay, animationFunction};
 }
 
 function modifyElement(announce){
-    if(announce.slot=="state"){
-        var element = document.getElementById(announce.id);
-        var player = document.getElementById(announce.id+"__player").textContent;
-        var destination = null;
-        switch(announce.value){
-            case "HAND":
-                if(player=="[player1]") destination = player_hand;
-                else destination = enemy_hand;
-                destination.appendChild(element);
-                break;
-            case "DRAW":
-                if(player=="[player1]") destination = player_draw;
-                else destination = enemy_draw;
-                destination.appendChild(element);
-                break;
-            case "DISCARD":
-                if(player=="[player1]") destination = player_discard;
-                else destination = enemy_discard;
-                destination.appendChild(element);
-                break;
-            case "MP":
-                if(player=="[player1]") destination = player_mp;
-                else destination = enemy_mp;
-                destination.appendChild(element);
-                break;
-            case "OUTOFGAME":
-                destination = out_of_game;
-                destination.appendChild(element);
-                break;
+    var msDelay = 20;
+    var animationFunction = () => {
+        if(announce.slot=="state"){
+            var element = document.getElementById(announce.id);
+            var player = document.getElementById(announce.id+"__player").textContent;
+            var destination = null;
+            switch(announce.value){
+                case "HAND":
+                    if(player=="[player1]") destination = player_hand;
+                    else destination = enemy_hand;
+                    destination.appendChild(element);
+                    break;
+                case "DRAW":
+                    if(player=="[player1]") destination = player_draw;
+                    else destination = enemy_draw;
+                    destination.appendChild(element);
+                    break;
+                case "DISCARD":
+                    if(player=="[player1]") destination = player_discard;
+                    else destination = enemy_discard;
+                    destination.appendChild(element);
+                    break;
+                case "MP":
+                    if(player=="[player1]") destination = player_mp;
+                    else destination = enemy_mp;
+                    destination.appendChild(element);
+                    break;
+                case "OUTOFGAME":
+                    destination = out_of_game;
+                    destination.appendChild(element);
+                    break;
+            }
         }
+        var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
+        elementAtt.textContent = announce.value;
     }
-    var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
-    elementAtt.textContent = announce.value;
-    
+    return {msDelay, animationFunction};
 }
 
 
@@ -226,28 +241,40 @@ function enableChoices(){
 
 
 function animate(announces){
-    var index = 0;
-    var msdelay = 20;
+    var accumDelay = 0;
+    var operationData;
+
     announces.forEach((announce) => {
         if(announce!=null)
             switch(announce.operation){
                 case "create":
-                    setTimeout(()=>insertElement(announce),index++*msdelay);
+                    operationData = insertingData(announce);
                     break;
+    
                 case "modify":
-                    setTimeout(()=>modifyElement(announce),index++*msdelay);
+                    operationData = modifyElement(announce);
                     break;
+
                 case "delete":
-                    setTimeout(()=>document.getElementById(announce.id).remove(),index++*msdelay);
+                    operationData.msDelay = 20;
+                    operationData.animationFunction = () => document.getElementById(announce.id).remove();
                     break;
+
                 case "move":
-                    setTimeout(()=>document.getElementById(announce.to).appendChild(document.getElementById(announce.id)),index++*msdelay);
+                    operationData.msDelay = 20;
+                    operationData.animationFunction = () => document.getElementById(announce.to).appendChild(document.getElementById(announce.id));
                     break;
+
                 default:
                     console.error("error in operation type");
                     break;
             }
-        else setTimeout(()=>enableChoices(),index++*msdelay);
+        else {
+            operationData.msDelay = 20;
+            operationData.animationFunction = enableChoices;
+        }
+        setTimeout(operationData.animationFunction, accumDelay);
+        accumDelay += operationData.msDelay;
     });
 }
 
@@ -261,6 +288,7 @@ function closeUpListener(e){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
+    invisible = document.getElementById("invisible");
     closeUp = document.getElementById("close-up");
     game_space = document.getElementById("game-space");
     locations = document.getElementById("locations");
