@@ -219,23 +219,6 @@
 )
 
 
-; E-char-discard
-(defclass MAIN::E-char-discard (is-a EVENT)
-    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-)
-
-(defrule MAIN::E-char-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-discard) (type IN) 
-        (char ?c))
-    =>
-    (send ?e complete)
-    (send ?c modify state DISCARD)
-    ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
-
-    (debug Discarding character ?c)
-)
-
-
 ; E-char-destroy
 (defclass MAIN::E-char-destroy (is-a EVENT)
     (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))

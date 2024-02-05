@@ -2,11 +2,11 @@
 (deftemplate MAIN::action
 	; Plantilla básica de acción
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE))
+	(slot type (type SYMBOL) (default E) (allowed-values EP E))
 	(multislot identifier (type ?VARIABLE) (default ?NONE))
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
 	(multislot data (type STRING) (default ""))
-	;(slot type (type SYMBOL) (default E) (allowed-values EP E))
 	(slot blocking (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
 )
 
@@ -61,7 +61,7 @@
 			(do-for-all-facts ((?a action)) (eq ?p ?a:player) (retract ?a))
 			(retract ?action)
 		else
-			(eval (str-cat "(make-instance (gen-name E-" ?action:event-def ") of E-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
+			(eval (str-cat "(make-instance (gen-name " ?action:type "-" ?action:event-def ") of " ?action:type "-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
 		)
 		(do-for-fact ((?a action)) (and (eq ?a:identifier ?pass-identifier) (eq ?p ?a:player))
 			(retract ?a)

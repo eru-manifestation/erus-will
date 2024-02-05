@@ -93,6 +93,9 @@
     (load* "compulsory-division/standard-phases/event-phases/both-players-draw/both-players-draw-0.clp")
     (load* "compulsory-division/standard-phases/event-phases/both-players-draw/both-players-draw-1.clp")
 
+    (load* "compulsory-division/standard-phases/event-phases/char-discard/char-discard-1.clp")
+    (load* "compulsory-division/standard-phases/event-phases/char-discard/char-discard-2.clp")
+
     (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-1-1.clp")
     (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-2-1.clp")
     (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-3-1.clp")

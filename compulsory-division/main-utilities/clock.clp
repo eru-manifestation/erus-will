@@ -26,6 +26,11 @@ both-players-draw-0
 both-players-draw-1
 FALSE
 
+START-char-discard
+char-discard-1
+char-discard-2
+FALSE
+
 START-corruption-check
 corruption-check-1-1-1
 corruption-check-1-2

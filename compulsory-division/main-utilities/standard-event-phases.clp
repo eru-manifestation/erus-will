@@ -80,6 +80,10 @@
 )
 
 
+; EP-char-discard
+(defclass MAIN::EP-char-discard (is-a EVENT-PHASE)
+    (slot char (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+)
 
 ;/////////////////// UNIFIED HANDLER //////////////////
 (defrule MAIN::ep-start (declare (auto-focus TRUE) (salience ?*event-handler-salience*))

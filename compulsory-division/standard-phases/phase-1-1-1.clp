@@ -173,8 +173,9 @@
 		(in (over ?loc) (under ?char))
 	)
 	=>
-	(assert (action 
+	(assert (action
 		(player ?p)
+		(type EP)
 		(event-def char-discard)
 		(description (sym-cat "Discard character " ?char))
 		(identifier ?char (discardsymbol ?p))

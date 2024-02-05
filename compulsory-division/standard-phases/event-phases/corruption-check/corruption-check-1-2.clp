@@ -21,7 +21,7 @@
 		(= (+ 1 ?dices) (send ?char get-corruption))
 	))
 	=>
-	(make-instance (gen-name E-char-discard) of E-char-discard (character ?char))
+	(make-instance (gen-name EP-char-discard) of EP-char-discard (character ?char))
 )
 
 

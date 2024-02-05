@@ -75,7 +75,7 @@ function insertingData(announce){
         }
     }else if(announce.classes.includes("event")){
         destination = events;
-        msDelay = 5000;
+        msDelay = 2000 + msDelay;
         animationFunction = () => {
             destination.insertAdjacentHTML("beforeend", makeElement(announce))
             var element = document.getElementById(announce.id);
