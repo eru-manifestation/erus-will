@@ -12,13 +12,9 @@
 * Directrices sobre Información Primaria:
     Descripción:
     - Los objetos del juego deben dividir sus propiedades en tres tipos (identificativas, cualitativas y de estado).
-    Las identificativas sirven para identificar unívocamente al objeto; por tanto, no deben modificarse
-    en ningún momento durante el trascurso del programa. Las cualitativas y de estado describen las cualidades del 
-    objeto, las cuáles están sujetas a cambios durante el programa. Las cualitativas describen características
-    que sí pueden depender del contexto donde se pregunten (Ex. La piedra del arca asegura 2 MP a cualquier personaje,
-    pero si el personaje que la porta es enano da 5 MP) mientras que las de estado describen propiedades
-    que cambian en el programa pero son iguales independientemente del contexto (Ex. Saber si un personaje
-    está girado o no, no depende del contexto donde se pregunte, sólo del estado del personaje).
+    Las identificativas sirven para identificar unívocamente al objeto; por tanto, no deben modificarse en ningún momento durante el trascurso del programa. Las cualitativas y de estado describen las cualidades del objeto, las cuáles están sujetas a cambios durante el programa. Las cualitativas describen características
+    que sí pueden depender del contexto donde se pregunten (Ex. La piedra del arca asegura 2 MP a cualquier personaje, pero si el personaje que la porta es enano da 5 MP) mientras que las de estado describen propiedades que cambian en el programa pero son iguales independientemente del contexto (Ex. Saber si un personaje está girado o no, no depende del contexto donde se pregunte, sólo del estado del personaje).
+    
     Necesidades de la Implementación:
     - El contexto del programa se describe como un set de ítems de información que conforman las modificaciones
     pertinentes al valor crudo cada propiedad cualitativa de los objetos.

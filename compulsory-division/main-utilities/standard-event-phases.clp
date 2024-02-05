@@ -90,10 +90,7 @@
 	(object (is-a EVENT) (name ?ep) (type IN))
 	(object (is-a ?class) (name ?ep) (type IN))
 	(not (object (is-a ?class) (type ONGOING)))
-	; Por defecto, pone a la espera cualquier otra fase eventual, por lo que se comporta bien con el
-	;  listado paralelo de 2 fases eventuales similares: Primero inicia y acaba una, luego inicia y acaba
-	;  la siguiente. En principio, de hacerse con más de 2 o con varias distintas, el comportamiento es
-	;  el de apilado de fases eventuales
+	; Por defecto, pone a la espera cualquier otra fase eventual, por lo que se comporta bien con el listado paralelo de 2 fases eventuales similares: Primero inicia y acaba una, luego inicia y acaba la siguiente. En principio, de hacerse con más de 2 o con varias distintas, el comportamiento es el de apilado de fases eventuales
 	=>
 	(pop-focus)
 	(jump (sym-cat START (sub-string 3 (str-length ?class) ?class)))

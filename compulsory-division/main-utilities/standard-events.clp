@@ -134,16 +134,6 @@
     (slot loc (visibility public) (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
 )
 
-(defrule MAIN::E-loc-organize (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-loc-organize) (type IN) 
-        (player ?p) (loc ?loc))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
-
-    (debug Organizing fellowships of player ?p in ?loc)
-)
-
 
 ; E-r-long-event-discard
 (defclass MAIN::E-r-long-event-discard (is-a EVENT)

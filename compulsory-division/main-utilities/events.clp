@@ -1,5 +1,4 @@
-; FUNCION QUE DEFINE DÓNDE ESTÁ PENSADO QUE EXISTA EL EVENTO, LLAMADA AL SER SER COMPLETADO
-;  O DESACTIVADO 
+; FUNCION QUE DEFINE DÓNDE ESTÁ PENSADO QUE EXISTA EL EVENTO, LLAMADA AL SER SER COMPLETADO O DESACTIVADO 
 (deffunction get-target-phase ()
 	(bind ?phase (nth$ 2 (get-focus-stack)))
 	(bind ?length (str-length ?phase))
