@@ -14,9 +14,11 @@
 
 
 (defrule mandatory-council
-	(not (exists 
-		(object (is-a OWNABLE) (name ?owned-card))
-		(object (is-a CARD) (name ?owned-card) (state DRAW))
+	(player ?player)
+	(enemy ?enemy)
+	;TODO: CHECK
+	(not (exists
+		(object (is-a CARD) (name ?owned-card) (position ?pos&:(or (eq ?pos (drawsymbol ?player)) (eq ?pos (drawsymbol ?enemy)))))
 	))
 	=>
 	(make-instance (gen-name E-convoque-council) of E-convoque-council)
@@ -45,10 +47,10 @@
 	(logical 
 		(only-actions (phase P-5-4))
     	(player ?p)
-
+		;TODO: CHECK
 		(not (exists 
 			(object (is-a OWNABLE) (name ?owned-card) (player ?p))
-			(object (is-a CARD) (name ?owned-card) (state DRAW))
+			(object (is-a CARD) (name ?owned-card) (position ?pos&:(eq ?pos (drawsymbol ?p))))
 		))
 	)
 	=>

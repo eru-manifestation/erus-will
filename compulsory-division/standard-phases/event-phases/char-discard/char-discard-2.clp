@@ -17,7 +17,7 @@
 	?ep<-(object (is-a EP-char-discard) (type ONGOING) (char ?char))
 	=>
     (send ?ep complete)
-    (send ?char modify state DISCARD)
+    (send ?char put-position (discardsymbol (send ?char get-player)))
 
     (debug Discarding character ?char)
 )

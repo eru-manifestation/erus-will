@@ -9,8 +9,7 @@
 
 (deffunction MAIN::gen-fell (?player ?location)
     (bind ?fell (gen-name FELLOWSHIP))
-    (make-instance ?fell of FELLOWSHIP (player ?player))
-    (in-move (symbol-to-instance-name ?fell) ?location)
+    (make-instance ?fell of FELLOWSHIP (player ?player) (position ?location))
 )
 
 (defrule MAIN::empty-fell-tagging (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))

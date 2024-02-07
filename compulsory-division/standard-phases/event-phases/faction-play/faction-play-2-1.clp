@@ -17,11 +17,11 @@
 	?ep<-(object (is-a EP-faction-play) (type ONGOING) (dices ?dices) (faction ?faction) (char ?char) (loc ?loc))
 	=>
 	(if (< (send ?faction get-influence-check) (+ (send ?char get-influence) ?dices)) then
-		(send ?faction modify state MP)
+		(send ?faction put-position (mpsymbol (send ?faction get-player)))
 		(send ?loc modify state TAPPED)
 		(debug Chequeo de influencia de ?char para ?faction conseguido con (+ (send ?char get-influence) ?dices) de (send ?faction get-influence-check) necesarios)
 		else
-		(send ?faction modify state DISCARD)
+		(send ?faction put-position (send ?faction get-player))
 		(debug Chequeo de influencia de ?char para ?faction fallido con (+ (send ?char get-influence) ?dices) de (send ?faction get-influence-check) necesarios)
 	)
 	(send ?ep complete)

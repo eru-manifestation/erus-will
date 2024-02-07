@@ -138,13 +138,5 @@
 
     (load-utilities)
     (load-standard)
-    
-
-    ;(watch rules)
-    ;(watch instances E-char-play E-item-play-only-minor)
-    ;(run 40)
-    ; (run 3)
-    ; (send [wolves1] modify state HAND) ;Testar el ataque
-    ; (run)
 )
 

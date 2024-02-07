@@ -21,36 +21,29 @@
 	)
 )
 
-(deffunction MAIN::in-move (?element ?to)
+;TODO: CAMBIAR EL NOMBRE PARA IGUALARLO A LAS DEMAS CARACTERÍSTICAS
+(defmessage-handler BASIC put-position after (?to)
+	(bind ?element (instance-name ?self))
 	(in-unchain ?element)
 	(assert (in (over ?to) (under ?element)))
 	(announce all { "operation" : "move" , "id" : (JSONformat ?element) , "to" : (JSONformat ?to) })
 )
 
 ; TODO: testear el arbol de posicion en cuanto a eliminar: subarboles eliminados flotantes, etc.
-(defrule MAIN::in-exit-game1 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
-	?in <- (in (transitive FALSE) (over ?exit))
-	(or (not (object (name ?exit)))
-		(object (name ?exit) (is-a STATABLE) (state HAND | DRAW | DISCARD | MP))
-	)
+(defrule MAIN::in-exit-game (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
+	?in <- (in (transitive FALSE) (over ?over) (under ?under))
+	(not (and (object (name ?over)) (object (name ?under))))
 	=>
 	(retract ?in)
 )
 
-(defrule MAIN::in-exit-game2 (declare (salience ?*universal-rules-salience*) (auto-focus TRUE))
-	?in <- (in (transitive FALSE) (under ?exit))
-	(or (not (object (name ?exit)))
-		(object (name ?exit) (is-a STATABLE) (state HAND | DRAW | DISCARD | MP))
-	)
-	=>
-	(retract ?in)
-)
 
+;TODO: regla para que las cartas que estén en un STACK no puedan tener relación de localización entre sí mismas???
 
 ;///////////////////////// DEFMESSAGE-HANDLER
 
 (defmessage-handler LOCATION init after () ; TODO: actualizar cada vez que se modifique
 	(foreach ?attackable ?self:automatic-attacks
-		(in-move ?attackable (instance-name ?self))
+		(send ?attackable put-position (instance-name ?self))
 	)
 )

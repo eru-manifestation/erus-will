@@ -18,7 +18,7 @@
 		(only-actions (phase fell-move-4-1))
     	(enemy ?p)
 		?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (route $? ?region ?n&:(numberp ?n) $?))
-		(object (is-a CREATURE) (player ?p) (state HAND) (name ?creature) (regions $? ?region ?n2&:(<= ?n2 ?n) $?))
+		(object (is-a CREATURE) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?creature) (regions $? ?region ?n2&:(<= ?n2 ?n) $?))
 	)
 	=>
 	(assert (action 
@@ -40,7 +40,7 @@
 		(only-actions (phase fell-move-4-1))
     	(enemy ?p)
 		?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (to ?to))
-		(object (is-a CREATURE) (player ?p) (state HAND) (name ?creature) 
+		(object (is-a CREATURE) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?creature) 
 			(places $? ?place&:(eq ?place (send ?to get-place)) $?))
 	)
 	=>

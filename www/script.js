@@ -12,7 +12,7 @@ var closeUp, game_space,
     player_draw, enemy_draw, 
     player_discard, enemy_discard, 
     player_mp, enemy_mp, 
-    out_of_game, 
+    player_out_of_game, enemy_out_of_game, 
     events;
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
@@ -46,81 +46,66 @@ function makeElement(announce){
     var id = announce.id;
     var res = `<div id=${id} class="${announce.classes.reduce((a,b)=>a+" "+b,"")}"`
     if(announce.classes.includes("card"))
-        res+=`style=background-image:url('../tw/icons/${classToImg(announce.classes[0])}.jpg'`
+        res+=`style=background-image:url('../tw/icons/${classToImg(announce.classes[0])}.jpg')`
     res+=` draggable=true>`;
     announce = new Map(Object.entries(announce));
     announce.delete("operation");
     announce.delete("id");
     announce.delete("classes");
     announce.delete("instance-#");
+    announce.delete("position");
     announce.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}"><span>${value}</span></div>`)
     res += "</div>"
     return res;
 }
 
 function insertingData(announce){
-    var destination = invisible;
     var msDelay = 20;
-    var animationFunction = () => destination.insertAdjacentHTML("beforeend", makeElement(announce));
+    var animationFunction;
+    
+    if(announce.position != "[nil]"){
+        animationFunction = () => 
+            document.getElementById(announce.position)
+            .insertAdjacentHTML("beforeend", makeElement(announce));
+    }else{
+        if(announce.classes.includes("location")){
+            animationFunction = () => 
+                locations.insertAdjacentHTML("beforeend", makeElement(announce));
+        }else if(announce.classes.includes("event")){
+            msDelay = 2000 + msDelay;
+            animationFunction = () => {
+                events.insertAdjacentHTML("beforeend", makeElement(announce));
+                var element = document.getElementById(announce.id);
+                element.classList.add("eventppanimation");
+                setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
+            };
+        }else if(announce.id === "[out-of-game2]"){
+            animationFunction = () =>{
+                game_space.insertAdjacentHTML("beforeend", makeElement(announce));
 
-    if(announce.id=="[player1]" || announce.id=="[player2]"){
-        destination=game_space;
-    }else if(announce.classes.includes("location")){
-        destination=locations;
-    }else if(announce.classes.includes("card")){
-        if(announce.player=="[player1]"){
-            destination=player_draw;
-        }else{
-            destination=enemy_draw;
+                player_hand = document.getElementById("[hand1]");
+                enemy_hand = document.getElementById("[hand2]");
+                player_draw = document.getElementById("[draw1]");
+                enemy_draw = document.getElementById("[draw2]");
+                player_discard = document.getElementById("[discard1]");
+                enemy_discard = document.getElementById("[discard2]");
+                player_mp = document.getElementById("[mp1]");
+                enemy_mp = document.getElementById("[mp2]");
+                player_out_of_game = document.getElementById("[out-of-game1]");
+                enemy_out_of_game = document.getElementById("[out-of-game2]");
+            }
+        } else {
+            animationFunction = () =>
+                game_space.insertAdjacentHTML("beforeend", makeElement(announce));
         }
-    }else if(announce.classes.includes("event")){
-        destination = events;
-        msDelay = 2000 + msDelay;
-        animationFunction = () => {
-            destination.insertAdjacentHTML("beforeend", makeElement(announce))
-            var element = document.getElementById(announce.id);
-            // element.textContent += JSON.stringify(announce);
-            element.classList.add("eventppanimation");
-            setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
-        };
     }
+
     return {msDelay, animationFunction};
 }
 
 function modifyElement(announce){
     var msDelay = 20;
     var animationFunction = () => {
-        if(announce.slot=="state"){
-            var element = document.getElementById(announce.id);
-            var player = document.getElementById(announce.id+"__player").textContent;
-            var destination = null;
-            switch(announce.value){
-                case "HAND":
-                    if(player=="[player1]") destination = player_hand;
-                    else destination = enemy_hand;
-                    destination.appendChild(element);
-                    break;
-                case "DRAW":
-                    if(player=="[player1]") destination = player_draw;
-                    else destination = enemy_draw;
-                    destination.appendChild(element);
-                    break;
-                case "DISCARD":
-                    if(player=="[player1]") destination = player_discard;
-                    else destination = enemy_discard;
-                    destination.appendChild(element);
-                    break;
-                case "MP":
-                    if(player=="[player1]") destination = player_mp;
-                    else destination = enemy_mp;
-                    destination.appendChild(element);
-                    break;
-                case "OUTOFGAME":
-                    destination = out_of_game;
-                    destination.appendChild(element);
-                    break;
-            }
-        }
         var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
         elementAtt.textContent = announce.value;
     }
@@ -262,7 +247,12 @@ function animate(announces){
 
                 case "move":
                     operationData.msDelay = 20;
-                    operationData.animationFunction = () => document.getElementById(announce.to).appendChild(document.getElementById(announce.id));
+                    operationData.animationFunction = () => {
+                        // debugger;
+                        const target = document.getElementById(announce.id);
+                        if (target != null)
+                            document.getElementById(announce.to).appendChild(target);
+                    };
                     break;
 
                 default:
@@ -292,15 +282,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
     closeUp = document.getElementById("close-up");
     game_space = document.getElementById("game-space");
     locations = document.getElementById("locations");
-    player_hand = document.getElementById("[PLAYERHAND]");
-    enemy_hand = document.getElementById("[ENEMYHAND]");
-    player_draw = document.getElementById("[PLAYERDRAW]");
-    enemy_draw = document.getElementById("[ENEMYDRAW]");
-    player_discard = document.getElementById("[PLAYERDISCARD]");
-    enemy_discard = document.getElementById("[ENEMYDISCARD]");
-    player_mp = document.getElementById("[PLAYERMP]");
-    enemy_mp = document.getElementById("[ENEMYMP]");
-    out_of_game = document.getElementById("[OUTOFGAME]");
     events = document.querySelector(".events");
 
     window.addEventListener("mousedown", closeUpListener)

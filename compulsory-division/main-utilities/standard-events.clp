@@ -41,7 +41,7 @@
 		(character ?c) (under ?u))
     =>
     (send ?e complete)
-    (in-move ?c ?u)
+    (send ?c put-position ?u)
     (send ?c modify state UNTAPPED)
 
     (debug Playing character ?c under ?u)
@@ -60,7 +60,7 @@
 		(item ?item) (owner ?owner))
     =>
     (send ?e complete)
-    (in-move ?item ?owner)
+    (send ?item put-position ?owner)
     (send ?item modify state UNTAPPED)
 
     (debug Playing minor item ?item under ?owner)
@@ -80,7 +80,7 @@
 		(item ?item) (owner ?owner) (loc ?loc))
     =>
     (send ?e complete)
-    (in-move ?item ?owner)
+    (send ?item put-position ?owner)
     (send ?item modify state UNTAPPED)
     (send ?owner modify state TAPPED)
     (send ?loc modify state TAPPED)
@@ -103,7 +103,7 @@
     =>
     (send ?e complete)
     (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?disp))
-    (in-move ?item ?rec)
+    (send ?item put-position ?rec)
 
     (debug Transfering item ?item from ?disp to ?rec)
 )
@@ -122,7 +122,7 @@
     =>
     (send ?e complete)
     (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?bearer))
-    (send ?item modify state MP)
+    (send ?item put-position (mpsymbol (send ?item get-player)))
 
     (debug Storing item ?item in ?haven by ?bearer)
 )
@@ -145,7 +145,7 @@
         (r-long-event ?rle))
     =>
     (send ?e complete)
-    (send ?rle modify state DISCARD)
+    (send ?rle put-position (discardsymbol (send ?rle get-player)))
 
     (debug Discarding long-event resoure ?rle)
 )
@@ -179,7 +179,7 @@
     =>
     (send ?e complete)
     ; TODO: Qué siginifica jugar un r-long event?
-    (send ?ale modify state DISCARD)
+    (send ?ale put-position (discardsymbol (send ?ale get-player)))
 
     (debug Discarding long-event adversity ?ale)
 )
@@ -219,7 +219,7 @@
         (char ?c))
     =>
     (send ?e complete)
-    (send ?c modify state OUT-OF-GAME)
+    (send ?c put-position (outofgamesymbol (send ?c get-player)))
     ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
 
     (debug Destroying character ?c)
@@ -237,7 +237,7 @@
         (char ?c) (fell ?fell))
     =>
     (send ?e complete)
-    (in-move ?c ?fell)
+    (send ?c put-position ?fell)
 
     (debug Moving character ?c to ?fell)
 )
@@ -254,7 +254,7 @@
         (follower ?follower) (followed ?followed))
     =>
     (send ?e complete)
-    (in-move ?follower ?followed)
+    (send ?follower put-position ?followed)
 
     (debug Making character ?follower follower of ?followed)
 )
@@ -271,7 +271,7 @@
         (follower ?follower) (fell ?fell))
     =>
     (send ?e complete)
-    (in-move ?follower ?fell)
+    (send ?follower put-position ?fell)
 
     (debug Making the follower ?follower an usual character in ?fell)
 )
@@ -331,11 +331,11 @@
     (bind ?chosen (create$))
 	; TODO: ESCOGE LOS PRIMEROS QUE SEAN, NO ES ALEATORIO
     ; TODO: HACERLO DE FORMA QUE SE LLAME A ESTA REGLA DE FORMA RECURSIVA
-    (do-for-all-instances ((?card CARD) (?ownable OWNABLE)) (and (eq ?card ?ownable) (eq ?card:state DRAW) (eq ?card:player ?p))
+    (do-for-all-instances ((?card CARD) (?ownable OWNABLE)) (and (eq ?card ?ownable) (eq ?card:position (drawsymbol ?p)) (eq ?card:player ?p))
         (if (< 0 ?n) then
             (bind ?chosen (insert$ ?chosen 1 ?card))
             (bind ?n (- ?n 1))
-            (send ?card modify state HAND)
+            (send ?card put-position (handsymbol ?p))
             else
             break
         )
@@ -391,7 +391,7 @@
         (fell ?fell) (from ?from) (to ?to))
     =>
     (send ?e complete)
-    (in-move ?fell ?to)
+    (send ?fell put-position ?to)
 
     (debug Changing location of fellowship ?fell from ?from to ?to)
 )
@@ -407,7 +407,7 @@
         (loc ?loc))
     =>
     (send ?e complete)
-    (send ?loc modify state OUT-OF-GAME)
+    (send ?loc put-position (send ?loc get-player))
 
     (debug Taking ?loc out of the game)
 )
@@ -424,7 +424,7 @@
         (player ?p) (card ?c))
     =>
     (send ?e complete)
-    (send ?c modify state DISCARD)
+    (send ?c put-position (discardsymbol ?p))
 
     (debug Discarding ?c of ?p from hand)
 )
@@ -460,7 +460,7 @@
 		(ally ?ally) (char ?char) (loc ?loc))
     =>
     (send ?e complete)
-    (in-move ?ally ?char)
+    (send ?ally put-position ?char)
     (send ?ally modify state UNTAPPED)
     (send ?char modify state TAPPED)
     (send ?loc modify state TAPPED)
@@ -515,7 +515,7 @@
         (fell ?fell) (creature ?creature) (attack-at ?attack-at))
     =>
     (send ?e complete)
-    (in-move ?creature ?fell)
+    (send ?creature put-position ?fell)
     (send ?creature modify state UNTAPPED)
     (send ?e modify attack (instance-name (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))))
     
@@ -527,7 +527,7 @@
         (creature ?creature) (attack ?at))
     (object (is-a EP-attack) (type OUT) (name ?at) (state DEFEATED))
     =>
-    (send ?creature modify state MP)
+    (send ?creature put-position (mpsymbol (send ?creature get-player)))
 
     (debug Creature ?creature has been defeated, moving it to the player's MP)
 )
@@ -537,7 +537,7 @@
         (creature ?creature) (attack ?at))
     (object (is-a EP-attack) (type OUT) (name ?at) (state UNDEFEATED))
     =>
-    (send ?creature modify state DISCARD)
+    (send ?creature put-position (discardsymbol (send ?creature get-player)))
 
     (debug Creature ?creature has not been defeated, moving it to enemy's DISCARD)
 )

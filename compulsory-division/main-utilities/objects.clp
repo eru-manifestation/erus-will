@@ -5,22 +5,23 @@
 )
 
 (defclass MAIN::STATABLE (is-a USER)
-	(slot state (visibility public) (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD OUT-OF-GAME UNTAPPED TAPPED))
+	(slot state (visibility public) (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED))
 )
 
 (defclass MAIN::WOUNDABLE (is-a USER)
-	(slot state (visibility public) (type SYMBOL) (default DRAW) (allowed-symbols DRAW HAND MP DISCARD OUT-OF-GAME UNTAPPED TAPPED WOUNDED))
+	(slot state (visibility public) (type SYMBOL) (default UNTAPPED) (allowed-symbols UNTAPPED TAPPED WOUNDED))
 )
 
 (defclass MAIN::CORRUPTION (is-a USER)
 	(slot corruption (visibility public) (type INTEGER) (default 0) (access read-only))
 )
 
-(defclass MAIN::NUMERABLE (is-a USER)
+(defclass MAIN::BASIC (is-a USER)
+	(slot position (visibility public) (access read-write) (default ?DERIVE) (type INSTANCE-NAME) (allowed-classes POSITIONABLE))
     (slot instance-# (visibility public) (type INTEGER) (default 2) (storage shared) (pattern-match non-reactive))
 )
 
-(defclass MAIN::ATTACKABLE (is-a USER)
+(defclass MAIN::ATTACKABLE (is-a BASIC)
 	; Los attackable son aquellos que pueden atacar, son las características mínimas para la fase de ataque. Son tanto
 	; ataques automáticos como criaturas
 	(slot race (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
@@ -35,35 +36,44 @@
 )
 
 ; CLASES ABSTRACTAS
-(defclass MAIN::PLAYER (is-a NUMERABLE)
+(defclass MAIN::PLAYER (is-a BASIC)
     (slot instance-# (source composite))
 	(slot general-influence (visibility public) (type INTEGER) (default 20))
 	(slot hand (visibility public) (type INTEGER) (default 0))
 	(slot mp (visibility public) (type INTEGER) (default 0))
 )
 
-(defclass MAIN::FELLOWSHIP (is-a OWNABLE NUMERABLE)
+(defclass MAIN::FELLOWSHIP (is-a OWNABLE BASIC)
     (slot instance-# (source composite))
 	(slot empty (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
 	(slot companions (visibility public) (type INTEGER) (default 0) (access read-write))
 )
 
+(defclass MAIN::STACK (is-a OWNABLE BASIC))
+
+(defclass MAIN::data-item (is-a BASIC)
+    (slot instance-# (source composite))
+    (slot active (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
+    (slot target (visibility public) (type SYMBOL) (default ?NONE))
+    (slot target-slot (visibility public) (type SYMBOL) (default ?NONE))
+    (slot value (visibility public) (type INTEGER) (default ?NONE))
+)
+
 ; CLASES CONCRETAS
-(defclass MAIN::CARD (is-a STATABLE NUMERABLE))
+(defclass MAIN::CARD (is-a STATABLE BASIC))
 
 (defclass MAIN::RESOURCE (is-a OWNABLE CARD))
 (defclass MAIN::ADVERSITY (is-a OWNABLE CARD))
 
 (defclass MAIN::LOCATION (is-a CARD)
 	(slot closest-haven (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only) (allowed-instance-names [rivendell] [grey-havens] [edhellond] [lorien]))
-	(slot state (source composite) (default UNTAPPED) (allowed-symbols OUT-OF-GAME UNTAPPED TAPPED))
 	(slot player-draw (visibility public) (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
 	(slot enemy-draw (visibility public) (type INTEGER) (default ?NONE) (access initialize-only) (range 0 ?VARIABLE))
 	(multislot route (visibility public) (type ?VARIABLE) (default ?NONE) (access initialize-only) 
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
 	(slot place (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
-	(multislot automatic-attacks (visibility public) (type INSTANCE-NAME) (default (create$)) (access initialize-only) (allowed-classes ATTACKABLE))
+	(multislot automatic-attacks (visibility public) (type INSTANCE-NAME) (default (create$)) (allowed-classes ATTACKABLE))
 	(multislot playable-items (visibility public) (type SYMBOL) (default (create$)) (access read-only) (allowed-symbols MINOR-ITEM GREATER-ITEM MAJOR-ITEM))
 )
 

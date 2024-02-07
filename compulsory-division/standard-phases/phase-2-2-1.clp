@@ -18,7 +18,7 @@
     	(player ?p)
 		; Dado un suceso duradero en la mano del jugador
 		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p)
-			(state HAND))
+			(position ?pos&:(eq ?pos (handsymbol ?p))))
 	)
 	=>
 	(assert (action 

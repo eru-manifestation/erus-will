@@ -25,7 +25,7 @@
 	(logical
 		(only-actions (phase both-players-draw-0))
 		(object (is-a PLAYER) (name ?p) (hand ?hand&:(> ?hand 8)))
-		(object (is-a CARD) (player ?p) (state HAND) (name ?c))
+		(object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
 	)
 	=>
 	(assert (action 

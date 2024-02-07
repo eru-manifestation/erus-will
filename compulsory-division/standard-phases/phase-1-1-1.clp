@@ -27,7 +27,7 @@
 
 
 		; Hay un personaje en la mano del jugador dueño del turno
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
+		(object (is-a CHARACTER) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?char) 
 			(birthplace ?bp) (race ?race) (mind ?mind))
 		
 		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de una compañía) y la compañía tiene espacio
@@ -70,7 +70,7 @@
 
 		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen necesaria para jugarlo)
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
-		(object (is-a CHARACTER) (state HAND) (name ?char) (player ?p) 
+		(object (is-a CHARACTER) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?char) (player ?p) 
 			(birthplace ?bp) (race ?race) (mind ?mind&:(<= ?mind ?gen-inf)))
 		
 		; Localiza una compañía/personaje en una localización

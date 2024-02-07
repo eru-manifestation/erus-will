@@ -1,12 +1,5 @@
-(defclass MAIN::data-item (is-a NUMERABLE)
-    (slot instance-# (source composite))
-    (slot active (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
-    (slot target (visibility public) (type SYMBOL) (default ?NONE))
-    (slot target-slot (visibility public) (type SYMBOL) (default ?NONE))
-    (slot value (visibility public) (type INTEGER) (default ?NONE))
-)
 (defmessage-handler data-item init after ()
-    (in-move (instance-name ?self) ?self:target)
+    (send ?self put-position ?self:target)
     (eval (str-cat 
         "(send [" ?self:target "] modify " ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
@@ -73,7 +66,7 @@
 (defrule MAIN::hand-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
     (logical
         (object (is-a PLAYER) (name ?p))
-        (object (is-a CARD) (player ?p) (state HAND) (name ?c))
+        (object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
     )
     =>
     (debug Se crea el hand item por ?c para el jugador ?p)
@@ -108,7 +101,7 @@
 ; INFO ITEM PARA MP DE PLAYER DESDE FACTION
 (defrule MAIN::mp-player-data-item-population#faction (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
     (logical
-        (object (is-a FACTION) (name ?f) (state MP) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+        (object (is-a FACTION) (name ?f) (player ?p) (position ?pos&:(eq ?pos (mpsymbol ?p))) (mp ?mp&:(<> 0 ?mp)))
     )
     =>
     (debug Se crea el mp item por ?f para ?p)
@@ -142,7 +135,7 @@
 ; INFO ITEM PARA MP DE PLAYER DESDE CREATURE
 (defrule MAIN::mp-player-data-item-population#creature (declare (auto-focus TRUE) (salience ?*universal-rules-salience*))
     (logical
-        (object (is-a CREATURE) (name ?c) (state MP) (player ?p) (mp ?mp&:(<> 0 ?mp)))
+        (object (is-a CREATURE) (name ?c) (player ?p) (position ?pos&:(eq ?pos (mpsymbol ?p))) (mp ?mp&:(<> 0 ?mp)))
     )
     =>
     (debug Se crea el mp item por ?c para ?p)

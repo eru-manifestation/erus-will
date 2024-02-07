@@ -15,7 +15,7 @@
 
 
 ; DEFINICIÓN DE TEMPLATE EVENTO
-(defclass MAIN::EVENT (is-a NUMERABLE)
+(defclass MAIN::EVENT (is-a BASIC)
     (slot instance-# (source composite))
 	(slot target-phase (visibility public) (type SYMBOL))
 	(slot type (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN OUT))
