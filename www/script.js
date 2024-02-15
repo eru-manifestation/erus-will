@@ -8,11 +8,11 @@ var choice = [];
 var closeUp, game_space,
     invisible,
     locations, 
-    player_hand, enemy_hand, 
-    player_draw, enemy_draw, 
-    player_discard, enemy_discard, 
-    player_mp, enemy_mp, 
-    player_out_of_game, enemy_out_of_game, 
+    // player_hand, enemy_hand, 
+    // player_draw, enemy_draw, 
+    // player_discard, enemy_discard, 
+    // player_mp, enemy_mp, 
+    // player_out_of_game, enemy_out_of_game, 
     events;
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
@@ -79,21 +79,21 @@ function insertingData(announce){
                 element.classList.add("eventppanimation");
                 setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
             };
-        }else if(announce.id === "[out-of-game2]"){
-            animationFunction = () =>{
-                game_space.insertAdjacentHTML("beforeend", makeElement(announce));
+        // }else if(announce.id === "[out-of-game2]"){
+        //     animationFunction = () =>{
+        //         game_space.insertAdjacentHTML("beforeend", makeElement(announce));
 
-                player_hand = document.getElementById("[hand1]");
-                enemy_hand = document.getElementById("[hand2]");
-                player_draw = document.getElementById("[draw1]");
-                enemy_draw = document.getElementById("[draw2]");
-                player_discard = document.getElementById("[discard1]");
-                enemy_discard = document.getElementById("[discard2]");
-                player_mp = document.getElementById("[mp1]");
-                enemy_mp = document.getElementById("[mp2]");
-                player_out_of_game = document.getElementById("[out-of-game1]");
-                enemy_out_of_game = document.getElementById("[out-of-game2]");
-            }
+        //         player_hand = document.getElementById("[hand1]");
+        //         enemy_hand = document.getElementById("[hand2]");
+        //         player_draw = document.getElementById("[draw1]");
+        //         enemy_draw = document.getElementById("[draw2]");
+        //         player_discard = document.getElementById("[discard1]");
+        //         enemy_discard = document.getElementById("[discard2]");
+        //         player_mp = document.getElementById("[mp1]");
+        //         enemy_mp = document.getElementById("[mp2]");
+        //         player_out_of_game = document.getElementById("[out-of-game1]");
+        //         enemy_out_of_game = document.getElementById("[out-of-game2]");
+        //     }
         } else {
             animationFunction = () =>
                 game_space.insertAdjacentHTML("beforeend", makeElement(announce));
@@ -248,7 +248,6 @@ function animate(announces){
                 case "move":
                     operationData.msDelay = 20;
                     operationData.animationFunction = () => {
-                        // debugger;
                         const target = document.getElementById(announce.id);
                         if (target != null)
                             document.getElementById(announce.to).appendChild(target);
