@@ -140,3 +140,6 @@
     (load-standard)
 )
 
+(deffunction debug ()
+    (batch developement/orders.clp)
+)

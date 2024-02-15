@@ -5,12 +5,7 @@
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug INICIA EL JUEGO, creamos la mesa)
-
-(assert (post-drawS))
-(assert (post-drawG))
-
-)
+(debug INICIA EL JUEGO, creamos la mesa))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection-salience*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -126,64 +121,37 @@
 )
 
 
-(defrule post-drawS
-    ?pd <- (post-drawS)
-    (enemy ?p)
-    (object (is-a GIMLI) (name ?gimli) (player ?p))
-    (object (is-a LEGOLAS) (name ?legolas) (player ?p))
-    (object (is-a ELLADAN) (name ?elladan) (player ?p))
-    (object (is-a PIPPIN) (name ?pippin) (player ?p))
-    (object (is-a ELVEN-CLOAK) (name ?cloak) (player ?p))
-    (object (is-a DAGGER-OF-WESTERNESSE) (name ?dagger) (player ?p))
-
-    (object (is-a RIVENDELL) (name ?rivendell))
-    (object (is-a FELLOWSHIP) (name ?fell) (player ?p))
-    (in (over ?rivendell) (under ?fell))
+(defrule initial-chars
+    ?char <- (object (is-a CHARACTER) 
+        (name [gimli1] | [legolas1] | [elladan1] | [pippin1] |
+        [aragorn-ii1] | [eomer1] | [boromir-ii1] | [merry1])
+        (player ?p)
+        (position ?draw&:(eq ?draw (drawsymbol ?p)))
+    )
+    ?fell <- (object (is-a FELLOWSHIP) (position ?loc&:(eq ?loc (symbol-to-instance-name rivendell)))
+        (player ?p) (name [fellowship1] | [fellowship2])
+    )
     =>
-    (debug Putting initial fellowship of Saruman)
-
-    (make-instance (gen-name E-char-play) of E-char-play (character ?gimli) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?legolas) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?elladan) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?pippin) (under ?fell))
-
-    (debug Putting initial items of Saruman)
-
-    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?cloak) (owner ?elladan))
-    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?dagger) (owner ?pippin))
-
-    ;ESTA REGLA SOLO SE DEBE LANZAR UNA VEZ
-    (retract ?pd)
+    (make-instance (gen-name E-char-play) of E-char-play 
+        (character (instance-name ?char)) (under (instance-name ?fell)))
 )
 
 
 
-(defrule post-drawG
-    ?pd <- (post-drawG)
-    (player ?p)
-    (object (is-a ARAGORN-II) (name ?aragorn) (player ?p))
-    (object (is-a EOMER) (name ?eomer) (player ?p))
-    (object (is-a BOROMIR-II) (name ?boromir) (player ?p))
-    (object (is-a MERRY) (name ?merry) (player ?p))
-    (object (is-a ELVEN-CLOAK) (name ?cloak) (player ?p))
-    (object (is-a SHIELD-OF-IRON--BOUND-ASH) (name ?shield) (player ?p))
-
-    (object (is-a RIVENDELL) (name ?rivendell))
-    (object (is-a FELLOWSHIP) (name ?fell) (player ?p))
-    (in (over ?rivendell) (under ?fell))
+(defrule initial-items
+    ?minoritem <- (object (is-a MINOR-ITEM)
+        (name [elven-cloak2] | [dagger-of-westernesse1]
+        | [elven-cloak1] | [shield-of-iron--bound-ash1]) 
+        (player ?p)
+        (position ?draw&:(eq ?draw (drawsymbol ?p)))
+    )
     =>
-    (debug Putting initial fellowship of Gandalf)
-
-    (make-instance (gen-name E-char-play) of E-char-play (character ?aragorn) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?eomer) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?boromir) (under ?fell))
-    (make-instance (gen-name E-char-play) of E-char-play (character ?merry) (under ?fell))
-
-    (debug Putting initial items of Gandalf)
-
-    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?shield) (owner ?boromir))
-    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?cloak) (owner ?merry))
-
-    ;ESTA REGLA SOLO SE DEBE LANZAR UNA VEZ
-    (retract ?pd)
+    (bind ?itemname (instance-name ?minoritem))
+    (bind ?holder (switch ?itemname
+        (case [elven-cloak2] then [elladan1])
+        (case [dagger-of-westernesse1] then [pippin1])
+        (case [elven-cloak1] then [merry1])
+        (case [shield-of-iron--bound-ash1] then [boromir-ii1])
+    ))
+    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?itemname) (owner ?holder))
 )

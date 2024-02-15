@@ -109,7 +109,7 @@
   z-index: 1;
   opacity: 1;
 
-  animation: 3s linear 0s fadeinout;
+  animation: 1s linear 0s fadeinout;
 
   &>span{
     margin: auto;
