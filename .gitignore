@@ -3,3 +3,4 @@ node_modules
 package-lock.json
 developement/.$Esquemas.drawio.dtmp
 developement/trash
+debug/log*

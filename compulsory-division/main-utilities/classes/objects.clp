@@ -46,7 +46,7 @@
 (defclass MAIN::FELLOWSHIP (is-a OWNABLE BASIC)
     (slot instance-# (source composite))
 	(slot empty (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
-	(slot companions (visibility public) (type INTEGER) (default 0) (access read-write))
+	(slot companions (visibility public) (type FLOAT) (default 0.0) (access read-write))
 )
 
 (defclass MAIN::STACK (is-a OWNABLE BASIC))

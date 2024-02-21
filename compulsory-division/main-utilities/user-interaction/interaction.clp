@@ -1,8 +1,7 @@
 (defglobal MAIN
     ?*announce-p1* = (create$)
     ?*announce-p2* = (create$)
-    ?*debug* = (create$)
-    ?*debug-state* = FALSE
+    ?*message* = (create$)
     ?*choose-p1* = (create$)
     ?*choose-p2* = (create$)
 
@@ -19,9 +18,9 @@
 )
 
 (deffunction MAIN::get-debug ()
-	(if (neq 0 (length$ ?*debug*)) then
-		(bind ?res (str-cat (expand$ ?*debug*)))
-		(bind ?*debug* (create$))
+	(if (neq 0 (length$ ?*message*)) then
+		(bind ?res (str-cat (expand$ ?*message*)))
+		(bind ?*message* (create$))
 		?res
 		else
 		""
@@ -104,9 +103,14 @@
 	)
 )
 
-(deffunction MAIN::debug ($?message)
-	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "DEBUG MESSAGE_________________________________" crlf))
-	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> TRACE FROM: " (implode$ (get-focus-stack)) crlf))
-	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "--> DEBUG: " (implode$ ?message) crlf))
-	(bind ?*debug* (insert$ ?*debug* (+ 1 (length$ ?*debug*)) "----------------------------------------------" crlf crlf))
+(deffunction MAIN::message ($?message)
+	(bind ?insert (create$ crlf
+		"DEBUG MESSAGE_________________________________" crlf
+		"--> TRACE FROM: " (implode$ (get-focus-stack)) crlf
+		"--> DEBUG: " (implode$ ?message) crlf
+		"----------------------------------------------" crlf crlf
+	))
+	(if ?*print-message* then (print-content ?insert))
+	(bind ?*message* (insert$ ?*message* (+ 1 (length$ ?*message*)) ?insert))
+	TRUE
 )

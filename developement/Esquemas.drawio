@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2024-02-14T17:12:20.466Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="2FR_Gyl0XbJ-WlgY34aZ" version="21.8.2" type="device" pages="12">
+<mxfile host="Electron" modified="2024-02-17T18:29:49.845Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.8.2 Chrome/114.0.5735.289 Electron/25.8.1 Safari/537.36" etag="Nngz8irPWbI874VUM5Jj" version="21.8.2" type="device" pages="12">
   <diagram id="arFOftMZ87LQeRAixyki" name="Nuevo sistema de eventos">
     <mxGraphModel dx="2620" dy="1444" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
       <root>
@@ -1344,7 +1344,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="CgCFekpvihmw5xez60h8" name="EP-faction-play">
-    <mxGraphModel dx="794" dy="547" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1034" dy="559" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1353,6 +1353,9 @@
         </mxCell>
         <mxCell id="iyRqWSNqtKHXDpQyqrm2-2" value="FASE EVENTUAL JUGAR FACCION&lt;br&gt;(faction-play)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="176" y="45" width="124" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Jmlua5pWWxDNQLTi02b3-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="iyRqWSNqtKHXDpQyqrm2-4" target="Jmlua5pWWxDNQLTi02b3-1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="iyRqWSNqtKHXDpQyqrm2-4" value="INICIO JUGAR FACCION&lt;br&gt;(faction-play-0)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="381" y="40" width="120" height="60" as="geometry" />
@@ -1422,6 +1425,12 @@
         </mxCell>
         <mxCell id="ldf-kUI-6ogurEyrpDlL-20" value="FIN RESOLVER CHEQUEO DE INFLUENCIA&lt;br&gt;(faction-play-2-2)" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="400" y="690" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Jmlua5pWWxDNQLTi02b3-1" value="GIRAR PERSONAJE&lt;br&gt;(HAY QUE HACERLO)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="85" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Jmlua5pWWxDNQLTi02b3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.375;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Jmlua5pWWxDNQLTi02b3-1" target="ldf-kUI-6ogurEyrpDlL-7">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
@@ -1504,7 +1513,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="eY2wNAd6d4KcMaiDaRGq" name="EP-attack">
-    <mxGraphModel dx="1847" dy="1713" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1861" dy="1728" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1602,7 +1611,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="B4wLVwS8nCZW2IFv7vyC" name="EP-strike">
-    <mxGraphModel dx="373" dy="1809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="419" dy="1728" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />

@@ -1,13 +1,13 @@
 ;/////////////////// STRIKE 3 2: EJECUTAR GOLPE ////////////////////////
-(defmodule strike-3-2 (import MAIN ?ALL))
+(defmodule strike-3-2 (import MAIN ?ALL) (import strike-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug The strike is being executed))
+(message The strike is being executed))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -15,47 +15,69 @@
 
 
 (defrule execute-strike
-	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (attackable ?at))
-	(object (is-a CHARACTER) (name ?char))
-	(object (is-a ATTACKABLE) (name ?at))
+	;(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (attackable ?at))
+	(target ?char)
+	(attackable ?at)
+	(dices ?d)
+	; (object (is-a CHARACTER) (name ?char))
+	; (object (is-a ATTACKABLE) (name ?at))
 	=>
 	(bind ?prowess (send ?char get-prowess))
 	(bind ?at-prowess (send ?at get-prowess))
 	(bind ?at-body (send ?at get-body))
 
-	(if (< ?at-prowess (+ (send ?ep get-dices) ?prowess)) then
-		(if (eq ?at-body nil) then
-			(send ?ep modify state DEFEATED)
-			else
-			(make-instance (gen-name EP-resistance-check) of EP-resistance-check (attacker ?char) (assaulted ?at))
+	(if (< ?at-prowess (+ ?d ?prowess)) then
+		(if (neq ?at-body (slot-default-value ATTACKABLE body)) then
+			(assert (enemy-res-check))
 		)
 		else
-		(if (= ?at-prowess (+ (send ?ep get-dices) ?prowess)) then
-			(send ?ep modify state UNDEFEATED)
-			else
-			(make-instance (gen-name EP-resistance-check) of EP-resistance-check (attacker ?at) (assaulted ?char))
-			(send ?ep modify state SUCCESSFUL)		
+		(if (= ?at-prowess (+ ?d ?prowess)) then
+			;(send ?ep modify state UNDEFEATED)
+			; El golpe no ha sido derrotado
+			(assert (cancel))
+			else	
+			; No se derrota el golpe y se requiere chequeo de resistencia
+			(assert (defender-res-check)) 
+			(assert (cancel))	
 		)
 	)
 )
 
-(defrule execute-strike#tap-unhindered
-	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
-	(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
+(defrule enemy-res-check
+	(enemy-res-check)
+	(target ?char)
+	(attackable ?at)
 	=>
-	(send ?char modify state TAPPED)
+	(make-instance (gen-name E-phase) of E-phase
+		(reason resistance-check strike-3-2::enemy-res-check)
+		(data (str-cat "attacker " ?char) (str-cat "assaulted " ?at)))
+)
+
+(defrule defender-res-check
+	(defender-res-check)
+	(target ?char)
+	(attackable ?at)
+	=>
+	(make-instance (gen-name E-phase) of E-phase
+		(reason resistance-check strike-3-2::defneder-res-check)
+		(data (str-cat "attacker " ?at) (str-cat "assaulted " ?char)))
+)
+
+(defrule cancel
+	(object (is-a E-phase) (state EXEC) (name ?e))
+	(cancel)
+	=>
+	(E-cancel ?e strike-3-2::cancel)
 )
 
 
-(defrule calculate-check-result
-	(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (attackable ?at))
-	(object (is-a EP-resistance-check) (type OUT) (attacker ?char) (assaulted ?at) (result ?res))
+(defrule tap-unhindered
+	; (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
+	; (object (is-a CHARACTER) (name ?char) (state UNTAPPED))
+	(target ?char)
+	(not (hindered))
 	=>
-	(if (eq ?res PASSED) then
-		(send ?ep modify state UNDEFEATED)
-		else
-		(if (eq ?res NOT-PASSED) then
-			(send ?ep modify state UNDEFEATED)
-		)
-	)
+	; (send ?char modify state TAPPED)
+	(E-modify ?char state TAPPED
+		TAP strike-3-2::tap-unhindered)
 )

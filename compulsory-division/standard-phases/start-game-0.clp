@@ -1,18 +1,18 @@
 ;/////////////////// INICIA EL JUEGO 0: SE INICIA LA MESA ////////////////////////
-(defmodule start-game-0 (import MAIN ?ALL))
+(defmodule start-game-0 (import MAIN ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug INICIA EL JUEGO, creamos la mesa))
+(message INICIA EL JUEGO, creamos la mesa))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 (deffunction init-handS()
-    (debug Creating inital card of Saruman)
+    (message Creating inital card of Saruman)
 
     (init-card GIMLI 1 2)
     (init-card LEGOLAS 1 2)
@@ -59,11 +59,11 @@
     (init-card AMBUSHER 1 2)
     
     
-    (debug Initial cards of Saruman created)
+    (message Initial cards of Saruman created)
 )
 
 (deffunction init-handG()
-    (debug Creating inital card of Gandalf)
+    (message Creating inital card of Gandalf)
 
     (init-card ARAGORN-II 1 1)
     (init-card EOMER 1 1)
@@ -110,7 +110,7 @@
     (init-card BRIGANDS 3 1)
     (init-card CAVE-DRAKE 2 1)
     
-    (debug Initial cards of Gandalf created)
+    (message Initial cards of Gandalf created)
 )
 
 (defrule init-cards
@@ -122,36 +122,43 @@
 
 
 (defrule initial-chars
-    ?char <- (object (is-a CHARACTER) 
-        (name [gimli1] | [legolas1] | [elladan1] | [pippin1] |
-        [aragorn-ii1] | [eomer1] | [boromir-ii1] | [merry1])
+    (object (is-a CHARACTER) 
+        (name ?char&[gimli1]|[legolas1]|[elladan1]|[pippin1]|
+        [aragorn-ii1]|[eomer1]|[boromir-ii1]|[merry1])
         (player ?p)
         (position ?draw&:(eq ?draw (drawsymbol ?p)))
     )
-    ?fell <- (object (is-a FELLOWSHIP) (position ?loc&:(eq ?loc (symbol-to-instance-name rivendell)))
-        (player ?p) (name [fellowship1] | [fellowship2])
+    (object (is-a FELLOWSHIP) (position ?loc&:(eq ?loc (symbol-to-instance-name rivendell)))
+        (player ?p) (name ?fell&[fellowship1]|[fellowship2])
     )
     =>
-    (make-instance (gen-name E-char-play) of E-char-play 
-        (character (instance-name ?char)) (under (instance-name ?fell)))
+    (E-modify ?char position ?fell PLAY CHARACTER start-game-0::initial-chars)
+    (message "Jugando personaje inicial " ?char)
 )
 
 
 
 (defrule initial-items
     ?minoritem <- (object (is-a MINOR-ITEM)
-        (name [elven-cloak2] | [dagger-of-westernesse1]
-        | [elven-cloak1] | [shield-of-iron--bound-ash1]) 
+        (name ?itemname&[elven-cloak2]|[dagger-of-westernesse1]
+        |[elven-cloak1]|[shield-of-iron--bound-ash1]) 
         (player ?p)
         (position ?draw&:(eq ?draw (drawsymbol ?p)))
     )
+    (not 
+        (object (is-a CHARACTER) 
+            (name ?char&[elladan1]|[pippin1]|[boromir-ii1]|[merry1])
+            (player ?p)
+            (position ?fell&:(neq (class ?fell) FELLOWSHIP))
+        )
+    )
     =>
-    (bind ?itemname (instance-name ?minoritem))
     (bind ?holder (switch ?itemname
         (case [elven-cloak2] then [elladan1])
         (case [dagger-of-westernesse1] then [pippin1])
         (case [elven-cloak1] then [merry1])
         (case [shield-of-iron--bound-ash1] then [boromir-ii1])
     ))
-    (make-instance (gen-name E-item-play-only-minor) of E-item-play-only-minor (item ?itemname) (owner ?holder))
+    (E-modify ?itemname position ?holder PLAY ITEM start-game-0::initial-items)
+    (message "Jugando objeto inicial " ?itemname " en " ?holder)
 )

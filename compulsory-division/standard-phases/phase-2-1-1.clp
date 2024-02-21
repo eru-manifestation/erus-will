@@ -1,13 +1,13 @@
 ;////////////////// Fase 2 1 1: EJECUCION DESCARTAR RECURSOS SUCESOS DURADEROS ////////////////////////
-(defmodule P-2-1-1 (import MAIN ?ALL))
+(defmodule P-2-1-1 (import MAIN ?ALL) (import P-1-1-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Descartar recursos de suceso duradero))
+(message Descartar recursos de suceso duradero))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -18,6 +18,5 @@
 	(object (is-a R-LONG-EVENT) (name ?le) 
 		(state TAPPED | UNTAPPED) (player ?p))
 	=>
-	(make-instance (gen-name E-r-long-event-discard) of E-r-long-event-discard 
-		(r-long-event ?le))
+	(E-modify ?le position (discardsymbol ?p) DISCARD R-LONG-EVENT P211::long-event-discard)
 )

@@ -6,7 +6,7 @@
 	(multislot identifier (type ?VARIABLE) (default ?NONE))
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
-	(multislot data (type STRING) (default ""))
+	(multislot data (type ?VARIABLE) (default ?NONE))
 	(slot blocking (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
 )
 
@@ -26,17 +26,21 @@
 	(if (not (any-factp ((?action action)) (and (eq ?p ?action:player) ?action:blocking))) then
 		(bind ?description "Pass")
 		(bind ?identifier PASS)
-		(bind ?event-def nil)
+		(bind ?event-def pass)
 		(bind ?blocking TRUE)
-		(assert (action (player ?p) (identifier ?identifier) (description ?description) (event-def ?event-def) (blocking ?blocking)))
+		(assert (action 
+			(player ?p) 
+			(identifier ?identifier) 
+			(description ?description) 
+			(event-def ?event-def) 
+			(data (create$))
+			(blocking ?blocking)))
 		(choose ?p { 
 			"vector" : [ (str-cat ?identifier) ] , 
 			"description" : (JSONformat ?description) })
 	)
 
-	(if ?*debug-state* then
-		(print-content ?*debug*)
-		(bind ?*debug* (create$))
+	(if ?*print-message* then
 		(print-content ?*announce-p1*)
 		(bind ?*announce-p1* (create$))
 		(print-content ?*announce-p2*)
@@ -51,28 +55,50 @@
 
 ; Jugar la acción deseada
 (deffunction MAIN::play-action (?p $?identifier)
-	(bind ?pass-identifier (create$ PASS))
+	(bind ?pass-evdef pass)
 	;TODO: controlar cuando haya dos acciones con el mismo identificador
 	(bind ?p (symbol-to-instance-name ?p))
 	(do-for-fact ((?action action)) (and (eq ?p ?action:player) (eq $?identifier ?action:identifier))
-		(debug ?p Se ha seleccionado: ?action:description)
-		(if (eq ?identifier ?pass-identifier) then
-			; La elección ha sido pasar
-			(do-for-all-facts ((?a action)) (eq ?p ?a:player) (retract ?a))
-			(retract ?action)
-		else
-			(eval (str-cat "(make-instance (gen-name " ?action:type "-" ?action:event-def ") of " ?action:type "-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
+		(message ?p "Se ha seleccionado: " ?action:description)
+		(switch ?action:event-def
+			(case ?pass-evdef then
+				; La elección ha sido pasar
+				(do-for-all-facts ((?a action)) (eq ?p ?a:player) (retract ?a))
+				(retract ?action)
+			)
+			(case modify then
+				(E-modify (expand$ ?action:data))
+			)
+			(case phase then
+				(make-instance (gen-name E-phase) of E-phase 
+					(reason (explode$ (nth$ 1 ?action:data)))
+					(data (rest$ ?action:data))
+				)
+			)
+			(case variable then
+				; (if (not (do-for-fact ((?f (nth$ 1 ?action:data)))
+				; 	(eq ?f:implied (rest$ ?action:data))
+				; 	(retract ?f)
+				; 	;	TODO: testing
+				; )) then
+					(assert-string (str-cat "(" ?action:data ")"))
+				; )
+			)
+			(case varswap then
+				(retract (nth$ 1 ?action:data))
+				(assert-string (str-cat "(" (implode$ (rest$ ?action:data)) ")"))
+			)
+			(default 
+				;	TODO: eliminar esta alternativa
+				(eval (str-cat "(make-instance (gen-name " ?action:type "-" ?action:event-def ") of " ?action:type "-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
+			)
 		)
-		(do-for-fact ((?a action)) (and (eq ?a:identifier ?pass-identifier) (eq ?p ?a:player))
+	
+		; TODO: verificar si es posible eliminar esta instruccion por redundancia
+		(do-for-fact ((?a action)) (and (eq ?a:event-def ?pass-evdef) (eq ?p ?a:player))
 			(retract ?a)
 		)
 		(run)
 		(return TRUE)
 	)
 )
-
-; (load-all)
-; (bind ?*debug-state* TRUE)
-; (run)
-; (play-action player1 "[elven-cloak1] [aragorn-ii1]")
-;(play-action player1 "[rivendell]")

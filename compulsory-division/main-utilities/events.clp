@@ -13,52 +13,121 @@
 )
 
 
+(defmessage-handler E-modify exec ()
+	(if (eq ?self:old (send ?self:target (sym-cat get- ?self:slot))) then
+		(send ?self:target modify ?self:slot ?self:new)
+		(send ?self modify state OUT)
+		else
+		(send ?self modify state DEFUSED)
+	)
+)
 
-; DEFINICIÓN DE TEMPLATE EVENTO
-(defclass MAIN::EVENT (is-a BASIC)
-    (slot instance-# (source composite))
-	(slot target-phase (visibility public) (type SYMBOL))
-	(slot type (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN OUT))
-	; Revisar en los que capturen datos de eventos que se especifique defused FALSE
-	; para evitar pattern matching innecesario
-	(slot defused (visibility public) (type SYMBOL) (default FALSE) (allowed-symbols TRUE FALSE)
-		(pattern-match non-reactive))
+(defmessage-handler E-modify init after ()
+	(send ?self modify old (send ?self:target (sym-cat get- ?self:slot)))
 )
 
 
-; DEFINICION DEL EVENTO DE FASE EVENTUAL
-(defclass MAIN::EVENT-PHASE (is-a EVENT)
-    (slot instance-# (source composite))
-	(slot target-phase (visibility public) (type SYMBOL))
-	(slot type (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN OUT ONGOING))
+(defmessage-handler EVENT hold ()
+	(send ?self modify state (switch ?self:state
+		(case IN then IN-HOLD)
+		(case EXEC then EXEC-HOLD)
+		(case OUT then OUT-HOLD)
+		(default 
+			(println STAM_ERROR: Incorrect event state)
+			(halt)
+			?self:state
+		)
+	))
 )
 
-; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT HANDLER
-(defmessage-handler EVENT complete()
-	; Lo marca como terminado
-	(send ?self modify type OUT)
-	(send ?self modify target-phase (get-target-phase))
+(defmessage-handler EVENT unhold ()
+	(send ?self modify state (switch ?self:state
+		(case IN-HOLD then IN)
+		(case EXEC-HOLD then EXEC)
+		(case OUT-HOLD then OUT)
+		(default 
+			(println STAM_ERROR: Incorrect event state)
+			(halt)
+			?self:state
+		)
+	))
 )
 
-; MÉTODO PARA QUE NO SE LLEVE A CABO EL EVENTO
-(defmessage-handler EVENT defuse ()
-	; Desactiva el evento y lo marca como terminado
-	(send ?self modify defused TRUE)
-	(send ?self modify type OUT)
-	(send ?self modify target-phase (get-target-phase))
+
+(defmessage-handler EVENT init after ()
+;	TODO: usar una variable global que guarde el evento que se ejecute
+	(do-for-instance ((?ep EVENT)) 
+		(and (neq ?ep (instance-name ?self)) (or (eq EXEC ?ep:state) (eq IN ?ep:state) (eq OUT ?ep:state)))
+		(send ?self modify position (instance-name ?ep))
+		(send ?ep hold)
+	)
+)
+
+(defmessage-handler EVENT put-state after (?newState)
+	; Se presupone que si se desactiva es porque un cancelador ha actuado justo debajo de él e inmediatamente se pone DONE inmediatamente. Los cancelers son los únicos eventos cuya salida no se puede observar. Además, las salidas al ser cancelados no son observables tampoco.
+	(if (or (eq ?newState DONE) (eq ?newState DEFUSED)) then
+		(send ?self modify target-phase (get-target-phase))
+
+		(if (neq ?self:position (slot-default-value EVENT position)) then
+			(send ?self:position unhold)
+		)
+	)
+)
+
+;;;;;;;;;;;;;;;;;;;;;; GENERATORS
+
+(deffunction MAIN::E-modify (?target ?slot ?newValue $?reason)
+	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot ?slot) (new ?newValue) (reason $?reason))
+)
+
+;	Como siempre se intercepta al único evento que haya en activo, 
+; (deffunction MAIN::E-intercept (?target ?slot ?newValue ?intercepted $?reason)
+; 	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot ?slot) (new ?newValue) (position ?intercepted) (reason $?reason))
+; )
+
+(deffunction MAIN::E-cancel (?target $?reason)
+	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot state) (new DEFUSED) (reason CANCEL $?reason))
+)
+
+;;;;;;;;;;;;;;;;;;;;; PHASING RULE
+
+(defrule MAIN::EN-modify (declare (auto-focus TRUE) (salience ?*E-next*))
+	?e <- (object (is-a E-modify) (state IN | EXEC | _ | OUT))
+	=>
+	(bind ?oldState (send ?e get-state))
+	(send ?e modify state 
+		(switch ?oldState
+			(case IN then EXEC)
+			(case EXEC then _)
+			(case _ then DEFUSED)
+			(case OUT then DONE)
+	))
+)
+
+(defrule MAIN::EN-phase (declare (auto-focus TRUE) (salience ?*E-next*))
+	?e <- (object (is-a E-phase) (state IN | OUT))
+	=>
+	; E-phase no usa _
+	(bind ?oldState (send ?e get-state))
+	(send ?e modify state 
+		(switch ?oldState
+			(case IN then 
+				(jump (sym-cat START- (nth$ 1 (send ?e get-reason))))
+				;	TODO: verificar que se percibe el hecho desde el modulo donde se aserta hasta el ultimo modulo de la fase eventual y ya esta
+				(foreach ?fact (send ?e get-data) 
+					(assert-string (str-cat "(" ?fact ")"))
+				)
+				(send ?e modify data (create$))
+				EXEC)
+			(case OUT then DONE)
+	))
 )
 
 
-; MÉTODO PARA QUE SE MARQUE EL EVENTO COMO COMPLETADO EN UN EVENT-PHASE HANDLER
-(defmessage-handler EVENT-PHASE complete()
-	(send ?self modify type OUT)
-	(send ?self modify target-phase (get-target-phase))
-)
-
-; MÉTODO PARA QUE NO SE LLEVE A CABO EL EVENT-PHASE (o se pare)
-(defmessage-handler EVENT-PHASE defuse ()
-	(send ?self modify defused TRUE)
-	(send ?self modify type OUT)
-	(send ?self modify target-phase (get-target-phase))
-	; TODO: que ocurre cuando defuseas un EVENT-PHASE?
+;TODO: Eliminar y cambiar por la doble comprobación
+(defrule MAIN::E-exec (declare (auto-focus TRUE) (salience ?*E-intercept*))
+	?e <- (object (is-a E-modify) (state _))
+	=>
+	; Por ahora esta regla es tan imperativa como una función
+	(send ?e exec)
 )

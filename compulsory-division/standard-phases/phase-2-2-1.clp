@@ -1,18 +1,18 @@
 ;////////////////// Fase 2 2 1: EJECUCION JUGAR RECURSOS SUCESOS DURADEROS ////////////////////////
-(defmodule P-2-2-1 (import MAIN ?ALL))
+(defmodule P-2-2-1 (import MAIN ?ALL) (import P-2-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Jugar recursos suceso duradero))
+(message Jugar recursos suceso duradero))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 ; ACCIÓN: JUGAR RECURSOS DE SUCESOS DURADEROS
-(defrule action-long-event-play (declare (salience ?*action-population-salience*))
+(defrule action-long-event-play (declare (salience ?*action-population*))
 	(logical
 		(only-actions (phase P-2-2-1))
     	(player ?p)
@@ -23,9 +23,11 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def r-long-event-play)
+		(event-def modify)
 		(description (sym-cat "Play long event resource " ?rle))
 		(identifier ?rle)
-		(data (create$ "( r-long-event [" ?rle "])"))
+		(data (create$ ?rle position (slot-default-value BASIC position)
+			PLAY R-LONG-EVENT P221::action-long-event-play
+		))
 	))
 )

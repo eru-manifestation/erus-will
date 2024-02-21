@@ -1,59 +1,53 @@
 ;//////////////////// Fase 3 1 1: EJECUCIÓN MOVER COMPAÑÍAS ///////////////////////
-(defmodule P-3-1-1 (import MAIN ?ALL))
+(defmodule P-3-1-1 (import MAIN ?ALL) (import P-2-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Eleccion de la ejecucion del movimiento))
+(message Eleccion de la ejecucion del movimiento))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 ; ACCIÓN: Ejecutar movimiento declarado por el propio evento
-(defrule action-fell-move (declare (salience ?*action-population-salience*))
+(defrule action-fell-move (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-3-1-1))
+		; (only-actions (phase P-3-1-1))
     	(player ?p)
-		(object (is-a E-fell-decl-move) (type IN)
-			(fell ?fell) (from ?from) (to ?to) (name ?event))
+		(object (is-a E-phase) (state EXEC) (reason turno $?))
+		(move ?fell ?to)
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def fell-move)
-		(description (sym-cat "Move fellowship " ?fell " from " ?from " to " ?to))
+		(event-def modify)
+		(description (sym-cat "Move fellowship " ?fell " from to " ?to))
 		(identifier ?fell)
-		(data (create$ 
-		"( decl-event [" ?event "])"
-		"( fell [" ?fell "])"
-		"( from [" ?from "])"
-		"( to [" ?to "])"))
+		(data (create$ ?fell position ?to P311::action-fell-move))
 		(blocking TRUE)
 	))
 )
 
 ; ACCIÓN: Ejecutar permanencia en el lugar
-(defrule action-fell-remain (declare (salience ?*action-population-salience*))
+(defrule action-fell-remain (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-3-1-1))
+		; (only-actions (phase P-3-1-1))
     	(player ?p)
-		(object (is-a E-fell-decl-remain) (type IN)
-			(loc ?loc) (fell ?fell) (name ?event))
+		(object (is-a E-phase) (state EXEC) (reason turno $?))
+		(remain ?fell)
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def fell-move)
-		(description (sym-cat "Execute remain of " ?fell " in " ?loc))
+		(event-def phase)
+		(description (sym-cat "Execute remain of " ?fell))
 		(identifier ?fell)
-		(data (create$ 
-		"( decl-event [" ?event "])"
-		"( fell [" ?fell "])"
-		"( from [" ?loc "])"
-		"( to [" ?loc "])"))
+		(data (create$ "fell-move P311::action-fell-remain"
+			(str-cat "fellowship " ?fell)
+		))
 		(blocking TRUE)
 	))
 )

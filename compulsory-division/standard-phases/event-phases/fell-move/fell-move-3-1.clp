@@ -1,31 +1,24 @@
 ;/////////////////// FELLWOSHIP MOVE 3 1: AMBOS PERSONAJES ROBAN UNA CARTA ////////////////////////
-(defmodule fell-move-3-1 (import MAIN ?ALL))
+(defmodule fell-move-3-1 (import MAIN ?ALL) (import fell-move-2 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Ambos personajes roban una carta, si deben robar)
-(assert (both-draw-one#player) (both-draw-one#enemy)))
+(message Ambos personajes roban una carta, si deben robar))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 ; Calcula cuantas cartas debe robar cada jugador (no se roba si no se mueve)
-(defrule both-draw-one#player
-    ?unicity<-(both-draw-one#player)
-    ?e<-(object (is-a EP-fell-move) (type ONGOING) (player-draw ?pd&:(< 0 ?pd)))
+(defrule both-draw-one
+    ?f <- (draw-ammount ? ?p)
     =>
-    (retract ?unicity)
-    (make-instance (gen-name E-fell-move-player-draw) of E-fell-move-player-draw (fell-move ?e))
-)
-
-(defrule both-draw-one#enemy
-    ?unicity<-(both-draw-one#enemy)
-    ?e<-(object (is-a EP-fell-move) (type ONGOING) (enemy-draw ?pd&:(< 0 ?pd)))
-    =>
-    (retract ?unicity)    
-    (make-instance (gen-name E-fell-move-enemy-draw) of E-fell-move-enemy-draw (fell-move ?e))
+    (retract ?f)
+    (make-instance (gen-name E-phase) of E-phase 
+        (reason draw fell-move-3-1::both-draw-one)
+        (data (str-cat "target " ?p) "ammount 1")
+    )
 )

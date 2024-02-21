@@ -1,36 +1,36 @@
 ;/////////////////// LOCATION PHASE 3 1: JUGAR OBJETO MENOR ADICIONAL ////////////////////////
-(defmodule loc-phase-3-1 (import MAIN ?ALL))
+(defmodule loc-phase-3-1 (import MAIN ?ALL) (import loc-phase-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Play additional minor item))
+(message Play additional minor item))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-(defrule play-additional-minor-item (declare (salience ?*action-population-salience*))
+(defrule play-additional-minor-item (declare (salience ?*action-population*))
 	(logical
 		(only-actions (phase loc-phase-3-1))
     	(player ?p)
-		(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell))
+		(fellowship ?fell)
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
-		(not (object (is-a E-item-play-only-minor)))
+
+		(object (is-a E-modify) (reason $? PLAY ITEM $?) (state DONE))
+		(not (object (is-a E-modify) (reason $? loc-phase-3-1::play-additional-minor-item) (state DONE)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def E-item-play-only-minor)
+		(event-def modify)
 		(description (sym-cat "Play additional minor item " ?item " under " ?char))
 		(identifier ?item ?char)
-		(data (create$ 
-		"( item [" ?item "])" 
-		"( owner ["?char "])")))
-	)
+		(data (create$ ?item position ?char PLAY ITEM loc-phase-3-1::play-additional-minor-item))
+	))
 )

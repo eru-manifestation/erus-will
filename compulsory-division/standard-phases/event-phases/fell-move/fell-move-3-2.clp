@@ -1,13 +1,13 @@
 ;/////////////////// FELLWOSHIP MOVE 3 2: EL JUGADOR ELIGE SI ROBAR ////////////////////////
-(defmodule fell-move-3-2 (import MAIN ?ALL))
+(defmodule fell-move-3-2 (import MAIN ?ALL) (import fell-move-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Player decides whether to keep drawing, if possible))
+(message Player decides whether to keep drawing, if possible))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -15,17 +15,27 @@
 ; ACCION: seguir robando mientras se pueda y quiera
 (defrule action-player-draw
     (logical
-		(only-actions (phase fell-move-3-2))
-    	(player ?p)
-		(object (is-a EP-fell-move) (type ONGOING) (name ?e) (player-draw ?pd&:(< 0 ?pd)))
+		(player ?p)
+		?f <- (draw-ammount ? ?p)
+		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
+		; (only-actions (phase fell-move-3-2))		
 	)
     =>
     (assert (action 
 		(player ?p)
-		(event-def fell-move-player-draw)
+		(event-def varswap)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?p))
-		(data (create$ 
-		"( fell-move [" ?e "])"))
+		(data (create$ ?f draw ?p))
 	))
+)
+
+
+(defrule exec-player-draw
+	?f <- (draw ?p)
+	=>
+	(retract ?f)
+	(make-instance (gen-name E-phase) of E-phase
+		(reason draw fell-move-3-2::exec-player-draw)
+		(data (str-cat "target " ?p) "ammount 1"))
 )

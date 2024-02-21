@@ -1,36 +1,49 @@
 ;/////////////////// ATTACK 2 1: EL JUGADOR DISTRIBUYE LOS GOLPES ////////////////////////
-(defmodule attack-2-1 (import MAIN ?ALL))
+(defmodule attack-2-1 (import MAIN ?ALL) (import attack-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Player chooses how to distrubute the strikes))
+(message Player chooses how to distrubute the strikes))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
+(defrule init-strikes
+	(attackable ?at)
+	=>
+	(assert (num-strikes (send ?at get-strikes)))
+)
 
-(defrule player-select-strike (declare (salience ?*action-population-salience*))
+(defrule decrease-strikes
+	(num-strikes ?n&:(< 1 ?n))
+	=>
+	(assert (num-strikes (- ?n 1)))
+)
+
+;	TODO: deberia funcionar correctamente solo si la saliencia de action-selection es inferior a 0
+(defrule player-select-strike (declare (salience ?*action-population*))
 	(logical 
 		(only-actions (phase attack-2-1))
     	(player ?p)
-		(object (is-a EP-attack) (type ONGOING) (fell ?fell) (attackable ?at))
-		(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
+		(fellowship ?fell)
+		(attackable ?at)
+		?f <- (num-strikes ?)
+		;(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
 		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 		(in (over ?fell) (under ?char))
-		(not (object (is-a E-select-strike) (char ?char)))
+		;(not (object (is-a E-select-strike) (char ?char)))
+		(not (strike ?char))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def select-strike)
+		(event-def varswap)
 		(description (sym-cat "Assign strike from " ?at " to " ?char))
 		(identifier ?at ?char)
-		(data (create$ 
-		"( char [" ?char "])" 
-		"( attackable [" ?at "])"))
+		(data (create$ ?f strike ?char))
 	))
 )

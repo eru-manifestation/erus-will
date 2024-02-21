@@ -1,13 +1,13 @@
 ;/////////////////// FASE 0 2 1: EJECUCION CURAR PERSONAJES EN REFUGIOS ////////////////////////
-(defmodule P-0-2-1 (import MAIN ?ALL))
+(defmodule P-0-2-1 (import MAIN ?ALL) (import P-0-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Cura personajes en refugios))
+(message Cura personajes en refugios))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -18,5 +18,6 @@
 	(object (is-a HAVEN) (name ?loc))
 	(in (over ?loc) (under ?c))
 	=>
-	(make-instance (gen-name E-cure) of E-cure (card ?c))
+	(E-modify ?c state UNTAPPED P021-heal)
+	(message "Curar personajes y aliados heridos en refugios que sean del jugador actual")
 )

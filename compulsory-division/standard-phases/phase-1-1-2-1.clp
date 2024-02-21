@@ -1,107 +1,28 @@
-;/////////////////////// FASE 1 1 2 1: EJECUCION DECLARAR MOVIMIENTO ///////////////////////
-(defmodule P-1-1-2-1 (import MAIN ?ALL))
+;/////////////////////// FASE 1 1 2 1: TODO: CAMBIAR NOMBRE -> INICIO DECLARAR MOVIMIENTO ///////////////////////
+(defmodule P-1-1-2-1 (import MAIN ?ALL) (import P-1-1-2-0 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Ejecucion declarar movimiento))
+(message Inicio declarar movimiento))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
-(defrule action-fell-decl-mov#from-haven (declare (salience ?*action-population-salience*))
-	(logical
-		(only-actions (phase P-1-1-2-1))
-    	(player ?p)
-		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
-		(not (object (is-a E-fell-decl-move) (fell ?fell)))
-		
-		; Encuentro la localización de la compañía
-		(object (is-a HAVEN) (name ?loc))
-		(in (over ?loc) (under ?fell))
+(defrule action-fell-decl-remain (declare (salience ?*action-population*))
+    (player ?p)
 
-		; Por cada localización adyacente (excluyendo el propio haven)
-		(object (is-a LOCATION) (name ?to) (place ?place&:(neq ?place HAVEN)) (closest-haven ?loc))
-	)
+	; Hay una compañía que no tiene declarado movimiento ni permanencia
+	(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (empty FALSE) (position ?loc))
+	(not (move ?fell $?))
+	(not (remain ?fell $?))
+	
+	(object (is-a E-phase) (state EXEC) (reason turn $?))
 	=>
-	(assert (action 
-		(player ?p)
-		(event-def fell-decl-move)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?to))
-		(identifier ?fell ?to)
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( from [" ?loc "])"
-		"( to [" ?to "])"))
-	))
-)
-
-
-; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
-(defrule action-fell-decl-mov#haven-haven (declare (salience ?*action-population-salience*))
-	(logical
-		(only-actions (phase P-1-1-2-1))
-    	(player ?p)
-		; Hay una compañía con movimiento por defecto del jugador dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
-		(not (object (is-a E-fell-decl-move) (fell ?fell)))
-		
-		; Encuentro la localización de la compañía
-		(object (is-a HAVEN) (name ?loc) (site-pathA ?pathA) (site-pathB ?pathB))
-		(in (over ?loc) (under ?fell))
-	)
-	=>
-	(assert (action 
-		(player ?p)
-		(event-def fell-decl-move)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathA))
-		(identifier ?fell ?pathA)
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( from [" ?loc "])"
-		"( to [" ?pathA "])"))
-	))
-	(assert (action 
-		(player ?p)
-		(event-def fell-decl-move)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathB))
-		(identifier ?fell ?pathB)
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( from [" ?loc "])"
-		"( to [" ?pathB "])"))
-	))
-)
-
-
-; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
-(defrule action-fell-decl-mov#no-haven (declare (salience ?*action-population-salience*))
-	(logical
-		(only-actions (phase P-1-1-2-1))
-    	(player ?p)
-		; Hay una compañía con movimiento por defecto del dueño del turno (no tiene declarado movimiento)
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
-		(not (object (is-a E-fell-decl-move) (fell ?fell)))
-
-		; Encuentro la localización de la compañía
-		(object (is-a LOCATION) (name ?loc) (place ?place&:(neq ?place HAVEN)) (closest-haven ?cl-haven))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
-	)
-	=>
-	(assert (action 
-		(player ?p)
-		(event-def fell-decl-move)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?cl-haven))
-		(identifier ?fell ?cl-haven)
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( from [" ?loc "])"
-		"( to [" ?cl-haven "])"))
-	))
+	(assert (remain ?fell))
+	(message "La compañia " ?fell " permanecera en " ?loc)
 )

@@ -1,38 +1,37 @@
 ;/////////////////////// FASE 4: FASE DE LUGARES ///////////////////////
-(defmodule P-4 (import MAIN ?ALL))
+(defmodule P-4 (import MAIN ?ALL) (import P-3-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Fase de lugares))
+(message Fase de lugares))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-; ACCIÓN: INICIAR FASE MOVIMIENTO
-(defrule action-loc-phase (declare (salience ?*action-population-salience*))
+; ACCIÓN: INICIAR FASE LUGARES
+(defrule action-loc-phase (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-4))
+		;(only-actions (phase P-4))
+		(object (is-a E-modify) (state EXEC) (reason turn $?))
     	(player ?p)
 
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
-		(object (is-a LOCATION) (name ?loc))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
-		(not (object (is-a E-loc-phase) (loc ?loc) (fell ?fell))) ;TODO ARREGLAR ESTO
+		(object (is-a FELLOWSHIP) (empty FALSE) (player ?p) (name ?fell))
+		(not (object (is-a E-phase) (reason loc-phase $?) (state DONE)))
 	)
 	=>
+	;	TODO: Hacer loc-phase
 	(assert (action 
 		(player ?p)
-		(event-def loc-phase)
-		(description (sym-cat "Begin location phase for " ?fell " in " ?loc))
+		(event-def phase)
+		(description (sym-cat "Begin location phase for " ?fell))
 		(identifier ?fell)
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( loc [" ?loc "])"))
+		(data (create$ "loc-phase P4::action-loc-phase"
+			(str-cat "fellowship " ?fell)))
 		(blocking TRUE)
 	))
 )

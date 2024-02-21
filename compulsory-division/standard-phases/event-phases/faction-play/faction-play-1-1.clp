@@ -1,20 +1,19 @@
 ;/////////////////// FACTION PLAY 1 1: EJECUCION LANZAR DADOS CHEQUEO DE INFLUENCIA ////////////////////////
-(defmodule faction-play-1-1 (import MAIN ?ALL))
+(defmodule faction-play-1-1 (import MAIN ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
+(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Ejecucion lanzar dados para el chequeo de influencia))
+(message Ejecucion lanzar dados para el chequeo de influencia))
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
 (defrule dice-roll
-	?ep<-(object (is-a EP-faction-play) (type ONGOING))
 	=>
-	(send ?ep modify dices (+ (random 1 6) (random 1 6)))
+	(assert (dices (+ (random 1 6) (random 1 6))))
 )

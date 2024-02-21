@@ -1,16 +1,4 @@
-;TODO: IMPORTANTE, RECORDAR QUE LA CORRUPCIÓN DE LOS PERSONAJES AL SER UN MODIFICADOR,
-;   SE DEBE INVERTIR CON RESPECTO A LA INFORMACIÓN DE LA CARTA
-
-; MECANISMO DE INICIACIÓN DE CARTAS
-(deffunction MAIN::init-card(?card-class ?times ?player-n)
-    (bind ?player (symbol-to-instance-name (sym-cat player ?player-n)))
-    (make-instance (gen-name ?card-class) of ?card-class 
-        (player ?player) (position (drawsymbol ?player)))
-    (if (< 1 ?times)
-    then
-        (init-card ?card-class (- ?times 1) ?player-n)
-    )
-)
+;TODO: IMPORTANTE, RECORDAR QUE LA CORRUPCIÓN DE LOS PERSONAJES AL SER UN MODIFICADOR, SE DEBE INVERTIR CON RESPECTO A LA INFORMACIÓN DE LA CARTA
 
 
 ;//////////////// MANO DE GANDALF /////////////////
