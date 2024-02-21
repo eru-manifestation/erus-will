@@ -145,13 +145,13 @@
         (player ?p)
         (position ?draw&:(eq ?draw (drawsymbol ?p)))
     )
-    (not 
+    (not (exists
         (object (is-a CHARACTER) 
             (name ?char&[elladan1]|[pippin1]|[boromir-ii1]|[merry1])
             (player ?p)
             (position ?fell&:(neq (class ?fell) FELLOWSHIP))
         )
-    )
+    ))
     =>
     (bind ?holder (switch ?itemname
         (case [elven-cloak2] then [elladan1])

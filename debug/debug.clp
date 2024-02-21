@@ -11,4 +11,4 @@
 ; (watch message-handlers EVENT hold)
 ; (watch message-handlers EVENT unhold)
 ;(watch message-handlers BASIC put-position after)
-(run 24)
+(run 64)

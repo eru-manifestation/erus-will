@@ -1,3 +1,6 @@
+(clear)
+(defmodule MAIN (export ?ALL))
+
 (deffunction load-classes ()
     (and
         (load* "compulsory-division/main-utilities/classes/object-prelude.clp")
@@ -135,7 +138,6 @@
 (deffunction load-all ()
     (set-strategy breadth)
     (and
-        (load* "compulsory-division/main-utilities/innit.clp")
         (load-utilities)
         (load-standard)
     )

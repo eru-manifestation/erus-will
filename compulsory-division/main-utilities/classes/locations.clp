@@ -81,7 +81,7 @@
 )
 
 (deffunction MAIN::init-locations ()
-    (debug Starting locations)
+    (message Starting locations)
     
     ; ATAQUES AUTOMATICOS
 
@@ -112,5 +112,5 @@
     (send [barrow--downs] put-automatic-attacks [attackable-barrow--downs1])
     (make-instance beorns-house of BEORNS-HOUSE)
 
-    (debug Locations started)
+    (message Locations started)
 )
