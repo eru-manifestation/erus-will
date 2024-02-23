@@ -2,10 +2,7 @@
 (defmodule attack-2-1 (import MAIN ?ALL) (import attack-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Player chooses how to distrubute the strikes))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -27,7 +24,7 @@
 ;	TODO: deberia funcionar correctamente solo si la saliencia de action-selection es inferior a 0
 (defrule player-select-strike (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase attack-2-1))
+		(object (is-a E-phase) (state EXEC) (reason attack $?))
     	(player ?p)
 		(fellowship ?fell)
 		(attackable ?at)

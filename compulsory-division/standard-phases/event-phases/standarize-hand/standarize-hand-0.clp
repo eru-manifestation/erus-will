@@ -4,10 +4,7 @@
 
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Jugar o robar hasta tener 8 cartas))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -30,7 +27,6 @@
 ; ACCION descartar una desde la mano
 (defrule action-card-discard-from-hand (declare (salience ?*action-population*))
 	(logical
-		;(only-actions (phase standarize-hand-0))
 		(object (is-a E-phase) (state EXEC) (reason standarize-hand))
 		(target ?p)
 		(object (is-a PLAYER) (name ?p) (hand ?hand&:(> ?hand 8)))

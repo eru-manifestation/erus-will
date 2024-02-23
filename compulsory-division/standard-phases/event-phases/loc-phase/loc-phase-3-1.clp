@@ -2,10 +2,7 @@
 (defmodule loc-phase-3-1 (import MAIN ?ALL) (import loc-phase-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Play additional minor item))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -15,7 +12,7 @@
 
 (defrule play-additional-minor-item (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-3-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowship ?fell)
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))

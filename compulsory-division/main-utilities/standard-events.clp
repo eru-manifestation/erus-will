@@ -58,7 +58,6 @@
 ;   TODO: manejo de elecciones en intercepcion
 (defrule MAIN::EI-action-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
 	(logical
-		;(only-actions (phase char-discard-1))
         ; En el caso de los EI's, la constriccion E-modify con EXEC funciona como only-actions
 		(object (is-a E-modify) (state EXEC) (target ?char)
             (reason $? DISCARD CHARACTER $?)

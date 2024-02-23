@@ -2,10 +2,7 @@
 (defmodule P-2-2-1 (import MAIN ?ALL) (import P-2-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(message Jugar recursos suceso duradero))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -14,7 +11,7 @@
 ; ACCIÓN: JUGAR RECURSOS DE SUCESOS DURADEROS
 (defrule action-long-event-play (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-2-2-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		; Dado un suceso duradero en la mano del jugador
 		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p)

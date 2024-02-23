@@ -5,8 +5,8 @@
 ;(set-break draw-0::clock)
 
 (bind ?*print-message* TRUE)
-(watch instances)
-(watch facts)
+;(watch instances)
+;(watch facts)
 ;(watch activations)
 (watch rules)
 (watch focus)

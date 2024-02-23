@@ -4,10 +4,7 @@
 
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Player chooses whether facing the strike normally or hindered with -3 prowess))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -18,7 +15,7 @@
 
 (defrule action-face-strike-hindered
 	(logical
-		(only-actions (phase strike-1-1))
+		(object (is-a E-phase) (state EXEC) (reason strike $?))
 		
 		(data (data target ?char))
 		(data (data attackable ?at))

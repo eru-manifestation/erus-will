@@ -2,10 +2,7 @@
 (defmodule loc-phase-2-1 (import MAIN ?ALL) (import loc-phase-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Ejecucion ataques automaticos fase lugares))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -15,7 +12,7 @@
 
 (defrule play-item#minor (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-2-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowhsip ?fell)
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
@@ -39,7 +36,7 @@
 
 (defrule play-item#greater (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-2-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowhsip ?fell)
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
@@ -63,7 +60,7 @@
 
 (defrule play-item#major (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-2-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowhsip ?fell)
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
@@ -87,7 +84,7 @@
 
 (defrule play-ally (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-2-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowhsip ?fell)
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
@@ -111,7 +108,7 @@
 
 (defrule play-faction (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase loc-phase-2-1))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
 		(fellowhsip ?fell)
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))

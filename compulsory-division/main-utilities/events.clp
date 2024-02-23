@@ -37,7 +37,7 @@
 		(case EXEC then EXEC-HOLD)
 		(case OUT then OUT-HOLD)
 		(default 
-			(println STAM_ERROR: Incorrect event state)
+			(println "STAM_ERROR: Incorrect event state")
 			(halt)
 			?self:state
 		)
@@ -50,7 +50,7 @@
 		(case EXEC-HOLD then EXEC)
 		(case OUT-HOLD then OUT)
 		(default 
-			(println STAM_ERROR: Incorrect event state)
+			(println "STAM_ERROR: Incorrect event state")
 			(halt)
 			?self:state
 		)

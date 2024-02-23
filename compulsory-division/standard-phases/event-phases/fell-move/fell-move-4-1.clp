@@ -2,10 +2,7 @@
 (defmodule fell-move-4-1 (import MAIN ?ALL) (import fell-move-3-3 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Enemy plays adversities))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -15,7 +12,7 @@
 
 (defrule action-play-creature#by-regions (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase fell-move-4-1))
+		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
 		(fellowship ?fell)
 		(route $? ?region ?n&:(numberp ?n) $?)
@@ -39,9 +36,8 @@
 
 (defrule action-play-creature#by-place (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase fell-move-4-1))
+		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
-		;?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (to ?to))
 		(fellowship ?fell)
 		(to ?to)
 		(object (is-a CREATURE) (player ?p) 

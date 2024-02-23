@@ -9,24 +9,11 @@
 		(pop-focus)
 		(jump ?jump-stage)
 		else
-		(if (eq (nth$ 2 (get-focus-stack)) MAIN) then
-			(if (< (length$ (get-focus-stack)) 3) then 
-				;(message Fin de la partida);PUEDE QUE SEA NECESARIO PQ NUNCA OCURRA
-				;(halt)
-				(update-only-actions MAIN)
-				else
-				(update-only-actions (nth$ 3 (get-focus-stack)))
-			)
-			else 
-			(update-only-actions (nth$ 2 (get-focus-stack)))
-		)
-
 		;TODO: sustituir la regla ini por un mapa (switch) que imprima el mensaje de entrada conveniente y que refresque las reglas del modulo, ya que cambiando el foco basta para conseguirlo
 		; Probar con (focus <module-name>) o (set-current-module <module-name>)
 		;(message Reglas: (get-defrule-list))
 		(object-pattern-match-delay 
 			(focus ?stage)
-			(foreach ?rule (get-defrule-list) (refresh ?rule))
 			(foreach ?deftemplate (get-deftemplate-list)
 				(do-for-all-facts ((?f ?deftemplate)) TRUE
 					(retract ?f)
@@ -60,7 +47,6 @@
 
 ; REGLA DE INICIO DE JUEGO
 (defrule MAIN::start =>
-	(assert (only-actions (phase FALSE)))
 	;(tic 1)
 	;	TODO: intercambiar el hecho player y enemy por las variables de la fase eventual turn
 	(assert (infinite) (player ?*player1*) (enemy ?*player2*))

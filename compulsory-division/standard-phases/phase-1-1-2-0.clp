@@ -2,10 +2,7 @@
 (defmodule P-1-1-2-0 (import MAIN ?ALL) (import P-1-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(message Ejecucion declarar movimiento))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -16,7 +13,6 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
 (defrule action-fell-decl-mov#from-haven (declare (salience ?*action-population*))
 	(logical
-		; (only-actions (phase P-1-1-2-0))
     	(player ?p)
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
@@ -49,7 +45,6 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
 (defrule action-fell-decl-mov#haven-haven (declare (salience ?*action-population*))
 	(logical
-		; (only-actions (phase P-1-1-2-0))
     	(player ?p)
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
@@ -84,7 +79,6 @@
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
 (defrule action-fell-decl-mov#no-haven (declare (salience ?*action-population*))
 	(logical
-		; (only-actions (phase P-1-1-2-0))
     	(player ?p)
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia

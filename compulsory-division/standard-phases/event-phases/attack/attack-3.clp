@@ -2,10 +2,7 @@
 (defmodule attack-3 (import MAIN ?ALL) (import attack-2-2 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Player chooses the order in which strikes execute))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -16,7 +13,7 @@
 
 (defrule action-select-strike  (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase attack-3))
+		(object (is-a E-phase) (state EXEC) (reason attack $?))
     	(player ?p)
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 
@@ -39,7 +36,7 @@
 
 (defrule action-select-spare-strike  (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase attack-3))
+		(object (is-a E-phase) (state EXEC) (reason attack $?))
     	(player ?p)
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 

@@ -2,10 +2,7 @@
 (defmodule P-1-1-1 (import MAIN ?ALL) (import P-0-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(message Ejecucion de la fase de organizacion))
+
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -19,7 +16,7 @@
 ; Influencia directa de algún personaje para controlarlo
 (defrule action-char-play#as-follower (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 
 		; Sólo se puede jugar un personaje por turno en fase de organización
@@ -59,7 +56,7 @@
 ; ACCIÓN: Jugar personaje 2
 (defrule action-char-play#under-fell (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		
 		; Sólo se puede jugar un personaje por turno en fase de organización
@@ -97,7 +94,7 @@
 ; Puedes intercambiar objetos entre tus personajes si están en el mismo lugar, pero antes, el portador de cada objeto deberá hacer un chequeo de corrupción
 (defrule action-item-transfer (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
 		(object (is-a ITEM) (name ?i) (position ?disposer) (player ?p))
@@ -126,7 +123,7 @@
 ; También puedes almacenar objetos si el portador está en un refugio
 (defrule action-item-store (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
 		(object (is-a ITEM) (name ?i) (position ?bearer) (player ?p))
@@ -153,7 +150,7 @@
 ; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
 (defrule action-char-discard (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
@@ -176,7 +173,7 @@
 ; Siempre puedes mover a un personaje a otra compañia del lugar a menos que ya tenga 7 integrantes
 (defrule action-char-move#change-fell (declare (salience ?*action-population*))
 	(logical
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
 		(player ?p)
 
@@ -207,7 +204,7 @@
 ; Siempre que un personaje tenga suficiente influencia puedes hacer de un personaje seguidor
 (defrule action-char-follow (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
 		(player ?p)
 
@@ -246,7 +243,7 @@
 ; Siempre que el jugador tenga suficiente influencia general y que haya espacio en la compañía puedo bajarlo
 (defrule action-char-unfollow (declare (salience ?*action-population*))
 	(logical 
-		(only-actions (phase P-1-1-1))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
 		(player ?p)
 
