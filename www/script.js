@@ -259,8 +259,7 @@ function animate(announces){
                     break;
             }
         else {
-            operationData.msDelay = 20;
-            operationData.animationFunction = enableChoices;
+            operationData = {msDelay : 20, animationFunction : enableChoices};
         }
         setTimeout(operationData.animationFunction, accumDelay);
         accumDelay += operationData.msDelay;

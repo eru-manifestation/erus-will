@@ -18,7 +18,7 @@
 		; (only-actions (phase P-3-1-1))
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turno $?))
-		(move ?fell ?to)
+		(data (data move ?fell ?to))
 	)
 	=>
 	(assert (action 
@@ -37,7 +37,7 @@
 		; (only-actions (phase P-3-1-1))
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turno $?))
-		(remain ?fell)
+		(data (data remain ?fell))
 	)
 	=>
 	(assert (action 
@@ -46,7 +46,7 @@
 		(description (sym-cat "Execute remain of " ?fell))
 		(identifier ?fell)
 		(data (create$ "fell-move P311::action-fell-remain"
-			(str-cat "fellowship " ?fell)
+			(str-cat "fellowship [" ?fell "]")
 		))
 		(blocking TRUE)
 	))

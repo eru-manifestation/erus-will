@@ -16,7 +16,7 @@
 (defrule action-enemy-draw
     (logical
 		(enemy ?enemy)
-		?f <- (draw-ammount ? ?enemy)
+		?f <- (data (data draw-ammount ? ?enemy))
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
 		; (only-actions (phase fell-move-3-3))		
 	)
@@ -32,10 +32,10 @@
 
 
 (defrule exec-enemy-draw
-	?f <- (draw ?p)
+	?f <- (data (data draw ?p))
 	=>
 	(retract ?f)
 	(make-instance (gen-name E-phase) of E-phase
 		(reason draw fell-move-3-2::exec-enemy-draw)
-		(data (str-cat "target " ?p) "ammount 1"))
+		(data (str-cat "target [" ?p "]") "ammount 1"))
 )

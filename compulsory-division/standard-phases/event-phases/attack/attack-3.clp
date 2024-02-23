@@ -21,8 +21,8 @@
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 
         ;(char ?char) (attackable ?at))
-		(attackable ?at)
-		(strike ?char)
+		(data (data attackable ?at))
+		(data (data strike ?char))
 	)   
     =>
 	(assert (action 
@@ -31,7 +31,7 @@
 		(description (sym-cat "Execute strike from " ?at " to " ?char))
 		(identifier ?char)
 		(data (create$ "strike attack-3::action-select-strike"
-			(str-cat "target " ?char) (str-cat "attackable " ?at)))
+			(str-cat "target [" ?char "]") (str-cat "attackable [" ?at "]")))
 		(blocking TRUE)
 	))
 )
@@ -44,8 +44,8 @@
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 
         ;(char ?char) (attackable ?at))
-		(attackable ?at)
-		(spare-strike ?char)
+		(data (data attackable ?at))
+		(data (data spare-strike ?char))
 	)   
     =>
 	(assert (action 
@@ -54,7 +54,7 @@
 		(description (sym-cat "Execute strike from " ?at " to " ?char))
 		(identifier ?char)
 		(data (create$ "strike attack-3::action-select-spare-strike"
-			(str-cat "target " ?char) (str-cat "attackable " ?at)))
+			(str-cat "target [" ?char "]") (str-cat "attackable [" ?at "]")))
 		(blocking TRUE)
 	))
 )

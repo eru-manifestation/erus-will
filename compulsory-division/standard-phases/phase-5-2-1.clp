@@ -18,5 +18,5 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason standarize-hand P521::standarize-hand)
-		(data (str-cat "target " ?p)))
+		(data (str-cat "target [" ?p "]")))
 )

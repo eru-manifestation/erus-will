@@ -1,5 +1,7 @@
 ;/////////////////// RESISTANCE CHECK 1: LANZAR DADOS ////////////////////////
 (defmodule resistance-check-1 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -14,6 +16,6 @@
 
 (defrule roll-dices
 	=>
-	(assert (dices (+ (random 1 6) (random 1 6))))
+	(assert (data (data dices (+ (random 1 6) (random 1 6)))))
 )
 

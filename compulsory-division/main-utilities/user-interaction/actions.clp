@@ -41,10 +41,6 @@
 	)
 
 	(if ?*print-message* then
-		(print-content ?*announce-p1*)
-		(bind ?*announce-p1* (create$))
-		(print-content ?*announce-p2*)
-		(bind ?*announce-p2* (create$))
 		(print-content ?*choose-p1*)
 		(bind ?*choose-p1* (create$))
 		(print-content ?*choose-p2*)
@@ -76,22 +72,20 @@
 				)
 			)
 			(case variable then
-				; (if (not (do-for-fact ((?f (nth$ 1 ?action:data)))
-				; 	(eq ?f:implied (rest$ ?action:data))
-				; 	(retract ?f)
-				; 	;	TODO: testing
-				; )) then
-					(assert-string (str-cat "(" ?action:data ")"))
-				; )
+				(bind ?m (set-current-module (get-focus)))
+				(assert-string (str-cat "(data (data " (implode$ ?action:data) "))"))
+				(set-current-module ?m)
 			)
 			(case varswap then
+				(bind ?m (set-current-module (get-focus)))
 				(retract (nth$ 1 ?action:data))
-				(assert-string (str-cat "(" (implode$ (rest$ ?action:data)) ")"))
+				(assert-string (str-cat "(data (data " (implode$ (rest$ ?action:data)) "))"))
+				(set-current-module ?m)
 			)
-			(default 
-				;	TODO: eliminar esta alternativa
-				(eval (str-cat "(make-instance (gen-name " ?action:type "-" ?action:event-def ") of " ?action:type "-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
-			)
+			; (default 
+			; 	;	TODO: eliminar esta alternativa
+			; 	(eval (str-cat "(make-instance (gen-name " ?action:type "-" ?action:event-def ") of " ?action:type "-" ?action:event-def " " (str-cat (expand$ ?action:data)) ")"))
+			; )
 		)
 	
 		; TODO: verificar si es posible eliminar esta instruccion por redundancia

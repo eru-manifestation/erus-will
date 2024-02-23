@@ -1,11 +1,13 @@
 ;/////////////////// STANDARIZE HAND 0: ROBAR O DESCARTAR HASTA TENER 8 ////////////////////////
 (defmodule standarize-hand-0 (import MAIN ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
 (defrule ini (declare (salience ?*universal-rules*)) ?ini<-(ini) => (retract ?ini)
 (foreach ?rule (get-defrule-list) (refresh ?rule))
-(message Ambos jugadores descartan o roban hasta tener 8 cartas))
+(message Jugar o robar hasta tener 8 cartas))
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
@@ -14,12 +16,12 @@
 
 ; Roba las cartas que necesites
 (defrule card-draw
-	(target ?p)
+	(data (data target ?p))
 	(object (is-a PLAYER) (name ?p) (hand ?hand&:(< ?hand 8)))
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason draw standarize-hand::card-draw) 
-		(data (str-cat "target " ?p) (str-cat "ammount " (- 8 ?hand)))
+		(data (str-cat "target [" ?p "]") (str-cat "ammount " (- 8 ?hand)))
 	)
 	; (make-instance (gen-name E-player-draw) of E-player-draw (player ?p) (draw-ammount (- 8 ?hand)))
 )

@@ -1,4 +1,3 @@
-(clear)
 (defmodule MAIN (export ?ALL))
 
 (deffunction load-classes ()
@@ -95,6 +94,8 @@
         ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5-1.clp")
         ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-6.clp")
         ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-7.clp")
+
+        (load* "compulsory-division/standard-phases/event-phases/draw/draw-0.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/standarize-hand/standarize-hand-0.clp")
         ;(load* "compulsory-division/standard-phases/event-phases/standarize-hand/standarize-hand-1.clp")

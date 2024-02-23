@@ -1,5 +1,7 @@
 ;/////////////////////// FREE COUNCIL 1 0: JUGADOR REALIZA CHEQUEO DE CORRUPCION EN SUS PERSONAJES ///////////////////////
 (defmodule free-council-1-0 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -19,6 +21,6 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason corruption-check free-council-1-0::player-corruption-check)
-		(data (str-cat "target " ?char)))
+		(data (str-cat "target [" ?char "]")))
 	;(make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?char))
 )

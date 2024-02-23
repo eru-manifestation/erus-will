@@ -31,7 +31,7 @@
 		(description (sym-cat "Begin location phase for " ?fell))
 		(identifier ?fell)
 		(data (create$ "loc-phase P4::action-loc-phase"
-			(str-cat "fellowship " ?fell)))
+			(str-cat "fellowship [" ?fell "]")))
 		(blocking TRUE)
 	))
 )

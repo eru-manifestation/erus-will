@@ -19,5 +19,5 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason corruption-check free-council-1-0::player-corruption-check)
-		(data (str-cat "target " ?char)))
+		(data (str-cat "target [" ?char "]")))
 )

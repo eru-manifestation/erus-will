@@ -1,5 +1,7 @@
 ;/////////////////// LOCATION PHASE 1 1: EJECUCION ATAQUE AUTOMATICO FASE LUGARES ////////////////////////
 (defmodule loc-phase-1-1 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -14,11 +16,11 @@
 
 
 (defrule face-automatic-attacks
-	(fellowship ?fell)
+	(data (data fellowship ?fell))
 	(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position))) 
 		(automatic-attacks $? ?attack $?))
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason attack loc-phase-1-1::face-automatic-attacks)
-		(data (str-cat "fellowhsip " ?fell) (str-cat "attackable "?attack)))
+		(data (str-cat "fellowhsip [" ?fell "]") (str-cat "attackable [" ?attack "]")))
 )

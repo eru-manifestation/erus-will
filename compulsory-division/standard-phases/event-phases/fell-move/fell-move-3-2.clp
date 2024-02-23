@@ -16,7 +16,7 @@
 (defrule action-player-draw
     (logical
 		(player ?p)
-		?f <- (draw-ammount ? ?p)
+		?f <- (data (data draw-ammount ? ?p))
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
 		; (only-actions (phase fell-move-3-2))		
 	)
@@ -32,10 +32,10 @@
 
 
 (defrule exec-player-draw
-	?f <- (draw ?p)
+	?f <- (data (data draw ?p))
 	=>
 	(retract ?f)
 	(make-instance (gen-name E-phase) of E-phase
 		(reason draw fell-move-3-2::exec-player-draw)
-		(data (str-cat "target " ?p) "ammount 1"))
+		(data (str-cat "target [" ?p "]") "ammount 1"))
 )

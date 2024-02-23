@@ -1,5 +1,6 @@
 ;/////////////////// DRAW 0: ROBAR n ////////////////////////
 (defmodule draw-0 (import MAIN ?ALL))
+(deftemplate data (multislot data))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -14,14 +15,14 @@
 
 ; Roba las cartas que necesites
 (defrule card-draw
-    (target ?p)
-    ?a <- (ammount ?n&:(< 0 ?n))
+    (data (data target ?p))
+    ?a <- (data (data ammount ?n&:(< 0 ?n)))
     (object (is-a CARD) (position ?hand&:(eq ?hand (drawsymbol ?p))) 
         (name ?card))
 	=>
 	; TODO: ESCOGE LOS PRIMEROS QUE SEAN, NO ES ALEATORIO
     (retract ?a)
-    (assert (ammount (- ?n 1)))
+    (assert (data (data ammount (- ?n 1))))
     (E-modify ?card position (handsymbol ?p) DRAW draw-0::card-draw)
     (message "El jugador " ?p " roba " ?card)
 )

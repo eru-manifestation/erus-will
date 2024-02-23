@@ -2,13 +2,19 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
+;(set-break draw-0::clock)
+
 (bind ?*print-message* TRUE)
 (watch instances)
+(watch facts)
 ;(watch activations)
 (watch rules)
 (watch focus)
-(watch message-handlers EVENT put-state after)
+;(watch message-handlers EVENT put-state after)
 ; (watch message-handlers EVENT hold)
 ; (watch message-handlers EVENT unhold)
 ;(watch message-handlers BASIC put-position after)
-(run 64)
+; (run 145)
+(run)
+(play-action player1 PASS)
+(play-action player1 [fellowship1] [grey-havens])

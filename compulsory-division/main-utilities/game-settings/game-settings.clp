@@ -182,6 +182,5 @@ FALSE
 	(assert (ini))
 	(bind ?*jumps* (+ 1 ?*jumps*))
 	(update-only-actions ?jump-stage)
-    ;TODO: sustituir la regla ini por un mapa (switch) que imprima el mensaje de entrada conveniente y que refresque las reglas del modulo, ya que cambiando el foco basta para conseguirlo
-	(message (get-defrule-list))
+    ?jump-stage
 )

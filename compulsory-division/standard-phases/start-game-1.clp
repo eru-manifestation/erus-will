@@ -18,6 +18,6 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason standarize-hand start-game-1::standarize-hand) 
-		(data (str-cat "target " ?p)))
+		(data (str-cat "target [" ?p "]")))
 	(message ?p " roba hasta tener 8 cartas")
 )

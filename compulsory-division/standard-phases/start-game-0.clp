@@ -1,5 +1,6 @@
 ;/////////////////// INICIA EL JUEGO 0: SE INICIA LA MESA ////////////////////////
 (defmodule start-game-0 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -145,12 +146,18 @@
         (player ?p)
         (position ?draw&:(eq ?draw (drawsymbol ?p)))
     )
-    (not (exists
+    (not (and
         (object (is-a CHARACTER) 
-            (name ?char&[elladan1]|[pippin1]|[boromir-ii1]|[merry1])
-            (player ?p)
-            (position ?fell&:(neq (class ?fell) FELLOWSHIP))
+            (name ?char)
+            (player ?p2)
+            (position ?hand&:(eq ?hand (drawsymbol ?p2)))
         )
+        (test (or
+            (eq ?char [elladan1])
+            (eq ?char [pippin1])
+            (eq ?char [boromir-ii1])
+            (eq ?char [merry1])
+        ))
     ))
     =>
     (bind ?holder (switch ?itemname

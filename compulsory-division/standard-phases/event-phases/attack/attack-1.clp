@@ -1,5 +1,7 @@
 ;/////////////////// ATTACK 1: ATACANTE JUEGA CARTAS QUE MODIFIQUE EL ATAQUE ////////////////////////
 (defmodule attack-1 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI

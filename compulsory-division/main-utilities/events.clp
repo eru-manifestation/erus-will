@@ -15,7 +15,11 @@
 
 (defmessage-handler E-modify exec ()
 	(if (eq ?self:old (send ?self:target (sym-cat get- ?self:slot))) then
-		(send ?self:target modify ?self:slot ?self:new)
+		(if (neq ?self:slot position) then
+			(send ?self:target modify ?self:slot ?self:new)
+			else
+			(send ?self:target put-position ?self:new)
+		)
 		(send ?self modify state OUT)
 		else
 		(send ?self modify state DEFUSED)
@@ -58,7 +62,7 @@
 ;	TODO: usar una variable global que guarde el evento que se ejecute
 	(do-for-instance ((?ep EVENT)) 
 		(and (neq ?ep (instance-name ?self)) (or (eq EXEC ?ep:state) (eq IN ?ep:state) (eq OUT ?ep:state)))
-		(send ?self modify position (instance-name ?ep))
+		(send ?self put-position (instance-name ?ep))
 		(send ?ep hold)
 	)
 )
@@ -112,11 +116,14 @@
 	(send ?e modify state 
 		(switch ?oldState
 			(case IN then 
-				(jump (sym-cat START- (nth$ 1 (send ?e get-reason))))
+				(bind ?module (nth$ 1 (send ?e get-reason)))
+				(bind ?module (jump (sym-cat START- ?module)))
 				;	TODO: verificar que se percibe el hecho desde el modulo donde se aserta hasta el ultimo modulo de la fase eventual y ya esta
+				(set-current-module ?module)
 				(foreach ?fact (send ?e get-data) 
-					(assert-string (str-cat "(" ?fact ")"))
+					(assert-string (str-cat "(data (data " ?fact "))"))
 				)
+				(set-current-module MAIN)
 				(send ?e modify data (create$))
 				EXEC)
 			(case OUT then DONE)

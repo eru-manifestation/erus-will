@@ -1,5 +1,7 @@
 ;/////////////////// FACTION PLAY 1 1: EJECUCION LANZAR DADOS CHEQUEO DE INFLUENCIA ////////////////////////
 (defmodule faction-play-1-1 (import MAIN ?ALL) (export ?ALL))
+(deftemplate data (multislot data))
+
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
 ;/////INI
@@ -15,5 +17,5 @@
 
 (defrule dice-roll
 	=>
-	(assert (dices (+ (random 1 6) (random 1 6))))
+	(assert (data (data dices (+ (random 1 6) (random 1 6)))))
 )

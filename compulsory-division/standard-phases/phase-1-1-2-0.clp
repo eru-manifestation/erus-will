@@ -24,8 +24,8 @@
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		;	TODO: Testear si es posible eliminar reason: la activacion original deberia desactivarse al cambiar de E-phase, pero como esta regla es dependiente de la fase, no deberia haber una activacion inesperada en la fase superior
 
-		(not (move ?fell $?))
-		(not (remain ?fell $?))
+		(not (data (data move ?fell $?)))
+		(not (data (data remain ?fell $?)))
 		
 		; Encuentro la localización de la compañía
 		(object (is-a HAVEN) (name ?loc))
@@ -54,8 +54,8 @@
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
 		(object (is-a FELLOWSHIP) (name ?fell) (empty FALSE) (player ?p))
-		(not (move ?fell $?))
-		(not (remain ?fell $?))
+		(not (data (data move ?fell $?)))
+		(not (data (data remain ?fell $?)))
 		
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 
@@ -89,8 +89,8 @@
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
 		(object (is-a FELLOWSHIP) (name ?fell) (empty FALSE) (player ?p))
-		(not (move ?fell $?))
-		(not (remain ?fell $?))
+		(not (data (data move ?fell $?)))
+		(not (data (data remain ?fell $?)))
 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 

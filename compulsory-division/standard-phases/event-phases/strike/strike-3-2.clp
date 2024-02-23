@@ -16,9 +16,9 @@
 
 (defrule execute-strike
 	;(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (attackable ?at))
-	(target ?char)
-	(attackable ?at)
-	(dices ?d)
+	(data (data target ?char))
+	(data (data attackable ?at))
+	(data (data dices ?d))
 	; (object (is-a CHARACTER) (name ?char))
 	; (object (is-a ATTACKABLE) (name ?at))
 	=>
@@ -28,44 +28,44 @@
 
 	(if (< ?at-prowess (+ ?d ?prowess)) then
 		(if (neq ?at-body (slot-default-value ATTACKABLE body)) then
-			(assert (enemy-res-check))
+			(assert (data (data enemy-res-check)))
 		)
 		else
 		(if (= ?at-prowess (+ ?d ?prowess)) then
 			;(send ?ep modify state UNDEFEATED)
 			; El golpe no ha sido derrotado
-			(assert (cancel))
+			(assert (data (data cancel)))
 			else	
 			; No se derrota el golpe y se requiere chequeo de resistencia
-			(assert (defender-res-check)) 
-			(assert (cancel))	
+			(assert (data (data defender-res-check)))
+			(assert (data (data cancel)))
 		)
 	)
 )
 
 (defrule enemy-res-check
-	(enemy-res-check)
-	(target ?char)
-	(attackable ?at)
+	(data (data enemy-res-check))
+	(data (data target ?char))
+	(data (data attackable ?at))
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason resistance-check strike-3-2::enemy-res-check)
-		(data (str-cat "attacker " ?char) (str-cat "assaulted " ?at)))
+		(data (str-cat "attacker [" ?char "]") (str-cat "assaulted [" ?at "]")))
 )
 
 (defrule defender-res-check
-	(defender-res-check)
-	(target ?char)
-	(attackable ?at)
+	(data (data defender-res-check))
+	(data (data target ?char))
+	(data (data attackable ?at))
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason resistance-check strike-3-2::defneder-res-check)
-		(data (str-cat "attacker " ?at) (str-cat "assaulted " ?char)))
+		(data (str-cat "attacker [" ?at "]") (str-cat "assaulted [" ?char "]")))
 )
 
 (defrule cancel
 	(object (is-a E-phase) (state EXEC) (name ?e))
-	(cancel)
+	(data (data cancel))
 	=>
 	(E-cancel ?e strike-3-2::cancel)
 )
@@ -74,8 +74,8 @@
 (defrule tap-unhindered
 	; (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
 	; (object (is-a CHARACTER) (name ?char) (state UNTAPPED))
-	(target ?char)
-	(not (hindered))
+	(data (data target ?char))
+	(not (data (data hindered)))
 	=>
 	; (send ?char modify state TAPPED)
 	(E-modify ?char state TAPPED
