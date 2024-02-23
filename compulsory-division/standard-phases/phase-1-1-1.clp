@@ -31,9 +31,8 @@
 			(birthplace ?bp) (race ?race) (mind ?mind))
 		
 		; Localiza un personaje en una localización, que no sea seguidor (está debajo justo de una compañía) y la compañía tiene espacio
-		(object (is-a CHARACTER) (player ?p) (name ?play-under) (influence ?influence&:(<= ?mind ?influence)))
+		(object (is-a CHARACTER) (player ?p) (name ?play-under) (position ?fell) (influence ?influence&:(<= ?mind ?influence)))
 		(object (is-a FELLOWSHIP) (player ?p) (name ?fell) (companions ?comp&:(< ?comp 7)))
-		(in (transitive FALSE) (over ?fell) (under ?play-under))
 
 		(object (is-a LOCATION) (name ?loc))
 		(in (over ?loc) (under ?play-under))
@@ -72,9 +71,8 @@
 			(birthplace ?bp) (race ?race) (mind ?mind&:(<= ?mind ?gen-inf)))
 		
 		; Localiza una compañía/personaje en una localización
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
+		(object (is-a FELLOWSHIP) (name ?fell) (position ?loc) (player ?p) (companions ?comp&:(< ?comp 7)))
 		(object (is-a LOCATION) (name ?loc) (place ?place))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
 		
 		; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
 		(test (or 
@@ -102,9 +100,8 @@
 		(only-actions (phase P-1-1-1))
     	(player ?p)
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
-		(object (is-a ITEM) (name ?i) (player ?p))
+		(object (is-a ITEM) (name ?i) (position ?disposer) (player ?p))
 		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer) (player ?p))
-		(in (transitive FALSE) (over ?disposer) (under ?i))
 
 		; Localiza un personaje que esté en el mismo lugar
 		(object (is-a LOCATION) (name ?loc))
@@ -132,12 +129,11 @@
 		(only-actions (phase P-1-1-1))
     	(player ?p)
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
-		(object (is-a ITEM) (name ?i) (player ?p))
+		(object (is-a ITEM) (name ?i) (position ?bearer) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
 		(in (over ?loc) (under ?i))
 
 		(object (is-a CHARACTER) (name ?bearer) (player ?p))
-		(in (transitive FALSE) (over ?bearer) (under ?i))
 	)
 	=>
 	(assert (action 
@@ -185,16 +181,13 @@
 		(player ?p)
 
 		; Dado un personaje directamente bajo una compañía del lugar (no es seguidor), y otra compañía del lugar
-      	(object (is-a FELLOWSHIP) (name ?ini-fell) (player ?p))
-		(in (transitive FALSE) (over ?loc) (under ?ini-fell))
+      	(object (is-a FELLOWSHIP) (name ?ini-fell) (position ?loc) (player ?p))
 
-		(object (is-a CHARACTER) (name ?char) (player ?p))
-		(in (transitive FALSE) (over ?ini-fell) (under ?char))
+		(object (is-a CHARACTER) (name ?char) (position ?ini-fell) (player ?p))
 
       ;Testear que la compañía destino no tenga 7 o más integrantes
-      (object (is-a FELLOWSHIP) (name ?fell&:(neq ?ini-fell ?fell))
+      (object (is-a FELLOWSHIP) (name ?fell&:(neq ?ini-fell ?fell)) (position ?loc)
 			(companions ?cn&:(< ?cn 7)) (player ?p))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
 
 	)
 	=>
@@ -219,12 +212,11 @@
 		(player ?p)
 
 		;Dado un personaje en la localizacion con mente inferior a la influencia de otro en juego (que no es seguidor)
-		(object (is-a CHARACTER) (name ?headchar) (player ?p) (influence ?influence))
+		(object (is-a CHARACTER) (name ?headchar) (position ?fell) (player ?p) (influence ?influence))
 		(in (over ?loc) (under ?headchar))
 
 		;Encuentro la compañia del personaje (uso transitive FALSE para verificar que ?headchar no es seguidor)
 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
-		(in (transitive FALSE) (over ?fell) (under ?headchar))
 
 		; Encuentro otro personaje en la compañia (no en la localizacion porque puedo pasarme del limite de la compañia) y verifico que ?headchar tenga influencia para poder con ?tobefollower
 		(object (is-a CHARACTER) (player ?p) (mind ?mind&:(<= ?mind ?influence))
@@ -270,8 +262,7 @@
 		(in (over ?followed) (under ?follower))
 
 		;Encuentro una compañía con espacio en el lugar
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
+		(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (companions ?comp&:(< ?comp 7)) (position ?loc))
 	)
 	=>
 	; Asertar la acción "Hacer seguidor un personaje en cierta compañía"

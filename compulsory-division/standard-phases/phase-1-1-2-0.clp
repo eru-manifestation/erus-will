@@ -88,7 +88,7 @@
     	(player ?p)
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
-		(object (is-a FELLOWSHIP) (name ?fell) (empty FALSE) (player ?p))
+		(object (is-a FELLOWSHIP) (position ?loc) (name ?fell) (empty FALSE) (player ?p))
 		(not (data (data move ?fell $?)))
 		(not (data (data remain ?fell $?)))
 
@@ -96,7 +96,6 @@
 
 		; Encuentro la localización de la compañía
 		(object (is-a LOCATION) (name ?loc) (place ?place&:(neq ?place HAVEN)) (closest-haven ?cl-haven))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
 	)
 	=>
 	(assert (action 

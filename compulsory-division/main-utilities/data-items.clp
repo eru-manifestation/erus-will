@@ -11,9 +11,9 @@
 ; INFO ITEM DE CORRUPTION PARA CHARACTER
 (defrule MAIN::corruption-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules*))
     (logical
-        (object (is-a CORRUPTION) (name ?corr) (corruption ?corruption-value&:(<> ?corruption-value 0)))
+        (object (is-a CORRUPTION) (name ?corr) (position ?char)
+            (corruption ?corruption-value&:(<> ?corruption-value 0)))
         (object (is-a CHARACTER) (name ?char))
-        (in (transitive FALSE) (over ?char) (under ?corr))
     )
     =>
     (message Se crea el corruption data item de ?corr para ?char)
@@ -49,8 +49,7 @@
 (defrule MAIN::influence-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules*))
     (logical
         (object (is-a CHARACTER) (name ?char))
-        (object (is-a CHARACTER) (name ?follower) (mind ?mind))
-        (in (transitive FALSE) (over ?char) (under ?follower))
+        (object (is-a CHARACTER) (name ?follower) (position ?char) (mind ?mind))
     )
     =>
     (message Se crea el influence item por ?follower para ?char)
@@ -62,10 +61,9 @@
 (defrule MAIN::general-influence-data-item-population (declare (auto-focus TRUE) (salience ?*universal-rules*))
     (logical
         (object (is-a PLAYER) (name ?p))
-        (object (is-a CHARACTER) (name ?char) (mind ?mind) (player ?p))
+        (object (is-a CHARACTER) (name ?char) (position ?fell) (mind ?mind) (player ?p))
         (exists
             (object (is-a FELLOWSHIP) (player ?p) (name ?fell))
-            (in (transitive FALSE) (over ?fell) (under ?char))
         )
     )
     =>

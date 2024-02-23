@@ -37,8 +37,7 @@
     ; Si o existe ningun elemento de localización directo entre la localización
     ; y una compañía del jugador
     (not (exists
-        (object (is-a FELLOWSHIP) (name ?fell) (player ?p) (empty TRUE))
-        (in (over ?loc) (transitive FALSE) (under ?fell))
+        (object (is-a FELLOWSHIP) (position ?loc) (name ?fell) (player ?p) (empty TRUE))
     ))
     =>
     (message Creating empty fellowship for player ?p in ?loc)
@@ -49,11 +48,9 @@
     (object (is-a PLAYER) (name ?p))
     (object (is-a LOCATION) (name ?loc))
     (object (is-a FELLOWSHIP) (name ?fell)
-        (player ?p) (empty TRUE))
-    (in (transitive FALSE) (over ?loc) (under ?fell))
+        (player ?p) (empty TRUE) (position ?loc))
     (object (is-a FELLOWSHIP) (name ?other-fell&:(neq ?other-fell ?fell))
-        (player ?p) (empty TRUE))
-    (in (transitive FALSE) (over ?loc) (under ?other-fell))
+        (player ?p) (empty TRUE) (position ?loc))
     =>
     (message Deleting extra empty fellowship ?fell of player ?p in ?loc)
     (send ?other-fell delete)
