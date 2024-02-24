@@ -19,10 +19,11 @@
     =>
     (assert (action 
 		(player ?enemy)
-		(event-def varswap)
+		(event-def variable)
+		(initiator ?f)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?enemy))
-		(data (create$ ?f draw ?enemy))
+		(data (create$ draw ?enemy))
 	))
 )
 

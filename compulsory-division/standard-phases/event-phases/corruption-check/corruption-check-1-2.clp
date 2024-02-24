@@ -11,8 +11,8 @@
 
 
 (defrule discard-character
-	(target ?char)
-	(dices ?dices)
+	(data (data target ?char))
+	(data (data dices ?dices))
 	(object (is-a CHARACTER) (name ?char) (corruption ?corr))
 	(test (or
 		; Si el resultado es igual o 1 menor a los puntos de corrupcion del personaje, este se descarta (con lo que lleve excepto seguidores)
@@ -27,8 +27,8 @@
 
 
 (defrule destroy-character
-	(target ?char)
-	(dices ?dices)
+	(data (data target ?char))
+	(data (data dices ?dices))
 	(test 
 		; Si el resultado es 2 menor a los puntos de corrupcion del personaje, este sale del juego (descarta lo que lleve excepto seguidores)
 		(< (+ 1 ?dices) (send ?char get-corruption))

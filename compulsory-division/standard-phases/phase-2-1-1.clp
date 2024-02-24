@@ -12,8 +12,9 @@
 (defrule long-event-discard
     (player ?p)
 	; Dado un rec suceso duradero tuyo
-	(object (is-a R-LONG-EVENT) (name ?le) 
-		(state TAPPED | UNTAPPED) (player ?p))
+	(object (is-a R-LONG-EVENT) (name ?le) (player ?p) 
+		(position ?pos))
+	(not (object (is-a STACK) (name ?pos)))
 	=>
 	(E-modify ?le position (discardsymbol ?p) DISCARD R-LONG-EVENT P211::long-event-discard)
 )

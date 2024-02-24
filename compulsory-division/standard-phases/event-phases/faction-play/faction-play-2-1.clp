@@ -12,9 +12,9 @@
 
 (defrule influence-check
 	;?ep<-(object (is-a EP-faction-play) (type ONGOING) (dices ?dices) (faction ?faction) (char ?char) (loc ?loc))
-	(dices ?dices)
-	(faction ?faction)
-	(character ?char)
+	(data (data dices ?dices))
+	(data (data faction ?faction))
+	(data (data character ?char))
 	=>
 	(bind ?favor (+ (send ?char get-influence) ?dices))
 	(bind ?against (send ?faction get-influence-check))
@@ -22,12 +22,12 @@
 	(if (< ?against ?favor) then
 		(message "Chequeo de influencia de " ?char " para " ?faction " conseguido con " ?favor " de " ?against " necesarios")
 		else
-		(assert (failed))
+		(assert (data (data failed)))
 		(message "Chequeo de influencia de " ?char " para " ?faction " fallido con " ?favor " de " ?against " necesarios")
 	)
 )
 (defrule check-failed
-	(failed)
+	(data (data failed))
 	(object (is-a E-phase) (state EXEC) (name ?e))
 	=>
 	;	TODO: optimizar los E-cancel para que funcionen con un defglobal

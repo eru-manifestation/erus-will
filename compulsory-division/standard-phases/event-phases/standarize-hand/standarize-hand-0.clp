@@ -28,7 +28,7 @@
 (defrule action-card-discard-from-hand (declare (salience ?*action-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason standarize-hand))
-		(target ?p)
+		(data (data target ?p))
 		(object (is-a PLAYER) (name ?p) (hand ?hand&:(> ?hand 8)))
 		(object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
 	)

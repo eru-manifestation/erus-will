@@ -14,7 +14,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowship ?fell)
+		(data (data fellowship ?fell))
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))

@@ -11,9 +11,8 @@
 
 (defrule execute-resistance-check
 	(object (is-a E-phase) (state EXEC) (name ?e))
-	;(attacker ?at)
-	(assaulted ?as)
-	(dices ?d)
+	(data (data assaulted ?as))
+	(data (data dices ?d))
 	=>
 	;	TODO: faltan cosas por hacer
 	(if (< ?d (send ?as get-body)) then

@@ -13,14 +13,13 @@
 ; ACCIÓN: INICIAR FASE LUGARES
 (defrule action-loc-phase (declare (salience ?*action-population*))
 	(logical
-		(object (is-a E-modify) (state EXEC) (reason turn $?))
+		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 
 		(object (is-a FELLOWSHIP) (empty FALSE) (player ?p) (name ?fell))
-		(not (object (is-a E-phase) (reason loc-phase $?) (state DONE)))
+		(not (object (is-a E-phase) (reason loc-phase $?)))
 	)
 	=>
-	;	TODO: Hacer loc-phase
 	(assert (action 
 		(player ?p)
 		(event-def phase)

@@ -12,8 +12,10 @@
 ; Calcula cuantas cartas debe robar cada jugador (no se roba si no se mueve)
 (defrule both-draw-one
     ?f <- (data (data draw-ammount ? ?p))
+    (not (data (data drawn-one ?p)))
     =>
     (retract ?f)
+    (assert (data (data drawn-one ?p)))
     (make-instance (gen-name E-phase) of E-phase 
         (reason draw fell-move-3-1::both-draw-one)
         (data (str-cat "target [" ?p "]") "ammount 1")

@@ -11,7 +11,7 @@
 
 
 (defrule start-free-council
-	(council)
+	(data (data council))
 	=>
 	(make-instance (gen-name E-phase) of E-phase (reason free-council P53::free-council))
 	(message "El Concilio de los Pueblos Libres esta a punto de comenzar")

@@ -14,13 +14,14 @@
 	(logical
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		(data (data move ?fell ?to))
+		?f <- (data (data move ?fell ?to))
 	)
 	=>
 	(assert (action 
 		(player ?p)
 		(event-def modify)
-		(description (sym-cat "Move fellowship " ?fell " from to " ?to))
+		(initiator ?f)
+		(description (sym-cat "Move fellowship " ?fell " to " ?to))
 		(identifier ?fell)
 		(data (create$ ?fell position ?to P311::action-fell-move))
 		(blocking TRUE)
@@ -32,12 +33,13 @@
 	(logical
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		(data (data remain ?fell))
+		?f <- (data (data remain ?fell))
 	)
 	=>
 	(assert (action 
 		(player ?p)
 		(event-def phase)
+		(initiator ?f)
 		(description (sym-cat "Execute remain of " ?fell))
 		(identifier ?fell)
 		(data (create$ "fell-move P311::action-fell-remain"

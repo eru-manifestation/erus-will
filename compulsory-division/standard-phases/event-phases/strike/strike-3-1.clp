@@ -14,13 +14,13 @@
 	;(object (is-a EP-strike) (name ?ep) (type ONGOING))
 	=>
 	;(send ?ep modify dices (+ (random 1 6) (random 1 6)))
-	(assert (dices (+ (random 1 6) (random 1 6))))
+	(assert (data (data dices (+ (random 1 6) (random 1 6)))))
 )
 
 (defrule punish-hindered
-	?f1 <- (dices ?n)
-	?f2 <- (unpunished-hindered)
+	?f1 <- (data (data dices ?n))
+	?f2 <- (data (data unpunished-hindered))
 	=>
 	(retract ?f1 ?f2)
-	(assert (dices (- ?n 3)) (hindered))
+	(assert (data (data dices (- ?n 3))) (data (data hindered)))
 )

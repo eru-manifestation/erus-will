@@ -14,7 +14,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowhsip ?fell)
+		(data (data fellowhsip ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? MINOR-ITEM $?))
 		(object (is-a MINOR-ITEM) (player ?p) 
@@ -38,7 +38,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowhsip ?fell)
+		(data (data fellowhsip ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? GREATER-ITEM $?))
 		(object (is-a GREATER-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
@@ -62,7 +62,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowhsip ?fell)
+		(data (data fellowhsip ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? MAJOR-ITEM $?))
 		(object (is-a MAJOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
@@ -86,7 +86,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowhsip ?fell)
+		(data (data fellowhsip ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED))
 		(object (is-a ALLY) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (playable-places $? ?loc $?) (name ?ally))
@@ -110,7 +110,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
     	(player ?p)
-		(fellowhsip ?fell)
+		(data (data fellowhsip ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED))
 		(object (is-a FACTION) (player ?p) 

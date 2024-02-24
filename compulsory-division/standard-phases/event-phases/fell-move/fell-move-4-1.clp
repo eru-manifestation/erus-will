@@ -14,8 +14,8 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
-		(fellowship ?fell)
-		(route $? ?region ?n&:(numberp ?n) $?)
+		(data (data fellowship ?fell))
+		(data (data route $? ?region ?n&:(numberp ?n) $?))
 		;?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (route $? ?region ?n&:(numberp ?n) $?))
 		(object (is-a CREATURE) (player ?p) 
 			(regions $? ?region ?n2&:(<= ?n2 ?n) $?)
@@ -38,8 +38,8 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
-		(fellowship ?fell)
-		(to ?to)
+		(data (data fellowship ?fell))
+		(data (data to ?to))
 		(object (is-a CREATURE) (player ?p) 
 			(position ?pos&:(eq ?pos (handsymbol ?p))) 
 			(places $? ?place&:(eq ?place (send ?to get-place)) $?) (name ?creature))

@@ -162,14 +162,14 @@
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-movement-phase)))
     =>
     (make-instance (gen-name E-phase) of E-phase
-        (reason move-fell MAIN::EI-movement-phase)
+        (reason fell-move MAIN::EI-movement-phase)
         (data (str-cat "fellowship [" ?fell "]") (str-cat "to [" ?to "]"))
     )
 )
 
 (defrule MAIN::EI-check-mov-phase (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    (not (object (is-a E-phase) (state DONE) (reason fell-move $?)))
     (object (is-a E-modify) (state IN) (reason $? P311::action-fell-move) (name ?e))
+    (object (is-a E-phase) (state DEFUSED) (reason fell-move $?))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-check-mov-phase)))
     =>
     (E-cancel ?e MAIN::EI-check-mov-phase)
@@ -188,7 +188,7 @@
 )
 
 (defrule MAIN::EI-failed-play-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    (not (object (is-a E-phase) (state DONE) (reason faction-play $?)))
+    (object (is-a E-phase) (state DEFUSED) (reason faction-play $?))
     (object (is-a E-modify) (state IN) (reason $? PLAY FACTION $?) (target ?faction)
         (name ?e))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-failed-play-faction)))

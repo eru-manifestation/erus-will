@@ -10,15 +10,15 @@
 
 
 (defrule calculate-adversity-limit
-    (fellowship ?fell)
+    (data (data fellowship ?fell))
     =>
-    (assert (hazard-limit (max 2 (send ?fell get-companions))))
+    (assert (data (data hazard-limit (max 2 (send ?fell get-companions)))))
 )
 
 ; CALCULA LA RUTA TOMADA (no hay ruta si no se mueve)
 (defrule calculate-route
-    (fellowship ?fell)
-    (to ?to)
+    (data (data fellowship ?fell))
+    (data (data to ?to))
     =>
     (bind ?from (send ?fell get-position))
     (bind ?route nil)
@@ -41,30 +41,30 @@
         ; se va por la ruta de la carta destino      
         (bind ?route (send ?to get-route))
     )
-    (assert (route ?route))
+    (assert (data (data route ?route)))
 )
 
 
 ; Calcula cuantas cartas debe robar cada jugador (no se roba si no se mueve)
 (defrule calculate-cards-to-draw
-	(fellowship ?fell)
-	(to ?to)
+	(data (data fellowship ?fell))
+	(data (data to ?to))
     =>
     (bind ?player (send ?fell get-player))
     (bind ?enemy (enemy ?player))
 	(bind ?from (send ?fell get-position))
 
     (if (eq HAVEN (send ?to get-place)) then
-        (assert (draw-ammount (send ?from get-player-draw) ?player))
-        (assert (draw-ammount (send ?from get-enemy-draw) ?enemy))
+        (assert (data (data draw-ammount (send ?from get-player-draw) ?player)))
+        (assert (data (data draw-ammount (send ?from get-enemy-draw) ?enemy)))
         else
-        (assert (draw-ammount (send ?to get-player-draw) ?player))
-        (assert (draw-ammount (send ?to get-enemy-draw) ?enemy))
+        (assert (data (data draw-ammount (send ?to get-player-draw) ?player)))
+        (assert (data (data draw-ammount (send ?to get-enemy-draw) ?enemy)))
     )
 )
 
 (defrule populate-draw-ammount
-    (draw-ammount ?n&:(< 1 ?n) ?p)
+    (data (data draw-ammount ?n&:(< 1 ?n) ?p))
     =>
-    (assert (draw-ammount (- ?n 1) ?p))
+    (assert (data (data draw-ammount (- ?n 1) ?p)))
 )
