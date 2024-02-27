@@ -2,7 +2,7 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-(set-break phase-4::clock)
+;(set-break P-4::clock)
 
 (bind ?*print-message* TRUE)
 ;(watch instances)
@@ -17,35 +17,37 @@
 ; (watch message-handlers EVENT unhold)
 ;(watch message-handlers BASIC put-position after)
 ; (run 145)
+
+;TEST 1
+; (run)
+; (play-action player1 PASS)
+; (play-action player1 [fellowship1] [grey-havens])
+; (play-action player1 [fellowship1])
+
+;TEST 2
 (run)
+(play-action player1 [shield-of-iron--bound-ash1] [aragorn-ii1])
+;Both players updated
+;
 (play-action player1 PASS)
-(play-action player1 [fellowship1] [grey-havens])
+;Both players updated
+;
+(play-action player1 PASS)
+;Both players updated
+;
 (play-action player1 [fellowship1])
-
-;TODO: testear
-
-;;Player player1 commands: {[shield-of-iron--bound-ash1] [aragorn-ii1]}
 ;Both players updated
 ;
-;Player player1 commands: {PASS}
+(play-action player1 [fellowship1])
 ;Both players updated
 ;
-;Player player1 commands: {PASS}
-;Both players updated
-;
-;Player player1 commands: {[fellowship1]}
-;Both players updated
-;
-;Player player1 commands: {[fellowship1]}
-;Both players updated
-;
-;Player player1 commands: {[star--glass1] [star--glass1]}
+(play-action player1 [star--glass1] [star--glass1])
 ;        ^-- The command is rejected
 ;
-;Player player1 commands: {[star--glass1] [merry1]}
+(play-action player1 [star--glass1] [merry1])
 ;Both players updated
 ;
-;Player player1 commands: {[scroll-of-isildur1] [hand1]}
+(play-action player1 [scroll-of-isildur1] [hand1])
 ;        ^-- The command is rejected
 ;
-;Player player1 commands: {[rangers-of-the-north1] [discard1]}
+(play-action player1 [rangers-of-the-north1] [discard1])

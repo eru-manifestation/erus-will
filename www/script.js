@@ -5,15 +5,7 @@ const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
 var choice = [];
 
-var closeUp, game_space,
-    invisible,
-    locations, 
-    // player_hand, enemy_hand, 
-    // player_draw, enemy_draw, 
-    // player_discard, enemy_discard, 
-    // player_mp, enemy_mp, 
-    // player_out_of_game, enemy_out_of_game, 
-    events;
+var closeUp, game_space, locations, events;
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
@@ -44,18 +36,27 @@ function classToImg(cls){
 
 function makeElement(announce){
     var id = announce.id;
-    var res = `<div id=${id} class="${announce.classes.reduce((a,b)=>a+" "+b,"")}"`
-    if(announce.classes.includes("card"))
-        res+=`style=background-image:url('../tw/icons/${classToImg(announce.classes[0])}.jpg')`
-    res+=` draggable=true>`;
-    announce = new Map(Object.entries(announce));
-    announce.delete("operation");
-    announce.delete("id");
-    announce.delete("classes");
-    announce.delete("instance-#");
-    announce.delete("position");
-    announce.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}"><span>${value}</span></div>`)
-    res += "</div>"
+    var classes = announce.classes;
+    var res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"")}"`;
+    if(classes.includes("card"))
+        res+=`style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
+    
+    var map = new Map(Object.entries(announce));
+    map.delete("operation");
+    map.delete("id");
+    map.delete("classes");
+    map.delete("instance-#");
+    map.delete("position");
+
+    if(classes.includes("event")){
+        map.delete("reason");
+        map.forEach((value,key) => res+=` ${key}=${value}`);
+        res += ` draggable=true>`;
+    }else{
+        res += ` draggable=true>`;
+        map.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}"><span>${value}</span></div>`);
+    }
+    res += "</div>";
     return res;
 }
 
@@ -79,21 +80,6 @@ function insertingData(announce){
                 element.classList.add("eventppanimation");
                 setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
             };
-        // }else if(announce.id === "[out-of-game2]"){
-        //     animationFunction = () =>{
-        //         game_space.insertAdjacentHTML("beforeend", makeElement(announce));
-
-        //         player_hand = document.getElementById("[hand1]");
-        //         enemy_hand = document.getElementById("[hand2]");
-        //         player_draw = document.getElementById("[draw1]");
-        //         enemy_draw = document.getElementById("[draw2]");
-        //         player_discard = document.getElementById("[discard1]");
-        //         enemy_discard = document.getElementById("[discard2]");
-        //         player_mp = document.getElementById("[mp1]");
-        //         enemy_mp = document.getElementById("[mp2]");
-        //         player_out_of_game = document.getElementById("[out-of-game1]");
-        //         enemy_out_of_game = document.getElementById("[out-of-game2]");
-        //     }
         } else {
             animationFunction = () =>
                 game_space.insertAdjacentHTML("beforeend", makeElement(announce));
@@ -108,6 +94,13 @@ function modifyElement(announce){
     var animationFunction = () => {
         var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
         elementAtt.textContent = announce.value;
+    };
+    // TODO: cambiar
+    if (announce.id.includes("e-phase") || announce.id.includes("e-modify")){
+        animationFunction = () => {
+            var element = document.getElementById(announce.id);
+            element.setAttribute(announce.slot,announce.value);
+        };
     }
     return {msDelay, animationFunction};
 }
@@ -276,7 +269,6 @@ function closeUpListener(e){
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
-    invisible = document.getElementById("invisible");
     closeUp = document.getElementById("close-up");
     game_space = document.getElementById("game-space");
     locations = document.getElementById("locations");
@@ -305,9 +297,3 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
 
 });
-
-
-
-// socket.on('connect', function (data) {
-//     socket.emit('storeClientInfo', { customId:"000CustomIdHere0000" });
-// });

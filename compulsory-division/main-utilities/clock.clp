@@ -56,7 +56,7 @@
 )
 ;(defrule MAIN::infiniterule (declare (salience 100)) ?c<-(infinite) => (retract ?c) (assert (infinite)))
 
-(defrule MAIN::start-turn (declare (auto-focus TRUE) (salience -100))
+(defrule MAIN::start-turn
 	(object (is-a E-phase) (reason $? MAIN::start) (state DONE))
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
@@ -64,14 +64,16 @@
 		(data "player [player1]"))	
 )
 
-(defrule MAIN::next-turn (declare (auto-focus TRUE) (salience -100))
+(defrule MAIN::next-turn
 	(object (is-a E-phase) (reason $? MAIN::start-turn) (state DONE))
-	?f1 <- (player ?p)
-	?f2 <- (enemy ?e)
 	; Necesario el hecho (player ?p) para hacer las veces de una variable que estaria en el modulo de la fase eventual padre a "turn"
 	=>
-	(assert (player ?e) (enemy ?p))
-	(retract ?f1 ?f2)
-	(make-instance (gen-name E-phase) of E-phase 
-		(reason turn MAIN::next-turn) (data (str-cat "target [" ?e "]")))
+	(do-for-fact ((?e enemy)) TRUE
+		(do-for-fact ((?p player)) TRUE
+			(assert (player ?e:implied) (enemy ?p:implied))
+			(make-instance (gen-name E-phase) of E-phase 
+				(reason turn MAIN::next-turn) (data (str-cat "target [" (nth$ 1 ?e:implied) "]")))
+			(retract ?e ?p)
+		)
+	)
 )

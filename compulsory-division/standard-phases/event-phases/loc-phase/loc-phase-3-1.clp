@@ -12,14 +12,14 @@
 
 (defrule play-additional-minor-item (declare (salience ?*action-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason loc-phase $?))
+		(object (is-a E-phase) (state EXEC) (reason loc-phase $?) (name ?e))
     	(player ?p)
 		(data (data fellowship ?fell))
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
 
-		(object (is-a E-modify) (reason $? PLAY ITEM $?) (state DONE))
+		(exists (object (is-a E-modify) (reason $? PLAY $?) (position ?e)))
 		(not (object (is-a E-modify) (reason $? loc-phase-3-1::play-additional-minor-item) (state DONE)))
 	)
 	=>

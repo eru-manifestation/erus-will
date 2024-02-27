@@ -194,7 +194,7 @@ FALSE
         (case fell-move-3-3 then "Enemy decides whether to draw, if possible")
         (case fell-move-4-1 then "Enemy plays adversities")
         (case loc-phase-1-1 then "Ejecucion ataques automaticos fase lugares")
-        (case loc-phase-2-1 then "Ejecucion ataques automaticos fase lugares")
+        (case loc-phase-2-1 then "Jugar recursos en el lugar")
         (case loc-phase-3-1 then "Play additional minor item")
         (case faction-play-1-1 then "Ejecucion lanzar dados para el chequeo de influencia")
         (case faction-play-2-1 then "Se resuelve el chequeo de influencia")
