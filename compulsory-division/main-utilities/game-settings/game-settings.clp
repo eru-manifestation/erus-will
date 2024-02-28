@@ -222,6 +222,7 @@ FALSE
     (focus ?jump-stage)
 	(bind ?*jumps* (+ 1 ?*jumps*))
 	(foreach ?rule (get-defrule-list ?jump-stage) (refresh ?rule))
-	(message (ini-message ?jump-stage))
+	(announce all { "operation" : "phase" , "description" : (ini-message ?jump-stage) } )
+    (message (ini-message ?jump-stage))
     ?jump-stage
 )

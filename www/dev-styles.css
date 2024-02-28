@@ -94,15 +94,16 @@
   background-size: cover;
 }
 
-#invisible{
+#phase{
   display: none;
 }
 
-.eventppanimation {
+.phaseanimation {
+  display: flex !important;
   position: fixed !important;
   width: 80%;
   height: 20%;
-  /* background-color: green; */
+  background-color: green;
   font-size: 3rem;
   top: 30%;
   left: 10%;
@@ -120,30 +121,37 @@
 
 }
 
-.event[state="IN"]{
-  background-color: rgb(63, 192, 61);
+.event{
+  &::after{
+    content: attr(reason) !important;
+  }
+
+  &[state="IN"]{
+    background-color: rgb(63, 192, 61);
+  }
+  &[state="IN-HOLD"]{
+    background-color: rgba(85, 192, 61, 0.446);
+  }
+  &[state="EXEC"]{
+    background-color: rgb(192, 61, 61);
+  }
+  &[state="EXEC-HOLD"]{
+    background-color: rgba(192, 61, 61, 0.446);
+  }
+  &[state="OUT"]{
+    background-color: rgb(63, 61, 192);
+  }
+  &[state="OUT-HOLD"]{
+    background-color: rgba(63, 61, 192, 0.479);
+  }
+  &[state="DEFUSED"]{
+    background-color: rgb(192, 61, 192);
+  }
+  &[state="DONE"]{
+    background-color: grey;
+  }
 }
-.event[state="IN-HOLD"]{
-  background-color: rgba(85, 192, 61, 0.446);
-}
-.event[state="EXEC"]{
-  background-color: rgb(192, 61, 61);
-}
-.event[state="EXEC-HOLD"]{
-  background-color: rgba(192, 61, 61, 0.446);
-}
-.event[state="OUT"]{
-  background-color: rgb(63, 61, 192);
-}
-.event[state="OUT-HOLD"]{
-  background-color: rgba(63, 61, 192, 0.479);
-}
-.event[state="DEFUSED"]{
-  background-color: rgb(192, 61, 192);
-}
-.event[state="DONE"]{
-  background-color: grey;
-}
+
 
 
 @keyframes fadeinout{
@@ -196,8 +204,16 @@
 .locations        {background-color:rgb(139, 135, 135); grid-area: locations;}
 #\[hand1\]        {background-color:#5b3d2d; grid-area: player-hand;}
 #\[hand2\]        {background-color:#5b3d2d; grid-area: enemy-hand;}
-#\[draw1\]        {background-color:#3D3A4B; grid-area: player-draw;}
-#\[draw2\]        {background-color:#3D3A4B; grid-area: enemy-draw;}
+#\[draw1\]        {background-color:#3D3A4B; grid-area: player-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+}
+#\[draw2\]        {background-color:#3D3A4B; grid-area: enemy-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+}
 #\[discard1\]     {background-color:#D3C0CD; grid-area: player-discard;}
 #\[discard2\]     {background-color:#D3C0CD; grid-area: enemy-discard;}
 #\[mp1\]          {background-color:#5A9367; grid-area: player-mp;}

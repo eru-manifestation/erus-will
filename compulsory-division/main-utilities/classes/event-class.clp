@@ -9,7 +9,6 @@
 
 ; DEFINICION DEL EVENTO DE FASE EVENTUAL
 (defclass MAIN::E-phase (is-a EVENT)
-    (slot instance-# (source composite))
 	(multislot data (visibility public) (type STRING) (default (create$)))
 )
 

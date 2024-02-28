@@ -5,7 +5,7 @@ const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
 var choice = [];
 
-var closeUp, game_space, locations, events;
+var closeUp, phase, game_space, locations, events;
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
@@ -39,7 +39,7 @@ function makeElement(announce){
     var classes = announce.classes;
     var res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"")}"`;
     if(classes.includes("card"))
-        res+=`style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
+        res+=` style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
     
     var map = new Map(Object.entries(announce));
     map.delete("operation");
@@ -49,7 +49,7 @@ function makeElement(announce){
     map.delete("position");
 
     if(classes.includes("event")){
-        map.delete("reason");
+        map.set("reason", map.get("reason").split(" ")[0]);
         map.forEach((value,key) => res+=` ${key}=${value}`);
         res += ` draggable=true>`;
     }else{
@@ -73,12 +73,9 @@ function insertingData(announce){
             animationFunction = () => 
                 locations.insertAdjacentHTML("beforeend", makeElement(announce));
         }else if(announce.classes.includes("event")){
-            msDelay = 1000 + msDelay;
+            msDelay = 300;
             animationFunction = () => {
                 events.insertAdjacentHTML("beforeend", makeElement(announce));
-                var element = document.getElementById(announce.id);
-                element.classList.add("eventppanimation");
-                setTimeout(() => element.classList.remove("eventppanimation"), msDelay);
             };
         } else {
             animationFunction = () =>
@@ -97,6 +94,7 @@ function modifyElement(announce){
     };
     // TODO: cambiar
     if (announce.id.includes("e-phase") || announce.id.includes("e-modify")){
+        msDelay = 300;
         animationFunction = () => {
             var element = document.getElementById(announce.id);
             element.setAttribute(announce.slot,announce.value);
@@ -220,7 +218,7 @@ function enableChoices(){
 
 function animate(announces){
     var accumDelay = 0;
-    var operationData;
+    var operationData = {msDelay : 0, animationFunction : ()=>{}};;
 
     announces.forEach((announce) => {
         if(announce!=null)
@@ -246,7 +244,16 @@ function animate(announces){
                             document.getElementById(announce.to).appendChild(target);
                     };
                     break;
-
+                
+                case "phase":
+                    operationData.msDelay = 1020;
+                    operationData.animationFunction = () => {
+                        phase.firstChild.textContent = announce.description;
+                        phase.classList.add("phaseanimation");
+                        setTimeout(() => phase.classList.remove("phaseanimation"), 1000);
+                    };
+                    break;
+                
                 default:
                     console.error("error in operation type");
                     break;
@@ -270,6 +277,7 @@ function closeUpListener(e){
 
 document.addEventListener("DOMContentLoaded", ()=>{
     closeUp = document.getElementById("close-up");
+    phase = document.getElementById("phase");
     game_space = document.getElementById("game-space");
     locations = document.getElementById("locations");
     events = document.querySelector(".events");

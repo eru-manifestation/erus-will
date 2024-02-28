@@ -51,3 +51,30 @@
 ;        ^-- The command is rejected
 ;
 (play-action player1 [rangers-of-the-north1] [discard1])
+
+
+; Player player1 commands: {[shield-of-iron--bound-ash1] [aragorn-ii1]}
+; Both players updated
+
+; Player player1 commands: {[elven-cloak1] PASS}
+;         ^-- The command is rejected
+
+; Player player1 commands: {PASS}
+; Both players updated
+
+; Player player1 commands: {[fellowship1] [fellowship1]}
+;         ^-- The command is rejected
+
+; Player player1 commands: {[fellowship1] [barrow--downs]}
+; Both players updated
+
+; Player player1 commands: {[fellowship1]}
+; Both players updated
+
+; Player player2 commands: {[draw2]}
+; Both players updated
+
+; Player player1 commands: {[fellowship1]}
+; STAM_ERROR: Incorrect event state
+; STAM_ERROR: Incorrect event state
+; Both players updated

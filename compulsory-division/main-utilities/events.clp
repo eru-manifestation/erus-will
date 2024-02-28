@@ -49,6 +49,12 @@
 		(case IN-HOLD then IN)
 		(case EXEC-HOLD then EXEC)
 		(case OUT-HOLD then OUT)
+		; En caso de que pase el mando a un evento desactivado, se entiende que quien le pasa el mando es el propio cancelador, que quiere que se le transfiera a su vez a quien tiene abajo, de haberlo
+		(case DEFUSED then 
+			(if (neq ?self:position (slot-default-value EVENT position)) then
+				(send ?self:position unhold)
+			)
+			DEFUSED)
 		(default 
 			(println "STAM_ERROR: Incorrect event state")
 			(halt)
@@ -59,6 +65,7 @@
 
 
 (defmessage-handler EVENT init after ()
+	(send ?self modify target-phase (get-target-phase))
 ;	TODO: usar una variable global que guarde el evento que se ejecute
 	(do-for-instance ((?ep EVENT)) 
 		(and (neq ?ep (instance-name ?self)) (or (eq EXEC ?ep:state) (eq IN ?ep:state) (eq OUT ?ep:state)))
@@ -69,9 +76,7 @@
 
 (defmessage-handler EVENT put-state after (?newState)
 	; Se presupone que si se desactiva es porque un cancelador ha actuado justo debajo de él e inmediatamente se pone DONE inmediatamente. Los cancelers son los únicos eventos cuya salida no se puede observar. Además, las salidas al ser cancelados no son observables tampoco.
-	(if (or (eq ?newState DONE) (eq ?newState DEFUSED)) then
-		(send ?self modify target-phase (get-target-phase))
-
+	(if (eq ?newState DONE) then
 		(if (neq ?self:position (slot-default-value EVENT position)) then
 			(send ?self:position unhold)
 		)
