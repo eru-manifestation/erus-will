@@ -1,7 +1,7 @@
 ;/////////////////////// FASE 5 1 1: EJECUCION ELEGIR SI DESCARTAR ///////////////////////
 (defmodule P-5-1-1 (import MAIN ?ALL) (import P-4 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))

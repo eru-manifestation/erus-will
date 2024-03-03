@@ -1,15 +1,14 @@
-; DEFINICIÓN DE TEMPLATE EVENTO
 (defclass MAIN::EVENT (is-a BASIC)
     (slot instance-# (source composite))
-	(slot target-phase (visibility public) (type SYMBOL))
 	(slot state (visibility public) (type SYMBOL) (default IN) (allowed-symbols IN IN-HOLD EXEC EXEC-HOLD _ OUT OUT-HOLD DONE DEFUSED))
 	(multislot reason (visibility public) (type SYMBOL) (default ?NONE))
+	(slot position (source composite) (type INSTANCE-ADDRESS INSTANCE-NAME) (default-dynamic ?*active-event*))
 )
 
 
-; DEFINICION DEL EVENTO DE FASE EVENTUAL
 (defclass MAIN::E-phase (is-a EVENT)
-	(multislot data (visibility public) (type STRING) (default (create$)))
+	(multislot data (visibility public) (type ?VARIABLE) (default (create$)))
+	(slot res (visibility public) (type SYMBOL) (default UNDEFINED))
 )
 
 
@@ -18,4 +17,33 @@
 	(slot slot (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only))
 	(slot old (visibility public) (type ?VARIABLE) (default TOBEDETERMINED) (access initialize-only))
 	(slot new (visibility public) (type ?VARIABLE) (default ?NONE) (access initialize-only))
+)
+
+
+(deftemplate MAIN::data
+	(slot phase (type SYMBOL) (default turn))
+	(multislot data (type ?VARIABLE) (default ?NONE))
+)
+
+(deffunction MAIN::decompressData (?phase $?data)
+	(if (neq (create$) ?data) then
+		(while (bind ?i (member$ / ?data)) do
+			(assert (data (phase ?phase) (data (subseq$ ?data 1 (- ?i 1)))))
+			(bind ?data (replace$ ?data 1 ?i (create$)))
+		)
+		(assert (data (phase ?phase) (data ?data)))
+	)
+)
+
+(deffunction MAIN::compressData (?phase)
+	(bind ?res (create$))
+	(do-for-fact ((?data data)) (eq ?phase ?data:phase)
+		(bind ?res ?data:data)
+		(retract ?data)
+	)
+	(delayed-do-for-all-facts ((?data data)) (eq ?phase ?data:phase)
+		(bind ?res (insert$ ?res 1 ?data:data /))
+		(retract ?data)
+	)
+	(return ?res)
 )

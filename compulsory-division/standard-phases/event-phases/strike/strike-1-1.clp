@@ -1,9 +1,9 @@
 ;/////////////////// STRIKE 1 1: ELEGIR SI HACER FRENTE AL ATAQUE CON -3 ////////////////////////
 (defmodule strike-1-1 (import MAIN ?ALL) (export ?ALL))
-(deftemplate data (multislot data))
+
 
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -15,18 +15,18 @@
 
 (defrule action-face-strike-hindered
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason strike $?))
+		(object (is-a E-phase) (state EXEC))
 		
-		(data (data target ?char))
-		(data (data attackable ?at))
-		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
+		(data (phase strike) (data target ?t))
+		(data (phase strike) (data attackable ?at))
+		(object (name ?t) (state UNTAPPED))
 	)
 	=>
 	(assert (action 
-		(player (send ?char get-player))
+		(player (send ?t get-player))
 		(event-def variable)
-		(description (sym-cat "Face strike from " ?at " to " ?char " hindered"))
-		(identifier ?char)
+		(description (sym-cat "Face strike from " ?at " to " ?t " hindered"))
+		(identifier ?t)
 		(data (create$ unpunished-hindered))
 	))
 )

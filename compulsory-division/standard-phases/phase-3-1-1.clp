@@ -1,7 +1,7 @@
 ;//////////////////// Fase 3 1 1: EJECUCIÓN MOVER COMPAÑÍAS ///////////////////////
 (defmodule P-3-1-1 (import MAIN ?ALL) (import P-2-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -14,7 +14,7 @@
 	(logical
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		?f <- (data (data move ?fell ?to))
+		?f <- (data (phase turn) (data move ?fell ?to))
 	)
 	=>
 	(assert (action 
@@ -33,7 +33,7 @@
 	(logical
     	(player ?p)
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		?f <- (data (data remain ?fell))
+		?f <- (data (phase turn) (data remain ?fell))
 	)
 	=>
 	(assert (action 
@@ -43,8 +43,8 @@
 		(description (sym-cat "Execute remain of " ?fell))
 		(identifier ?fell)
 		(data (create$ "fell-move P311::action-fell-remain"
-			(str-cat "fellowship [" ?fell "]")
-		))
+			fellowship ?fell)
+		)
 		(blocking TRUE)
 	))
 )

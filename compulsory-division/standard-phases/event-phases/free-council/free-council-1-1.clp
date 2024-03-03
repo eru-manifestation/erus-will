@@ -1,7 +1,7 @@
 ;/////////////////////// FREE COUNCIL 1 1: ENEMIGO REALIZA CHEQUEO DE CORRUPCION EN SUS PERSONAJES ///////////////////////
 (defmodule free-council-1-1 (import MAIN ?ALL) (import free-council-1-0 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -16,5 +16,5 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason corruption-check free-council-1-0::player-corruption-check)
-		(data (str-cat "target [" ?char "]")))
+		(data target ?char))
 )

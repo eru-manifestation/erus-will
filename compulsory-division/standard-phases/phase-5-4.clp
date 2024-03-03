@@ -1,7 +1,7 @@
 ;/////////////////////// FASE 5 4: CONVOCAR EL CONCILIO LIBRE ///////////////////////
 (defmodule P-5-4 (import MAIN ?ALL) (import P-5-3 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))

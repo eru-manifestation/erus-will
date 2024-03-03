@@ -1,7 +1,7 @@
 ;/////////////////////// FASE 1 1 2 0: EJECUCION DECLARAR MOVIMIENTO ///////////////////////
 (defmodule P-1-1-2-0 (import MAIN ?ALL) (import P-1-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -20,8 +20,8 @@
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		;	TODO: Testear si es posible eliminar reason: la activacion original deberia desactivarse al cambiar de E-phase, pero como esta regla es dependiente de la fase, no deberia haber una activacion inesperada en la fase superior
 
-		(not (data (data move ?fell $?)))
-		(not (data (data remain ?fell $?)))
+		(not (data (phase turn) (data move ?fell $?)))
+		(not (data (phase turn) (data remain ?fell $?)))
 		
 		; Encuentro la localización de la compañía
 		(object (is-a HAVEN) (name ?loc))
@@ -49,8 +49,8 @@
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
 		(object (is-a FELLOWSHIP) (name ?fell) (empty FALSE) (player ?p))
-		(not (data (data move ?fell $?)))
-		(not (data (data remain ?fell $?)))
+		(not (data (phase turn) (data move ?fell $?)))
+		(not (data (phase turn) (data remain ?fell $?)))
 		
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 
@@ -83,8 +83,8 @@
 
 		; Hay una compañía que no tiene declarado movimiento ni permanencia
 		(object (is-a FELLOWSHIP) (position ?loc) (name ?fell) (empty FALSE) (player ?p))
-		(not (data (data move ?fell $?)))
-		(not (data (data remain ?fell $?)))
+		(not (data (phase turn) (data move ?fell $?)))
+		(not (data (phase turn) (data remain ?fell $?)))
 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 

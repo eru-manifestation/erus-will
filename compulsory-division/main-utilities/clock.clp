@@ -1,5 +1,5 @@
 ; FUNCION DE CAMBIO DE FASE
-(deffunction MAIN::tic (?stage)
+(deffunction MAIN::tic ()
 	;	TODO: es innecesario pedir ?stage por parametros
 	(bind ?stage (get-focus))
 
@@ -9,27 +9,10 @@
 		(pop-focus)
 		(jump ?jump-stage)
 		else
-		;TODO: sustituir la regla ini por un mapa (switch) que imprima el mensaje de entrada conveniente y que refresque las reglas del modulo, ya que cambiando el foco basta para conseguirlo
-		; Probar con (focus <module-name>) o (set-current-module <module-name>)
-		;(message Reglas: (get-defrule-list))
-		(object-pattern-match-delay 
-			(focus ?stage)
-			(foreach ?deftemplate (get-deftemplate-list)
-				(do-for-all-facts ((?f ?deftemplate)) TRUE
-					(retract ?f)
-				)
-			)
-			(pop-focus)
-		)
-
-		; TODO: Cuidado al retractar hechos que sean heredados de MAIN. De la misma forma, solo se deben retractar los hechos del modulo final de una E-phase, ya que supongo que se retractarian los hechos de la E-phase al completo. Hacer esto cuando se de un salto a una E-phase, no cuando se de un tick del reloj ¡¡IMPORTANTE!!
-		; Mejor encontrar la deftemplate list e iterar sobre ella en cada uno de los modulos. Eliminamos todos los hechos y despues eliminamos la deftemplate con (undeftemplate <deftemplate-name>)
-		; ¡¡¡¡¡IMPORTANTISIMO!!!!! Ahora mismo, se genera el deftemplate de data antes de eliminar los desperdicios anteriores. Por tanto, hacer la limpieza AL SALIR DE LA FASE, para evitar conflictos de prioridades en crear y limpiar deftemplates.
-		;(message Hechos: (get-deftemplate-list ?stage))
-
-		(do-for-instance ((?ep E-phase)) (eq EXEC ?ep:state)
-			(send ?ep modify state DONE)
-		)
+		; (do-for-instance ((?ep E-phase)) (eq EXEC ?ep:state)
+		; 	(send ?ep modify state OUT)
+		; )
+		(complete FINISHED)
 	)
 	
 	; ELIMINA EVENTOS O FASES EVENTUALES TERMINADAS
@@ -61,7 +44,7 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason turn MAIN::start-turn) 
-		(data "player [player1]"))	
+		(data player [player1]))	
 )
 
 (defrule MAIN::next-turn
@@ -72,7 +55,7 @@
 		(do-for-fact ((?p player)) TRUE
 			(assert (player ?e:implied) (enemy ?p:implied))
 			(make-instance (gen-name E-phase) of E-phase 
-				(reason turn MAIN::next-turn) (data (str-cat "target [" (nth$ 1 ?e:implied) "]")))
+				(reason turn MAIN::next-turn) (data target (nth$ 1 ?e:implied)))
 			(retract ?e ?p)
 		)
 	)

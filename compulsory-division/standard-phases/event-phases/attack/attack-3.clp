@@ -1,7 +1,7 @@
 ;/////////////////// ATTACK 3: HACER FRENTE AL GOLPE EN EL ORDEN QUE ELIJA EL DEFENSOR ////////////////////////
 (defmodule attack-3 (import MAIN ?ALL) (import attack-2-2 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -18,17 +18,18 @@
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 
         ;(char ?char) (attackable ?at))
-		(data (data attackable ?at))
-		(data (data strike ?char))
+		(data (phase attack) (data attackable ?at))
+		?f <- (data (phase attack) (data strike ?char))
 	)   
     =>
 	(assert (action 
 		(player ?p)
 		(event-def phase)
+		(initiator ?f)
 		(description (sym-cat "Execute strike from " ?at " to " ?char))
 		(identifier ?char)
 		(data (create$ "strike attack-3::action-select-strike"
-			(str-cat "target [" ?char "]") (str-cat "attackable [" ?at "]")))
+			target ?char / attackable ?at))
 		(blocking TRUE)
 	))
 )
@@ -41,17 +42,19 @@
 
 		;(object (is-a E-select-strike) (name ?e) (type IN) 
         ;(char ?char) (attackable ?at))
-		(data (data attackable ?at))
-		(data (data spare-strike ?char))
+		(not (data (phase attack) (data strike ?char)))
+		(data (phase attack) (data attackable ?at))
+		?f <- (data (phase attack) (data spare-strike ?char))
 	)   
     =>
 	(assert (action 
 		(player ?p)
 		(event-def phase)
-		(description (sym-cat "Execute strike from " ?at " to " ?char))
+		(initiator ?f)
+		(description (sym-cat "Execute additional strike from " ?at " to " ?char))
 		(identifier ?char)
 		(data (create$ "strike attack-3::action-select-spare-strike"
-			(str-cat "target [" ?char "]") (str-cat "attackable [" ?at "]")))
+			target ?char / attackable ?at / additional))
 		(blocking TRUE)
 	))
 )

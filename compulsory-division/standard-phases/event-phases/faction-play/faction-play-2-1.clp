@@ -1,7 +1,7 @@
 ;/////////////////// FACTION PLAY 2 1: EJECUCION RESOLVER CHEQUEO DE INFLUENCIA ////////////////////////
 (defmodule faction-play-2-1 (import MAIN ?ALL) (import faction-play-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -12,9 +12,9 @@
 
 (defrule influence-check
 	;?ep<-(object (is-a EP-faction-play) (type ONGOING) (dices ?dices) (faction ?faction) (char ?char) (loc ?loc))
-	(data (data dices ?dices))
-	(data (data faction ?faction))
-	(data (data character ?char))
+	(data (phase faction-play) (data dices ?dices))
+	(data (phase faction-play) (data faction ?faction))
+	(data (phase faction-play) (data character ?char))
 	=>
 	(bind ?favor (+ (send ?char get-influence) ?dices))
 	(bind ?against (send ?faction get-influence-check))
@@ -22,12 +22,12 @@
 	(if (< ?against ?favor) then
 		(message "Chequeo de influencia de " ?char " para " ?faction " conseguido con " ?favor " de " ?against " necesarios")
 		else
-		(assert (data (data failed)))
+		(assert (data (phase faction-play) (data failed)))
 		(message "Chequeo de influencia de " ?char " para " ?faction " fallido con " ?favor " de " ?against " necesarios")
 	)
 )
 (defrule check-failed
-	(data (data failed))
+	(data (phase faction-play) (data failed))
 	(object (is-a E-phase) (state EXEC) (name ?e))
 	=>
 	;	TODO: optimizar los E-cancel para que funcionen con un defglobal

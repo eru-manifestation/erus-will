@@ -1,7 +1,7 @@
 ;/////////////////////// CORRUPTION CHECK 1 2: FIN EJECUCION DEL CHEQUEO DE CORRUPCION ///////////////////////
 (defmodule corruption-check-1-2 (import MAIN ?ALL) (import corruption-check-1-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -11,8 +11,8 @@
 
 
 (defrule discard-character
-	(data (data target ?char))
-	(data (data dices ?dices))
+	(data (phase corruption-check) (data target ?char))
+	(data (phase corruption-check) (data dices ?dices))
 	(object (is-a CHARACTER) (name ?char) (corruption ?corr))
 	(test (or
 		; Si el resultado es igual o 1 menor a los puntos de corrupcion del personaje, este se descarta (con lo que lleve excepto seguidores)
@@ -20,6 +20,7 @@
 		(= (+ 1 ?dices) ?corr)
 	))
 	=>
+	; TODO: hacer que las reglas solo digan si se supera o no y de que grado. Las acciones se tomaran posteriormente en OUT por EI's
 	(E-modify ?char position (discardsymbol (send ?char get-player)) 
 		DISCARD CHARACTER corruption-check-1-2::discard-character)
 	(message "El resultado es " ?dices ", igual o 1 inferior a los puntos de corrupcion: " ?corr ". El personaje " ?char " se descarta.")
@@ -27,8 +28,8 @@
 
 
 (defrule destroy-character
-	(data (data target ?char))
-	(data (data dices ?dices))
+	(data (phase corruption-check) (data target ?char))
+	(data (phase corruption-check) (data dices ?dices))
 	(test 
 		; Si el resultado es 2 menor a los puntos de corrupcion del personaje, este sale del juego (descarta lo que lleve excepto seguidores)
 		(< (+ 1 ?dices) (send ?char get-corruption))

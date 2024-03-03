@@ -1,7 +1,7 @@
 ;/////////////////// RESISTANCE CHECK 2: EJECUTAR CHEQUEO RESISTENCIA ////////////////////////
 (defmodule resistance-check-2 (import MAIN ?ALL) (import resistance-check-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -10,16 +10,15 @@
 
 
 (defrule execute-resistance-check
-	(object (is-a E-phase) (state EXEC) (name ?e))
-	(data (data assaulted ?as))
-	(data (data dices ?d))
+	(data (phase resistance-check) (data assaulted ?as))
+	(data (phase resistance-check) (data dices ?d))
 	=>
-	;	TODO: faltan cosas por hacer
 	(if (< ?d (send ?as get-body)) then
-		;(send ?ep modify result NOT-PASSED)
-		(E-cancel ?e resistance-check-2::execute-resistance-check)
-		;else
-		;(send ?ep modify result PASSED)
+		(message "Se ha pasado el chequeo de resistencia")
+		(complete PASSED)
+		else
+		(message "No se ha pasado el chequeo de resistencia," ?as " abandona la partida")
+		(complete NOT-PASSED)
 	)
 )
 

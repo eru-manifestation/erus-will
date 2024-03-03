@@ -1,9 +1,9 @@
 ;/////////////////// FELLWOSHIP MOVE 2: REVELAR MOVIMIENTO AL OPONENTE ////////////////////////
 (defmodule fell-move-1 (import MAIN ?ALL) (export ?ALL))
-(deftemplate data (multislot data))
+
 
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))

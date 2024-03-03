@@ -1,3 +1,13 @@
+:root{
+  --event-in: rgb(63, 192, 61);
+  --event-out: rgb(63, 61, 192);
+  --event-exec: rgb(192, 61, 61);
+  --event-defused: rgb(192, 61, 192);
+  --event-done: grey;
+  --event-border: white;
+  --event-border-inactive: rgb(69, 69, 69);
+}
+
 
 * {
   box-sizing: border-box;
@@ -5,6 +15,8 @@
   padding: 0;
   font-family:monospace;
   /* outline: 1px solid red; */
+
+
 }
 
 
@@ -122,33 +134,31 @@
 }
 
 .event{
+  border-color: var(--event-border) !important;
+
   &::after{
-    content: attr(reason) !important;
+    content: attr(reason) " - " attr(state) !important;
   }
 
-  &[state="IN"]{
-    background-color: rgb(63, 192, 61);
+  &[state^="IN"]{
+    background-color: var(--event-in);
   }
-  &[state="IN-HOLD"]{
-    background-color: rgba(85, 192, 61, 0.446);
+  &[state^="EXEC"], &[state="_"]{
+    background-color: var(--event-exec);
   }
-  &[state="EXEC"]{
-    background-color: rgb(192, 61, 61);
-  }
-  &[state="EXEC-HOLD"]{
-    background-color: rgba(192, 61, 61, 0.446);
-  }
-  &[state="OUT"]{
-    background-color: rgb(63, 61, 192);
-  }
-  &[state="OUT-HOLD"]{
-    background-color: rgba(63, 61, 192, 0.479);
+  &[state^="OUT"]{
+    background-color: var(--event-out);
   }
   &[state="DEFUSED"]{
-    background-color: rgb(192, 61, 192);
+    background-color: var(--event-defused);
+    border-color: var(--event-border-inactive) !important;
   }
   &[state="DONE"]{
-    background-color: grey;
+    background-color: var(--event-done);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state$="HOLD"]{
+    border-color: var(--event-border-inactive) !important;
   }
 }
 

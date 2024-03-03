@@ -1,9 +1,9 @@
 ;/////////////////////// CORRUPTION CHECK 1 1 1: EJECUCION LANZAR DADOS PARA EL CHEQUEO DE CORRUPCION ///////////////////////
 (defmodule corruption-check-1-1-1 (import MAIN ?ALL) (export ?ALL))
-(deftemplate data (multislot data))
+
 
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -13,5 +13,5 @@
 
 (defrule roll-dices
 	=>
-	(assert (data (data dices (+ (random 1 6) (random 1 6)))))
+	(assert (data (phase corruption-check) (data dices (+ (random 1 6) (random 1 6)))))
 )

@@ -1,7 +1,7 @@
 ;/////////////////// STRIKE 3 2: EJECUTAR GOLPE ////////////////////////
 (defmodule strike-3-2 (import MAIN ?ALL) (import strike-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -12,12 +12,9 @@
 
 
 (defrule execute-strike
-	;(object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (attackable ?at))
-	(data (data target ?char))
-	(data (data attackable ?at))
-	(data (data dices ?d))
-	; (object (is-a CHARACTER) (name ?char))
-	; (object (is-a ATTACKABLE) (name ?at))
+	(data (phase strike) (data target ?char))
+	(data (phase strike) (data attackable ?at))
+	(data (phase strike) (data dices ?d))
 	=>
 	(bind ?prowess (send ?char get-prowess))
 	(bind ?at-prowess (send ?at get-prowess))
@@ -25,56 +22,58 @@
 
 	(if (< ?at-prowess (+ ?d ?prowess)) then
 		(if (neq ?at-body (slot-default-value ATTACKABLE body)) then
-			(assert (data (data enemy-res-check)))
+			(make-instance (gen-name E-phase) of E-phase
+				(reason resistance-check strike-3-2::execute-strike#enemy-res-check)
+				(data attacker ?char / assaulted ?at))
+			else
+			(complete DEFEATED)
 		)
 		else
-		(if (= ?at-prowess (+ ?d ?prowess)) then
-			;(send ?ep modify state UNDEFEATED)
-			; El golpe no ha sido derrotado
-			(assert (data (data cancel)))
-			else	
-			; No se derrota el golpe y se requiere chequeo de resistencia
-			(assert (data (data defender-res-check)))
-			(assert (data (data cancel)))
+		(if (> ?at-prowess (+ ?d ?prowess)) then
+			(make-instance (gen-name E-phase) of E-phase
+				(reason resistance-check strike-3-2::execute-strike#defender-res-check)
+				(data attacker ?at / assaulted ?char))
+			else
+			(complete PARTIALLY-UNDEFEATED)
 		)
 	)
 )
 
-(defrule enemy-res-check
-	(data (data enemy-res-check))
-	(data (data target ?char))
-	(data (data attackable ?at))
+
+(defrule undefeat-attacker
+	?e <- (object (is-a E-phase) (state EXEC))
+	(object (is-a E-phase) (reason $? strike-3-2::execute-strike#enemy-res-check)
+		(position ?e) (state DONE) (res NOT-PASSED)
+	)
 	=>
-	(make-instance (gen-name E-phase) of E-phase
-		(reason resistance-check strike-3-2::enemy-res-check)
-		(data (str-cat "attacker [" ?char "]") (str-cat "assaulted [" ?at "]")))
+	(complete PARTIALLY-UNDEFEATED)
 )
 
-(defrule defender-res-check
-	(data (data defender-res-check))
-	(data (data target ?char))
-	(data (data attackable ?at))
+
+(defrule defeat-attacker
+	?e <- (object (is-a E-phase) (state EXEC))
+	(object (is-a E-phase) (reason $? strike-3-2::execute-strike#enemy-res-check)
+		(position ?e) (state DONE) (res PASSED)
+	)
 	=>
-	(make-instance (gen-name E-phase) of E-phase
-		(reason resistance-check strike-3-2::defneder-res-check)
-		(data (str-cat "attacker [" ?at "]") (str-cat "assaulted [" ?char "]")))
+	(complete DEFEATED)
 )
 
-(defrule cancel
-	(object (is-a E-phase) (state EXEC) (name ?e))
-	(data (data cancel))
+
+(defrule undefeated-strike
+	?e <- (object (is-a E-phase) (state EXEC))
+	(not (object (is-a E-phase) (reason $? strike-3-2::execute-strike#defender-res-check)
+		(position ?e)))
 	=>
-	(E-cancel ?e strike-3-2::cancel)
+	(complete UNDEFEATED)
 )
 
 
 (defrule tap-unhindered
-	; (object (is-a EP-strike) (name ?ep) (type ONGOING) (char ?char) (hindered FALSE))
-	; (object (is-a CHARACTER) (name ?char) (state UNTAPPED))
-	(data (data target ?char))
-	(not (data (data hindered)))
+	(data (phase strike) (data target ?char))
+	(not (data (phase strike) (data hindered)))
+	(test (eq UNTAPPED (send ?char get-state)))
 	=>
-	; (send ?char modify state TAPPED)
 	(E-modify ?char state TAPPED
 		TAP strike-3-2::tap-unhindered)
 )

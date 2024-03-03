@@ -57,7 +57,7 @@
 	(bind ?p (symbol-to-instance-name ?p))
 	(do-for-fact ((?action action)) (and (eq ?p ?action:player) (eq $?identifier ?action:identifier))
 		(message ?p "Se ha seleccionado: " ?action:description)
-		(bind ?m (set-current-module (get-focus)))
+		(bind ?m (set-current-module (get-focus))) ;TODO: probar si es necesario
 		(bind ?initiator ?action:initiator)
 		(switch ?action:event-def
 			(case ?pass-evdef then
@@ -75,7 +75,7 @@
 				)
 			)
 			(case variable then
-				(assert-string (str-cat "(data (data " (implode$ ?action:data) "))"))
+				(assert (data (phase (nth$ 1 (send ?*active-event* get-reason))) (data ?action:data)))
 			)
 		)
 

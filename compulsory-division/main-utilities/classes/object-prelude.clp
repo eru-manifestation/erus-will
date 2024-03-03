@@ -14,6 +14,8 @@
 		(return (implode$ ?data)))
 	(if (instance-namep ?data) then
 		(return (str-cat "[" (instance-name-to-symbol ?data) "]")))
+	(if (instance-addressp ?data) then
+		(return (JSONformat (instance-name ?data))))
 	(return "ERROR")
 )
 

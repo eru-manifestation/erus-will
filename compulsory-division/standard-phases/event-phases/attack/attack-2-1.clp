@@ -1,7 +1,7 @@
 ;/////////////////// ATTACK 2 1: EL JUGADOR DISTRIBUYE LOS GOLPES ////////////////////////
 (defmodule attack-2-1 (import MAIN ?ALL) (import attack-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -10,30 +10,32 @@
 
 
 (defrule init-strikes
-	(data (data attackable ?at))
+	(data (phase attack) (data attackable ?at))
 	=>
-	(assert (data (data num-strikes (send ?at get-strikes))))
+	(assert (data (phase attack) (data num-strikes (send ?at get-strikes))))
 )
 
 (defrule decrease-strikes
-	(data (data num-strikes ?n&:(< 1 ?n)))
+	?f <- (data (phase attack) (data num-strikes ?n))
 	=>
-	(assert (data (data num-strikes (- ?n 1))))
+	(loop-for-count (?i ?n) 
+		(assert (data (phase attack) (data unasigned-strike ?i)))
+	)
+	(retract ?f)
 )
 
-;	TODO: deberia funcionar correctamente solo si la saliencia de action-selection es inferior a 0
 (defrule player-select-strike (declare (salience ?*action-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason attack $?))
     	(player ?p)
-		(data (data fellowship ?fell))
-		(data (data attackable ?at))
-		?f <- (data (data num-strikes ?))
+		(data (phase attack) (data fellowship ?fell))
+		(data (phase attack) (data attackable ?at))
+		?f <- (data (phase attack) (data unasigned-strike ?))
 		;(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
 		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 		(in (over ?fell) (under ?char))
 		;(not (object (is-a E-select-strike) (char ?char)))
-		(not (data (data strike ?char)))
+		(not (data (phase attack) (data strike ?char)))
 	)
 	=>
 	(assert (action 

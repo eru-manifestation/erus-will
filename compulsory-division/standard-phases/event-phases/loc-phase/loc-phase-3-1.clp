@@ -1,7 +1,7 @@
 ;/////////////////// LOCATION PHASE 3 1: JUGAR OBJETO MENOR ADICIONAL ////////////////////////
 (defmodule loc-phase-3-1 (import MAIN ?ALL) (import loc-phase-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -14,7 +14,7 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason loc-phase $?) (name ?e))
     	(player ?p)
-		(data (data fellowship ?fell))
+		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))

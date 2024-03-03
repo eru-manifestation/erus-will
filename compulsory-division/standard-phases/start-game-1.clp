@@ -1,7 +1,7 @@
 ;/////////////////// INICIA EL JUEGO 1: LOS DOS ROBAN HASTA TENER 8 CARTAS ////////////////////////
 (defmodule start-game-1 (import MAIN ?ALL) (import start-game-0 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -15,6 +15,6 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase
 		(reason standarize-hand start-game-1::standarize-hand) 
-		(data (str-cat "target [" ?p "]")))
+		(data target ?p))
 	(message ?p " roba hasta tener 8 cartas")
 )

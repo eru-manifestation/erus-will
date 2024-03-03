@@ -1,9 +1,9 @@
 ;/////////////////// STANDARIZE HAND 0: ROBAR O DESCARTAR HASTA TENER 8 ////////////////////////
 (defmodule standarize-hand-0 (import MAIN ?ALL))
-(deftemplate data (multislot data))
+
 
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -13,22 +13,21 @@
 
 ; Roba las cartas que necesites
 (defrule card-draw
-	(data (data target ?p))
+	(data (phase standarize-hand) (data target ?p))
 	(object (is-a PLAYER) (name ?p) (hand ?hand&:(< ?hand 8)))
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason draw standarize-hand::card-draw) 
-		(data (str-cat "target [" ?p "]") (str-cat "ammount " (- 8 ?hand)))
+		(data target ?p / ammount (- 8 ?hand))
 	)
-	; (make-instance (gen-name E-player-draw) of E-player-draw (player ?p) (draw-ammount (- 8 ?hand)))
 )
 
 
 ; ACCION descartar una desde la mano
 (defrule action-card-discard-from-hand (declare (salience ?*action-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason standarize-hand))
-		(data (data target ?p))
+		(object (is-a E-phase) (state EXEC))
+		(data (phase standarize-hand) (data target ?p))
 		(object (is-a PLAYER) (name ?p) (hand ?hand&:(> ?hand 8)))
 		(object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
 	)

@@ -1,7 +1,7 @@
 ;/////////////////// ATTACK 2 2: EL ENEMIGO DISTRIBUYE LOS DEMAS GOLPES ////////////////////////
 (defmodule attack-2-2 (import MAIN ?ALL) (import attack-2-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -13,13 +13,13 @@
 (defrule enemy-select-strike (declare (salience ?*action-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason attack $?))
-		(data (data fellowship ?fell))
-		(data (data attackable ?at))
-		?f <- (data (data num-strikes ?))
+		(data (phase attack) (data fellowship ?fell))
+		(data (phase attack) (data attackable ?at))
+		?f <- (data (phase attack) (data unasigned-strike ?))
 		;(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
 		(object (is-a CHARACTER) (name ?char))
 		(in (over ?fell) (under ?char))
-		(not (data (data strike ?char)))
+		(not (data (phase attack) (data strike ?char)))
 		;(not (object (is-a E-select-strike) (char ?char)))
 	)
 	=>
@@ -39,17 +39,17 @@
 (defrule enemy-select-spare-strike (declare (salience ?*action-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason attack $?))
-		(data (data fellowship ?fell))
-		(data (data attackable ?at))
+		(data (phase attack) (data fellowship ?fell))
+		(data (phase attack) (data attackable ?at))
 		;(object (is-a ATTACKABLE) (name ?at) (strikes ?strikes&:(< 0 ?strikes)))
-		?f <- (data (data num-strikes ?))
+		?f <- (data (phase attack) (data unasigned-strike ?))
 		(object (is-a CHARACTER) (name ?char))
 		(in (over ?fell) (under ?char))
 		(not (exists
 			(object (is-a CHARACTER) (name ?char1))
 			(in (over ?fell) (under ?char1))
 			;(not (object (is-a E-select-strike) (char ?char)))
-			(not (data (data strike ?char1)))
+			(not (data (phase attack) (data strike ?char1)))
 		))
 	)
 	=>

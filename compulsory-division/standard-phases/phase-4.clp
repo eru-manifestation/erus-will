@@ -1,7 +1,7 @@
 ;/////////////////////// FASE 4: FASE DE LUGARES ///////////////////////
 (defmodule P-4 (import MAIN ?ALL) (import P-3-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -26,7 +26,7 @@
 		(description (sym-cat "Begin location phase for " ?fell))
 		(identifier ?fell)
 		(data (create$ "loc-phase P4::action-loc-phase"
-			(str-cat "fellowship [" ?fell "]")))
+			fellowship ?fell))
 		(blocking TRUE)
 	))
 )

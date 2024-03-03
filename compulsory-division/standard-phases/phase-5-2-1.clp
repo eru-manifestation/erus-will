@@ -1,7 +1,7 @@
 ;/////////////////////// FASE 5 2 1: AMBOS ROBAN ANTES DEL FINAL DEL TURNO ///////////////////////
 (defmodule P-5-2-1 (import MAIN ?ALL) (import P-5-1-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -15,5 +15,5 @@
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
 		(reason standarize-hand P521::standarize-hand)
-		(data (str-cat "target [" ?p "]")))
+		(data target ?p))
 )

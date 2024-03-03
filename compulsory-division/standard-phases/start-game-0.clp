@@ -1,8 +1,8 @@
 ;/////////////////// INICIA EL JUEGO 0: SE INICIA LA MESA ////////////////////////
 (defmodule start-game-0 (import MAIN ?ALL) (export ?ALL))
-(deftemplate data (multislot data))
+
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))

@@ -17,6 +17,8 @@
 
     ?*out-of-game1* = (make-instance out-of-game1 of STACK (player ?*player1*))
     ?*out-of-game2* = (make-instance out-of-game2 of STACK (player ?*player2*))
+
+    ?*active-event* = (slot-default-value BASIC position)
 )
 
 (deffunction MAIN::handsymbol (?player)
@@ -183,7 +185,7 @@ FALSE
         (case P-5-2-1 then "Ambos roban antes del final del turno")
         (case P-5-3 then "Ir al concilio libre si ha sido convocado")
         (case P-5-4 then "Convoque free council if the conditions are met")
-        (case standarize-hand-0 then "Jugar o robar hasta tener 8 cartas")
+        (case standarize-hand-0 then "Descartar o robar hasta tener 8 cartas")
         (case draw-0 then "Robar las cartas necesarias")
         (case corruption-check-1-1-1 then "Ejecucion lanzar dados chequeo corrupcion")
         (case corruption-check-1-2 then "Fin ejecucion chequeo corrupcion")

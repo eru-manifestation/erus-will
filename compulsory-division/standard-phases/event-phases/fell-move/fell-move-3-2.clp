@@ -1,7 +1,7 @@
 ;/////////////////// FELLWOSHIP MOVE 3 2: EL JUGADOR ELIGE SI ROBAR ////////////////////////
 (defmodule fell-move-3-2 (import MAIN ?ALL) (import fell-move-3-1 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -13,7 +13,7 @@
 (defrule action-player-draw
     (logical
 		(player ?p)
-		?f <- (data (data draw-ammount ? ?p))
+		?f <- (data (phase fell-move) (data draw-ammount ? ?p))
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
 	)
     =>
@@ -29,10 +29,10 @@
 
 
 (defrule exec-player-draw
-	?f <- (data (data draw ?p))
+	?f <- (data (phase fell-move) (data draw ?p))
 	=>
 	(retract ?f)
 	(make-instance (gen-name E-phase) of E-phase
 		(reason draw fell-move-3-2::exec-player-draw)
-		(data (str-cat "target [" ?p "]") "ammount 1"))
+		(data target ?p / ammount 1))
 )

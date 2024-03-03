@@ -1,7 +1,7 @@
 ;/////////////////// FELLWOSHIP MOVE 4 1: EL ENEMIGO JUEGA ADVERSIDADES ////////////////////////
 (defmodule fell-move-4-1 (import MAIN ?ALL) (import fell-move-3-3 ?ALL) (export ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock*)) => (tic (get-focus)))
+(defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
 (defrule choose-action (declare (salience ?*action-selection*))
@@ -14,8 +14,8 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
-		(data (data fellowship ?fell))
-		(data (data route $? ?region ?n&:(numberp ?n) $?))
+		(data (phase fell-move) (data fellowship ?fell))
+		(data (phase fell-move) (data route $? ?region ?n&:(numberp ?n) $?))
 		;?ep <- (object (is-a EP-fell-move) (type ONGOING) (fell ?fell) (route $? ?region ?n&:(numberp ?n) $?))
 		(object (is-a CREATURE) (player ?p) 
 			(regions $? ?region ?n2&:(<= ?n2 ?n) $?)
@@ -38,8 +38,8 @@
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason fell-move $?))
     	(enemy ?p)
-		(data (data fellowship ?fell))
-		(data (data to ?to))
+		(data (phase fell-move) (data fellowship ?fell))
+		(data (phase fell-move) (data to ?to))
 		(object (is-a CREATURE) (player ?p) 
 			(position ?pos&:(eq ?pos (handsymbol ?p))) 
 			(places $? ?place&:(eq ?place (send ?to get-place)) $?) (name ?creature))
