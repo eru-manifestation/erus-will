@@ -1,6 +1,6 @@
 (defrule MAIN::EI-tap-owner (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a E-modify) (state EXEC) (new ?owner)
-        (reason $? PLAY ?res&ITEM|ALLY|FACTION $? ?fr))
+        (reason $? PLAY ?res&ITEM|ALLY $? ?fr))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-tap-owner)))
     (test (and
         (neq start-game-0::initial-items ?fr)
@@ -30,7 +30,7 @@
 
 (defrule MAIN::EI-move-corruption (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a E-modify) (state EXEC) (target ?item) (old ?oldOwner)
-        (reason $? ?op&TRANSFER|STORE ITEM $? ?fr&~MAIN::EI-action-reassign-objects))
+        (reason $? ?op&TRANSFER|STORE ITEM $? ?fr&~MAIN::EI-a-reassign-objects))
     (object (name ?item) (position ?owner) (corruption ?c&:(< 0 ?c)))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-move-corruption)))
     =>
@@ -52,7 +52,7 @@
 )
 
 ;   TODO: manejo de elecciones en intercepcion
-(defrule MAIN::EI-action-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
+(defrule MAIN::EI-a-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
 	(logical
         ; En el caso de los EI's, la constriccion E-modify con EXEC funciona como only-actions
 		?e <- (object (is-a E-modify) (state EXEC) (target ?char)
@@ -68,7 +68,7 @@
 		)
 		(in (over ?fell) (under ?newOwner))
 
-        (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-action-reassign-objects)))
+        (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-a-reassign-objects)))
 	)
 	=>
 	(assert (action 
@@ -77,21 +77,19 @@
 		(description (sym-cat "Transfer item " ?item " from " ?char " to " ?newOwner " before discarding it"))
 		(identifier ?item ?newOwner)
 		(data (create$ ?item position ?newOwner
-			TRANSFER ITEM MAIN::EI-action-reassign-objects))
+			TRANSFER ITEM MAIN::EI-a-reassign-objects))
 	))
 )
 
 
-;TODO: Manejar objetos al destruir un personaje
-
-(defrule MAIN::EI-creature-attack (declare (auto-focus TRUE) (salience ?*E-intercept*))
+(defrule MAIN::EI-creature-combat (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a E-modify) (state OUT)
         (reason $? PLAY CREATURE $?) (target ?creature) (new ?fell))
-    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-creature-attack)))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-creature-combat)))
 	=>
 	(make-instance (gen-name E-phase) of E-phase 
-        (reason attack CREATURE MAIN::EI-creature-attack)
-        (data fellowship ?fell / attackable ?creature))
+        (reason combat CREATURE MAIN::EI-creature-combat)
+        (data attack 1 ?fell ?creature))
 	(message "Se inicia el ataque de " ?creature " a " ?fell)
 )
 
@@ -122,17 +120,18 @@
         (reason $? MAIN::EI-standarize-hand-after-mov)
         (data $? target ?p $?)))
     =>
+    (message ?p " repone su mano tras la fase de movimiento")
     (make-instance (gen-name E-phase) of E-phase 
         (reason standarize-hand MAIN::EI-standarize-hand-after-mov) 
         (data target ?p))
-    (message ?p " repone su mano tras la fase de movimiento")
 )
 
 (defrule MAIN::EI-movement-phase (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-modify) (state IN) (reason $? P311::action-fell-move)
+    ?e <- (object (is-a E-modify) (state IN) (reason $? P311::a-fell-move)
         (target ?fell) (new ?to))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-movement-phase)))
     =>
+    (message "Se ejecuta la fase de movimiento para mover la copañia")
     (make-instance (gen-name E-phase) of E-phase
         (reason fell-move MAIN::EI-movement-phase)
         (data fellowship ?fell / to ?to)
@@ -140,82 +139,113 @@
 )
 
 (defrule MAIN::EI-check-mov-phase (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-modify) (state IN) (reason $? P311::action-fell-move))
-    (object (is-a E-phase) (state DEFUSED) (reason fell-move $?))
+    ?e <- (object (is-a E-modify) (state IN) (reason $? P311::a-fell-move))
+    (or (object (is-a E-phase) (position ?e) (state DEFUSED) (reason fell-move $?))
+        (object (is-a E-phase) (position ?e) (state OUT) (res UNSUCCESSFUL) (reason fell-move $?)))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-check-mov-phase)))
     =>
     (E-cancel ?e MAIN::EI-check-mov-phase)
 )
 
 
-(defrule MAIN::EI-check-play-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-modify) (state IN)
-        (reason $? PLAY FACTION $?) (target ?faction) (new ?char))
-    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-check-play-faction)))
+(defrule MAIN::EI-creature-combat#defeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-phase) (state OUT) 
+        (position ?pos)
+        (reason combat $? CREATURE $?) (res DEFEATED))
+    (object (is-a E-modify) (name ?pos) (target ?creature))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-creature-combat#defeated)))
     =>
-    (make-instance (gen-name E-phase) of E-phase
-        (reason faction-play MAIN::EI-check-play-faction)
-        (data faction ?faction / character ?char))
-    (message ?char " debe realizar un chequeo de influencia al influenciar la faccion " ?faction)
+    ;   TODO: es el mp correcto?
+    (E-modify ?creature position (mpsymbol (send ?creature get-player))
+        MP CREATURE MAIN::EI-creature-combat#defeated)
+    (message "La criatura " ?creature " ha sido derrotada, se añade a la pila de puntos de victoria")
 )
 
-(defrule MAIN::EI-failed-play-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    (object (is-a E-phase) (state DEFUSED) (reason faction-play $?))
-    ?e <- (object (is-a E-modify) (state IN) (reason $? PLAY FACTION $?) (target ?faction))
-    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-failed-play-faction)))
+(defrule MAIN::E-creature-combat-fell#undefeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-phase) (state OUT|DEFUSED) 
+        (position ?pos)
+        (reason combat $? CREATURE $?) (res UNDEFEATED|UNDEFINED))
+    (object (is-a E-modify) (name ?pos) (target ?creature))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::E-creature-combat-fell#undefeated)))
     =>
-    (E-cancel ?e MAIN::EI-failed-play-faction)
-    (message "Como no se ha llegado a completar el chequeo de influencia, no se puede jugar la faccion " ?faction)
+    (E-modify ?creature position (discardsymbol (send ?creature get-player))
+        DISCARD CREATURE MAIN::E-creature-combat-fell#undefeated)
+    (message "La criatura " ?creature " no ha sido derrotada, se mueve al descarte enemigo")
 )
 
-(defrule MAIN::EI-mp-move-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-modify) (state OUT) (slot position) (target ?faction) (new ?char))
-    (object (is-a FACTION) (name ?faction))
-    (object (is-a CHARACTER) (name ?char))
-    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-mp-move-faction)))
+
+(defrule MAIN::EI-tap-unhindered (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-phase) (reason strike $?) (state OUT) (res DEFEATED|PARTIALLY-UNDEFEATED))
+	(data (phase strike) (data target ?t))
+    (object (name ?t) (state UNTAPPED))
+    (not (data (phase strike) (data hindered)))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-tap-unhindered)))
+	=>
+	(E-modify ?t state TAPPED MAIN::EI-tap-unhindered)
+)
+
+
+(defrule MAIN::EI-wound (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-phase) (reason strike $?) (state OUT) (res UNDEFEATED))
+	(data (phase strike) (data target ?t))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-tap-unhindered)))
+	=>
+	(E-modify ?t state WOUNDED MAIN::EI-wound)
+)
+
+
+(defrule MAIN::EI-gain-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a E-phase) (reason faction-play $?) (state OUT) (res SUCCESSFUL)
+        (data $? char ?char $? faction ?faction $?))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-gain-faction)))
     =>
     (E-modify ?faction position (mpsymbol (send ?faction get-player))
-        MP FACTION MAIN::EI-mp-move-faction)
+        PLAY FACTION MP FACTION MAIN::EI-gain-faction)
     (message "La faccion " ?faction " influenciada por " ?char " se mueve a la pila de puntos de victoria")
 )
 
 
-(defrule MAIN::EI-creature-attack#defeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-phase) (state OUT) 
-        (reason $? MAIN::EI-creature-attack)
-        (position ?pos))
-    (object (is-a E-modify) (name ?pos) (target ?creature))
-    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-creature-attack#defeated)))
+(defrule MAIN::EI-discard-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a E-phase) (reason faction-play $?) (state OUT|DEFUSED) (res ~SUCCESSFUL)
+        (data $? char ?char $? faction ?faction $?))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-discard-faction)))
     =>
-    ;   TODO: es el mp correcto?
-    (E-modify ?creature position (mpsymbol (send ?creature get-player))
-        MP CREATURE MAIN::EI-creature-attack#defeated)
-    (message "Creature " ?creature " has been defeated, moving it to the player's MP")
-)
-
-(defrule MAIN::E-creature-attack-fell#undefeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a E-phase) (state DEFUSED) 
-        (reason $? MAIN::EI-creature-attack)
-        (position ?pos))
-    (object (is-a E-modify) (name ?pos) (target ?creature))
-    (not (object (is-a EVENT) (position ?e) (reason $? E-creature-attack-fell#undefeated)))
-    =>
-    (E-modify ?creature position (discardsymbol (send ?creature get-player))
-        DISCARD CREATURE MAIN::E-creature-attack-fell#undefeated)
-    (message "Creature " ?creature " has not been defeated, moving it to enemy's DISCARD")
+    (E-modify ?faction position (discardsymbol (send ?faction get-player))
+        DISCARD MAIN::EI-discard-faction)
+    (message "La faccion " ?faction " no ha sido influenciada por " ?char " se mueve a la pila de descarte")
 )
 
 
-; TODO: Cuando un personaje o aliado falla el chequeo de resistencia debera abandonar el juego, que pasa con las adversidades y ataques automaticos?
-; (E-modify ?as position (outofgamesymbol (send ?as get-player))
-; 			DESTROY resistance-check-2::execute-resistance-check)
+(defrule MAIN::EI-failed-res-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a E-phase) (state OUT) (reason resistance-check $?) (res NOT-PASSED)
+        (data $? target ?t $?))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-failed-res-check)))
+    =>
+    (E-modify ?t position (outofgamesymbol (send ?t get-player))
+        OUT-OF-GAME MAIN::EI-failed-res-check)
+    (message ?t "se elimina del juego por haber fallado el chequeo de resistencia")
+)
 
 
-; ; RECOLECTOR DE BASURA
-; (defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
-; 		(salience ?*garbage-collector*))
-; 	; Destruye los eventos marcados como terminados
-; 	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
-; 	=>
-; 	(send ?e delete)
-; )
+(defrule MAIN::EI-failed-corr-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a E-phase) (state OUT) (reason corruption-check $?) (res NOT-PASSED)
+        (data $? target ?t $?))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-failed-corr-check)))
+    =>
+    (E-modify ?t position (discardsymbol (send ?t get-player))
+        DISCARD CHARACTER MAIN::EI-failed-corr-check)
+    (message ?t " se descarta por no haber superado el chequeo de resistencia")
+)
+
+
+(defrule MAIN::EI-corrupted-corr-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a E-phase) (state OUT) (reason corruption-check $?) (res CORRUPTED)
+        (data $? target ?t $?))
+    (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-corrupted-corr-check)))
+    =>
+    (E-modify ?t position (outofgamesymbol (send ?t get-player))
+        OUT-OF-GAME CHARACTER MAIN::EI-corrupted-corr-check)
+    (message ?t " abandona la partida por haberse dejado dominar por la corrupcion")
+)
+
+;TODO: Manejar objetos al destruir un personaje

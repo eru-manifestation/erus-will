@@ -1,10 +1,10 @@
 ;/////////////////// INICIA EL JUEGO 1: LOS DOS ROBAN HASTA TENER 8 CARTAS ////////////////////////
-(defmodule start-game-1 (import MAIN ?ALL) (import start-game-0 ?ALL) (export ?ALL))
+(defmodule start-game-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 

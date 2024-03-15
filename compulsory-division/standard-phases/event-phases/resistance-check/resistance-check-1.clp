@@ -1,28 +1,28 @@
 ;/////////////////// RESISTANCE CHECK 1: LANZAR DADOS ////////////////////////
-(defmodule resistance-check-1 (import MAIN ?ALL) (export ?ALL))
+(defmodule resistance-check-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 (defrule roll-dices
 	=>
-	(assert (data (phase resistance-check) (data dices (+ (random 1 6) (random 1 6)))))
+	(E-roll-dices RESISTANCE-ROLL resistance-check-1::roll-dices)
 )
 
-(defrule punish-wounded
-	?f1 <- (data (phase resistance-check) (data dices ?n))
-	(data (phase resistance-check) (data target ?char))
-	(not (data (phase resistance-check) (data punish-wounded)))
-	(test (eq WOUNDED (send ?char get-state))) 
+(defrule execute-resistance-check
+	(data (phase resistance-check) (data assaulted ?as))
+	(object (is-a E-phase) (reason dices RESISTANCE-ROLL $?) (state DONE) (res ?d))
 	=>
-	(retract ?f1)
-	(assert (data (phase resistance-check) (data dices (+ ?n 1)))
-		(data (phase resistance-check) (data punish-wounded)))
-	(message "La tirada de dados aumenta en 1 porque el personaje estaba herido antes")
+	(if (< ?d (send ?as get-body)) then
+		(message "Se ha pasado el chequeo de resistencia")
+		(complete PASSED)
+		else
+		(message "No se ha pasado el chequeo de resistencia")
+		(complete NOT-PASSED)
+	)
 )
-

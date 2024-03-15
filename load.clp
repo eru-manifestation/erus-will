@@ -78,60 +78,46 @@
         ;(load* "compulsory-division/standard-phases/phase-5-5.clp")
 
 
-        (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1-1-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1-2.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-2.clp")
+        (load* "compulsory-division/standard-phases/event-phases/corruption-check/corruption-check-1.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-2.clp")
-        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-2.clp")
-        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3-3.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-0.clp")
-        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-1.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4-2.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5-0.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5-1.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-6.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-7.clp")
+        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-3.clp")
+        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-4.clp")
+        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-5.clp")
+        (load* "compulsory-division/standard-phases/event-phases/fell-move/fell-move-6.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/draw/draw-0.clp")
 
+        (load* "compulsory-division/standard-phases/event-phases/dices/dices-1.clp")
+
         (load* "compulsory-division/standard-phases/event-phases/standarize-hand/standarize-hand-0.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/standarize-hand/standarize-hand-1.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-1-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-2-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-3-1.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-4.clp")
 
-        (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-1-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-2-1.clp")
+        (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-1.clp")
+
+        (load* "compulsory-division/standard-phases/event-phases/combat/combat-1.clp")
+        (load* "compulsory-division/standard-phases/event-phases/combat/combat-2.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-1-0.clp")
         (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-1-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/free-council/free-council-2-1.clp")
 
-        ;(load* "compulsory-division/standard-phases/event-phases/attack/attack-0.clp")
         (load* "compulsory-division/standard-phases/event-phases/attack/attack-1.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/attack/attack-2-0.clp")
-        (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/attack/attack-2-2.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/attack/attack-2-3.clp")
+        (load* "compulsory-division/standard-phases/event-phases/attack/attack-2.clp")
         (load* "compulsory-division/standard-phases/event-phases/attack/attack-3.clp")
         (load* "compulsory-division/standard-phases/event-phases/attack/attack-4.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/attack/attack-5.clp")
         
-        (load* "compulsory-division/standard-phases/event-phases/strike/strike-1-1.clp")
+        (load* "compulsory-division/standard-phases/event-phases/strike/strike-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/strike/strike-2.clp")
-        (load* "compulsory-division/standard-phases/event-phases/strike/strike-3-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/strike/strike-3-2.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/strike/strike-4.clp")
+        (load* "compulsory-division/standard-phases/event-phases/strike/strike-3.clp")
+        (load* "compulsory-division/standard-phases/event-phases/strike/strike-4.clp")
+        (load* "compulsory-division/standard-phases/event-phases/strike/strike-5.clp")
 
-        ;(load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-0.clp")
         (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-1.clp")
-        (load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-2.clp")
-        ;(load* "compulsory-division/standard-phases/event-phases/resistance-check/resistance-check-3.clp")
     )
 )
 

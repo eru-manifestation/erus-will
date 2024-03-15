@@ -5,11 +5,17 @@
 	(slot position (source composite) (type INSTANCE-ADDRESS INSTANCE-NAME) (default-dynamic ?*active-event*))
 )
 
+;TODO: hacer reason ordenado alfabeticamente de forma automatica
 
 (defclass MAIN::E-phase (is-a EVENT)
 	(multislot data (visibility public) (type ?VARIABLE) (default (create$)))
-	(slot res (visibility public) (type SYMBOL) (default UNDEFINED))
+	(slot res (visibility public) (type ?VARIABLE) (default UNDEFINED))
 )
+
+;TODO: hacer data ordenado alfabeticamente de forma automatica
+; (defmessage-handler EVENT put-data before ($?data)
+; 	; Ordenar alfabeticamente, insertar, evitar que se inserte despues
+; )
 
 
 (defclass MAIN::E-modify (is-a EVENT)

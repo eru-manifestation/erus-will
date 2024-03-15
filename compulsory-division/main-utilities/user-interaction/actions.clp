@@ -11,7 +11,7 @@
 )
 
 
-(defrule MAIN::action-pass (declare (auto-focus TRUE) (salience ?*action-population*))
+(defrule MAIN::a-pass (declare (auto-focus TRUE) (salience ?*a-population*))
 	(logical
 		(object (is-a PLAYER) (name ?p))
 		(exists (action (event-def ~pass) (player ?p)))

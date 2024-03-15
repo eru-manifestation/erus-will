@@ -1,4 +1,4 @@
-(defmodule attack-1 (import MAIN ?ALL))
+(defmodule faction-play-2 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 

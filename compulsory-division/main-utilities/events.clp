@@ -24,7 +24,7 @@
 		(case EXEC then EXEC-HOLD)
 		(case OUT then OUT-HOLD)
 		(default 
-			(println "STAM_ERROR: Incorrect event state")
+			(println "SATM_ERROR: No se puede poner a la espera un evento en estado " ?self:state)
 			(halt)
 			?self:state
 		)
@@ -38,11 +38,11 @@
 		(case OUT-HOLD then OUT)
 		; En caso de que pase el mando a un evento desactivado, se entiende que quien le pasa el mando es el propio cancelador, que quiere que se le transfiera a su vez a quien tiene abajo, de haberlo
 		(case DEFUSED then 
-			;TODO: ciclo infinito, cuidado
 			(returnFocus ?self:position)
+			; Puede dar dobles activaciones por retraer y asertar DEFUSED
 			DEFUSED)
 		(default 
-			(println "STAM_ERROR: Incorrect event state")
+			(println "SATM_ERROR: No se puede reactivar un evento en estado " ?self:state)
 			(halt)
 			?self:state
 		)
@@ -87,7 +87,18 @@
 )
 
 (deffunction MAIN::E-cancel (?target $?reason)
-	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot state) (new DEFUSED) (reason CANCEL $?reason))
+	(if (eq IN (send ?target get-state))
+		then
+		(make-instance (gen-name E-modify) of E-modify (target ?target) 
+			(slot state) (new DEFUSED) (reason CANCEL $?reason))
+		else
+		(println "SATM_ERROR: No se puede cancelar un evento en estado " (send ?target get-state))
+		(halt)
+	)
+)
+
+(deffunction MAIN::E-roll-dices ($?reason)
+	(make-instance (gen-name E-phase) of E-phase (reason dices $?reason))
 )
 
 ;;;;;;;;;;;;;;;;;;;;; PHASING RULE
@@ -138,12 +149,15 @@
 
 
 (deffunction complete (?exitCode)
-	(if (eq (send ?*active-event* get-state) EXEC) then
-		(send ?*active-event* modify data (compressData (nth$ 1 ?self:reason)))
+	(bind ?state (send ?*active-event* get-state))
+	(bind ?phase (nth$ 1 (send ?*active-event* get-reason)))
+	(if (eq ?state EXEC) then
+		(pop-focus)
+		(send ?*active-event* modify data (compressData ?phase))
 		(send ?*active-event* modify res ?exitCode)
 		(send ?*active-event* modify state OUT)
-		(pop-focus)
 		else
-		(println "SATM_ERROR: Incorrect event state")
+		(println "SATM_ERROR: No se puede completar un evento en estado " ?state)
+		(halt)
 	)
 )

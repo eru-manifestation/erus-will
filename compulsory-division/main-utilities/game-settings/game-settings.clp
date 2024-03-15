@@ -106,17 +106,16 @@ draw-0
 FALSE
 
 START-corruption-check
-corruption-check-1-1-1
-corruption-check-1-2
+corruption-check-1
 FALSE
 
 START-fell-move
 fell-move-1
 fell-move-2
-fell-move-3-1
-fell-move-3-2
-fell-move-3-3
-fell-move-4-1
+fell-move-3
+fell-move-4
+fell-move-5
+fell-move-6
 FALSE
 
 START-loc-phase
@@ -126,8 +125,9 @@ loc-phase-3-1
 FALSE
 
 START-faction-play
-faction-play-1-1
-faction-play-2-1
+faction-play-1
+faction-play-2
+faction-play-3
 FALSE
 
 START-free-council
@@ -136,24 +136,32 @@ free-council-1-1
 free-council-2-1
 FALSE
 
+START-combat
+combat-1
+combat-2
+FALSE
+
+START-dices
+dices-1
+FALSE
+
 START-attack
 attack-1
-attack-2-1
-attack-2-2
+attack-2
 attack-3
 attack-4
 FALSE
 
 START-strike
-strike-1-1
+strike-1
 strike-2
-strike-3-1
-strike-3-2
+strike-3
+strike-4
+strike-5
 FALSE
 
 START-resistance-check
 resistance-check-1
-resistance-check-2
 FALSE
 
 )
@@ -164,6 +172,8 @@ FALSE
 ; RECUPERA EL FOCO ACTUAL Y LO COMPARA EN LA LISTA PARA DEVOLVER EL FOCO SIGUIENTE
 (deffunction MAIN::stage-guide (?stage)
 	(bind ?i (member$ ?stage $?*phase-list*))
+    (if (eq ?i FALSE) then (println "no se ha encontrado" ?stage))
+
 	(nth$ (+ 1 ?i) $?*phase-list*)
 )
 
@@ -187,33 +197,35 @@ FALSE
         (case P-5-4 then "Convoque free council if the conditions are met")
         (case standarize-hand-0 then "Descartar o robar hasta tener 8 cartas")
         (case draw-0 then "Robar las cartas necesarias")
-        (case corruption-check-1-1-1 then "Ejecucion lanzar dados chequeo corrupcion")
-        (case corruption-check-1-2 then "Fin ejecucion chequeo corrupcion")
+        (case corruption-check-1 then "Chequeo de corrupcion")
+        (case resistance-check-1 then "Chequeo de resistencia")
+        (case dices-1 then "Tirada de dados")
         (case fell-move-1 then "Revelar movimiento")
         (case fell-move-2 then "Calcular limite de adversidades, cartas por robar e itinerario")
-        (case fell-move-3-1 then "Ambos jugadores roban una carta si se ejecuta un movimiento")
-        (case fell-move-3-2 then "Player decides whether to keep drawing, if possible")
-        (case fell-move-3-3 then "Enemy decides whether to draw, if possible")
-        (case fell-move-4-1 then "Enemy plays adversities")
+        (case fell-move-3 then "Ambos jugadores roban una carta si se ejecuta un movimiento")
+        (case fell-move-4 then "El jugador que mueve decide si seguir robando, de ser posible")
+        (case fell-move-5 then "El adversario decide si seguir robando, si es posible")
+        (case fell-move-6 then "El adversario puede jugar adversidades")
         (case loc-phase-1-1 then "Ejecucion ataques automaticos fase lugares")
         (case loc-phase-2-1 then "Jugar recursos en el lugar")
-        (case loc-phase-3-1 then "Play additional minor item")
-        (case faction-play-1-1 then "Ejecucion lanzar dados para el chequeo de influencia")
-        (case faction-play-2-1 then "Se resuelve el chequeo de influencia")
+        (case loc-phase-3-1 then "Jugar objeto menor adicional")
+        (case faction-play-1 then "Se gira el personaje")
+        (case faction-play-2 then "Se pueden jugar cartas que modifiquen la proxima tirada")
+        (case faction-play-3 then "Se resuelve el chequeo de influencia")
         (case free-council-1-0 then "Jugador realiza chequeo de corrupcion de sus personajes")
         (case free-council-1-1 then "Enemigo realiza chequeo de corrupcion de sus personajes")
         (case free-council-2-1 then "Nombramiento del vencedor del concilio")
-        (case attack-1 then "Atacante juega cartas que modifiquen el ataque")
-        (case attack-2-1 then "Player chooses how to distrubute the strikes")
-        (case attack-2-2 then "Enemy chooses how to distrubute the spare strikes")
-        (case attack-3 then "Player chooses the order in which strikes execute")
-        (case attack-4 then "Declare the result of the attack")
-        (case strike-1-1 then "Player chooses whether facing the strike normally or hindered with -3 prowess")
-        (case strike-2 then "Player plays resources which modifies the strike")
-        (case strike-3-1 then "Roll dices")
-        (case strike-3-2 then "The strike is being executed")
-        (case resistance-check-1 then "Roll dices")
-        (case resistance-check-2 then "Execute resistance check")
+        (case combat-1 then "Se ejecutan los ataques en orden")
+        (case combat-2 then "Resolucion del combate")
+        (case attack-1 then "Se juegan cartas que modifiquen el numero de golpes")
+        (case attack-2 then "El defensor elige quienes recibiran golpes")
+        (case attack-3 then "El atacante administra los golpes restantes")
+        (case attack-4 then "El defensor ejecuta los golpes")
+        (case strike-1 then "Atacante juega adversidades que modifiquen el golpe")
+        (case strike-2 then "El atacante usa los golpes sin objetivo como modificador")
+        (case strike-3 then "El defensor decide si luchar reservando energias")
+        (case strike-4 then "El defensor juega recursos que modifiquen el golpe")
+        (case strike-5 then "Se tiran los dados")
         (default "No info")
     )
 )

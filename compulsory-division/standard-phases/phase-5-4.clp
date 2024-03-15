@@ -1,10 +1,10 @@
 ;/////////////////////// FASE 5 4: CONVOCAR EL CONCILIO LIBRE ///////////////////////
-(defmodule P-5-4 (import MAIN ?ALL) (import P-5-3 ?ALL) (export ?ALL))
+(defmodule P-5-4 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -22,7 +22,7 @@
 )
 
 
-(defrule arrange-council#mp (declare (salience ?*action-population*))
+(defrule arrange-council#mp (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -40,7 +40,7 @@
 )
 
 
-(defrule arrange-council#empty-deck (declare (salience ?*action-population*))
+(defrule arrange-council#empty-deck (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)

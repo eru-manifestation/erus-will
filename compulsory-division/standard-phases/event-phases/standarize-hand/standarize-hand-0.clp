@@ -1,12 +1,9 @@
-;/////////////////// STANDARIZE HAND 0: ROBAR O DESCARTAR HASTA TENER 8 ////////////////////////
 (defmodule standarize-hand-0 (import MAIN ?ALL))
-
-
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -24,7 +21,7 @@
 
 
 ; ACCION descartar una desde la mano
-(defrule action-card-discard-from-hand (declare (salience ?*action-population*))
+(defrule a-card-discard-from-hand (declare (salience ?*a-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC))
 		(data (phase standarize-hand) (data target ?p))
@@ -38,7 +35,7 @@
 		(description (sym-cat "Discard card " ?c " from player " ?p "'s hand"))
 		(identifier ?c (discardsymbol ?p))
 		(data (create$ ?c position (discardsymbol ?p)
-			DISCARD FROM-HAND standarize-hand-0::action-card-discard-from-hand))
+			DISCARD FROM-HAND standarize-hand-0::a-card-discard-from-hand))
 		(blocking TRUE)
 	))
 )

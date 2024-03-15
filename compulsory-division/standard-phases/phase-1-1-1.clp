@@ -1,10 +1,10 @@
 ;/////////////////////// FASE 1 1 1: EJECUCIÓN ACCIONES FASE ORGANIZACION ///////////////////////
-(defmodule P-1-1-1 (import MAIN ?ALL) (import P-0-2-1 ?ALL) (export ?ALL))
+(defmodule P-1-1-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
@@ -14,7 +14,7 @@
 ; Puedes jugar un personaje de tu mano en su lugar natal o
 ; en cualquier refugio si tienes suficiente Influencia general o
 ; Influencia directa de algún personaje para controlarlo
-(defrule action-char-play#as-follower (declare (salience ?*action-population*))
+(defrule a-char-play#as-follower (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -49,12 +49,12 @@
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
 		(identifier ?play-under ?char)
-		(data (create$ ?char position ?play-under PLAY CHARACTER P111-action-char-play#as-follower))
+		(data (create$ ?char position ?play-under PLAY CHARACTER P111-a-char-play#as-follower))
 	))
 )
 
 ; ACCIÓN: Jugar personaje 2
-(defrule action-char-play#under-fell (declare (salience ?*action-population*))
+(defrule a-char-play#under-fell (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -85,14 +85,14 @@
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
 		(identifier ?fell ?char)
-		(data (create$ ?char position ?fell PLAY CHARACTER P111-action-char-play#under-fell))
+		(data (create$ ?char position ?fell PLAY CHARACTER P111-a-char-play#under-fell))
 	))
 )
 
 
 ; ACCIÓN: TRANSFERIR OBJETO
 ; Puedes intercambiar objetos entre tus personajes si están en el mismo lugar, pero antes, el portador de cada objeto deberá hacer un chequeo de corrupción
-(defrule action-item-transfer (declare (salience ?*action-population*))
+(defrule a-item-transfer (declare (salience ?*a-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -115,13 +115,13 @@
 		(description (sym-cat "Transfer item " ?i " from " ?disposer " to " ?receiver))
 		(identifier ?i ?receiver)
 		(data (create$ ?i position ?receiver
-			TRANSFER ITEM P111::action-item-transfer))
+			TRANSFER ITEM P111::a-item-transfer))
 	))
 )
 
 ; ACCIÓN: ALMACENAR OBJETO
 ; También puedes almacenar objetos si el portador está en un refugio
-(defrule action-item-store (declare (salience ?*action-population*))
+(defrule a-item-store (declare (salience ?*a-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -139,7 +139,7 @@
 		(description (sym-cat "Store item " ?i " from " ?bearer " in " ?loc))
 		(identifier ?i ?loc)
 		(data (create$ ?i position (mpsymbol ?p) 
-			STORE ITEM P111::action-item-store))
+			STORE ITEM P111::a-item-store))
 	))
 )
 
@@ -148,7 +148,7 @@
 ; Como parche para la opcion que deja la guia de organizar compañia de modo que descartes los personajes que no te quepan en la compañia
 
 ; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
-(defrule action-char-discard (declare (salience ?*action-population*))
+(defrule a-char-discard (declare (salience ?*a-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
@@ -163,7 +163,7 @@
 		(event-def modify)
 		(description (sym-cat "Discard character " ?char))
 		(identifier ?char (discardsymbol ?p))
-		(data (create$ ?char position (discardsymbol ?p) DISCARD CHARACTER P111::action-char-discard))
+		(data (create$ ?char position (discardsymbol ?p) DISCARD CHARACTER P111::a-char-discard))
 	))
 )
 
@@ -171,7 +171,7 @@
 
 ; ACCIÓN: MOVER PERSONAJE DE UNA COMPAÑÍA A OTRA
 ; Siempre puedes mover a un personaje a otra compañia del lugar a menos que ya tenga 7 integrantes
-(defrule action-char-move#change-fell (declare (salience ?*action-population*))
+(defrule a-char-move#change-fell (declare (salience ?*a-population*))
 	(logical
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
@@ -195,14 +195,14 @@
 		(description (sym-cat "Move " ?char " from " ?ini-fell " to " ?fell))
 		(identifier ?char ?fell)
 		(data (create$ ?char position ?fell
-			MOVE CHARACTER P111::action-char-move#change-fell))
+			MOVE CHARACTER P111::a-char-move#change-fell))
 	))
 )
 
 
 ; ACCIÓN: HACER PERSONAJE UN SEGUIDOR
 ; Siempre que un personaje tenga suficiente influencia puedes hacer de un personaje seguidor
-(defrule action-char-follow (declare (salience ?*action-population*))
+(defrule a-char-follow (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
@@ -234,14 +234,14 @@
 		(description (sym-cat "Make " ?tobefollower " a follower of " ?headchar))
 		(identifier ?tobefollower ?headchar)
 		(data (create$ ?tobefollower position ?headchar
-			FOLLOW P111::action-char-follow))
+			FOLLOW P111::a-char-follow))
 	))
 )
 
 
 ; ACCIÓN: PASAR DE SEGUIDOR A PERSONAJE
 ; Siempre que el jugador tenga suficiente influencia general y que haya espacio en la compañía puedo bajarlo
-(defrule action-char-unfollow (declare (salience ?*action-population*))
+(defrule a-char-unfollow (declare (salience ?*a-population*))
 	(logical 
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 		(object (is-a HAVEN) (name ?loc))
@@ -269,6 +269,6 @@
 		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
 		(identifier ?follower ?fell)
 		(data (create$ ?follower position ?fell
-			UNFOLLOW P111::action-char-unfollow))
+			UNFOLLOW P111::a-char-unfollow))
 	))
 )

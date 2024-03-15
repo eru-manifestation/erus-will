@@ -1,17 +1,17 @@
 ;/////////////////////// FASE 1 1 2 0: EJECUCION DECLARAR MOVIMIENTO ///////////////////////
-(defmodule P-1-1-2-0 (import MAIN ?ALL) (import P-1-1-1 ?ALL) (export ?ALL))
+(defmodule P-1-1-2-0 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO
-(defrule action-fell-decl-mov#from-haven (declare (salience ?*action-population*))
+(defrule a-fell-decl-mov#from-haven (declare (salience ?*a-population*))
 	(logical
     	(player ?p)
 
@@ -43,7 +43,7 @@
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE REFUGIO HACIA REFUGIO
-(defrule action-fell-decl-mov#haven-haven (declare (salience ?*action-population*))
+(defrule a-fell-decl-mov#haven-haven (declare (salience ?*a-population*))
 	(logical
     	(player ?p)
 
@@ -77,7 +77,7 @@
 
 
 ; ACCIÓN: DECLARAR MOVIMIENTO DESDE NO REFUGIO
-(defrule action-fell-decl-mov#no-haven (declare (salience ?*action-population*))
+(defrule a-fell-decl-mov#no-haven (declare (salience ?*a-population*))
 	(logical
     	(player ?p)
 

@@ -1,18 +1,18 @@
 ;/////////////////// LOCATION PHASE 3 1: JUGAR OBJETO MENOR ADICIONAL ////////////////////////
-(defmodule loc-phase-3-1 (import MAIN ?ALL) (import loc-phase-2-1 ?ALL) (export ?ALL))
+(defmodule loc-phase-3-1 (import MAIN ?ALL))
 ;/////CLOCK
 (defrule clock (declare (salience ?*clock*)) => (tic))
 
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-(defrule play-additional-minor-item (declare (salience ?*action-population*))
+(defrule play-additional-minor-item (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason loc-phase $?) (name ?e))
+		?e <- (object (is-a E-phase) (state EXEC))
     	(player ?p)
 		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))

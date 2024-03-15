@@ -16,10 +16,10 @@
     ;?*special-effects* = 0
 
     ; Reglas que lanzan actions
-    ?*action-population* = 8
+    ?*a-population* = 8
 
     ; Reglas que requieren la intervención del usuario (restringido para user-interaction)
-    ?*action-selection* = 6
+    ?*a-selection* = 6
 
     ; Intercepción de eventos tanto en la salida como la entrada
     ?*E-intercept* = 4

@@ -127,6 +127,7 @@
 )
 
 (defclass MAIN::ITEM(is-a MP-ABLE RESOURCE CORRUPTION))
+
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
