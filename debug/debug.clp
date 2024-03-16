@@ -2,7 +2,7 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-(set-break fell-move-5::clock)
+;(set-break fell-move-5::clock)
 
 (bind ?*print-message* TRUE)
 ;(watch instances)
@@ -14,8 +14,8 @@
 (watch rules)
 (watch focus)
 ; (watch message-handlers EVENT put-state after)
-(watch message-handlers EVENT hold)
-(watch message-handlers EVENT unhold)
+; (watch message-handlers EVENT hold)
+; (watch message-handlers EVENT unhold)
 ;(watch message-handlers BASIC put-position after)
 ; (run 145)
 
@@ -54,13 +54,13 @@
 
 ; (play-action player2 [draw2])
 
-(play-action player1 PASS)
-(play-action player1 [fellowship1] [barrow--downs])
-(play-action player1 [fellowship1])
-(play-action player2 PASS)
-(play-action player1 [red-arrow1] [discard1])
-(play-action player2 [wood--elves1] [discard2])
-(play-action player1 [fellowship1])
-(play-action player1 [attackable-barrow--downs1] [aragorn-ii1])
-(play-action player1 [aragorn-ii1])
-(play-action player1 PASS)
+; (play-action player1 PASS)
+; (play-action player1 [fellowship1] [barrow--downs])
+; (play-action player1 [fellowship1])
+; (play-action player2 PASS)
+; (play-action player1 [red-arrow1] [discard1])
+; (play-action player2 [wood--elves1] [discard2])
+; (play-action player1 [fellowship1])
+; (play-action player1 [attackable-barrow--downs1] [aragorn-ii1])
+; (play-action player1 [aragorn-ii1])
+; (play-action player1 PASS)
