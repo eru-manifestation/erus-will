@@ -29,8 +29,8 @@
 
             (if (eq (send ?from get-site-pathA) ?to) then
                 (bind ?route (send ?from get-routeA))
-                else
-                (bind ?route (send ?from get-routeB))  
+                ; else
+                ; (bind ?route (send ?from get-routeB))  
             )
             else
             ; se va por la ruta de la carta fuente

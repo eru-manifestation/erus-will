@@ -88,7 +88,7 @@
   background-image: url(info-icon.png);
 }
 #game-space .attackable:not(.card) {
-  display: none;
+  /* display: none; */
   background-image: url(attackable.png);
 }
 

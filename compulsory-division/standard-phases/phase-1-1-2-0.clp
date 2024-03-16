@@ -55,7 +55,7 @@
 		(object (is-a E-phase) (state EXEC) (reason turn $?))
 
 		; Encuentro la localización de la compañía
-		(object (is-a HAVEN) (name ?loc) (site-pathA ?pathA) (site-pathB ?pathB))
+		(object (is-a HAVEN) (name ?loc) (site-pathA ?pathA)); (site-pathB ?pathB))
 		(in (over ?loc) (under ?fell))
 	)
 	=>
@@ -66,13 +66,13 @@
 		(identifier ?fell ?pathA)
 		(data (create$ move ?fell ?pathA))
 	))
-	(assert (action 
-		(player ?p)
-		(event-def variable)
-		(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathB))
-		(identifier ?fell ?pathB)
-		(data (create$ move ?fell ?pathB))
-	))
+	; (assert (action 
+	; 	(player ?p)
+	; 	(event-def variable)
+	; 	(description (sym-cat "Declare movement of fellowship " ?fell " from " ?loc " to " ?pathB))
+	; 	(identifier ?fell ?pathB)
+	; 	(data (create$ move ?fell ?pathB))
+	; ))
 )
 
 
