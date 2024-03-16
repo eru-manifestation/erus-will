@@ -144,9 +144,7 @@
 				(send ?e modify data (create$))
 				(message "Se inicia la fase " ?phase)
 				EXEC)
-			(case OUT then 
-				(message "Finaliza la fase " ?phase)
-				DONE)
+			(case OUT then DONE)
 	))
 )
 
@@ -162,5 +160,11 @@
 		else
 		(println "SATM_ERROR: No se puede completar un evento en estado " ?state)
 		(halt)
+	)
+)
+
+(defmessage-handler E-phase put-state after (?state)
+	(if (eq ?state OUT) then
+		(message "Finaliza la fase " (nth$ 1 ?self:reason))
 	)
 )

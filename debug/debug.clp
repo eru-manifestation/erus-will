@@ -2,7 +2,7 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-(set-break loc-phase-2-1::clock)
+(set-break fell-move-5::clock)
 
 (bind ?*print-message* TRUE)
 ;(watch instances)

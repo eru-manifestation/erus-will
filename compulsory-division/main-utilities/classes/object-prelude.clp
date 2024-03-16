@@ -44,7 +44,6 @@
 )
 
 (defmessage-handler USER init after ()
-	; TODO HACER ANNOUNCE CREATE
 	(bind ?class (class ?self))
 	(bind ?superclasses (class-superclasses ?class inherit))
 	(bind ?values (create$))
@@ -70,6 +69,5 @@
 )
 
 (defmessage-handler USER delete before ()
-	; TODO HACER ANNOUNCE DESTROY
 	(announce all { "operation" : "delete" , "id" : (JSONformat (instance-name ?self)) })
 )

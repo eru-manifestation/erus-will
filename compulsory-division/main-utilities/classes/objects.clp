@@ -74,8 +74,8 @@
 		(allowed-values 1 2 3 4 5 6 7 8 9 COAST FREE-LAND BORDER-LAND WILDERNESS SHADOW-LAND DARK-LAND))
 	(slot place (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
-	(multislot automatic-attacks (visibility public) (type INSTANCE-NAME) (default (create$)) (allowed-classes ATTACKABLE))
-	(multislot playable-items (visibility public) (type SYMBOL) (default (create$)) (access read-only) (allowed-symbols MINOR-ITEM GREATER-ITEM MAJOR-ITEM))
+	(multislot automatic-attacks (visibility public) (type INSTANCE-NAME) (default (create$)))
+	(multislot playable-items (visibility public) (type SYMBOL) (default (create$)) (access read-only) (allowed-symbols MINOR-ITEM GREATER-ITEM MAJOR-ITEM GOLD-RING))
 )
 
 (defclass MAIN::HAVEN (is-a LOCATION)
@@ -101,7 +101,7 @@
 	(slot corruption (visibility public) (type INTEGER) (default 0) (access read-write))
 )
 
-(defclass MAIN::ALLY (is-a MP-ABLE WOUNDABLE RESOURCE);TODO poner el allowed classes de playable-places
+(defclass MAIN::ALLY (is-a MP-ABLE WOUNDABLE RESOURCE)
 	(multislot playable-places (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 )
 
@@ -138,6 +138,7 @@
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
 (defclass MAIN::SPECIAL-ITEM(is-a ITEM))
+(defclass MAIN::GOLD-RING(is-a ITEM))
 
 (deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then

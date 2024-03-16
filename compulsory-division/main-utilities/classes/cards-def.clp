@@ -52,6 +52,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
+    (slot corruption (source composite) (default -2))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 1))
     (slot body (source composite) (default 9))
@@ -155,7 +156,6 @@
 
 (defclass LAPSE-OF-WILL (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
 
-(defclass DODGE (is-a R-SHORT-EVENT) (slot instance-# (source composite)))
 
 ; PERSONAJES
 
@@ -229,7 +229,7 @@
 
 ; ADVERSIDADES (SUCESOS)
 
-(defclass AWAKEN-MINIONS (is-a A-LONG-EVENT) (slot instance-# (source composite)))
+(defclass AROUSE-MINIONS (is-a A-LONG-EVENT) (slot instance-# (source composite)))
 
 (defclass MUSTER-DISPERSES (is-a A-SHORT-EVENT) (slot instance-# (source composite)))
 
@@ -238,8 +238,6 @@
 (defclass LURE-OF-NATURE (is-a A-PERMANENT-EVENT) (slot instance-# (source composite)))
 
 (defclass WEARINESS-OF-THE-HEART (is-a A-SHORT-EVENT) (slot instance-# (source composite)))
-
-(defclass AWAKEN-MINIONS (is-a A-LONG-EVENT) (slot instance-# (source composite)))
 
 (defclass NEW-MOON (is-a A-SHORT-EVENT) (slot instance-# (source composite)))
 

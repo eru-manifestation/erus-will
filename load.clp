@@ -9,7 +9,7 @@
         (load* "compulsory-division/main-utilities/classes/locations.clp")
 
         ;other cards
-        (load* "compulsory-division/main-utilities/classes/cards-def.clp")
+        (load* "compulsory-division/main-utilities/classes/starter-deck.clp")
         
         ;events
         (load* "compulsory-division/main-utilities/classes/event-class.clp")
