@@ -1,11 +1,11 @@
-//var W3CWebSocket = require('websocket').w3cwebsocket;
+//let W3CWebSocket = require('websocket').w3cwebsocket;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
-var choice = [];
+let choice = [];
 
-var closeUp, phase, game_space, locations, events;
+let closeUp, phase, game_space, locations, events;
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
@@ -35,13 +35,13 @@ function classToImg(cls){
 }
 
 function makeElement(announce){
-    var id = announce.id;
-    var classes = announce.classes;
-    var res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"")}"`;
+    let id = announce.id;
+    let classes = announce.classes;
+    let res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"")}"`;
     if(classes.includes("card"))
         res+=` style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
     
-    var map = new Map(Object.entries(announce));
+    let map = new Map(Object.entries(announce));
     map.delete("operation");
     map.delete("id");
     map.delete("classes");
@@ -61,8 +61,8 @@ function makeElement(announce){
 }
 
 function insertingData(announce){
-    var msDelay = 20;
-    var animationFunction;
+    let msDelay = 20;
+    let animationFunction;
     
     if(announce.position != "[nil]"){
         animationFunction = () => 
@@ -87,16 +87,16 @@ function insertingData(announce){
 }
 
 function modifyElement(announce){
-    var msDelay = 20;
-    var animationFunction = () => {
-        var elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
+    let msDelay = 20;
+    let animationFunction = () => {
+        let elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
         elementAtt.textContent = announce.value;
     };
     // TODO: cambiar
     if (announce.id.includes("e-phase") || announce.id.includes("e-modify")){
         msDelay = 300;
         animationFunction = () => {
-            var element = document.getElementById(announce.id);
+            let element = document.getElementById(announce.id);
             element.setAttribute(announce.slot,announce.value);
         };
     }
@@ -125,14 +125,14 @@ function removeAllChoiceStyles(){
 }
 
 function startComplexChoice(event){
-    var draggable = event.target;
+    let draggable = event.target;
     event.dataTransfer.setData("text/plain", draggable.id);
     removeAllChoiceStyles();
 
     choice
     .filter((singleChoice) => singleChoice.vector[0]===draggable.id & singleChoice.vector.length===2)
     .forEach((singleChoice) => {
-        var complexChoiceTarget = document.getElementById(singleChoice.vector[1])
+        let complexChoiceTarget = document.getElementById(singleChoice.vector[1])
         complexChoiceTarget.classList.add("choosable-final");
         complexChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
         complexChoiceTarget.addEventListener("dragenter", showChoiceDescription);
@@ -146,7 +146,7 @@ function applyStyles(){
     choice
     .forEach((singleChoice)=>{
         if(singleChoice.vector.length===1) {
-            var simpleChoiceTarget = document.getElementById(singleChoice.vector[0]);
+            let simpleChoiceTarget = document.getElementById(singleChoice.vector[0]);
             simpleChoiceTarget.classList.add("choosable-final");
             simpleChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
             simpleChoiceTarget.addEventListener("mouseenter", showChoiceDescription);
@@ -163,7 +163,7 @@ function restartStyles(event){
 
 function completeComplexChoice(event){
     if (event.dataTransfer.types.includes("text/plain")){
-        var data = event.dataTransfer.getData("text/plain")+" "+event.target.id;
+        let data = event.dataTransfer.getData("text/plain")+" "+event.target.id;
         send_orders(data);
     }
     event.stopPropagation();
@@ -217,8 +217,8 @@ function enableChoices(){
 
 
 function animate(announces){
-    var accumDelay = 0;
-    var operationData = {msDelay : 0, animationFunction : ()=>{}};;
+    let accumDelay = 0;
+    let operationData = {msDelay : 0, animationFunction : ()=>{}};;
 
     announces.forEach((announce) => {
         if(announce!=null)

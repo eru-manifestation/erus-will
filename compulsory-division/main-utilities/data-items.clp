@@ -1,9 +1,11 @@
 (defmessage-handler data-item init after ()
     (send ?self put-position ?self:target)
+    (message "Se modifica " ?self:target-slot " de " ?self:target " por " ?self:motive)
     (eval (str-cat 
         "(send [" ?self:target "] modify " ?self:target-slot " (+ (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
 (defmessage-handler data-item delete before ()
+    (message "Se desactiva la modificacion de " ?self:target-slot " de " ?self:target " por " ?self:motive)
     (eval (str-cat 
         "(send [" ?self:target "] modify " ?self:target-slot " (- (send [" ?self:target"] get-" ?self:target-slot ") " ?self:value "))" ))
 )
@@ -19,8 +21,8 @@
         (object (is-a CHARACTER) (name ?char))
     )
     =>
-    (message Se crea el corruption data item de ?corr para ?char)
-    (make-instance (gen-name data-item) of data-item (target-slot corruption) (target ?char) (value ?corruption-value))
+    (make-instance (gen-name data-item) of data-item (target-slot corruption) (target ?char) (value ?corruption-value)
+        (motive "el elemento de corrupcion " ?corr))
 )
 
 ; INFO ITEM DE CANTIDAD DE COMPAÑEROS EN UNA COMPAÑIA 1
@@ -31,8 +33,8 @@
         (in (over ?fell) (under ?char))
     )
     =>
-    (message Se crea el companion data item de ?char para ?fell)
-    (make-instance (gen-name data-item) of data-item (target-slot companions) (target ?fell) (value 0.5))
+    (make-instance (gen-name data-item) of data-item (target-slot companions) (target ?fell) (value 0.5)
+        (motive "el hobbit " ?char))
 )
 
 ; INFO ITEM DE CANTIDAD DE COMPAÑEROS EN UNA COMPAÑIA 2
@@ -43,8 +45,8 @@
         (in (over ?fell) (under ?char))
     )
     =>
-    (message Se crea el companion data item de ?char para ?fell)
-    (make-instance (gen-name data-item) of data-item (target-slot companions) (target ?fell) (value 1))
+    (make-instance (gen-name data-item) of data-item (target-slot companions) (target ?fell) (value 1)
+        (motive "el personaje " ?char))
 )
 
 
@@ -55,8 +57,8 @@
         (object (is-a CHARACTER) (name ?follower) (position ?char) (mind ?mind))
     )
     =>
-    (message Se crea el influence item por ?follower para ?char)
-    (make-instance (gen-name data-item) of data-item (target-slot influence) (target ?char) (value (- 0 ?mind)))
+    (make-instance (gen-name data-item) of data-item (target-slot influence) (target ?char) (value (- 0 ?mind))
+        (motive "el seguidor " ?follower))
 )
 
 
@@ -70,8 +72,8 @@
         )
     )
     =>
-    (message Se crea el general influence item por ?char para el jugador ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot general-influence) (target ?p) (value (- 0 ?mind)))
+    (make-instance (gen-name data-item) of data-item (target-slot general-influence) (target ?p) (value (- 0 ?mind))
+        (motive "el personaje " ?char))
 )
 
 
@@ -82,8 +84,8 @@
         (object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
     )
     =>
-    (message Se crea el hand item por ?c para el jugador ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot hand) (target ?p) (value 1))
+    (make-instance (gen-name data-item) of data-item (target-slot hand) (target ?p) (value 1)
+        (motive "la carta " ?c))
 )
 
 
@@ -99,8 +101,8 @@
             (mp ?mp&:(<> 0 ?mp)) (name ?char))
     )
     =>
-    (message Se crea el mp item por ?char para ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp)
+        (motive "el personaje " ?char))
 )
 
 
@@ -112,8 +114,8 @@
             (mp ?mp&:(<> 0 ?mp)) (name ?f))
     )
     =>
-    (message Se crea el mp item por ?f para ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp)
+        (motive "la faccion " ?f))
 )
 
 
@@ -129,21 +131,37 @@
             (mp ?mp&:(<> 0 ?mp)) (name ?i))
     )
     =>
-    (message Se crea el mp item por ?i para ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp)
+        (motive "el objeto " ?i))
 )
 
 
-; ; INFO DE PROWESS PARA CHARACTER DE ITEM
-; (defrule MAIN::DIP-mp-player#item (declare (auto-focus TRUE) (salience ?*universal-rules*))
-;     (logical
-;         (object (is-a CHARACTER) (name ?char))
-;         (object (is-a ITEM) (player ?p) (position ?char) (prowess ))
-;     )
-;     =>
-;     (message Se crea el mp item por ?i para ?p)
-;     (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
-; )
+; INFO DE PROWESS PARA CHARACTER DE ITEM
+(defrule MAIN::DIP-prowess-character#item (declare (auto-focus TRUE) (salience ?*universal-rules*))
+    (logical
+        (object (is-a CHARACTER) (name ?char))
+        (object (is-a ITEM) (player ?p) (position ?char) (prowess ?prowess&~0)
+            (max-prowess ?mp) (name ?i))
+    )
+    =>
+    (make-instance (gen-name data-item) of data-item (target-slot prowess) (target ?char) 
+        (value (max 0 (min ?prowess (- ?mp (send ?char get-prowess)))))
+        (motive "el objeto " ?i))
+)
+
+
+; INFO DE BODY PARA CHARACTER DE ITEM
+(defrule MAIN::DIP-body-character#item (declare (auto-focus TRUE) (salience ?*universal-rules*))
+    (logical
+        (object (is-a CHARACTER) (name ?char))
+        (object (is-a ITEM) (player ?p) (position ?char) (body ?body&~0)
+            (max-body ?mb) (name ?i))
+    )
+    =>
+    (make-instance (gen-name data-item) of data-item (target-slot body) (target ?char) 
+        (value (max 0 (min ?body (- ?mb (send ?char get-body)))))
+        (motive "el objeto " ?i))
+)
 
 
 ; INFO ITEM PARA MP DE PLAYER DESDE ALLY
@@ -158,8 +176,8 @@
         (name ?a))
     )
     =>
-    (message Se crea el mp item por ?a para ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp))
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target ?p) (value ?mp)
+        (motive "el aliado " ?a))
 )
 
 
@@ -172,8 +190,8 @@
             (name ?c))
     )
     =>
-    (message Se crea el mp item por ?c para ?p)
-    (make-instance (gen-name data-item) of data-item (target-slot mp) (target (enemy ?p)) (value ?mp))
+    (make-instance (gen-name data-item) of data-item (target-slot mp) (target (enemy ?p)) (value ?mp)
+        (motive "la criatura derrotada " ?c))
 )
 
 
@@ -185,8 +203,8 @@
 	    (object (is-a E-phase) (position ?e) (reason dices STRIKE-ROLL $?) (state DONE) (name ?d))
     )
     =>
-    (message Se reduce el resultado de los dados por reservarse fuerzas)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -3))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -3)
+        (motive "reservarse fuerzas en el golpe"))
 )
 
 ; strike-5
@@ -198,8 +216,8 @@
 	    (object (is-a E-phase) (position ?e) (reason dices STRIKE-ROLL $?) (state DONE) (name ?d))
     )
     =>
-    (message Se reduce el resultado de los dados por estar agotado)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -1))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -1)
+        (motive "estar agotado"))
 )
 
 ; strike-5
@@ -211,8 +229,8 @@
 	    (object (is-a E-phase) (position ?e) (reason dices STRIKE-ROLL $?) (state DONE) (name ?d))
     )
     =>
-    (message Se reduce el resultado de los dados por estar herido)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -2))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -2)
+        (motive "estar herido"))
 )
 
 ; strike-5
@@ -223,8 +241,8 @@
 	    (object (is-a E-phase) (position ?e) (reason dices STRIKE-ROLL $?) (state DONE) (name ?d))
     )
     =>
-    (message Se reduce el resultado de los dados por el modificador de golpe extra)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -1))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value -1)
+        (motive "haber asignado un golpe extra como modificador"))
 )
 
 
@@ -237,8 +255,8 @@
         (object (name ?char) (state WOUNDED))
     )
 	=>
-	(message Aumenta la tirada debido a que el objetivo esta herido)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value 1))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value 1)
+        (motive "estar herido"))
 )
 
 
@@ -254,6 +272,6 @@
         (object (name ?faction) (influence-modifiers $? ?race ?value $?))
     )
     =>
-    (message Se modifica la tirada segun la raza del personaje)
-    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value ?value))
+    (make-instance (gen-name data-item) of data-item (target-slot res) (target ?d) (value ?value)
+        (motive "ser de raza " ?race))
 )

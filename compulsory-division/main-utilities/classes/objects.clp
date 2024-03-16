@@ -57,6 +57,7 @@
     (slot target (visibility public) (type SYMBOL) (default ?NONE))
     (slot target-slot (visibility public) (type SYMBOL) (default ?NONE))
     (slot value (visibility public) (type INTEGER) (default ?NONE))
+	(multislot motive (visibility public))
 )
 
 ; CLASES CONCRETAS
@@ -92,7 +93,7 @@
 )
 
 (defclass MAIN::CHARACTER (is-a ATTACKABLE MP-ABLE WOUNDABLE OWNABLE CARD)
-	(slot birthplace (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) (allowed-symbols TODO))
+	(slot birthplace (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 	(slot influence (visibility public) (type INTEGER) (default 0) (access read-write))
 	(slot mind (visibility public) (type INTEGER) (default 0) (access read-write))
 	(slot race (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
@@ -126,7 +127,12 @@
 		(allowed-symbols FREE-HOLD BORDER-HOLD RUINS SHADOW-HOLD DARK-HOLD HAVEN))
 )
 
-(defclass MAIN::ITEM(is-a MP-ABLE RESOURCE CORRUPTION))
+(defclass MAIN::ITEM(is-a MP-ABLE RESOURCE CORRUPTION)
+	(slot prowess (visibility public) (type INTEGER) (default 0) (access read-write) (range 0 ?VARIABLE))
+	(slot body (visibility public) (type INTEGER) (default 0) (access read-write) (range 0 ?VARIABLE))
+	(slot max-prowess (visibility public) (type INTEGER) (default 0) (access read-write) (range 0 ?VARIABLE))
+	(slot max-body (visibility public) (type INTEGER) (default 0) (access read-write) (range 0 ?VARIABLE))
+)
 
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))

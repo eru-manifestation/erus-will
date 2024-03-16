@@ -6,7 +6,7 @@
 
 (defclass ARAGORN-II (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 3))
     (slot mind (source composite) (default 9))
     (slot race (source composite) (default DUNEDAIN))
@@ -17,7 +17,7 @@
 
 (defclass EOMER (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default MAN))
@@ -28,7 +28,7 @@
 
 (defclass BOROMIR-II (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default DUNEDAIN))
@@ -42,11 +42,13 @@
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
+    (slot body (source composite) (default 1))
+    (slot max-body (source composite) (default 8))
 )
 
 (defclass MERRY (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
@@ -74,12 +76,16 @@
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
     (slot mp (source composite) (default 2))
+    (slot body (source composite) (default 2))
+    (slot max-body (source composite) (default 9))
 )
 
 (defclass GLAMDRING (is-a MAJOR-ITEM)
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 2))
+    (slot prowess (source composite) (default 3))
+    (slot max-prowess (source composite) (default 8))
 )
 
 (defclass STAR--GLASS (is-a MINOR-ITEM)
@@ -155,7 +161,7 @@
 
 (defclass GANDALF (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
     (slot race (source composite) (default WIZARD))
@@ -166,7 +172,7 @@
 
 (defclass BEREGOND (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default DUNEDAIN))
@@ -178,7 +184,7 @@
 
 (defclass FARAMIR (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
@@ -189,7 +195,7 @@
 
 (defclass KILI (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default DWARF))
@@ -201,7 +207,7 @@
 
 (defclass ERKENBRAND (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))
@@ -212,7 +218,7 @@
 
 (defclass BERETAR (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
@@ -312,7 +318,7 @@
 ; PERSONAJES Y OBJETOS INICIALES
 (defclass GIMLI (is-a CHARACTER)
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default DWARF))
@@ -323,7 +329,7 @@
 
 (defclass LEGOLAS (is-a CHARACTER)
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
@@ -334,7 +340,7 @@
 
 (defclass ELLADAN (is-a CHARACTER)
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
@@ -345,7 +351,7 @@
 
 (defclass PIPPIN (is-a CHARACTER)
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
@@ -359,6 +365,8 @@
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
+    (slot prowess (source composite) (default 1))
+    (slot max-prowess (source composite) (default 8))
 )
 
 
@@ -373,6 +381,8 @@
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
     (slot mp (source composite) (default 4))
+    (slot prowess (source composite) (default 3))
+    (slot max-prowess (source composite) (default 9))
 )
 
 (defclass SWORD-OF-GONDOLIN (is-a MAJOR-ITEM)
@@ -455,7 +465,7 @@
 
 (defclass SARUMAN (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
     (slot race (source composite) (default WIZARD))
@@ -465,7 +475,7 @@
 
 (defclass ANNALENA (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default ELF))
@@ -476,7 +486,7 @@
 
 (defclass BARD-BOWMAN (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default MAN))
@@ -487,7 +497,7 @@
 
 (defclass ELROHIR (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default ELF))
@@ -498,7 +508,7 @@
 
 (defclass BEREGOND (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default DUNEDAIN))
@@ -510,7 +520,7 @@
 
 (defclass CELEBORN (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 6))
     (slot race (source composite) (default ELF))
@@ -521,7 +531,7 @@
 
 (defclass PEATH (is-a CHARACTER)     
     (slot instance-# (source composite))
-    (slot birthplace (source composite) (default TODO))
+    (slot birthplace (source composite) (default [TODO]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default MAN))

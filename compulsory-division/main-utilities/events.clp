@@ -86,13 +86,13 @@
 	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot ?slot) (new ?newValue) (reason $?reason))
 )
 
-(deffunction MAIN::E-cancel (?target $?reason)
-	(if (eq IN (send ?target get-state))
+(deffunction MAIN::E-cancel ($?reason)
+	(if (eq IN (send ?*active-event* get-state))
 		then
-		(make-instance (gen-name E-modify) of E-modify (target ?target) 
+		(make-instance (gen-name E-modify) of E-modify (target ?*active-event*) 
 			(slot state) (new DEFUSED) (reason CANCEL $?reason))
 		else
-		(println "SATM_ERROR: No se puede cancelar un evento en estado " (send ?target get-state))
+		(println "SATM_ERROR: No se puede cancelar un evento en estado " (send ?*active-event* get-state))
 		(halt)
 	)
 )
@@ -142,8 +142,11 @@
 				;TODO no modify si data es vacio
 				(decompressData ?phase (send ?e get-data))
 				(send ?e modify data (create$))
+				(message "Se inicia la fase " ?phase)
 				EXEC)
-			(case OUT then DONE)
+			(case OUT then 
+				(message "Finaliza la fase " ?phase)
+				DONE)
 	))
 )
 

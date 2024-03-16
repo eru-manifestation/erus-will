@@ -1,4 +1,4 @@
-var addon = require('bindings')('addon.node');
+let addon = require('bindings')('addon.node');
 const uuid = require("uuid");
 const express = require('express');
 const app = express();
@@ -7,11 +7,11 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-var CLIPSEnvs = new Map();
-//var port = 8080;
+let CLIPSEnvs = new Map();
+//let port = 8080;
 
 function enemy(player){
-    var res;
+    let res;
     if (player === "player1"){
         res = "player2";
     }else if (player === "player2"){
@@ -22,12 +22,12 @@ function enemy(player){
 
 function updatePlayer(player, env, room){
     return new Promise((resolve,reject)=>{
-        var content, announce, choice;
+        let content, announce, choice;
         env.wrapEval("(get-debug)")
         .then((debug)=>{
             //TODO: fix that the debug buffer is shared, so it mustn't be emptied when one player
             //      reads it
-            var data = debug.replaceAll("crlf","\n");
+            let data = debug.replaceAll("crlf","\n");
             if (data != "") io.sockets.in(room).emit("log", "Debug buffer\n"+data);
         })
         .then(()=>{
@@ -66,17 +66,17 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:resource', (req, res) => {
-    var resource = req.params.resource;
+    let resource = req.params.resource;
     res.sendFile(__dirname + '/www/' + resource);
 });
 
 app.get('/tw/:img', (req, res) => {
-    var img = req.params.img;
+    let img = req.params.img;
     res.sendFile(__dirname + '/tw/' + img);
 });
 
 app.get('/tw/icons/:icon', (req, res) => {
-    var icon = req.params.icon;
+    let icon = req.params.icon;
     res.sendFile(__dirname + '/tw/icons/' + icon);
 });
 
@@ -86,7 +86,7 @@ io.engine.generateId = (req) => {
 
 io.on('connection', (socket) => {
     console.log('\nA user connected on socket '+socket.id);
-    var player, room, dev=false;
+    let player, room, dev=false;
     if(socket.handshake.query["room"] == "null" || socket.handshake.query["room"] == undefined){
         player = "player1";
         room = socket.id;
@@ -108,7 +108,7 @@ io.on('connection', (socket) => {
     io.sockets.in(room).fetchSockets().then((value)=>{
         //Si ambos jugadores ya están conectados
         if(value.length===2){
-            var wrap = new addon.ClipsWrapper();
+            let wrap = new addon.ClipsWrapper();
             wrap.createEnvironment()
             .then((value)=>{
                 console.log(value);
@@ -123,7 +123,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("orders", (orders) => {
-        var env = CLIPSEnvs.get(room);
+        let env = CLIPSEnvs.get(room);
         console.log("\nPlayer "+player+" commands: {"+orders+"}");
         env.wrapEval("(play-action "+player+" "+orders+")")
         .then((result)=>{

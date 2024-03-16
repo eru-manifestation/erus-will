@@ -144,7 +144,7 @@
         (object (is-a E-phase) (position ?e) (state OUT) (res UNSUCCESSFUL) (reason fell-move $?)))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-check-mov-phase)))
     =>
-    (E-cancel ?e MAIN::EI-check-mov-phase)
+    (E-cancel MAIN::EI-check-mov-phase)
 )
 
 
