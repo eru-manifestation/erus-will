@@ -16,11 +16,11 @@
 ; Influencia directa de algún personaje para controlarlo
 (defrule a-char-play#as-follower (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
+		?e <- (object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object (is-a E-modify) (state DONE) (reason $? PLAY CHARACTER $?)))
+		(not (object (is-a E-modify) (position ?e) (state DONE) (reason $? PLAY CHARACTER $?)))
 
 
 		; Hay un personaje en la mano del jugador dueño del turno
@@ -48,7 +48,7 @@
 		(player ?p)
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
-		(identifier ?play-under ?char)
+		(identifier ?char ?play-under)
 		(data (create$ ?char position ?play-under PLAY CHARACTER P111-a-char-play#as-follower))
 	))
 )
@@ -56,11 +56,11 @@
 ; ACCIÓN: Jugar personaje 2
 (defrule a-char-play#under-fell (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
+		?e <- (object (is-a E-phase) (state EXEC) (reason turn $?))
     	(player ?p)
 		
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object (is-a E-modify) (state DONE) (reason $? PLAY CHARACTER $?)))
+		(not (object (is-a E-modify) (position ?e) (state DONE) (reason $? PLAY CHARACTER $?)))
 
 		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen necesaria para jugarlo)
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
@@ -84,7 +84,7 @@
 		(player ?p)
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
-		(identifier ?fell ?char)
+		(identifier ?char ?fell)
 		(data (create$ ?char position ?fell PLAY CHARACTER P111-a-char-play#under-fell))
 	))
 )
