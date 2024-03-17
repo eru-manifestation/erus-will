@@ -7,6 +7,7 @@
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
 	(multislot data (type ?VARIABLE) (default ?NONE))
+	(multislot reason (type SYMBOL) (default (create$ variable)))
 	(slot blocking (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
 )
 
@@ -23,7 +24,8 @@
 		(identifier PASS) 
 		(description "Pass") 
 		(event-def pass) 
-		(data (create$))))
+		(data (create$)))
+		(reason MAIN::a-pass))
 )
 
 
@@ -66,12 +68,12 @@
 				(retract ?action)
 			)
 			(case modify then
-				(E-modify (expand$ ?action:data))
+				(E-modify (expand$ ?action:data) (expand$ ?action:reason))
 			)
 			(case phase then
 				(make-instance (gen-name E-phase) of E-phase 
-					(reason (explode$ (nth$ 1 ?action:data)))
-					(data (rest$ ?action:data))
+					(reason ?action:reason)
+					(data ?action:data)
 				)
 			)
 			(case variable then

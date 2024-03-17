@@ -22,7 +22,7 @@
 		(initiator ?f)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?p))
-		(data (create$ "draw fell-move-4::a-player-draw"
-			target ?p / ammount 1))
+		(data (create$ target ?p / ammount 1))
+		(reason draw fell-move-4::a-player-draw)
 	))
 )

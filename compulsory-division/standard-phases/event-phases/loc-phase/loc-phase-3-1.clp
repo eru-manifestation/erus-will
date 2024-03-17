@@ -28,6 +28,7 @@
 		(event-def modify)
 		(description (sym-cat "Play additional minor item " ?item " under " ?char))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char PLAY ITEM loc-phase-3-1::play-additional-minor-item))
+		(data (create$ ?item position ?char))
+		(reason PLAY ITEM loc-phase-3-1::play-additional-minor-item)
 	))
 )

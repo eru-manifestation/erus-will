@@ -23,8 +23,7 @@
 		(event-def modify)
 		(description (sym-cat "Play long event resource " ?rle))
 		(identifier ?rle)
-		(data (create$ ?rle position (slot-default-value BASIC position)
-			PLAY R-LONG-EVENT P221::a-long-event-play
-		))
+		(data (create$ ?rle position (slot-default-value BASIC position)))
+		(reason PLAY R-LONG-EVENT P221::a-long-event-play)
 	))
 )

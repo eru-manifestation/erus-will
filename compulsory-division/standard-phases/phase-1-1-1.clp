@@ -49,7 +49,8 @@
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
 		(identifier ?char ?play-under)
-		(data (create$ ?char position ?play-under PLAY CHARACTER P111-a-char-play#as-follower))
+		(data (create$ ?char position ?play-under))
+		(reason PLAY CHARACTER P111-a-char-play#as-follower)
 	))
 )
 
@@ -74,8 +75,8 @@
 		; O es su lugar de nacimiento, o es RIVENDELL, o no es mago
 		(test (or 
 				(eq ?bp ?loc)
-				(eq ?loc [rivendell]); TODO: []?
-				(and (eq ?place HAVEN) (neq ?race WIZARD))
+				(eq ?loc [rivendell])
+				(and (eq ?place HAVEN) (or (eq (class ?char) GANDALF) (neq ?race WIZARD)))
 		))
 	)
 	=>
@@ -85,7 +86,8 @@
 		(event-def modify)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
 		(identifier ?char ?fell)
-		(data (create$ ?char position ?fell PLAY CHARACTER P111-a-char-play#under-fell))
+		(data (create$ ?char position ?fell))
+		(reason PLAY CHARACTER P111-a-char-play#under-fell)
 	))
 )
 
@@ -114,8 +116,8 @@
 		(event-def modify)
 		(description (sym-cat "Transfer item " ?i " from " ?disposer " to " ?receiver))
 		(identifier ?i ?receiver)
-		(data (create$ ?i position ?receiver
-			TRANSFER ITEM P111::a-item-transfer))
+		(data (create$ ?i position ?receiver))
+		(reason TRANSFER ITEM P111::a-item-transfer)
 	))
 )
 
@@ -138,8 +140,8 @@
 		(event-def modify)
 		(description (sym-cat "Store item " ?i " from " ?bearer " in " ?loc))
 		(identifier ?i ?loc)
-		(data (create$ ?i position (mpsymbol ?p) 
-			STORE ITEM P111::a-item-store))
+		(data (create$ ?i position (mpsymbol ?p)))
+		(reason STORE ITEM P111::a-item-store)
 	))
 )
 
@@ -163,7 +165,8 @@
 		(event-def modify)
 		(description (sym-cat "Discard character " ?char))
 		(identifier ?char (discardsymbol ?p))
-		(data (create$ ?char position (discardsymbol ?p) DISCARD CHARACTER P111::a-char-discard))
+		(data (create$ ?char position (discardsymbol ?p))) 
+		(reason DISCARD CHARACTER P111::a-char-discard)
 	))
 )
 
@@ -194,8 +197,8 @@
 		(event-def modify)
 		(description (sym-cat "Move " ?char " from " ?ini-fell " to " ?fell))
 		(identifier ?char ?fell)
-		(data (create$ ?char position ?fell
-			MOVE CHARACTER P111::a-char-move#change-fell))
+		(data (create$ ?char position ?fell))
+		(reason MOVE CHARACTER P111::a-char-move#change-fell)
 	))
 )
 
@@ -233,8 +236,8 @@
 		(event-def modify)
 		(description (sym-cat "Make " ?tobefollower " a follower of " ?headchar))
 		(identifier ?tobefollower ?headchar)
-		(data (create$ ?tobefollower position ?headchar
-			FOLLOW P111::a-char-follow))
+		(data (create$ ?tobefollower position ?headchar))
+		(reason FOLLOW P111::a-char-follow)
 	))
 )
 
@@ -268,7 +271,7 @@
 		(event-def modify)
 		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
 		(identifier ?follower ?fell)
-		(data (create$ ?follower position ?fell
-			UNFOLLOW P111::a-char-unfollow))
+		(data (create$ ?follower position ?fell))
+		(reason UNFOLLOW P111::a-char-unfollow)
 	))
 )

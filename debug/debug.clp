@@ -2,7 +2,8 @@
 ;(set-fact-duplication TRUE) ;TODO: eliminar el id del data-item, cuidado con los in
 ;(set-break <rule-name>)
 
-;(set-break fell-move-5::clock)
+(set-break loc-phase-2-1::clock)
+(set-break faction-play-3::influence-check)
 
 (bind ?*print-message* TRUE)
 ;(watch instances)
@@ -54,13 +55,12 @@
 
 ; (play-action player2 [draw2])
 
-; (play-action player1 PASS)
-; (play-action player1 [fellowship1] [barrow--downs])
-; (play-action player1 [fellowship1])
-; (play-action player2 PASS)
-; (play-action player1 [red-arrow1] [discard1])
-; (play-action player2 [wood--elves1] [discard2])
-; (play-action player1 [fellowship1])
-; (play-action player1 [attackable-barrow--downs1] [aragorn-ii1])
-; (play-action player1 [aragorn-ii1])
-; (play-action player1 PASS)
+(play-action player1 PASS)
+(play-action player1 [fellowship1] [bree])
+(play-action player1 [fellowship1])
+(play-action player1 [gandalf1] [discard1])
+(play-action player2 [saruman1] [discard2])
+(play-action player1 [fellowship1])
+(send [rangers-of-the-north1] put-position [hand1])
+(run)
+(play-action player1 [rangers-of-the-north1] [aragorn-ii1])

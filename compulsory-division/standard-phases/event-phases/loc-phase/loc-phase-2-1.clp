@@ -28,7 +28,8 @@
 		(event-def modify)
 		(description (sym-cat "Play minor item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char PLAY ITEM loc-phase-2-1::play-item#minor))
+		(data (create$ ?item position ?char))
+		(reason PLAY ITEM loc-phase-2-1::play-item#minor)
 	))
 )
 
@@ -51,8 +52,8 @@
 		(event-def modify)
 		(description (sym-cat "Play greater item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char 
-			PLAY ITEM loc-phase-2-1::play-item#greater))
+		(data (create$ ?item position ?char))
+		(reason PLAY ITEM loc-phase-2-1::play-item#greater)
 	))
 )
 
@@ -75,8 +76,8 @@
 		(event-def modify)
 		(description (sym-cat "Play major item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?loc)
-		(data (create$ ?item position ?char 
-			PLAY ITEM loc-phase-2-1::play-item#major))
+		(data (create$ ?item position ?char))
+		(reason PLAY ITEM loc-phase-2-1::play-item#major)
 	))
 )
 
@@ -99,8 +100,8 @@
 		(event-def modify)
 		(description (sym-cat "Play ally " ?ally " under " ?char " in " ?loc))
 		(identifier ?ally ?char)
-		(data (create$ ?ally position ?char
-			PLAY ALLY loc-phase-2-1::play-ally))
+		(data (create$ ?ally position ?char))
+		(reason PLAY ALLY loc-phase-2-1::play-ally)
 	))
 )
 
@@ -125,7 +126,7 @@
 		(event-def phase)
 		(description (sym-cat "Influence faction " ?faction " with " ?char " in " ?loc))
 		(identifier ?faction ?char)
-		(data (create$ "faction-play loc-phase-2-1::play-faction"
-			character ?char / faction ?faction)))
-	)
+		(data (create$ character ?char / faction ?faction))
+		(reason faction-play loc-phase-2-1::play-faction)
+	))
 )

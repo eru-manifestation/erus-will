@@ -164,6 +164,10 @@ START-resistance-check
 resistance-check-1
 FALSE
 
+START-ring
+ring-1
+FALSE
+
 )
 	?*jumps* = 0
 )
@@ -199,6 +203,7 @@ FALSE
         (case draw-0 then "Robar las cartas necesarias")
         (case corruption-check-1 then "Chequeo de corrupcion")
         (case resistance-check-1 then "Chequeo de resistencia")
+        (case ring-1 then "Examinar anillo")
         (case dices-1 then "Tirada de dados")
         (case fell-move-1 then "Revelar movimiento")
         (case fell-move-2 then "Calcular limite de adversidades, cartas por robar e itinerario")

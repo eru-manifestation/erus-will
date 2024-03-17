@@ -24,8 +24,8 @@
 		(initiator ?f)
 		(description (sym-cat "Ejecutar golpe en " ?char))
 		(identifier ?char)
-		(data (create$ "strike attack-4::a-strike"
-			target ?char / attackable ?at))
+		(data (create$ target ?char / attackable ?at))
+		(reason strike attack-4::a-strike)
 		(blocking TRUE)
 	))
 )

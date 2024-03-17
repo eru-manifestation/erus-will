@@ -51,35 +51,35 @@
 	(message "Bajar seguidor " ?follower " antes de descartar el personaje")
 )
 
-;   TODO: manejo de elecciones en intercepcion
-(defrule MAIN::EI-a-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
-	(logical
-        ; En el caso de los EI's, la constriccion E-modify con EXEC funciona como only-actions
-		?e <- (object (is-a E-modify) (state EXEC) (target ?char)
-            (reason $? DISCARD CHARACTER $?))
-		(object (is-a ITEM) (position ?char) (name ?item))
+; ;   TODO: manejo de elecciones en intercepcion
+; (defrule MAIN::EI-a-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
+; 	(logical
+;         ; En el caso de los EI's, la constriccion E-modify con EXEC funciona como only-actions
+; 		?e <- (object (is-a E-modify) (state EXEC) (target ?char)
+;             (reason $? DISCARD CHARACTER $?))
+; 		(object (is-a ITEM) (position ?char) (name ?item))
 
-;   TODO: revisar las condiciones
-		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
-		(in (over ?fell) (under ?char))
+; ;   TODO: revisar las condiciones
+; 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+; 		(in (over ?fell) (under ?char))
 
-		(object (is-a CHARACTER) (name ?newOwner&:(neq ?char ?newOwner))
-			(state UNTAPPED | TAPPED) (player ?p)
-		)
-		(in (over ?fell) (under ?newOwner))
+; 		(object (is-a CHARACTER) (name ?newOwner&:(neq ?char ?newOwner))
+; 			(state UNTAPPED | TAPPED) (player ?p)
+; 		)
+; 		(in (over ?fell) (under ?newOwner))
 
-        (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-a-reassign-objects)))
-	)
-	=>
-	(assert (action 
-		(player ?p)
-		(event-def modify)
-		(description (sym-cat "Transfer item " ?item " from " ?char " to " ?newOwner " before discarding it"))
-		(identifier ?item ?newOwner)
-		(data (create$ ?item position ?newOwner
-			TRANSFER ITEM MAIN::EI-a-reassign-objects))
-	))
-)
+;         (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-a-reassign-objects)))
+; 	)
+; 	=>; TODO: ACTUALIZAR
+; 	(assert (action 
+; 		(player ?p)
+; 		(event-def modify)
+; 		(description (sym-cat "Transfer item " ?item " from " ?char " to " ?newOwner " before discarding it"))
+; 		(identifier ?item ?newOwner)
+; 		(data (create$ ?item position ?newOwner
+; 			TRANSFER ITEM MAIN::EI-a-reassign-objects))
+; 	))
+; )
 
 
 (defrule MAIN::EI-creature-combat (declare (auto-focus TRUE) (salience ?*E-intercept*))
@@ -195,8 +195,9 @@
 
 
 (defrule MAIN::EI-gain-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    (object (is-a E-phase) (reason faction-play $?) (state OUT) (res SUCCESSFUL)
-        (data $? char ?char $? faction ?faction $?))
+    ?e <- (object (is-a E-phase) (reason faction-play $?) (state OUT) (res SUCCESSFUL)
+        (data $? character ?char $?) (name ?en))
+    (object (name ?en) (data $? faction ?faction $?))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-gain-faction)))
     =>
     (E-modify ?faction position (mpsymbol (send ?faction get-player))
@@ -206,8 +207,9 @@
 
 
 (defrule MAIN::EI-discard-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    (object (is-a E-phase) (reason faction-play $?) (state OUT|DEFUSED) (res ~SUCCESSFUL)
-        (data $? char ?char $? faction ?faction $?))
+    ?e <- (object (is-a E-phase) (reason faction-play $?) (state OUT|DEFUSED) (res ~SUCCESSFUL)
+        (data $? character ?char $?) (name ?en))
+    (object (name ?en) (data $? faction ?faction $?))
     (not (object (is-a EVENT) (position ?e) (reason $? MAIN::EI-discard-faction)))
     =>
     (E-modify ?faction position (discardsymbol (send ?faction get-player))

@@ -25,8 +25,8 @@
 		(event-def modify)
 		(description (sym-cat "Play creature " ?creature " to attack " ?fell " in " ?region " region"))
 		(identifier ?creature ?fell)
-		(data (create$ ?creature position ?fell 
-			PLAY CREATURE REGION ?region ?n2 fell-move-6::a-play-creature#by-regions))
+		(data (create$ ?creature position ?fell))
+		(reason PLAY CREATURE REGION ?region ?n2 fell-move-6::a-play-creature#by-regions)
 	))
 )
 
@@ -48,7 +48,7 @@
 		(event-def modify)
 		(description (sym-cat "Play creature " ?creature " to attack " ?fell " in " ?place " place"))
 		(identifier ?creature ?fell)
-		(data (create$ ?creature position ?fell
-			PLAY CREATURE PLACE ?place fell-move-6::a-play-creature#by-place))
+		(data (create$ ?creature position ?fell))
+		(reason PLAY CREATURE PLACE fell-move-6::a-play-creature#by-place)
 	))
 )

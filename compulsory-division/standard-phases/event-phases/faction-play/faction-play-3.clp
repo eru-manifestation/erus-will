@@ -16,7 +16,7 @@
 
 
 (defrule influence-check
-	(object (is-a E-phase) (reason dices FACTION-INFLUENCE $?) (state DONE) (res ?d))
+	(object (is-a E-phase) (reason dices FACTION-INFLUENCE $?) (state DONE) (res ?dices))
 	(data (phase faction-play) (data faction ?faction))
 	(data (phase faction-play) (data character ?char))
 	=>

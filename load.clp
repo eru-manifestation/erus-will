@@ -4,15 +4,15 @@
     (and
         (load* "compulsory-division/main-utilities/classes/object-prelude.clp")
         (load* "compulsory-division/main-utilities/classes/objects.clp")
+
+        ;events
+        (load* "compulsory-division/main-utilities/classes/event-class.clp")
         
         ;locations
         (load* "compulsory-division/main-utilities/classes/locations.clp")
 
         ;other cards
         (load* "compulsory-division/main-utilities/classes/starter-deck.clp")
-        
-        ;events
-        (load* "compulsory-division/main-utilities/classes/event-class.clp")
     )
 )
 
@@ -53,6 +53,10 @@
         
         ;data items
         (load* "compulsory-division/main-utilities/data-items.clp")
+
+        ;other card's rules
+        (load* "compulsory-division/main-utilities/starter-deck-rules.clp")
+        
     )
 )
 
@@ -91,6 +95,8 @@
 
         (load* "compulsory-division/standard-phases/event-phases/dices/dices-1.clp")
 
+        (load* "compulsory-division/standard-phases/event-phases/ring/ring-1.clp")
+
         (load* "compulsory-division/standard-phases/event-phases/standarize-hand/standarize-hand-0.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-1-1.clp")
@@ -98,6 +104,8 @@
         (load* "compulsory-division/standard-phases/event-phases/loc-phase/loc-phase-3-1.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-1.clp")
+        (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-2.clp")
+        (load* "compulsory-division/standard-phases/event-phases/faction-play/faction-play-3.clp")
 
         (load* "compulsory-division/standard-phases/event-phases/combat/combat-1.clp")
         (load* "compulsory-division/standard-phases/event-phases/combat/combat-2.clp")

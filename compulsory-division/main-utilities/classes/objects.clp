@@ -96,12 +96,16 @@
 	(slot birthplace (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 	(slot influence (visibility public) (type INTEGER) (default 0) (access read-write))
 	(slot mind (visibility public) (type INTEGER) (default 0) (access read-write))
+	(multislot skills (visibility public) (type SYMBOL) (default SAGE) (access read-write)
+		(allowed-symbols WARRIOR SCOUT RANGER SAGE DIPLOMAT))
 	(slot race (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols DUNEDAIN ELF DWARF HOBBIT MAN WIZARD))
 	(slot corruption (visibility public) (type INTEGER) (default 0) (access read-write))
 )
 
 (defclass MAIN::ALLY (is-a MP-ABLE WOUNDABLE RESOURCE)
+	(multislot skills (visibility public) (type SYMBOL) (default SAGE) (access read-write)
+		(allowed-symbols WARRIOR SCOUT RANGER SAGE DIPLOMAT))
 	(multislot playable-places (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 )
 
@@ -115,6 +119,8 @@
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
 (defclass MAIN::FACTION(is-a MP-ABLE RESOURCE)
+	(slot race (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
+		(allowed-symbols DUNEDAIN ELF DWARF HOBBIT MAN SPECIAL ENT EAGLE WOSE))
 	(multislot playable-places (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 	(slot influence-check (visibility public) (type INTEGER) (default ?NONE) (access initialize-only))
 	(multislot influence-modifiers (visibility public) (type ?VARIABLE) (default ?NONE) (access initialize-only) 
@@ -137,8 +143,16 @@
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
 (defclass MAIN::GREATER-ITEM(is-a ITEM))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
+(defclass MAIN::GOLD-RING(is-a ITEM)
+	(slot magic-ring (visibility public) (type INTEGER) (default ?NONE))
+	(slot dwarven-ring (visibility public) (type INTEGER) (default ?NONE))
+	(slot one-ring (visibility public) (type INTEGER) (default ?NONE))
+)
+
 (defclass MAIN::SPECIAL-ITEM(is-a ITEM))
-(defclass MAIN::GOLD-RING(is-a ITEM))
+(defclass MAIN::MAGIC-RING(is-a SPECIAL-ITEM))
+(defclass MAIN::DWARVEN-RING(is-a SPECIAL-ITEM))
+(defclass MAIN::THE-ONE-RING(is-a SPECIAL-ITEM))
 
 (deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then

@@ -22,7 +22,7 @@
 		(initiator ?f)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?enemy))
-		(data (create$ "draw fell-move-5::a-enemy-draw"
-			draw ?enemy))
+		(data (create$ draw ?enemy))
+		(reason draw fell-move-5::a-enemy-draw)
 	))
 )

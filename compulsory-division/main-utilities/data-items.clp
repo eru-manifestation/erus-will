@@ -261,7 +261,7 @@
 
 
 ; faction-play-1
-(defrule MAIN-DIP-influence-faction-race (declare (auto-focus TRUE) (salience ?*universal-rules*))
+(defrule MAIN::DIP-influence-faction-race (declare (auto-focus TRUE) (salience ?*universal-rules*))
     (logical
         ?e <- (object (is-a E-phase) (state EXEC) (reason faction-play $?))
         (object (is-a E-phase) (position ?e) (reason dices FACTION-INFLUENCE $?) (state DONE) (name ?d))

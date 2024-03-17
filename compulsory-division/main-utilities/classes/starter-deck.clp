@@ -9,6 +9,7 @@
     (slot influence (source composite) (default 3))
     (slot mind (source composite) (default 9))
     (slot race (source composite) (default DUNEDAIN))
+    (multislot skills (source composite) (default WARRIOR SCOUT RANGER))
     (slot mp (source composite) (default 3))
     (slot prowess (source composite) (default 6))
     (slot body (source composite) (default 9))
@@ -22,6 +23,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default DUNEDAIN))
+    (multislot skills (source composite) (default WARRIOR))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 6))
@@ -35,6 +37,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default DWARF))
+    (multislot skills (source composite) (default WARRIOR SCOUT))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 3))
@@ -49,6 +52,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
     (slot race (source composite) (default HOBBIT))
+    (multislot skills (source composite) (default SCOUT))
     (slot corruption (source composite) (default -2))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 1))
@@ -63,6 +67,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
     (slot race (source composite) (default DUNEDAIN))
+    (multislot skills (source composite) (default WARRIOR))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
     (slot prowess (source composite) (default 4))
@@ -77,6 +82,7 @@
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 5))
     (slot race (source composite) (default DUNEDAIN))
+    (multislot skills (source composite) (default WARRIOR RANGER))
     (slot mp (source composite) (default 2))
     (slot prowess (source composite) (default 5))
     (slot body (source composite) (default 8))
@@ -90,6 +96,7 @@
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
     (slot race (source composite) (default MAN))
+    (multislot skills (source composite) (default WARRIOR RANGER))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 3))
     (slot body (source composite) (default 8))
@@ -103,12 +110,12 @@
     (slot birthplace (source composite) (default [rivendell]))
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
+    (multislot skills (source composite) (default WARRIOR SCOUT SAGE DIPLOMAT))
     (slot race (source composite) (default WIZARD))
     (slot corruption (source composite) (default -1))
     (slot prowess (source composite) (default 6))
     (slot body (source composite) (default 9))
 )
-;TODO: hacer que se pueda jugar por bp en cualquier lugar
 
 
 ; G44 TW036 Personaje Erkenbrand
@@ -117,6 +124,7 @@
     (slot birthplace (source composite) (default [edoras]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 4))
+    (multislot skills (source composite) (default WARRIOR))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 5))
@@ -126,12 +134,14 @@
 
 
 ; PERSONAJES SARUMAN
+; TODO: investigar que significa influencia directa sobre elfos
 ; S01 TW046 Personaje Gimli
 (defclass GIMLI (is-a CHARACTER)
     (slot instance-# (source composite))
     (slot birthplace (source composite) (default [iron-hill-dwarf--hold]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
+    (multislot skills (source composite) (default WARRIOR DIPLOMAT))
     (slot race (source composite) (default DWARF))
     (slot mp (source composite) (default 2))
     (slot prowess (source composite) (default 5))
@@ -145,6 +155,7 @@
     (slot birthplace (source composite) (default [thranduils-halls]))
     (slot influence (source composite) (default 2))
     (slot mind (source composite) (default 6))
+    (multislot skills (source composite) (default WARRIOR DIPLOMAT))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 2))
     (slot prowess (source composite) (default 5))
@@ -158,6 +169,7 @@
     (slot birthplace (source composite) (default [rivendell]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
+    (multislot skills (source composite) (default WARRIOR RANGER))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 5))
@@ -178,6 +190,8 @@
     (slot body (source composite) (default 9))
 )
 
+; TODO: añadir caracteristicas propias desde aqui
+; TODO: gestionar unicidad
 
 ; S19 TW005 Personaje Saruman
 ; S32 TW005 Personaje Saruman
@@ -453,6 +467,7 @@
 ; FACCIONES DE GANDALF
 ; G08 TW102 FacciÃ³n Montaraces del Norte
 (defclass RANGERS-OF-THE-NORTH (is-a FACTION)
+    (slot race (source composite) (default DUNEDAIN))
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$ [bree])))
     (slot influence-check (source composite) (default 9))
@@ -463,6 +478,7 @@
 
 ; G43 TW103 FacciÃ³n Jinetes de Rohan
 (defclass RIDERS-OF-ROHAN (is-a FACTION)(slot instance-# (source composite))
+    (slot race (source composite) (default MAN))
     (multislot playable-places (source composite) (default (create$ [edoras])))
     (slot influence-check (source composite) (default 9))
     (multislot influence-modifiers (source composite) (default HOBBIT 1 DUNEDAIN 1))
@@ -472,6 +488,7 @@
 
 ; G53 TW106 FacciÃ³n Torre de Guardia de Minas Tirith
 (defclass TOWER-GUARD-OF-MINAS-TIRITH (is-a FACTION)(slot instance-# (source composite))
+    (slot race (source composite) (default DUNEDAIN))
     (multislot playable-places (source composite) (default (create$ [minas-tirith])))
     (slot influence-check (source composite) (default 7))
     (multislot influence-modifiers (source composite) (default DUNEDAIN 1))
@@ -483,6 +500,7 @@
 ; FACCIONES DE SARUMAN
 ; S15 TW086 FacciÃ³n Dundelinos
 (defclass DUNLENDINGS (is-a FACTION)
+    (slot race (source composite) (default MAN))
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$ [dunnish-clan--hold])))
     (slot influence-check (source composite) (default 9))
@@ -493,6 +511,7 @@
 
 ; S27 TW108 FacciÃ³n Elfos del Bosque
 (defclass WOOD--ELVES (is-a FACTION)
+    (slot race (source composite) (default ELF))
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$ [thranduils-halls])))
     (slot influence-check (source composite) (default 8))
@@ -503,6 +522,7 @@
 
 ; S53 TW089 FacciÃ³n Ents de Fangorn
 (defclass ENTS-OF-FANGORN (is-a FACTION)
+    (slot race (source composite) (default ENT))
     (slot instance-# (source composite))
     (multislot playable-places (source composite) (default (create$ [wellinghall])))
     (slot influence-check (source composite) (default 9))

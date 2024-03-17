@@ -25,8 +25,8 @@
 		(event-def phase)
 		(description (sym-cat "Begin location phase for " ?fell))
 		(identifier ?fell)
-		(data (create$ "loc-phase P4::a-loc-phase"
-			fellowship ?fell))
+		(data (create$ fellowship ?fell))
+		(reason loc-phase P4::a-loc-phase)
 		(blocking TRUE)
 	))
 )
