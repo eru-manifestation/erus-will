@@ -192,6 +192,7 @@
 
 ; TODO: añadir caracteristicas propias desde aqui
 ; TODO: gestionar unicidad
+; TODO: seguir añadiendo skills
 
 ; S19 TW005 Personaje Saruman
 ; S32 TW005 Personaje Saruman
