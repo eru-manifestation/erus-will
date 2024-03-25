@@ -15,7 +15,7 @@
 )
 
 (defrule execute-resistance-check
-	(data (phase resistance-check) (data assaulted ?as))
+	(data (phase resistance-check) (data target ?as))
 	(object (is-a E-phase) (reason dices RESISTANCE-ROLL $?) (state DONE) (res ?d))
 	=>
 	(if (< ?d (send ?as get-body)) then

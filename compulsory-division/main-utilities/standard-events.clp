@@ -93,7 +93,7 @@
 	(message "Se inicia el ataque de " ?creature " a " ?fell)
 )
 
-
+; TODO: rediseñar
 (defrule MAIN::EI-manage-tapped-loc (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a E-modify) (state OUT) (slot position))
     (object (is-a LOCATION) (name ?loc) (state TAPPED))

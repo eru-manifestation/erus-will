@@ -29,7 +29,7 @@
 		(if (neq ?at-body (slot-default-value ATTACKABLE body)) then
 			(make-instance (gen-name E-phase) of E-phase
 				(reason resistance-check strike-5::execute-strike#enemy-res-check)
-				(data attacker ?char / assaulted ?at))
+				(data attacker ?char / target ?at))
 			else
 			(complete DEFEATED)
 		)
@@ -37,7 +37,7 @@
 		(if (> ?at-prowess (+ ?d ?prowess)) then
 			(make-instance (gen-name E-phase) of E-phase
 				(reason resistance-check strike-5::execute-strike#defender-res-check)
-				(data attacker ?at / assaulted ?char))
+				(data attacker ?at / target ?char))
 			else
 			(complete PARTIALLY-UNDEFEATED)
 		)

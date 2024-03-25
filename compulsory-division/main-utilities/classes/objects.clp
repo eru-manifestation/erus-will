@@ -154,6 +154,8 @@
 (defclass MAIN::DWARVEN-RING(is-a SPECIAL-ITEM))
 (defclass MAIN::THE-ONE-RING(is-a SPECIAL-ITEM))
 
+(defclass MAIN::PALANTIR(is-a GREATER-ITEM))
+
 (deffunction MAIN::enemy (?player)
 	(if (eq ?player [player1]) then
 		[player2]

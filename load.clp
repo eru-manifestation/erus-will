@@ -11,8 +11,6 @@
         ;locations
         (load* "compulsory-division/main-utilities/classes/locations.clp")
 
-        ;other cards
-        (load* "compulsory-division/main-utilities/classes/starter-deck.clp")
     )
 )
 
@@ -24,9 +22,11 @@
 
         ;interactions and debug
         (load* "compulsory-division/main-utilities/user-interaction/interaction.clp")
+    )
+)
 
-        (load-classes)
-
+(deffunction load-standard ()
+    (and
         ;game-settings
         (load* "compulsory-division/main-utilities/game-settings/game-settings.clp")
 
@@ -54,13 +54,10 @@
         ;data items
         (load* "compulsory-division/main-utilities/data-items.clp")
 
-        ;other card's rules
-        (load* "compulsory-division/main-utilities/starter-deck-rules.clp")
-        
     )
 )
 
-(deffunction load-standard()
+(deffunction load-phases()
     (and
         (load* "compulsory-division/standard-phases/start-game-0.clp")
         (load* "compulsory-division/standard-phases/start-game-1.clp")
@@ -134,7 +131,13 @@
     (set-strategy breadth)
     (and
         (load-utilities)
+        (load-classes)
+        ;other cards
+        (load* "compulsory-division/main-utilities/classes/starter-deck.clp")
         (load-standard)
+        (load-phases)
+        ;other card's rules
+        ; TODO: uncomment (load* "compulsory-division/main-utilities/starter-deck-rules.clp")
     )
 )
 

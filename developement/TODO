@@ -198,3 +198,34 @@ Gestionar correctamente el borrado de eventos y fases eventuales terminadas, de 
 Representar las fases eventuales como posicionamiento espacial en el tablero
 
 Nota: El poder de un personaje también se puede modificar al jugar ciertas cartas, pero solo se puede jugar una carta que requierauna habilidad en concreto (por ejemplo, una carta para Guerreros) contra un mismo golpe. Hacerlo mediante info items de sustraccion de caracter 
+
+
+
+
+
+PREGUNTAR:
+
+GRAN ESCUDO DE ROHAN:
+Cuándo se activa, después del golpe, justo cuando se está por girar el personaje o cuando se juegan recursos para modificar el golpe.
+
+GANDALF Y SARUMAN:
+Cuándo pueden utilizar sus habilidades respectivamente? Pueden usarlas en cualquier momento, cuando no haya nada mas ocurriendo, en una fase concreta, o es que hay algún momento en el que se puedan ejecutar acciones extra de ese estilo en cada fase.
+
+CELEBORN:
+Cómo funciona la habilidad que le da influencia sobre Galadriel? Porque parece que ni con el bufo de influencia que le da, puede controlarla
+
+GIMLI:
+Cómo se gestiona eso de la influencia sobre los elfos? A qué se refiere? Es cómo Celeborn?
+
+GOLLUM:
+Cuando se puede girar para ejecutar su acción con el anillo único.
+
+FUNCIONAMIENTO DEL PROWESS DE LOS OBJETOS:
+Si tengo una pieza de equipamiento que me potencia el ataque en 1, pero al jugar digamos Golpe Arriesgado, que me lo potencia en 3, al sobrepasar con esos 3 el máximo del primer equipamiento, debo sustraer el 1 de ataque que me proporcionaba? O debo dejarlo porque considere que sólo se aplica cuando se juega? Cómo funciona eso del máximo si hay unos cuántos.
+
+AROUSE MINIONS:
+Cuando se puede jugar, como modificador del ataque automático?
+
+
+CAMBIAR ESTO: TODO:
+El poder de un personaje también se puede modificar al jugar ciertas cartas, pero solo se puede  jugar una carta que requiera una habilidad en concreto (por ejemplo, una carta para Guerrero)

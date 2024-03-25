@@ -183,6 +183,7 @@
     (slot birthplace (source composite) (default [bag-end]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 4))
+    (multislot skills (source composite) (default SCOUT))
     (slot race (source composite) (default HOBBIT))
     (slot corruption (source composite) (default -2))
     (slot mp (source composite) (default 1))
@@ -190,9 +191,6 @@
     (slot body (source composite) (default 9))
 )
 
-; TODO: añadir caracteristicas propias desde aqui
-; TODO: gestionar unicidad
-; TODO: seguir añadiendo skills
 
 ; S19 TW005 Personaje Saruman
 ; S32 TW005 Personaje Saruman
@@ -201,11 +199,11 @@
     (slot birthplace (source composite) (default [isengard]))
     (slot influence (source composite) (default 10))
     (slot mind (source composite) (default 0))
+    (multislot skills (source composite) (default SCOUT RANGER SAGE DIPLOMAT))
     (slot race (source composite) (default WIZARD))
     (slot prowess (source composite) (default 6))
     (slot body (source composite) (default 9))
 )
-
 
 ; S23 TW008 Personaje Annalena
 (defclass ANNALENA (is-a CHARACTER)     
@@ -213,12 +211,12 @@
     (slot birthplace (source composite) (default [edhellond]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 3))
+    (multislot skills (source composite) (default SCOUT SAGE))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 3))
     (slot body (source composite) (default 8))
 )
-
 
 ; S36 TW013 Personaje Bardo el Arquero
 (defclass BARD-BOWMAN (is-a CHARACTER)     
@@ -226,6 +224,7 @@
     (slot birthplace (source composite) (default [lake--town]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 2))
+    (multislot skills (source composite) (default SCOUT))
     (slot race (source composite) (default MAN))
     (slot mp (source composite) (default 0))
     (slot prowess (source composite) (default 3))
@@ -239,11 +238,14 @@
     (slot birthplace (source composite) (default [lorien]))
     (slot influence (source composite) (default 1))
     (slot mind (source composite) (default 6))
+    (multislot skills (source composite) (default WARRIOR SAGE))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 2))
     (slot prowess (source composite) (default 6))
     (slot body (source composite) (default 9))
 )
+; TODO: habilidad con respecto a Galadriel
+
 
 
 ; S51 TW032 Personaje Elrohir
@@ -252,6 +254,7 @@
     (slot birthplace (source composite) (default [rivendell]))
     (slot influence (source composite) (default 0))
     (slot mind (source composite) (default 4))
+    (multislot skills (source composite) (default WARRIOR RANGER))
     (slot race (source composite) (default ELF))
     (slot mp (source composite) (default 1))
     (slot prowess (source composite) (default 5))
@@ -278,6 +281,7 @@
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 0))
 )
+; TODO: gestionar no duplicidad
 
 
 ; G21 TW154 Objeto Pergamino de Isildur
@@ -379,10 +383,15 @@
 )
 
 
-; G51 TW197 Recurso de Suceso Fuerza de los Medianos
 ; G56 TW196 Recurso de Suceso Sigilo de los Medianos
-; G20 TW197 Recurso de Suceso Fuerza de los Medianos
 ; S22 TW196 Recurso de Suceso Sigilo de los Medianos
+(defclass HALFLING-STEALTH (is-a R-SHORT-EVENT)
+    (slot instance-# (source composite))
+)
+
+
+; G51 TW197 Recurso de Suceso Fuerza de los Medianos
+; G20 TW197 Recurso de Suceso Fuerza de los Medianos
 ; S35 TW197 Recurso de Suceso Fuerza de los Medianos
 ; S47 TW197 Recurso de Suceso Fuerza de los Medianos
 (defclass HALFLING-STRENGTH (is-a R-SHORT-EVENT) 
@@ -403,6 +412,7 @@
 (defclass FORD (is-a R-SHORT-EVENT) 
     (slot instance-# (source composite))
 )
+; TODO: crear la division de fases para que se pueda descomentar su implementacion
 
 
 ; G55 TW171 Recurso de Suceso Puente
@@ -441,6 +451,7 @@
 (defclass DARK-QUARRELS (is-a R-SHORT-EVENT)
     (slot instance-# (source composite))
 )
+; TODO: condicion de las Puertas de la Mañana
 
 
 
@@ -643,6 +654,9 @@
 (defclass RIVER (is-a A-SHORT-EVENT)
     (slot instance-# (source composite))
 )
+
+; TODO: añadir caracteristicas propias desde aqui
+; TODO: gestionar unicidad
 
 
 ; G36 TW338 Adversidad de Suceso Los Sirvientes se Agitan
