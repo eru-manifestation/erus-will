@@ -92,8 +92,7 @@ function modifyElement(announce){
         let elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
         elementAtt.textContent = announce.value;
     };
-    // TODO: cambiar
-    if (announce.id.includes("e-phase") || announce.id.includes("e-modify")){
+    if (document.getElementById(announce.id).classList.contains("event")){
         msDelay = 300;
         animationFunction = () => {
             let element = document.getElementById(announce.id);
@@ -215,12 +214,8 @@ function enableChoices(){
     );
 }
 
-
-function animate(announces){
-    let accumDelay = 0;
-    let operationData = {msDelay : 0, animationFunction : ()=>{}};;
-
-    announces.forEach((announce) => {
+function animateAnnounce(announce){
+    return new Promise((resolve) =>{
         if(announce!=null)
             switch(announce.operation){
                 case "create":
@@ -261,9 +256,15 @@ function animate(announces){
         else {
             operationData = {msDelay : 20, animationFunction : enableChoices};
         }
-        setTimeout(operationData.animationFunction, accumDelay);
-        accumDelay += operationData.msDelay;
-    });
+        operationData.animationFunction();
+        setTimeout(resolve, operationData.msDelay);
+    })
+}
+
+async function animate(announces){
+    for await (announce of announces){
+        await animateAnnounce(announce);
+    }
 }
 
 function closeUpListener(e){
