@@ -294,6 +294,7 @@
 
 ; G27 TW130 Objeto Gran Escudo de Rohan
 (defclass GREAT-SHIELD-OF-ROHAN (is-a MAJOR-ITEM)
+	(slot unique (source composite) (default TRUE))
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 2))
     (slot mp (source composite) (default 2))
@@ -304,6 +305,7 @@
 
 ; G41 TW129 Objeto Glamdring
 (defclass GLAMDRING (is-a MAJOR-ITEM)
+	(slot unique (source composite) (default TRUE))
     (slot instance-# (source composite))
     (slot corruption (source composite) (default 1))
     (slot mp (source composite) (default 2))
@@ -547,6 +549,7 @@
 ; ADVERSIDADES DE GANDALF
 ; G12 TW258 Adversidad Criatura Berto (BÃ»rat)
 (defclass BERT-BURAT (is-a CREATURE) 
+	(slot unique (source composite) (default TRUE))
     (slot instance-# (source composite))
     (slot race (source composite) (default TROLL))
     (slot regions (source composite) (default (create$ WILDERNESS 1 SHADOW-LAND 1))) 
@@ -613,6 +616,7 @@
 
 ; G28 TW302 Adversidad Criatura Guille (WÃ»luag)
 (defclass WILLIAM-WULUAG (is-a CREATURE) 
+	(slot unique (source composite) (default TRUE))
     (slot instance-# (source composite))
     (slot race (source composite) (default TROLL))
     (slot regions (source composite) (default (create$ WILDERNESS 1 SHADOW-LAND 1 DARK-LAND 1))) 

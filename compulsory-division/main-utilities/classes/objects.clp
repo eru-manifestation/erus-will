@@ -64,7 +64,8 @@
 (defclass MAIN::data-item-remove (is-a data-item))
 
 ; CLASES CONCRETAS
-(defclass MAIN::CARD (is-a STATABLE BASIC))
+(defclass MAIN::CARD (is-a STATABLE BASIC)
+	(slot unique (visibility public) (type SYMBOL) (default FALSE) (access initialize-only) (allowed-symbols TRUE FALSE)))
 
 (defclass MAIN::RESOURCE (is-a OWNABLE CARD))
 (defclass MAIN::ADVERSITY (is-a OWNABLE CARD))
@@ -96,6 +97,7 @@
 )
 
 (defclass MAIN::CHARACTER (is-a ATTACKABLE MP-ABLE WOUNDABLE OWNABLE CARD)
+	(slot unique (source composite) (default TRUE))
 	(slot birthplace (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
 	(slot influence (visibility public) (type INTEGER) (default 0) (access read-write))
 	(slot mind (visibility public) (type INTEGER) (default 0) (access read-write))
@@ -107,6 +109,7 @@
 )
 
 (defclass MAIN::ALLY (is-a MP-ABLE WOUNDABLE RESOURCE)
+	(slot unique (source composite) (default TRUE))
 	(multislot skills (visibility public) (type SYMBOL) (default SAGE) (access read-write)
 		(allowed-symbols WARRIOR SCOUT RANGER SAGE DIPLOMAT))
 	(multislot playable-places (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
@@ -122,6 +125,7 @@
 (defclass MAIN::A-SHORT-EVENT (is-a ADVERSITY))
 
 (defclass MAIN::FACTION(is-a MP-ABLE RESOURCE)
+	(slot unique (source composite) (default TRUE))
 	(slot race (visibility public) (type SYMBOL) (default ?NONE) (access initialize-only) 
 		(allowed-symbols DUNEDAIN ELF DWARF HOBBIT MAN SPECIAL ENT EAGLE WOSE))
 	(multislot playable-places (visibility public) (type INSTANCE-NAME) (default ?NONE) (access initialize-only))
@@ -144,7 +148,8 @@
 )
 
 (defclass MAIN::MINOR-ITEM(is-a ITEM))
-(defclass MAIN::GREATER-ITEM(is-a ITEM))
+(defclass MAIN::GREATER-ITEM(is-a ITEM)
+	(slot unique (source composite) (default TRUE)))
 (defclass MAIN::MAJOR-ITEM(is-a ITEM))
 (defclass MAIN::GOLD-RING(is-a ITEM)
 	(slot magic-ring (visibility public) (type INTEGER) (default ?NONE))
@@ -154,8 +159,10 @@
 
 (defclass MAIN::SPECIAL-ITEM(is-a ITEM))
 (defclass MAIN::MAGIC-RING(is-a SPECIAL-ITEM))
-(defclass MAIN::DWARVEN-RING(is-a SPECIAL-ITEM))
-(defclass MAIN::THE-ONE-RING(is-a SPECIAL-ITEM))
+(defclass MAIN::DWARVEN-RING(is-a SPECIAL-ITEM)
+	(slot unique (source composite) (default TRUE)))
+(defclass MAIN::THE-ONE-RING(is-a SPECIAL-ITEM)
+	(slot unique (source composite) (default TRUE)))
 
 (defclass MAIN::PALANTIR(is-a GREATER-ITEM))
 

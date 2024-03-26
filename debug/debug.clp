@@ -63,6 +63,6 @@
 (play-action player2 [saruman1] [discard2])
 (play-action player1 [fellowship1])
 (play-action player1 [attackable-barrow--downs] [kili1])
-(defmessage-handler EP-attack put-strikes after ($?any) (message ?any))
 ;(play-action player1 [kili1])
 ;(play-action player1 [kili1])
+(E-play [gandalf1] [fellowship1] because)

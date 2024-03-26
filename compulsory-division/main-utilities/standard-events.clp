@@ -250,4 +250,22 @@
     (message ?t " abandona la partida por haberse dejado dominar por la corrupcion")
 )
 
+
+(defrule MAIN::EI-unique (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-play) (state IN) (target ?t))
+    (object (is-a CARD) (name ?t) (unique TRUE))
+    (exists 
+        (object (is-a STACK) (player ?p) (name ?hand&:(eq ?hand (handsymbol ?p))))
+        (object (is-a STACK) (player ?p) (name ?draw&:(eq ?draw (drawsymbol ?p))))
+        (object (is-a STACK) (player ?p) (name ?discard&:(eq ?discard (discardsymbol ?p))))
+        (object (is-a E-play) (state DONE) (target ?c2))
+        (object (is-a CARD) (unique TRUE) (name ?c2&:(eq (class ?c2) (class ?t)))
+            (position ~?hand&~?draw&~?discard))
+    )
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-unique)))
+    =>
+    (E-cancel MAIN::EI-unique)
+    (message ?t " no se puede volver a jugar, es una carta unica que ya ha aparecido")
+)
+
 ;TODO: Manejar objetos al destruir un personaje
