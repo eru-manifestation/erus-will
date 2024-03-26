@@ -8,31 +8,22 @@
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
-(defrule init-strikes
-	(data (phase attack) (data attackable ?at))
-	=>
-	(loop-for-count (?i (send ?at get-strikes)) 
-		(assert (data (phase attack) (data unasigned-strike ?i)))
-	)
-)
 
 (defrule a-defender-select-strike (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason attack $?))
-		(data (phase attack) (data fellowship ?fell))
-		(data (phase attack) (data attackable ?at))
-		?f <- (data (phase attack) (data unasigned-strike ?))
+		(object (is-a EP-attack) (state EXEC) (fellowship ?fell) (attackable ?at) (strikes $?strikes) (name ?attack))
+		(object (is-a ATTACKABLE) (name ?at) (strikes ?n&:(< 0 ?n)))
 		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
 		(in (over ?fell) (under ?char))
-		(not (data (phase attack) (data strike ?char)))
+		(test (not (member$ ?char ?strikes)))
 	)
 	=>
 	(assert (action 
 		(player (send ?fell get-player))
-		(event-def variable)
-		(initiator ?f)
+		(event-def modify)
 		(description (sym-cat "Asignar golpe de " ?at " a " ?char))
 		(identifier ?at ?char)
-		(data (create$ strike ?char))
+		(data ?attack strikes (create$ ?strikes ?char))
+		(reason attack-2::a-defender-select-strike)
 	))
 )

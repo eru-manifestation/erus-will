@@ -13,17 +13,12 @@
 
 
 (defrule face-automatic-attacks
-	(data (phase loc-phase) (data fellowship ?fell))
+	(object (is-a EP-loc-phase) (active TRUE) (fellowship ?fell))
 	(object (name ?fell) (position ?loc))
 	(object (is-a LOCATION) (name ?loc) (automatic-attacks ?attack1 $?attacks))
 	=>
-	(bind ?data (create$ attack 1 ?fell ?attack1))
-	(bind ?i 2)
-	(foreach ?attack ?attacks
-		(bind ?data (create$ ?data / attack ?i ?fell ?attack))
-		(bind ?i (+ 1 ?i))
-	)
-	(make-instance (gen-name E-phase) of E-phase 
-		(reason combat loc-phase-1-1::face-automatic-attacks)
-		(data ?data))
+	(make-instance (gen-name EP-combat) of EP-combat 
+		(reason loc-phase-1-1::face-automatic-attacks)
+		(target ?fell)
+		(attackables ?attack1 $?attacks))
 )

@@ -12,23 +12,24 @@
 
 (defrule play-additional-minor-item (declare (salience ?*a-population*))
 	(logical
-		?e <- (object (is-a E-phase) (state EXEC))
+		?e <- (object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
 
-		(exists (object (is-a E-modify) (reason $? PLAY $?) (position ?e)))
-		(not (object (is-a E-modify) (reason $? loc-phase-3-1::play-additional-minor-item) (state DONE)))
+		(exists (object (is-a E-play) (target ?t) (position ?e))
+			(object (is-a ITEM) (name ?t))
+		)
+		(not (object (is-a E-modify) (reason loc-phase-3-1::play-additional-minor-item) (state DONE)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play additional minor item " ?item " under " ?char))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char))
-		(reason PLAY ITEM loc-phase-3-1::play-additional-minor-item)
+		(data ?item ?char)
+		(reason loc-phase-3-1::play-additional-minor-item)
 	))
 )

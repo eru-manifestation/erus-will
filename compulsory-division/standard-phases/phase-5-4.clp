@@ -17,44 +17,42 @@
 		(position ?pos&:(or (eq ?pos (drawsymbol ?player)) (eq ?pos (drawsymbol ?enemy)))))
 	)
 	=>
-	(make-instance (gen-name E-phase) of E-phase (reason free-council P54::mandatory-council))
+	(make-instance (gen-name EP-free-council) of EP-free-council (reason P-5-4::mandatory-council))
 	(message "El Concilio de los Pueblos Libres se ejecuta por falta de cartas que robar")
 )
 
 
 (defrule arrange-council#mp (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p) (council FALSE) (name ?turn))
 		(object (is-a PLAYER) (name ?p) (mp ?mp&:(<= 20 ?mp)))
 	)
 	=>
-	;	TODO: pasar el hecho a MAIN, para que se pueda reintroducir en el sig turno
 	(assert (action 
 		(player ?p)
-		(event-def variable)
+		(event-def modify)
 		(description (sym-cat "Convoque council"))
 		(identifier [COUNCIL])
-		(data council)
+		(data ?turn council TRUE)
+		(reason P-5-4::arrange-council#mp)
 	))
 )
 
 
 (defrule arrange-council#empty-deck (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p) (council FALSE) (name ?turn))
 		(not (exists 
 			(object (is-a CARD) (position ?pos&:(eq ?pos (drawsymbol ?p))))
 		))
 	)
 	=>
-	;	TODO: pasar el hecho a MAIN, para que se pueda reintroducir en el sig turno
 	(assert (action 
 		(player ?p)
-		(event-def variable)
+		(event-def modify)
 		(description (sym-cat "Convoque council"))
 		(identifier [COUNCIL])
-		(data council)
+		(data ?turn council TRUE)
+		(reason P-5-4::arrange-council#empty-deck)
 	))
 )

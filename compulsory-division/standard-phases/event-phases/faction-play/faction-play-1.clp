@@ -9,7 +9,7 @@
 
 
 (defrule tap-character
-	(data (phase faction-play) (data character ?char))
+	(object (is-a EP-faction-play) (active TRUE) (character ?char))
 	=>
 	(message "Se gira el personaje " ?char " para intentar influenciar")
 	(E-modify ?char state TAPPED faction-play-1::tap-character)

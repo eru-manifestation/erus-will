@@ -11,17 +11,16 @@
 
 (defrule a-face-strike-hindered
 	(logical
-		(data (phase strike) (data target ?t))
-		(data (phase strike) (data attackable ?at))
+		(object (is-a EP-strike) (state EXEC) (target ?t) (attackable ?at) (hindered FALSE) (name ?strike))
 		(object (name ?t) (state UNTAPPED))
-		(object (is-a E-phase) (state EXEC))
 	)
 	=>
 	(assert (action 
 		(player (send ?t get-player))
-		(event-def variable)
+		(event-def modify)
 		(description (sym-cat "Face strike from " ?at " to " ?t " hindered"))
 		(identifier ?t)
-		(data (create$ hindered))
+		(data ?strike hindered TRUE)
+		(reason strike-3::a-face-strike-hindered)
 	))
 )

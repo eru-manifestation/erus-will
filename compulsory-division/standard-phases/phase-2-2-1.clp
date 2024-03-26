@@ -11,8 +11,7 @@
 ; ACCIÓN: JUGAR RECURSOS DE SUCESOS DURADEROS
 (defrule a-long-event-play (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		; Dado un suceso duradero en la mano del jugador
 		(object (is-a R-LONG-EVENT) (name ?rle) (player ?p)
 			(position ?pos&:(eq ?pos (handsymbol ?p))))
@@ -20,10 +19,10 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play long event resource " ?rle))
 		(identifier ?rle)
-		(data (create$ ?rle position (slot-default-value BASIC position)))
-		(reason PLAY R-LONG-EVENT P221::a-long-event-play)
+		(data ?rle (slot-default-value BASIC position))
+		(reason P-2-2-1::a-long-event-play)
 	))
 )

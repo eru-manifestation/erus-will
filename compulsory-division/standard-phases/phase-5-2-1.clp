@@ -13,7 +13,7 @@
 (defrule standarize-hand
 	(object (is-a PLAYER) (name ?p))
 	=>
-	(make-instance (gen-name E-phase) of E-phase 
-		(reason standarize-hand P521::standarize-hand)
-		(data target ?p))
+	(make-instance (gen-name EP-standarize-hand) of EP-standarize-hand 
+		(reason P-5-2-1::standarize-hand)
+		(target ?p))
 )

@@ -19,6 +19,6 @@
 	(object (is-a OWNABLE) (name ?c) (player ?p))
 	(not (object (is-a LOCATION) (name ?c)))
 	=>
-	(E-modify ?c state UNTAPPED P011-untap)
+	(E-modify ?c state UNTAPPED P-0-1-1-untap)
 	(message "En la fase Enderezamiento, enderezar todas las cartas no localizaciones del jugador")
 )

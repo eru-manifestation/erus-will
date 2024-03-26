@@ -16,13 +16,12 @@
 ; Influencia directa de algún personaje para controlarlo
 (defrule a-char-play#as-follower (declare (salience ?*a-population*))
 	(logical 
-		?e <- (object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
-
+		?e <- (object (is-a EP-turn) (state EXEC) (player ?p))
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object (is-a E-modify) (position ?e) (state DONE) (reason $? PLAY CHARACTER $?)))
-
-
+		(not (exists
+			(object (is-a E-play) (position ?e) (state DONE) (target ?t))
+			(object (is-a CHARACTER) (name ?t))
+		))
 		; Hay un personaje en la mano del jugador dueño del turno
 		(object (is-a CHARACTER) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?char) 
 			(birthplace ?bp) (race ?race) (mind ?mind))
@@ -46,22 +45,24 @@
 	; Asertar la acción "Jugar al personaje como seguidor"
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play character " ?char " as a follower of " ?play-under))
 		(identifier ?char ?play-under)
-		(data (create$ ?char position ?play-under))
-		(reason PLAY CHARACTER P111-a-char-play#as-follower)
+		(data ?char ?play-under)
+		(reason P-1-1-1-a-char-play#as-follower)
 	))
 )
 
 ; ACCIÓN: Jugar personaje 2
 (defrule a-char-play#under-fell (declare (salience ?*a-population*))
 	(logical 
-		?e <- (object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		?e <- (object (is-a EP-turn) (state EXEC) (player ?p))
 		
 		; Sólo se puede jugar un personaje por turno en fase de organización
-		(not (object (is-a E-modify) (position ?e) (state DONE) (reason $? PLAY CHARACTER $?)))
+		(not (exists
+			(object (is-a E-play) (position ?e) (state DONE) (target ?t))
+			(object (is-a CHARACTER) (name ?t))
+		))
 
 		; Hay un personaje en la mano del jugador dueño del turno (el jugador debe la inf gen necesaria para jugarlo)
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
@@ -83,11 +84,11 @@
 	; Asertar la acción "Jugar al personaje en esa compañía" (tener en cuenta la condición de que una localización debe tener siempre una compañía vacía asociada)
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play character " ?char " in fellowship " ?fell))
 		(identifier ?char ?fell)
-		(data (create$ ?char position ?fell))
-		(reason PLAY CHARACTER P111-a-char-play#under-fell)
+		(data ?char ?fell)
+		(reason P-1-1-1-a-char-play#under-fell)
 	))
 )
 
@@ -96,8 +97,7 @@
 ; Puedes intercambiar objetos entre tus personajes si están en el mismo lugar, pero antes, el portador de cada objeto deberá hacer un chequeo de corrupción
 (defrule a-item-transfer (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		; Localiza el personaje que posee (directamente) el objeto, ambos del jugador dueño del turno
 		(object (is-a ITEM) (name ?i) (position ?disposer) (player ?p))
 		(object (is-a CHARACTER) (state UNTAPPED | TAPPED | WOUNDED) (name ?disposer) (player ?p))
@@ -116,8 +116,8 @@
 		(event-def modify)
 		(description (sym-cat "Transfer item " ?i " from " ?disposer " to " ?receiver))
 		(identifier ?i ?receiver)
-		(data (create$ ?i position ?receiver))
-		(reason TRANSFER ITEM P111::a-item-transfer)
+		(data ?i position ?receiver)
+		(reason P-1-1-1::a-item-transfer)
 	))
 )
 
@@ -125,8 +125,7 @@
 ; También puedes almacenar objetos si el portador está en un refugio
 (defrule a-item-store (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		; Localiza un objeto y si está en un refugio, debe ser del jugador del turno
 		(object (is-a ITEM) (name ?i) (position ?bearer) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
@@ -140,8 +139,8 @@
 		(event-def modify)
 		(description (sym-cat "Store item " ?i " from " ?bearer " in " ?loc))
 		(identifier ?i ?loc)
-		(data (create$ ?i position (mpsymbol ?p)))
-		(reason STORE ITEM P111::a-item-store)
+		(data ?i position (mpsymbol ?p))
+		(reason P-1-1-1::a-item-store)
 	))
 )
 
@@ -152,8 +151,7 @@
 ; TODO: comprobar a la salida de esta fase de organizacion que la compañia esta correctamente
 (defrule a-char-discard (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		; Dada una localización refugio donde existe un personaje (debe haber una compañía)
 		(object (is-a HAVEN) (name ?loc))
 		(object (is-a CHARACTER) (name ?char) (player ?p))
@@ -162,11 +160,11 @@
 	=>
 	(assert (action
 		(player ?p)
-		(event-def modify)
+		(event-def discard)
 		(description (sym-cat "Discard character " ?char))
 		(identifier ?char (discardsymbol ?p))
-		(data (create$ ?char position (discardsymbol ?p))) 
-		(reason DISCARD CHARACTER P111::a-char-discard)
+		(data ?char) 
+		(reason P-1-1-1::a-char-discard)
 	))
 )
 
@@ -176,9 +174,8 @@
 ; Siempre puedes mover a un personaje a otra compañia del lugar a menos que ya tenga 7 integrantes
 (defrule a-char-move#change-fell (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
-		(player ?p)
 
 		; Dado un personaje directamente bajo una compañía del lugar (no es seguidor), y otra compañía del lugar
       	(object (is-a FELLOWSHIP) (name ?ini-fell) (position ?loc) (player ?p))
@@ -197,8 +194,8 @@
 		(event-def modify)
 		(description (sym-cat "Move " ?char " from " ?ini-fell " to " ?fell))
 		(identifier ?char ?fell)
-		(data (create$ ?char position ?fell))
-		(reason MOVE CHARACTER P111::a-char-move#change-fell)
+		(data ?char position ?fell)
+		(reason P-1-1-1::a-char-move#change-fell)
 	))
 )
 
@@ -207,9 +204,8 @@
 ; Siempre que un personaje tenga suficiente influencia puedes hacer de un personaje seguidor
 (defrule a-char-follow (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
-		(player ?p)
 
 		;Dado un personaje en la localizacion con mente inferior a la influencia de otro en juego (que no es seguidor)
 		(object (is-a CHARACTER) (name ?headchar) (position ?fell) (player ?p) (influence ?influence))
@@ -236,8 +232,8 @@
 		(event-def modify)
 		(description (sym-cat "Make " ?tobefollower " a follower of " ?headchar))
 		(identifier ?tobefollower ?headchar)
-		(data (create$ ?tobefollower position ?headchar))
-		(reason FOLLOW P111::a-char-follow)
+		(data ?tobefollower position ?headchar)
+		(reason P-1-1-1::a-char-follow)
 	))
 )
 
@@ -246,9 +242,8 @@
 ; Siempre que el jugador tenga suficiente influencia general y que haya espacio en la compañía puedo bajarlo
 (defrule a-char-unfollow (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 		(object (is-a HAVEN) (name ?loc))
-		(player ?p)
 
 		;Compruebo que el jugador tenga influencia general suficiente
 		(object (is-a PLAYER) (name ?p) (general-influence ?gen-inf))
@@ -271,7 +266,7 @@
 		(event-def modify)
 		(description (sym-cat "Make the follower " ?follower " a normal character in " ?fell))
 		(identifier ?follower ?fell)
-		(data (create$ ?follower position ?fell))
-		(reason UNFOLLOW P111::a-char-unfollow)
+		(data ?follower position ?fell)
+		(reason P-1-1-1::a-char-unfollow)
 	))
 )

@@ -12,9 +12,8 @@
 
 (defrule play-item#minor (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? MINOR-ITEM $?))
 		(object (is-a MINOR-ITEM) (player ?p) 
@@ -25,11 +24,11 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play minor item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char))
-		(reason PLAY ITEM loc-phase-2-1::play-item#minor)
+		(data ?item ?char)
+		(reason loc-phase-2-1::play-item#minor)
 	))
 )
 
@@ -37,9 +36,8 @@
 
 (defrule play-item#greater (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? GREATER-ITEM $?))
 		(object (is-a GREATER-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
@@ -49,11 +47,11 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play greater item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?char)
-		(data (create$ ?item position ?char))
-		(reason PLAY ITEM loc-phase-2-1::play-item#greater)
+		(data ?item ?char)
+		(reason loc-phase-2-1::play-item#greater)
 	))
 )
 
@@ -61,9 +59,8 @@
 
 (defrule play-item#major (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED) (playable-items $? MAJOR-ITEM $?))
 		(object (is-a MAJOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
@@ -73,11 +70,11 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play major item " ?item " under " ?char " in " ?loc))
 		(identifier ?item ?loc)
-		(data (create$ ?item position ?char))
-		(reason PLAY ITEM loc-phase-2-1::play-item#major)
+		(data ?item ?char)
+		(reason loc-phase-2-1::play-item#major)
 	))
 )
 
@@ -85,9 +82,8 @@
 
 (defrule play-ally (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED))
 		(object (is-a ALLY) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (playable-places $? ?loc $?) (name ?ally))
@@ -97,11 +93,11 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def modify)
+		(event-def play)
 		(description (sym-cat "Play ally " ?ally " under " ?char " in " ?loc))
 		(identifier ?ally ?char)
-		(data (create$ ?ally position ?char))
-		(reason PLAY ALLY loc-phase-2-1::play-ally)
+		(data ?ally ?char)
+		(reason loc-phase-2-1::play-ally)
 	))
 )
 
@@ -109,9 +105,8 @@
 
 (defrule play-faction (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(data (phase loc-phase) (data fellowship ?fell))
 		(object (is-a LOCATION) (name ?loc&:(eq ?loc (send ?fell get-position)))
 			(state UNTAPPED))
 		(object (is-a FACTION) (player ?p) 
@@ -123,10 +118,10 @@
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def phase)
+		(event-def faction-play)
 		(description (sym-cat "Influence faction " ?faction " with " ?char " in " ?loc))
 		(identifier ?faction ?char)
-		(data (create$ character ?char / faction ?faction))
-		(reason faction-play loc-phase-2-1::play-faction)
+		(data "(character [" ?char "]) (faction [" ?faction "])")
+		(reason loc-phase-2-1::play-faction)
 	))
 )

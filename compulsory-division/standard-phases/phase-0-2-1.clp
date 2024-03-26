@@ -15,6 +15,6 @@
 	(object (is-a HAVEN) (name ?loc))
 	(in (over ?loc) (under ?c))
 	=>
-	(E-modify ?c state UNTAPPED P021-heal)
+	(E-modify ?c state UNTAPPED P-0-2-1-heal)
 	(message "Curar personajes y aliados heridos en refugios que sean del jugador actual")
 )

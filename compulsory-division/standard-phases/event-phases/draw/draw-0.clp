@@ -10,14 +10,11 @@
 
 ; Roba las cartas que necesites
 (defrule card-draw
-    (data (phase draw) (data target ?p))
-    ?a <- (data (phase draw) (data ammount ?n&:(< 0 ?n)))
+    (object (is-a EP-draw) (active TRUE) (ammount ?n&:(< 0 ?n)) (target ?p))
     (object (is-a CARD) (position ?hand&:(eq ?hand (drawsymbol ?p))) 
         (name ?card))
 	=>
 	; TODO: ESCOGE LOS PRIMEROS QUE SEAN, NO ES ALEATORIO
-    (retract ?a)
-    (assert (data (phase draw) (data ammount (- ?n 1))))
-    (E-modify ?card position (handsymbol ?p) DRAW draw-0::card-draw)
+    (E-modify ?card position (handsymbol ?p) draw-0::card-draw)
     (message "El jugador " ?p " roba " ?card)
 )

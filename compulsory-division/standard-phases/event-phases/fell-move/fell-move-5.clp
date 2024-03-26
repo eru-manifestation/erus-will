@@ -12,17 +12,15 @@
 (defrule a-enemy-draw
     (logical
 		(enemy ?enemy)
-		?f <- (data (phase fell-move) (data draw-ammount ? ?enemy))
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-fell-move) (state EXEC) (enemy-draw ?n&:(< 0 ?n)))
 	)
     =>
     (assert (action 
 		(player ?enemy)
-		(event-def variable)
-		(initiator ?f)
+		(event-def draw)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?enemy))
-		(data (create$ draw ?enemy))
-		(reason draw fell-move-5::a-enemy-draw)
+		(data "(target [" ?enemy "]) (ammount " 1")")
+		(reason fell-move-5::a-enemy-draw)
 	))
 )

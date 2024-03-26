@@ -10,31 +10,26 @@
 
 
 
-(defrule a-strike  (declare (salience ?*a-population*))
+(defrule a-strike (declare (salience ?*a-population*))
 	(logical 
-		(object (is-a E-phase) (state EXEC) (reason attack $?))
-    	(player ?p)
-		(data (phase attack) (data attackable ?at))
-		?f <- (data (phase attack) (data strike ?char))
+		?e <- (object (is-a EP-attack) (state EXEC) (attackable ?at) (strikes $? ?char $?))
+		(player ?p)
 	)   
     =>
 	(assert (action 
 		(player ?p)
-		(event-def phase)
-		(initiator ?f)
+		(event-def strike)
 		(description (sym-cat "Ejecutar golpe en " ?char))
 		(identifier ?char)
-		(data (create$ target ?char / attackable ?at))
-		(reason strike attack-4::a-strike)
+		(data "(target [" ?char "]) (attackable [" ?at "])")
+		(reason attack-4::a-strike)
 		(blocking TRUE)
 	))
 )
 
 (defrule declare-result#defeated
-	?e <- (object (is-a E-phase) (state EXEC))
-	(not (data (phase attack) (data strike $?)))
-	(not (object (is-a E-phase) (position ?e) 
-		(reason strike $?) (res ~DEFEATED)))
+	?e <- (object (is-a EP-attack) (active TRUE) (strikes))
+	(not (object (is-a EP-strike) (position ?e) (res ~DEFEATED)))
 	=>
 	(complete DEFEATED)
 	(message "Todos los golpes han sido superados, el ataque ha sido derrotado")
@@ -43,10 +38,8 @@
 
 
 (defrule declare-result#undefeated
-	?e <- (object (is-a E-phase) (state EXEC))
-	(not (data (phase attack) (data strike $?)))
-	(exists (object (is-a E-phase) (position ?e) 
-		(reason strike $?) (res ~DEFEATED)))
+	?e <- (object (is-a EP-attack) (active TRUE) (strikes))
+	(exists (object (is-a EP-strike) (position ?e) (res ~DEFEATED)))
 	=>
 	(complete UNDEFEATED)
 	(message "Como algun golpe no se considera superado, el ataque ha sido exitoso")

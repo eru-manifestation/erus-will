@@ -2,12 +2,11 @@
 (deftemplate action
 	; Plantilla básica de acción
 	(slot player (type INSTANCE-NAME) (allowed-classes PLAYER) (default ?NONE))
-	(slot initiator (default FALSE))
 	(multislot identifier (type ?VARIABLE) (default ?NONE))
 	(slot description (type STRING) (default ?NONE))
 	(slot event-def (type SYMBOL) (default ?NONE))
 	(multislot data (type ?VARIABLE) (default ?NONE))
-	(multislot reason (type SYMBOL) (default (create$ variable)))
+	(slot reason (type SYMBOL) (default ?NONE))
 	(slot blocking (type SYMBOL) (default FALSE) (allowed-values TRUE FALSE))
 )
 
@@ -24,8 +23,8 @@
 		(identifier PASS) 
 		(description "Pass") 
 		(event-def pass) 
-		(data (create$)))
-		(reason MAIN::a-pass))
+		(data)
+		(reason MAIN::a-pass)))
 )
 
 
@@ -60,7 +59,6 @@
 	(do-for-fact ((?action action)) (and (eq ?p ?action:player) (eq $?identifier ?action:identifier))
 		(message ?p "Se ha seleccionado: " ?action:description)
 		(bind ?m (set-current-module (get-focus))) ;TODO: probar si es necesario
-		(bind ?initiator ?action:initiator)
 		(switch ?action:event-def
 			(case ?pass-evdef then
 				; La elección ha sido pasar, se eliminan todos los action, lo que emplica que se retracte PASS
@@ -68,20 +66,26 @@
 				(retract ?action)
 			)
 			(case modify then
-				(E-modify (expand$ ?action:data) (expand$ ?action:reason))
+				; Permite introducir una lista final en data
+				(E-modify (nth$ 1 ?action:data) (nth$ 2 ?action:data) (subseq$ ?action:data 3 100) ?action:reason)
 			)
-			(case phase then
-				(make-instance (gen-name E-phase) of E-phase 
-					(reason ?action:reason)
-					(data ?action:data)
-				)
+			(case play then
+				(E-play (expand$ ?action:data) ?action:reason)
 			)
-			(case variable then
-				(assert (data (phase (nth$ 1 (send ?*active-event* get-reason))) (data ?action:data)))
+			(case discard then
+				(E-discard (expand$ ?action:data) ?action:reason)
+			)
+			(case play-by-region then
+				(E-play-by-region (expand$ ?action:data) ?action:reason)
+			)
+			(case play-by-place then
+				(E-play-by-place (expand$ ?action:data) ?action:reason)
+			)
+			(default
+				(eval (str-cat "(make-instance (gen-name EP-" ?action:event-def 
+					") of EP-" ?action:event-def " " (expand$ ?action:data) " (reason " ?action:reason "))"))
 			)
 		)
-
-		(if ?initiator then (retract ?initiator))
 		(set-current-module ?m)
 		(run)
 		(return TRUE)

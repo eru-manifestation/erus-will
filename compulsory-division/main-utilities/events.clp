@@ -57,6 +57,7 @@
 (defmessage-handler EVENT put-state after (?newState)
 	; Se presupone que si se desactiva es porque un cancelador ha actuado justo debajo de él e inmediatamente se pone DONE inmediatamente. Los cancelers son los únicos eventos cuya salida no se puede observar. Además, las salidas al ser cancelados no son observables tampoco.
 	(if (eq ?newState DONE) then
+		(bind ?self:active FALSE)
 		(returnFocus ?self:position)
 	)
 )
@@ -76,29 +77,63 @@
 	;)
 )
 
-(defmessage-handler E-modify init after ()
-	(send ?self modify old (send ?self:target (sym-cat get- ?self:slot)))
+;;;;;;;;;;;;;;;;;;;;;; GENERATORS TODO:
+
+(deffunction MAIN::E-modify (?target ?slot ?newValue ?reason)
+	(make-instance (gen-name E-modify) of E-modify (target ?target) 
+		(slot ?slot)
+		(old (send ?target (sym-cat get- ?slot))) 
+		(new ?newValue) 
+		(reason ?reason))
 )
 
-;;;;;;;;;;;;;;;;;;;;;; GENERATORS TODO: Quitar ?target, esta sin uso
-
-(deffunction MAIN::E-modify (?target ?slot ?newValue $?reason)
-	(make-instance (gen-name E-modify) of E-modify (target ?target) (slot ?slot) (new ?newValue) (reason $?reason))
+(deffunction MAIN::E-play (?target ?newValue ?reason)
+	(make-instance (gen-name E-play) of E-play (target ?target)
+		(slot position)
+		(old (send ?target get-position)) 
+		(new ?newValue) 
+		(reason ?reason))
 )
 
-(deffunction MAIN::E-cancel ($?reason)
+(deffunction MAIN::E-play-by-region (?target ?newValue ?region ?reason)
+	(make-instance (gen-name E-play-by-region) of E-play-by-region (target ?target)
+		(slot position)
+		(old (send ?target get-position)) 
+		(new ?newValue) 
+		(reason ?reason)
+		(region ?region))
+)
+
+(deffunction MAIN::E-play-by-place (?target ?newValue ?place ?reason)
+	(make-instance (gen-name E-play-by-place) of E-play-by-place (target ?target)
+		(slot position)
+		(old (send ?target get-position)) 
+		(new ?newValue) 
+		(reason ?reason)
+		(place ?place))
+)
+
+(deffunction MAIN::E-discard (?target ?reason)
+	(make-instance (gen-name E-discard) of E-discard (target ?target)
+		(slot position)
+		(old (send ?target get-position)) 
+		(new (discardsymbol (send ?target get-player)))
+		(reason ?reason))
+)
+
+(deffunction MAIN::E-cancel (?reason)
 	(if (eq IN (send ?*active-event* get-state))
 		then
 		(make-instance (gen-name E-modify) of E-modify (target ?*active-event*) 
-			(slot state) (new DEFUSED) (reason CANCEL $?reason))
+			(slot state) (new DEFUSED) (reason ?reason))
 		else
 		(println "SATM_ERROR: No se puede cancelar un evento en estado " (send ?*active-event* get-state))
 		(halt)
 	)
 )
 
-(deffunction MAIN::E-roll-dices ($?reason)
-	(make-instance (gen-name E-phase) of E-phase (reason dices $?reason))
+(deffunction MAIN::E-roll-dices (?dice-class ?reason)
+	(make-instance (gen-name (sym-cat EP- ?dice-class)) of (sym-cat EP- ?dice-class) (reason ?reason))
 )
 
 ;;;;;;;;;;;;;;;;;;;;; PHASING RULE
@@ -133,16 +168,13 @@
 	=>
 	; E-phase no usa _
 	(bind ?oldState (send ?e get-state))
-	(bind ?phase (nth$ 1 (send ?e get-reason)))
+	(bind ?phase (send ?e get-phase))
 
 	(send ?e modify state 
 		(switch ?oldState
 			(case IN then 
-				(jump (sym-cat START- ?phase))
-				;TODO no modify si data es vacio
-				(decompressData ?phase (send ?e get-data))
-				(send ?e modify data (create$))
 				(message "Se inicia la fase " ?phase)
+				(jump (sym-cat START- ?phase))
 				EXEC)
 			(case OUT then DONE)
 	))
@@ -151,10 +183,8 @@
 
 (deffunction complete (?exitCode)
 	(bind ?state (send ?*active-event* get-state))
-	(bind ?phase (nth$ 1 (send ?*active-event* get-reason)))
 	(if (eq ?state EXEC) then
 		(pop-focus)
-		(send ?*active-event* modify data (compressData ?phase))
 		(send ?*active-event* modify res ?exitCode)
 		(send ?*active-event* modify state OUT)
 		else
@@ -165,6 +195,6 @@
 
 (defmessage-handler E-phase put-state after (?state)
 	(if (eq ?state OUT) then
-		(message "Finaliza la fase " (nth$ 1 ?self:reason))
+		(message "Finaliza la fase " (send ?*active-event* get-phase))
 	)
 )

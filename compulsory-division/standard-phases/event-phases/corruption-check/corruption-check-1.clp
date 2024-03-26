@@ -10,14 +10,14 @@
 
 (defrule roll-dices
 	=>
-	(E-roll-dices CORRUPTION-ROLL corruption-check-1::roll-dices)
+	(E-roll-dices corruption-roll corruption-check-1::roll-dices)
 )
 
 (defrule execute-corruption-check
-	?e <- (object (is-a E-phase) (state EXEC))
-	(data (phase corruption-check) (data target ?t))
-	(object (is-a E-phase) (position ?e) (reason dices CORRUPTION-ROLL $?) (state DONE) (res ?d))
+	?e <- (object (is-a EP-corruption-check) (active TRUE) (target ?t))
+	(object (is-a EP-corruption-roll) (position ?e) (state DONE) (name ?dices))
 	=>
+	(bind ?d (send ?dices get-res))
 	(bind ?corr (send ?t get-corruption))
 	(if (> ?d ?corr) then
 		(message ?t " ha pasado el chequeo de corrupcion")

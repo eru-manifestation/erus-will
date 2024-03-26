@@ -12,17 +12,15 @@
 (defrule a-player-draw
     (logical
 		(player ?p)
-		?f <- (data (phase fell-move) (data draw-ammount ? ?p))
-		(object (is-a E-phase) (state EXEC))
+		(object (is-a EP-fell-move) (state EXEC) (player-draw ?n&:(< 0 ?n)))
 	)
     =>
     (assert (action 
 		(player ?p)
-		(event-def phase)
-		(initiator ?f)
+		(event-def draw)
 		(description (sym-cat "Draw 1"))
 		(identifier (drawsymbol ?p))
-		(data (create$ target ?p / ammount 1))
-		(reason draw fell-move-4::a-player-draw)
+		(data "(target [" ?p "]) (ammount " 1")")
+		(reason fell-move-4::a-player-draw)
 	))
 )

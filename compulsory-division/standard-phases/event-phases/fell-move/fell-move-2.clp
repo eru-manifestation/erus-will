@@ -9,15 +9,14 @@
 
 
 (defrule calculate-adversity-limit
-    (data (phase fell-move) (data fellowship ?fell))
+    (object (is-a EP-fell-move) (active TRUE) (fellowship ?fell) (name ?fm))
     =>
-    (assert (data (phase fell-move) (data hazard-limit (max 2 (send ?fell get-companions)))))
+    (E-modify ?fm hazard-limit (max 2 (send ?fell get-companions)) fell-move-2::calculate-adversity-limit)
 )
 
 ; CALCULA LA RUTA TOMADA (no hay ruta si no se mueve)
 (defrule calculate-route
-    (data (phase fell-move) (data fellowship ?fell))
-    (data (phase fell-move) (data to ?to))
+    (object (is-a EP-fell-move) (active TRUE) (reason ~P-1-1-2-1::a-fell-decl-remain) (fellowship ?fell) (to ?to) (name ?fm))
     =>
     (bind ?from (send ?fell get-position))
     (bind ?route nil)
@@ -40,30 +39,32 @@
         ; se va por la ruta de la carta destino      
         (bind ?route (send ?to get-route))
     )
-    (assert (data (phase fell-move) (data route ?route)))
+    (E-modify ?fm route ?route fell-move-2::calculate-route)
 )
 
 
 ; Calcula cuantas cartas debe robar cada jugador (no se roba si no se mueve)
 (defrule calculate-cards-to-draw
-	(data (phase fell-move) (data fellowship ?fell))
-	(data (phase fell-move) (data to ?to))
+	(object (is-a EP-fell-move) (active TRUE) (reason ~P-1-1-2-1::a-fell-decl-remain) (fellowship ?fell) (to ?to) (name ?fm))
+    (object (is-a PLAYER) (name ?p))
     =>
+    (bind ?draw 0)
     (bind ?player (send ?fell get-player))
-    (bind ?enemy (enemy ?player))
 	(bind ?from (send ?fell get-position))
 
-    (if (eq HAVEN (send ?to get-place)) then
-        (assert (data (phase fell-move) (data draw-ammount (send ?from get-player-draw) ?player)))
-        (assert (data (phase fell-move) (data draw-ammount (send ?from get-enemy-draw) ?enemy)))
+    (if (eq ?p ?player) then
+        (if (eq HAVEN (send ?to get-place)) then
+            (bind ?draw (send ?from get-player-draw))
+            else
+            (bind ?draw (send ?to get-player-draw))
+        )
+        (E-modify ?fm player-draw ?draw fell-move-2::calculate-cards-to-draw)
         else
-        (assert (data (phase fell-move) (data draw-ammount (send ?to get-player-draw) ?player)))
-        (assert (data (phase fell-move) (data draw-ammount (send ?to get-enemy-draw) ?enemy)))
+        (if (eq HAVEN (send ?to get-place)) then
+            (bind ?draw (send ?from get-enemy-draw))
+            else
+            (bind ?draw (send ?to get-enemy-draw))
+        )
+        (E-modify ?fm enemy-draw ?draw fell-move-2::calculate-cards-to-draw)
     )
-)
-
-(defrule populate-draw-ammount
-    (data (phase fell-move) (data draw-ammount ?n&:(< 1 ?n) ?p))
-    =>
-    (assert (data (phase fell-move) (data draw-ammount (- ?n 1) ?p)))
 )

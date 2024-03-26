@@ -10,18 +10,16 @@
 
 (defrule a-spare-strike
 	(logical
-		(object (is-a E-phase) (state EXEC))
-		(data (phase strike) (data target ?t))
-		?f <- (data (phase attack) (data unasigned-strike $?))
-		(not (data (phase strike) (data spare-strike)))
+		(object (is-a EP-strike) (state EXEC) (target ?t) (attackable ?at) (spare-strike FALSE) (name ?strike))
+		(object (is-a ATTACKABLE) (name ?at) (strikes ?n&:(< 0 ?n)))
 	)
 	=>
 	(assert (action 
 		(player (enemy (send ?t get-player)))
-		(initiator ?f)
-		(event-def variable)
+		(event-def modify)
 		(description (sym-cat "Utilizar golpe sobrante como modificador en " ?t))
 		(identifier ?t)
-		(data (create$ spare-strike))
+		(data ?strike spare-strike TRUE)
+		(reason strike-2::a-spare-strike)
 	))
 )

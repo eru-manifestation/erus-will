@@ -11,14 +11,13 @@
 
 (defrule dice-roll
 	=>
-	(E-roll-dices FACTION-INFLUENCE-ROLL faction-play-3::dice-roll)
+	(E-roll-dices faction-influence-roll faction-play-3::dice-roll)
 )
 
 
 (defrule influence-check
-	(object (is-a E-phase) (reason dices FACTION-INFLUENCE-ROLL $?) (state DONE) (res ?dices))
-	(data (phase faction-play) (data faction ?faction))
-	(data (phase faction-play) (data character ?char))
+	(object (is-a EP-faction-influence-roll) (state DONE) (res ?dices))
+	(object (is-a EP-faction-play) (active TRUE) (faction ?faction) (character ?char))
 	=>
 	(bind ?favor (+ (send ?char get-influence) ?dices))
 	(bind ?against (send ?faction get-influence-check))

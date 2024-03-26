@@ -16,7 +16,7 @@
     (player ?p)
 	(object (is-a CHARACTER) (player ?p) (state UNTAPPED | TAPPED | WOUNDED) (name ?char))
 	=>
-	(make-instance (gen-name E-phase) of E-phase
-		(reason corruption-check free-council-1-0::player-corruption-check)
-		(data target ?char))
+	(make-instance (gen-name EP-corruption-check) of EP-corruption-check
+		(reason free-council-1-0::player-corruption-check)
+		(target ?char))
 )

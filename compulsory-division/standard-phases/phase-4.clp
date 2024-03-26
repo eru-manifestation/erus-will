@@ -13,20 +13,19 @@
 ; ACCIÓN: INICIAR FASE LUGARES
 (defrule a-loc-phase (declare (salience ?*a-population*))
 	(logical
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 
 		(object (is-a FELLOWSHIP) (empty FALSE) (player ?p) (name ?fell))
-		(not (object (is-a E-phase) (reason loc-phase $?) (data $? fellowship ?fell $?)))
+		(not (object (is-a EP-loc-phase) (fellowship ?fell)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def phase)
+		(event-def loc-phase)
 		(description (sym-cat "Begin location phase for " ?fell))
 		(identifier ?fell)
-		(data (create$ fellowship ?fell))
-		(reason loc-phase P4::a-loc-phase)
+		(data "(fellowship [" ?fell "])")
+		(reason P-4::a-loc-phase)
 		(blocking TRUE)
 	))
 )

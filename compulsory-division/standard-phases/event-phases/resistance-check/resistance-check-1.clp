@@ -11,13 +11,14 @@
 
 (defrule roll-dices
 	=>
-	(E-roll-dices RESISTANCE-ROLL resistance-check-1::roll-dices)
+	(E-roll-dices resistance-roll resistance-check-1::roll-dices)
 )
 
 (defrule execute-resistance-check
-	(data (phase resistance-check) (data target ?as))
-	(object (is-a E-phase) (reason dices RESISTANCE-ROLL $?) (state DONE) (res ?d))
+	(object (is-a EP-resistance-check) (active TRUE) (target ?as))
+	(object (is-a EP-resistance-roll) (state DONE) (name ?dices))
 	=>
+	(bind ?d (send ?dices get-res))
 	(if (< ?d (send ?as get-body)) then
 		(message "Se ha pasado el chequeo de resistencia")
 		(complete PASSED)

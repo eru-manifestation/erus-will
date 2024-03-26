@@ -10,10 +10,10 @@
 
 
 (defrule attack
-	?f <- (data (phase combat) (data attack ?n ?fell ?attackable))
-	(not (data (phase combat) (data attack ?n2&:(< ?n2 ?n) $?)))
+	(object (is-a EP-combat) (target ?fell) (attackables ?at $?))
 	=>
-	(retract ?f)
-	(make-instance (gen-name E-phase) of E-phase (reason attack combat-1::attack)
-		(data fellowship ?fell / attackable ?attackable))
+	(make-instance (gen-name EP-attack) of EP-attack 
+		(reason combat-1::attack)
+		(fellowship ?fell) 
+		(attackable ?at))
 )

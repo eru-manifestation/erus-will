@@ -11,33 +11,34 @@
 
 (defrule roll-dices
 	=>
-	(E-roll-dices STRIKE-ROLL strike-5::roll-dices)
+	(E-roll-dices strike-roll strike-5::roll-dices)
 )
 
 
 (defrule execute-strike
-	(data (phase strike) (data target ?char))
-	(data (phase strike) (data attackable ?at))
-	?e <- (object (is-a E-phase) (state EXEC))
-	(object (is-a E-phase) (position ?e) (reason dices STRIKE-ROLL $?) (state DONE) (res ?d))
+	?e <- (object (is-a EP-strike) (active TRUE) (attackable ?at) (target ?char))
+	(object (is-a EP-strike-roll) (position ?e) (state DONE) (name ?dices))
 	=>
+	(bind ?d (send ?dices get-res))
 	(bind ?prowess (send ?char get-prowess))
 	(bind ?at-prowess (send ?at get-prowess))
 	(bind ?at-body (send ?at get-body))
 
 	(if (< ?at-prowess (+ ?d ?prowess)) then
 		(if (neq ?at-body (slot-default-value ATTACKABLE body)) then
-			(make-instance (gen-name E-phase) of E-phase
-				(reason resistance-check strike-5::execute-strike#enemy-res-check)
-				(data attacker ?char / target ?at))
+			(make-instance (gen-name EP-resistance-check) of EP-resistance-check
+				(reason strike-5::execute-strike#enemy-res-check)
+				(attacker ?char)
+				(target ?at))
 			else
 			(complete DEFEATED)
 		)
 		else
 		(if (> ?at-prowess (+ ?d ?prowess)) then
-			(make-instance (gen-name E-phase) of E-phase
-				(reason resistance-check strike-5::execute-strike#defender-res-check)
-				(data attacker ?at / target ?char))
+			(make-instance (gen-name EP-resistance-check) of EP-resistance-check
+				(reason strike-5::execute-strike#defender-res-check)
+				(attacker ?at)
+				(target ?char))
 			else
 			(complete PARTIALLY-UNDEFEATED)
 		)
@@ -45,8 +46,8 @@
 )
 
 (defrule enemy-res
-	?e <- (object (is-a E-phase) (state EXEC))
-	?res <- (object (is-a E-phase) (position ?e) (reason resistance-check strike-5::execute-strike#enemy-res-check) (state DONE | DEFUSED))
+	?e <- (object (is-a EP-strike) (active TRUE))
+	?res <- (object (is-a EP-resistance-check) (position ?e) (reason strike-5::execute-strike#enemy-res-check) (state DONE | DEFUSED))
 	=>
 	(complete (switch (send ?res get-res)
 		(case PASSED then DEFEATED)
@@ -55,8 +56,8 @@
 )
 
 (defrule defender-res
-	?e <- (object (is-a E-phase) (state EXEC))
-	?res <- (object (is-a E-phase) (position ?e) (reason resistance-check strike-5::execute-strike#defender-res-check) (state DONE | DEFUSED))
+	?e <- (object (is-a EP-strike) (active TRUE))
+	?res <- (object (is-a EP-resistance-check) (position ?e) (reason strike-5::execute-strike#defender-res-check) (state DONE | DEFUSED))
 	=>
 	(complete (switch (send ?res get-res)
 		(case PASSED then PARTIALLY-UNDEFEATED)

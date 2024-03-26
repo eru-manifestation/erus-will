@@ -12,19 +12,18 @@
 ; ACCIÓN: Ejecutar movimiento declarado por el propio evento
 (defrule a-fell-move (declare (salience ?*a-population*))
 	(logical
-    	(player ?p)
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		?f <- (data (phase turn) (data move ?fell ?to))
+		(object (is-a EP-turn) (state EXEC) (player ?p) (move $? ?fell ?to $?))
+		(object (is-a FELLOWSHIP) (name ?fell))
+		(not (object (is-a EVENT) (target ?fell) (new ?to) (reason P-3-1-1::a-fell-move)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
 		(event-def modify)
-		(initiator ?f)
 		(description (sym-cat "Move fellowship " ?fell " to " ?to))
 		(identifier ?fell)
-		(data (create$ ?fell position ?to))
-		(reason P311::a-fell-move)
+		(data ?fell position ?to)
+		(reason P-3-1-1::a-fell-move)
 		(blocking TRUE)
 	))
 )
@@ -32,19 +31,17 @@
 ; ACCIÓN: Ejecutar permanencia en el lugar
 (defrule a-fell-remain (declare (salience ?*a-population*))
 	(logical
-    	(player ?p)
-		(object (is-a E-phase) (state EXEC) (reason turn $?))
-		?f <- (data (phase turn) (data remain ?fell))
+		(object (is-a EP-turn) (state EXEC) (player ?p) (remain $? ?fell $?))
+		(not (object (is-a EP-fell-move) (fellowship ?fell) (reason P-3-1-1::a-fell-remain)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def phase)
-		(initiator ?f)
+		(event-def fell-move)
 		(description (sym-cat "Execute remain of " ?fell))
 		(identifier ?fell)
-		(data (create$ fellowship ?fell))
-		(reason fell-move P311::a-fell-remain)
+		(data "(fellowship [" ?fell "])")
+		(reason P-3-1-1::a-fell-remain)
 		(blocking TRUE)
 	))
 )

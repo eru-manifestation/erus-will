@@ -13,8 +13,8 @@
 (defrule standarize-hand
 	(object (is-a PLAYER) (hand ?n&:(neq ?n 8)) (name ?p))
 	=>
-	(make-instance (gen-name E-phase) of E-phase
-		(reason standarize-hand start-game-1::standarize-hand) 
-		(data target ?p))
+	(make-instance (gen-name EP-standarize-hand) of EP-standarize-hand
+		(reason start-game-1::standarize-hand) 
+		(target ?p))
 	(message ?p " roba hasta tener 8 cartas")
 )

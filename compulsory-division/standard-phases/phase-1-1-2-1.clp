@@ -11,15 +11,11 @@
 
 
 (defrule a-fell-decl-remain (declare (salience ?*a-population*))
-    (player ?p)
-
 	; Hay una compañía que no tiene declarado movimiento ni permanencia
 	(object (is-a FELLOWSHIP) (name ?fell) (player ?p) (empty FALSE) (position ?loc))
-	(not (data (phase turn) (data move ?fell $?)))
-	(not (data (phase turn) (data remain ?fell $?)))
-	
-	(object (is-a E-phase) (state EXEC) (reason turn $?))
+	(object (is-a EP-turn) (state EXEC) (player ?p)(move $?move) (remain $?remain) (name ?turn))
+	(test (not (member$ ?fell (create$ ?move ?remain))))
 	=>
-	(assert (data (phase turn) (data remain ?fell)))
 	(message "La compañia " ?fell " permanecera en " ?loc)
+	(E-modify ?turn remain (insert$ ?remain 1 ?fell) P-1-1-2-1::a-fell-decl-remain)
 )

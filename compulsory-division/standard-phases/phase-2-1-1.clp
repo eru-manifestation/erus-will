@@ -16,5 +16,5 @@
 		(position ?pos))
 	(not (object (is-a STACK) (name ?pos)))
 	=>
-	(E-modify ?le position (discardsymbol ?p) DISCARD R-LONG-EVENT P211::long-event-discard)
+	(E-discard ?le P-2-1-1::long-event-discard)
 )

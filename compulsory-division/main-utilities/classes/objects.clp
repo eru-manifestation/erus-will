@@ -56,9 +56,12 @@
     (slot active (visibility public) (type SYMBOL) (default TRUE) (allowed-symbols TRUE FALSE))
     (slot target (visibility public) (type SYMBOL) (default ?NONE))
     (slot target-slot (visibility public) (type SYMBOL) (default ?NONE))
-    (slot value (visibility public) (type INTEGER) (default ?NONE))
+    (slot value (visibility public) (type ?VARIABLE) (default ?NONE))
 	(multislot motive (visibility public))
 )
+
+(defclass MAIN::data-item-add (is-a data-item))
+(defclass MAIN::data-item-remove (is-a data-item))
 
 ; CLASES CONCRETAS
 (defclass MAIN::CARD (is-a STATABLE BASIC))

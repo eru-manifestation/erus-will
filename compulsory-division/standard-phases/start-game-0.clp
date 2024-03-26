@@ -140,7 +140,7 @@
         (player ?p) (name ?fell&[fellowship1]|[fellowship2])
     )
     =>
-    (E-modify ?char position ?fell PLAY CHARACTER start-game-0::initial-chars)
+    (E-play ?char ?fell start-game-0::initial-chars)
     (message "Jugando personaje inicial " ?char)
 )
 
@@ -173,6 +173,6 @@
         (case [elven-cloak1] then [merry1])
         (case [shield-of-iron--bound-ash1] then [boromir-ii1])
     ))
-    (E-modify ?itemname position ?holder PLAY ITEM start-game-0::initial-items)
+    (E-play ?itemname ?holder start-game-0::initial-items)
     (message "Jugando objeto inicial " ?itemname " en " ?holder)
 )
