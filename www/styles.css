@@ -1,227 +1,424 @@
+:root{
+  --character-card: grey;
+}
+
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family:monospace;
   /* outline: 1px solid red; */
+
+
 }
 
-body {
-  /* width: 90%;
-    max-width: 900px; */
-  margin: 2em auto;
-  font:
-    0.9em/1.2 Arial,
-    Helvetica,
-    sans-serif;
+
+.attribute{
+    display: none;
 }
+
+.fellowship > .character{
+  aspect-ratio: 1/1;
+  /*! width: 15rem; */
+}
+
+
+/* ICONOS Y SUS ESTILOS */
+#game-space .data-item {
+  display: none;
+  background-image: url(info-icon.png);
+}
+#game-space .attackable:not(.card) {
+  /* display: none; */
+  background-image: url(attackable.png);
+}
+
+.attackable, .data-item{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none !important;
+  color: darkslategrey !important;
+}
+
 
 .card {
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-
-.game {
-  display: grid;
-  gap: 5rem;
-}
-
-.game > *:not(.locations){
-  /* TODO: IMPRIMIR CADA UNO A SU MANERA */
+#phase{
   display: none;
 }
 
+.phaseanimation {
+  display: flex !important;
+  position: fixed !important;
+  width: 80%;
+  height: 20%;
+  background-color: green;
+  font-size: 3rem;
+  top: 30%;
+  left: 10%;
+  z-index: 1;
+  opacity: 1;
 
-.locations{
-  grid-row: 2 / 12;
-  display:grid;
-  grid-template-columns:repeat(auto, 35rem);
-  grid-template-rows: 1;
-  justify-items: center;
-  gap: 5rem;
-  overflow-x: scroll;
+  animation: 1s linear 0s fadeinout;
+
+  &>span{
+    margin: auto;
+    text-transform: uppercase;
+    text-align: center;
+    word-break: break-word;
+  }
+
 }
 
-.player_draw, .enemy_draw, .player_discar, .enemy_discard, .player_hand, .enemy_hand
-,.location, .fellowship {
-  display: none;
+.event{
+  border-color: var(--event-border) !important;
+
+  &::after{
+    content: attr(reason) " - " attr(state) !important;
+  }
+
+  &[state^="IN"]{
+    background-color: var(--event-in);
+  }
+  &[state^="EXEC"], &[state="_"]{
+    background-color: var(--event-exec);
+  }
+  &[state^="OUT"]{
+    background-color: var(--event-out);
+  }
+  &[state="DEFUSED"]{
+    background-color: var(--event-defused);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state="DONE"]{
+    background-color: var(--event-done);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state$="HOLD"]{
+    border-color: var(--event-border-inactive) !important;
+  }
 }
 
-/* TIENE AL MENOS DOS HIJOS VISIBLES IMPLICA QUE HAY ALGO MÁS QUE SU PROPIA IMÁGEN */
-.location:has( .card) {
-  grid-row: 1;
-  width: clamp(600px, 40%, 60%);
+
+
+@keyframes fadeinout{
+  0%{
+    opacity: 0;
+  }
+
+  8%{
+    opacity: 1;
+  }
+
+  90%{
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
+  }
+}
+
+#close-up {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 80%;
+	top: 10%;
+	z-index: 2;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top,center;
+}
+
+
+#game-space {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 5px;
-  padding: 10px;
-  padding-top: 35rem;
-  background-color: rgb(122, 231, 204);
 }
 
-.fellowship:has( .card) { 
-  display: grid;
-  justify-items: center;
-  /* grid-template-rows: auto; */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  /* grid-auto-flow: row; */
-  /* grid-template-columns: 100px 100px; */
-  
-  border-radius: 5px;
-  padding: 10px;
-  background-color: rgba(171, 176, 174, 0.848);
-  border-width: 4px;
+#\[player1\]      {background-color:blue;   grid-area: player; display: none !important;}
+#\[player2\]      {background-color:red;    grid-area: enemy; display: none !important;}
+
+#\[hand1\]        {background-color:#5b3d2d; grid-area: player-hand; display: none !important;}
+#\[hand2\]        {background-color:#5b3d2d; grid-area: enemy-hand; display: none !important;}
+#\[draw1\]        {background-color:#3D3A4B; grid-area: player-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+  display: none !important;
 }
-
-.fellowship > .character{
-  /* margin: 0.5rem; */
-  border-radius: 2rem;
-  width: 12rem;
-  height: 7rem;
-  display: grid;
-  padding-top: 4rem;
-  /* border: 3px; */
-  align-items: end;
-  padding: 10px;
-  background-color: rgb(50, 175, 115);
+#\[draw2\]        {background-color:#3D3A4B; grid-area: enemy-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+  display: none !important;
 }
+#\[discard1\]     {background-color:#D3C0CD; grid-area: player-discard; display: none !important;}
+#\[discard2\]     {background-color:#D3C0CD; grid-area: enemy-discard; display: none !important;}
+#\[mp1\]          {background-color:#5A9367; grid-area: player-mp; display: none !important;}
+#\[mp2\]          {background-color:#5A9367; grid-area: enemy-mp; display: none !important;}
+#\[out-of-game1\] {background-color:black;   grid-area: player-out; display: none !important;}
+#\[out-of-game2\] {background-color:black;   grid-area: enemy-out; display: none !important;}
+.events           {background-color:#5CAB7D; grid-area: events; display: none !important;}
+.pass             {background-color: #FFF275;grid-area: pass; display: none !important;}
+
+.fellowship       {background-color: rgba(209, 183, 153, 0.32);}
 
 
-.character > * {
-  border-radius: 2rem;
-  width: 4rem;
-  height: 4rem;
-  border-width: 4px;
-}
 
 
-*[player="[player1]"]{
+.ownable[player="[player1]"]{
   border: 2px solid blue !important;
 }
 
-*[player="[player2]"]{
+.ownable[player="[player2]"]{
   border: 2px solid red !important;
 }
 
-
-
-/*--------------------------------------------------*/
-
-.top-bar{
-  grid-row: 1;
-  grid-column: 3 / 10;
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
+.choosable{
+  box-shadow: 0 0 30px rgb(212, 255, 0);
+}
+.choosable-final{
+  box-shadow: 0 0 30px rgb(0, 21, 255);
 }
 
-.sidebar{
-  display: grid;
-  background:linear-gradient(rgb(216, 147, 35) , rgb(128, 82, 7));
-  justify-content: space-evenly;
+/* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
+
+#locations{
+  color: red !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: column;
   align-items: center;
-}
+  outline: 1px solid green;
+  overflow: hidden;
 
-.sidebar .card{
-  width: 10vh;
-  height: 100%;
-}
 
-/* .sidebar:hover {
-  width: 30rem;
-  transition-duration: 1s;
-} */
-
-.sidebar-left {
-  grid-column: 1 / 3;
-  grid-row: 1 / 12;
-}
-
-.sidebar-right {
-  grid-column: 10 / 12;
-  grid-row: 1 / 12;
-}
-
-.mp-counter{
-  font-size: 4rem;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
-
-.player1{
-  color: rgb(22, 155, 237);
-}
-
-.player2{
-  color: rgb(235, 50, 75);
-}
-
-.panel{
-  grid-row: 2 / 12;
-  grid-column: 3 / 10;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.level-0 {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 5px;
-  padding: 10px;
-  padding-top: 35rem;
-  background-color: rgb(122, 231, 204);
+  &::after{
+    display: none;
+  }
 }
 
 
-.level-1 {
-  display: grid;
-  justify-items: center;
-  /* grid-template-rows: auto; */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  /* grid-auto-flow: row; */
-  /* grid-template-columns: 100px 100px; */
+/* Dar manualmente la clase location__focused a una manualmente para poder trabajar*/
+.location:not(.location__focused){
+  display: none !important;
+}
+
+.location__focused{
+  width: 100% !important;
+  height: 60% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative;
+  display:   flex !important;
+  background-size: contain;
+  background-repeat: repeat-x;
+  background-position: center;
+  border: 0 !important;
+  flex-flow: column;
+  align-items: center;
   
-  border-radius: 5px;
-  padding: 10px;
-  background-color: rgba(171, 176, 174, 0.848);
-  border: 2px solid rgba(25, 28, 29, 0.297);
-}
-
-.level-2 {
-  /* margin: 0.5rem; */
-  border-radius: 2rem;
-  width: 12rem;
-  height: 7rem;
-  display: grid;
-  padding-top: 4rem;
-  border: 3px solid rgba(229, 249, 255, 0.797);
-  align-items: end;
+  &::after, &::before{
+    transition: left 300ms ease-out 100ms,
+      right 300ms ease-out 100ms;
+    content: "";
+    position: absolute !important;
+    top: 0%;
+    background-image: url(cortina.png), 
+      linear-gradient(90deg, 
+        rgba(100,0,14,1) 0%, 
+        rgba(120,0,34,1) 73%, 
+        rgba(2,0,36,0) 72%, 
+        rgba(9,9,121,0) 100%); 
+    height: 100%;
+    width: 35%;
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+  }
   
-  padding: 10px;
-  background-color: rgb(50, 175, 115);
+  &::before{
+    left: 0% !important; 
+  }
+  
+  &::after{
+    right: 0% !important;
+    scale: -1 1;
+  }
+  
+  &:not(:has(.fellowship__focused:hover)):hover::before{
+    left: -1rem !important;
+  }
+  
+  &:not(:has(.fellowship__focused:hover)):hover::after{
+    right: -1rem !important;
+  }
+  
 }
 
-
-.level-3 {
-  /* margin: 0.5rem; */
-  border-radius: 2rem;
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid rgba(229, 249, 255, 0.797);
-  /* background-size: 150%; */
+/* Dar manualmente la clase fellowship__focused a una manualmente para poder trabajar*/
+.fellowship:not(.fellowship__focused){
+  display: none !important;
 }
 
-.game-element {
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* background-size: 120%;
-    background-position-x: 40%;
-    background-position-y: 20%; */
+.fellowship__focused{
+  position:  relative !important;
+  top: 100%;
+  width: 90vw;
+  height: 35vh;
+  z-index: 1;
+  margin: 0 !important;
+  gap: 4rem !important;
+  
+  display: flex !important;
+  align-items: center;
+  align-content: center;
+  
+  padding-inline: 4rem !important; 
+  
+  
+  &::after{
+    display: none;
+  }
+  
+  & .character{
+    margin:auto;
+    height: 90%;
+    aspect-ratio: 3/5;
+    border-radius: 5%;
+    border: .75rem solid var(--character-card) !important;
+    position: relative;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+    &::after{
+      position: absolute;
+      top: -1.5rem;
+      background-color: var(--character-card);
+      color: black;
+      width: max-content;
+      content: attr(id);
+    }
+    
+    /*&>.attribute{
+      display: block !important;
+    }*/
+    
+    &>.attribute:not(.body){
+      filter: drop-shadow(-.4rem .4rem 1px rgb(0,0,0,0.4));
+    }
+    
+
+    &>.prowess {
+      display: block !important;
+      position: absolute !important;
+      
+      bottom: 0rem;
+      left: -2rem;
+      background-image: url(combat-stats.png);
+      background-size: cover;
+      height: 4rem;
+      aspect-ratio: 1/1;
+      
+      &>span{
+        position: relative;
+        left: .7rem;
+        top: .9rem;
+        color: whitesmoke;
+      }
+      
+    }
+
+     &>.body{
+      display: block !important;
+      position: absolute;
+      bottom: 0rem;
+      left: 1rem;
+       
+      &>span{
+        position: relative;
+        left: -.6rem;
+        top: -1.3rem;
+        color: whitesmoke;
+      }
+    }
+    
+    
+
+    &>.attribute.corruption {
+      display: block !important;
+      position: absolute !important;
+      
+      bottom: 0rem;
+      right: -1.5rem;
+      background-image: url(corruption-marker.png);
+      background-size: cover;
+      height: 3rem;
+      aspect-ratio: 24/21;
+      display: grid !important;
+      justify-content: center;
+      
+      
+      &>span{
+        justify-self: center;
+        color: black;
+      }
+      
+      align-content: center;
+    }
+    
+    
+    &>.attribute.influence {
+      display: block !important;
+      position: absolute !important;
+      
+      top: 2rem;
+      left: -1.5rem;
+      background-image: url(influence-marker.png);
+      background-size: cover;
+      height: 3rem;
+      aspect-ratio: 2/3;
+      display: grid !important;
+      justify-content: center;
+      
+      
+      &>span{
+        font-size: 1.3rem;
+        position: relative;
+        justify-self: center;
+        color: whitesmoke;
+        top: .5rem;
+      }
+      
+      align-content: center;
+    }
+    
+    
+  }/*! margin: .5rem; */ /*
+  border: 4px solid grey;
+  text-align: center;
+  color: yellow;*/
 }
+
+/* Efecto hover a todas las cartas menos localizacion*/
+
+.card:not(.location){
+  scale: 1;
+  transition: scale 50ms ease-out;
+}
+.card:hover:not(.location):not(:has(.card:hover)){
+  scale: 1.1;
+}
+
