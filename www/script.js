@@ -5,7 +5,7 @@ const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
 let choice = [];
 
-let closeUp, phase, game_space, locations, events;
+let closeUp, phase, game_space, locations, events, focusedLocation = "[rivendell]", focusedFellowship = "[fellowship1]";
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
@@ -36,8 +36,10 @@ function classToImg(cls){
 
 function makeElement(announce){
     let id = announce.id;
+    let fl = (focusedLocation===id)? "location__focused" : ""; // TODO: mejorar un poco
+    let ff = (focusedFellowship===id)? "fellowship__focused" : "";
     let classes = announce.classes;
-    let res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"")}"`;
+    let res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"") + " " + fl + ff}"`;
     if(classes.includes("card"))
         res+=` style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
     
@@ -54,7 +56,7 @@ function makeElement(announce){
         res += ` draggable=true>`;
     }else{
         res += ` draggable=true>`;
-        map.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}"><span>${value}</span></div>`);
+        map.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}" content=${value}></div>`);
     }
     res += "</div>";
     return res;
@@ -89,8 +91,8 @@ function insertingData(announce){
 function modifyElement(announce){
     let msDelay = 20;
     let animationFunction = () => {
-        let elementAtt = document.getElementById(announce.id+"__"+announce.slot).firstChild;
-        elementAtt.textContent = announce.value;
+        let elementAtt = document.getElementById(announce.id+"__"+announce.slot);
+        elementAtt.setAttribute("content",announce.value);
     };
     if (document.getElementById(announce.id).classList.contains("event")){
         msDelay = 300;

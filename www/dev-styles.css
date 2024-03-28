@@ -58,13 +58,11 @@
       background-color: blue;
     }
 
-    &>span{
+    &::after{
       margin: auto;
       font-size: 2rem;
-    }
-
-    &::after{
-      display: none;
+      content: attr(content) !important;
+      display: block !important;
     }
 
   }
