@@ -19,6 +19,9 @@
   /* GUI CONSTANTS */
   --player-size: 30rem;
   --player-border-size: 2rem;
+  --sun-color: hsla(60,50%,50%,1);
+  --sun-size: 10vh;
+  --moon-color: hsla(0,0%,0%,.8);
 }
 
 
@@ -179,7 +182,6 @@
 #\[out-of-game1\] {background-color:black;   grid-area: player-out; display: none !important;}
 #\[out-of-game2\] {background-color:black;   grid-area: enemy-out; display: none !important;}
 .events           {background-color:#5CAB7D; grid-area: events; display: none !important;}
-.pass             {background-color: #FFF275;grid-area: pass; display: none !important;}
 
 .fellowship       {background-color: rgba(209, 183, 153, 0.32);}
 
@@ -628,6 +630,7 @@
     background-image: url(brazo.png);
     background-size: cover;
     background-position: right;
+    filter: drop-shadow(0rem 0rem 0.1rem black) var(--shadow);
     
     &::after{
       content: attr(content);
@@ -749,4 +752,32 @@
 
 #\[hand2\]{display:none;/* TODO: NO DEBERIA HABER hand2 */}
 
+.pass{
+  position: absolute;
+  top: 1%;
+  right: calc(50% - var(--sun-size) / 2);
+  width: var(--sun-size);
+  aspect-ratio: 1/1;
+  background-color: var(--sun-color);
+  border-radius: 50%;
+  /*overflow: hidden;*/
+  border: 1px solid var(--moon-color);
+  filter: drop-shadow(0 0 0.2rem  var(--sun-color));
+  
+  &::after{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 5%;
+    left: -10%; /*TODO: Cambiar entre -100% y 100% para pasar el dia*/
+    width: 90%;
+    aspect-ratio: 1/1;
+    background-color: var(--moon-color);
+    /*background-image: url(moon.png);
+    background-size: cover;
+    background-position: 80% 85%;*/
+    border-radius: 50%;
+    filter: drop-shadow(0 0 0.2rem  var(--moon-color));
+  }
+}
 
