@@ -1,5 +1,24 @@
 :root{
-  --character-card: grey;
+  /* LOCATION VIEW CONSTANTS */
+  --curtain-opening: -65%;
+  --color-light: whitesmoke;
+  --character-light: whitesmoke;
+  --character-border: hsla(185, 24%, 60%, 1);
+  --item-border-color: hsla(14, 61%,38%, 1);
+  --item-border-color-light: hsla(15, 38%, 63%, 1);
+  --item-border: repeating-linear-gradient(
+    -90deg, 
+    var(--item-border-color-light),
+    var(--item-border-color), 
+    var(--item-border-color-light) 
+    2rem);
+  --shadow: drop-shadow(-.4rem .4rem 1px rgb(0,0,0,0.4));
+  --shadow-inverted: drop-shadow(.4rem 0rem 1px rgb(0,0,0,0.4));
+  --text-shadow:hsla(0,0%,0%,.5) .1rem .05rem;
+  
+  /* GUI CONSTANTS */
+  --player-size: 30rem;
+  --player-border-size: 2rem;
 }
 
 
@@ -8,7 +27,7 @@
   margin: 0;
   padding: 0;
   font-family:monospace;
-  /* outline: 1px solid red; */
+  /*! outline: 1px solid red; */
 
 
 }
@@ -20,7 +39,6 @@
 
 .fellowship > .character{
   aspect-ratio: 1/1;
-  /*! width: 15rem; */
 }
 
 
@@ -30,7 +48,6 @@
   background-image: url(info-icon.png);
 }
 #game-space .attackable:not(.card) {
-  /* display: none; */
   background-image: url(attackable.png);
 }
 
@@ -139,13 +156,10 @@
 
 #game-space {
   display: flex;
+  overflow: hidden;
+  position: relative;
 }
 
-#\[player1\]      {background-color:blue;   grid-area: player; display: none !important;}
-#\[player2\]      {background-color:red;    grid-area: enemy; display: none !important;}
-
-#\[hand1\]        {background-color:#5b3d2d; grid-area: player-hand; display: none !important;}
-#\[hand2\]        {background-color:#5b3d2d; grid-area: enemy-hand; display: none !important;}
 #\[draw1\]        {background-color:#3D3A4B; grid-area: player-draw;
   &:not(:hover)>div{
     display: none;
@@ -190,7 +204,6 @@
 /* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
 
 #locations{
-  color: red !important;
   width: 100vw !important;
   height: 100vh !important;
   margin: 0;
@@ -210,20 +223,20 @@
 
 /* Dar manualmente la clase location__focused a una manualmente para poder trabajar*/
 .location:not(.location__focused){
-  display: none !important;
+  display: none;
 }
 
 .location__focused{
-  width: 100% !important;
-  height: 60% !important;
+  width: 100%;
+  height: 60%;
   margin: 0 !important;
   padding: 0 !important;
   position: relative;
-  display:   flex !important;
+  display: flex;
   background-size: contain;
-  background-repeat: repeat-x;
   background-position: center;
-  border: 0 !important;
+  background-repeat: repeat-x;
+  border: 0;
   flex-flow: column;
   align-items: center;
   
@@ -231,36 +244,49 @@
     transition: left 300ms ease-out 100ms,
       right 300ms ease-out 100ms;
     content: "";
-    position: absolute !important;
+    position: absolute;
     top: 0%;
     background-image: url(cortina.png), 
-      linear-gradient(90deg, 
-        rgba(100,0,14,1) 0%, 
-        rgba(120,0,34,1) 73%, 
-        rgba(2,0,36,0) 72%, 
-        rgba(9,9,121,0) 100%); 
+      linear-gradient(100deg, 
+        rgba(80,0,14,1) 0%, 
+        rgba(120,0,30,1) 84%, 
+        rgba(0,0,0,0) 80%, 
+        rgba(0,0,0,0) 100%); 
     height: 100%;
-    width: 35%;
+    width: 100%;
     background-size: contain;
     background-position: right;
     background-repeat: no-repeat;
   }
   
   &::before{
-    left: 0% !important; 
+    filter: var(--shadow-inverted);
+    left: var(--curtain-opening); 
   }
   
   &::after{
-    right: 0% !important;
+    filter: var(--shadow);
+    right: var(--curtain-opening);
     scale: -1 1;
   }
   
-  &:not(:has(.fellowship__focused:hover)):hover::before{
-    left: -1rem !important;
-  }
+  /* ANIMACION PARA CERRAR LAS CORTINAS
+  &:not(:has(.fellowship__focused:hover)):hover{
+    &::before{
+      left: -30%;
+    }
+    &::after{
+      right: -30%;
+    }
+  }*/
   
-  &:not(:has(.fellowship__focused:hover)):hover::after{
-    right: -1rem !important;
+  &:not(:has(.fellowship__focused:hover)):hover{
+    &::before{
+      left: calc( var(--curtain-opening) - 1rem);
+    }
+    &::after{
+      right: calc( var(--curtain-opening) - 1rem);
+    }
   }
   
 }
@@ -290,12 +316,35 @@
     display: none;
   }
   
+
+  /* ESTILOS DE TODOS LOS ATRIBUTOS */
+.card{
+  filter: var(--shadow);
+}
+  
+  
+.attribute{
+  position: absolute !important;
+  background-size: cover;
+  
+  &:not(.body){
+    filter: var(--shadow);
+  }
+      
+  &::after{
+    content:attr(content) !important;
+    position: relative;
+  }
+}
+  
+  
   & .character{
+    padding: 0;
     margin:auto;
     height: 90%;
     aspect-ratio: 3/5;
     border-radius: 5%;
-    border: .75rem solid var(--character-card) !important;
+    border: .75rem ridge var(--character-border) !important;
     border-width: .75rem !important;
     border-image: url(character-border1.png) 10 stretch repeat !important;
     
@@ -304,43 +353,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    
-    
-    &:has(>.state[content="TAPPED"]){
-      filter:grayscale(80%);
-    }
+    gap: 0;
     
     
     &::after{
-      border: .3rem solid hsla(185, 24%, 60%, 1);
+      border: .3rem solid var(--character-border);
       border-radius: .4rem;
       position: absolute;
       top: -2rem;
       width: max-content;
       text-transform: uppercase;
       content: attr(id);
-      background-color: var(--character-card);
+      background-color: var(--character-light);
       color: black;
     }
     
     /*&>.attribute{
       display: block !important;
     }*/
-    
-    
-    &>.attribute{
-      position: absolute !important;
-      background-size: cover;
-      
-      &::after{
-        content:attr(content) !important;
-        position: relative;
-      }
-    }
-    
-    &>.attribute:not(.body), &{
-      filter: drop-shadow(-.4rem .4rem 1px rgb(0,0,0,0.4));
-    }
     
 
     &>.prowess {
@@ -354,7 +384,7 @@
       &::after{
         left: .7rem;
         top: .9rem;
-        color: whitesmoke;
+        color: var(--character-light);
       }
       
     }
@@ -367,14 +397,13 @@
       &::after{
         left: -.6rem;
         top: -1.3rem;
-        color: whitesmoke;
+        color: var(--character-light);
       }
     }
     
     
 
-    &>.attribute.corruption {
-      display: block !important;      
+    &>.attribute.corruption {   
       bottom: 0rem;
       right: -1.5rem;
       background-image: url(corruption-marker.png);
@@ -383,11 +412,11 @@
       display: grid !important;
       justify-content: center;
       align-content: center;
+      color: black;
       
-      &::after{
-        color: black;
+      &[content="0"]::after{
+        content: "" !important;
       }
-      
     }
     
     
@@ -403,12 +432,10 @@
         content:attr(content) !important;
         font-size: 1.3rem;
         position: relative;
-        justify-self: center;
-        color: whitesmoke;
+        color: var(--character-light);
         top: 1.1rem;
         left: .7rem;
       }
-      
     }
     
     &>.attribute.mind {
@@ -426,16 +453,300 @@
         left: .5rem;
       }
     }
+    
+    /* ESTILOS DE SEGUIDORES */
+    &>.character{
+      position: absolute;
+      height: 110%;
+      top: 50%;
+      left: 50%;
+      transition-duration: 100ms;
+      transition-delay: 50ms;
+      
+      &:hover{
+        scale: 1.2;
+        top:-20%;
+      }
+    }
+    
+    
+    
+    /* ESTILOS DE ARMAS */
+    &>.item {
+      position: absolute;
+      bottom: 4rem;
+      right: -1.5rem;
+      height: 3rem;
+      aspect-ratio: 4/3;
+      
+      &:hover::after{
+        display: block;
+        top: -1.5rem;
+      }
+      
+      &:hover>.attribute.corruption{
+        display: grid !important;
+      }
+      
+      
+    }
   }
 }
+
+
+/* Estilos de todos los recursos*/
+
+.resource {
+  border-image: var(--item-border) 8;
+  border-width: .3rem;
+  border-style: ridge;
+  background-position: 50% 65%;
+  background-size: 150%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-light);
+  text-shadow: var(--text-shadow);
+  
+  &::after{
+    display: none;
+    position: absolute;
+    border: .3rem solid var(--item-border-color);
+    border-radius: .4rem;
+    font-size: 1rem;
+    width: max-content;
+    text-transform: uppercase;
+    content: attr(id);
+    background-color: var(--item-border-color-light);
+  }
+  
+  &>.attribute.corruption{
+    background-image: url(corruption-marker.png);
+    height: 2rem;
+    aspect-ratio: 24/21;
+    justify-content: center;
+    align-content: center;
+    color: black;
+    right: -1rem;
+    bottom: -1rem;
+    filter: brightness(80%) saturate(400%) hue-rotate(145deg);
+    text-shadow: none;
+     
+    &::after{
+      font-size: 1rem;
+      content: attr(content);
+    }
+  }
+}
+
+
+
 
 /* Efecto hover a todas las cartas menos localizacion*/
 
 .card:not(.location){
   scale: 1;
-  transition: scale 50ms ease-out;
+  transition: all 50ms ease-out;
 }
 .card:hover:not(.location):not(:has(.card:hover)){
+  z-index: 1000 !important;
   scale: 1.1;
+  &.item{
+    height: 5rem;
+    right: -3.5rem;
+    bottom: 3.5rem;
+  }
 }
+
+.fellowship__focused>.character:hover{
+  z-index: 2;
+}
+
+.card:has(>.state[content="TAPPED"]){
+  filter:grayscale(80%);
+}
+
+
+/*
+
+  GUI
+
+*/
+
+
+.object.player{
+  position:absolute;
+  width: calc(2 * var(--player-border-size) + var(--player-size));
+  top: calc(0rem - var(--player-border-size)  - var(--player-size) / 2);
+  aspect-ratio: 1/1;
+  border-radius: 40%;
+  background-position: calc(var(--player-size) / 2) calc(var(--player-size) / 2);
+  background-size: 50% 50%;
+  background-clip: border-box;
+  border-width: var(--player-border-size);
+  border-color: black;
+  border-style: solid;
+  
+  &::after{
+    position: absolute;
+    bottom: calc(var(--player-border-size) / 1.5);
+    content: attr(id);
+    text-transform: uppercase;
+  }
+  
+  &>.attribute.general-influence{
+    display: grid;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    width: 3rem;
+    aspect-ratio: 2/3;
+    background-image: url(influence-marker.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: var(--shadow);
+    
+    &::after{
+      position:relative;
+      content: attr(content);
+      color: var(--character-light);
+      top: 45%;
+      font-size: 1.5rem;
+      
+    }
+  }
+  
+  
+  &>.attribute.mp{
+    display: block;
+    position: absolute;
+    top: calc(50% + 1rem);
+    rotate: 8deg;
+    /*! width: calc(35vw - var(--player-size) / 2 - var(--player-border-size)); */
+    height: 8rem;
+    aspect-ratio: 1/1;
+    background-image: url(brazo.png);
+    background-size: cover;
+    background-position: right;
+    
+    &::after{
+      content: attr(content);
+      position: absolute;
+      font-size: 2rem;
+      text-align: center;
+      right: .8rem;
+      rotate: -8deg;
+      color: black;
+      background-color: hsla(0,0%,100%,.8);
+      height: 2.4rem;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+    }
+  }
+}
+
+#\[player1\]{
+  left: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
+  background-image: url(tw/icons/gandalf.jpg);
+  background-color:blue;
+  
+  &::after{
+    rotate: -40deg;
+    right: calc(var(--player-border-size) / 1.5);
+  }
+  
+  &>.attribute.general-influence{
+    left: 50%;
+  }
+  
+  &>.attribute.mp{
+      left: calc(100% + var(--player-border-size) - .3rem);
+  }
+  
+}
+
+
+#\[player2\]{
+  right: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
+  background-image: url(tw/icons/saruman.jpg);
+  background-color:red;
+  
+  &::after{
+    rotate: 40deg;
+    left: calc( var(--player-border-size) / 1.5);
+  }
+  
+  
+  &>.attribute.general-influence{
+    right: 50%;
+  }
+  
+  &>.attribute.mp{
+    right: calc(100% + var(--player-border-size) - .3rem);
+    scale: -1 1;
+    rotate: -8deg;
+    
+    &::after{
+      scale: -1 1;
+    }
+  }
+  
+  
+  &>.hand{
+    right: 16rem;
+    bottom: 0.5rem;
+    
+    &::after{
+      content: attr(content);
+    }
+  }
+}
+
+#\[draw1\]{
+  left: 16rem;
+  left: 1rem;
+  top: calc(var(--player-size) / 1.5);
+    
+  &::after{
+    position: relative;
+    bottom: -3rem;
+    content: "ROBAR";
+  }
+}
+
+#\[player2\]>.attribute.hand, #\[draw1\]{
+    display: grid !important;
+    position: absolute;
+    width: 4rem;
+    aspect-ratio: 1/1;
+    background-color: brown !important;
+    justify-content: center;
+    align-content: center;
+    font-size: 2rem;
+    color: black;
+    border: 2px solid black;
+}
+
+#\[hand1\]{
+  position: absolute;
+  z-index: 3;
+  bottom: 10rem;
+  left: 10%;
+  width: 80%;
+  height: 10%;
+  display: none; /*flex*/
+  gap: 1rem;
+  
+  background-color:#5b3d2d;
+  &>.card{
+    display: block;
+    position: relative;
+    margin:auto;
+    width: 10rem;
+    aspect-ratio: 1/1;
+  }
+}
+
+#\[hand2\]{display:none;/* TODO: NO DEBERIA HABER hand2 */}
+
 
