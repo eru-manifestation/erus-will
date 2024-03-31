@@ -31,7 +31,16 @@ function upcaseFirst(str){
 }
 
 function classToImg(cls){
-    return cls.replaceAll("--","").split("-").reduce((a,b)=>a+upcaseFirst(b),"");
+    return cls.replaceAll("--","")
+        .split("-")
+        .reduce((a,b)=>a+upcaseFirst(b),"");
+}
+
+function cardClass(cls){
+    return cls.replaceAll("--","\\")
+        .split("-")
+        .reduce((a,b)=>a+" "+b,"")
+        .replaceAll("\\","-");
 }
 
 function makeElement(announce){
@@ -41,7 +50,7 @@ function makeElement(announce){
     let classes = announce.classes;
     let res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"") + " " + fl + ff}"`;
     if(classes.includes("card"))
-        res+=` style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
+        res+=` card="${cardClass(classes[0])}" style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
     
     let map = new Map(Object.entries(announce));
     map.delete("operation");

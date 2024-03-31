@@ -190,40 +190,37 @@
 
 /* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
 
-
-/* Dar manualmente la clase location__focused a una manualmente para poder trabajar*/
-.location:not(.location__focused){
-  display: none;
-}
-
 .location__focused{
   width: 100%;
-  height: 60vh;
+  height: 100vh;
   margin: 0 !important;
   padding: 0 !important;
+  border: 0;
   position: relative;
   top: 101vh; /* 1vh extra para conseguir un scroll mas agradable */
-  display: flex;
-  background-size: contain;
-  background-position: center;
+  
+  background-position: top;
   background-repeat: repeat-x;
-  border: 0;
+  background-size: 50% 60%;
+  
+  display: flex;
   flex-flow: column;
   align-items: center;
+  
+  overflow: hidden;
   
   &::after, &::before{
     transition: left 300ms ease-out 100ms,
       right 300ms ease-out 100ms;
     content: "";
     position: absolute;
-    top: 0%;
     background-image: url(cortina.png), 
       linear-gradient(100deg, 
         rgba(80,0,14,1) 0%, 
         rgba(120,0,30,1) 84%, 
         rgba(0,0,0,0) 80%, 
         rgba(0,0,0,0) 100%); 
-    height: 100%;
+    height: 60%;
     width: 100%;
     background-size: contain;
     background-position: right;
@@ -264,13 +261,13 @@
 
 /* Dar manualmente la clase fellowship__focused a una manualmente para poder trabajar*/
 .fellowship:not(.fellowship__focused){
-  display: none !important;
+  display: none;
 }
 
 .fellowship__focused{
-  position:  relative !important;
-  top: 100%;
-  width: 90vw;
+  position: relative !important;
+  top: 60%;
+  width: 100vw;
   height: 40vh;
   z-index: 1;
   margin: 0 !important;
@@ -280,8 +277,7 @@
   align-items: center;
   align-content: center;
   
-  padding-inline: 4rem !important; 
-  
+  padding-inline: 4rem !important;
   
   &::after{
     display: none;
@@ -298,7 +294,7 @@
   position: absolute !important;
   background-size: cover;
   
-  &:not(.body){
+  &:not(:is(.body, .mind, .influence)){
     filter: var(--shadow);
   }
       
@@ -310,75 +306,96 @@
   
   
   & .character{
-    padding: 0;
     margin:auto;
     height: 90%;
-    aspect-ratio: 3/5;
+    /*! aspect-ratio: 3/5; */
+    width: 22vh;
     border-radius: 5%;
     border: .75rem ridge var(--character-border) !important;
     border-width: .75rem !important;
     border-image: url(character-border1.png) 10 stretch repeat !important;
     
     position: relative;
-    font-size: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
+    font-size: 1.2rem;
     
+    display: flex;
+    flex-flow: column-reverse;
+    padding-left: 6rem;
+    padding-block: 2rem;
+    gap: 1rem;
+    
+    &>*:not(:is(.attribute, .character)){
+      left: 1.5rem;
+      width: 100%;
+    }
     
     &::after{
       border: .3rem solid var(--character-border);
       border-radius: .4rem;
       position: absolute;
-      top: -2rem;
-      width: max-content;
+      top: -1.6rem;
+      left: .6rem;
+      z-index: -2;
+      width: 100%;
       text-transform: uppercase;
-      content: attr(id);
+      text-align: center;
+      content: attr(card);
       background-color: var(--character-light);
       color: black;
+      
     }
     
     /*&>.attribute{
       display: block !important;
     }*/
     
-
-    &>.prowess {
-      display: block !important;
-      bottom: 0rem;
+    &>.mp{
+      font-size: 1.5rem;
+      background-image: url(mp-marker.png);
+      width: 3rem;
+      aspect-ratio: 9/31;
       left: -2rem;
-      background-image: url(combat-stats.png);
+      top: -2rem;
+      z-index: -1;
+      color: black;
+      display: grid;
+      justify-content: center;
+      
+      &::after{
+        top: .4rem;
+      }
+    }
+    
+    &>:is(.prowess, .body){
+      font-size: 1.5rem;
+      display: block !important;
+      bottom: -1rem;
+      left: -2rem;
       height: 3rem;
       aspect-ratio: 1/1;
       
       &::after{
-        left: .3rem;
-        top: .5rem;
+        position: absolute;
+        bottom: .8rem;
         color: var(--character-light);
       }
-      
     }
 
-     &>.body{
-      display: block !important;
-      bottom: 0rem;
-      left: 1rem;
-       
-      &::after{
-        left: -1.1rem;
-        top: -.8rem;
-        color: var(--character-light);
-      }
+    &>.prowess {
+      background-image: url(combat-stats.png);
+      &::after{right: 1.8rem;}
     }
-    
+
+    &>.body::after{
+      left: 1.8rem;
+    }
     
 
     &>.attribute.corruption {   
-      bottom: 0rem;
+      bottom: -1rem;
       right: -1.5rem;
       background-image: url(corruption-marker.png);
-      height: 3rem;
+      width: 2.8rem;
       aspect-ratio: 24/21;
       display: grid !important;
       justify-content: center;
@@ -390,38 +407,38 @@
       }
     }
     
-    
-    &>.attribute.influence {
-      display: block !important;
-      top: 5rem;
-      left: -1.5rem;
-      background-image: url(influence-marker.png);
-      height: 3rem;
-      aspect-ratio: 2/3;
+    &>:is(.attribute.influence, .attribute.mind){
+      display: grid !important;
+      justify-content: center;
+      align-content: center;
+      width: 1.3rem;
+      left: -1.2rem;
       
       &::after{
-        content:attr(content) !important;
-        font-size: 1.3rem;
-        position: relative;
+        font-size: 1.1rem;
+      }
+    }
+    
+    &>.attribute.influence {
+      top: 3.7rem;
+      background-image: url(influence-marker.png);
+      aspect-ratio: 2/3;
+      
+      
+      &::after{
         color: var(--character-light);
-        top: 1.1rem;
-        left: .7rem;
+        top: 0.2rem;
       }
     }
     
     &>.attribute.mind {
-      display: block !important;
-      top: 2rem;
-      left: -1.5rem;
+      top: 1.5rem;
       background-image: url(mind-marker.png);
-      height: 2rem;
       aspect-ratio: 6/7;
       
       &::after{
-        font-size: 1.3rem;
-        justify-self: center;
         color: black;
-        left: .5rem;
+        top: -.1rem;
       }
     }
     
@@ -442,24 +459,28 @@
     
     
     
-    /* ESTILOS DE ARMAS */
+    /* ESTILOS DE OBJETOS */
     &>.item {
-      position: absolute;
-      bottom: 4rem;
-      right: -1.5rem;
-      height: 3rem;
+      position: relative;
       aspect-ratio: 4/3;
       
+      &:hover{
+        z-index: 1;
+      }
+      
       &:hover::after{
+        position: absolute;
         display: block;
-        top: -1.5rem;
+        bottom: 90%;
+        padding-inline: .3rem;
+        text-align: center;
+        width: 130%;
       }
       
       &:hover>.attribute.corruption{
         display: grid !important;
       }
-      
-      
+      /*! width: 4rem; */
     }
   }
 }
@@ -487,7 +508,7 @@
     font-size: 1rem;
     width: max-content;
     text-transform: uppercase;
-    content: attr(id);
+    content: attr(card);
     background-color: var(--item-border-color-light);
   }
   
@@ -517,15 +538,16 @@
 
 .card:not(.location){
   scale: 1;
+  bottom: 0;
   transition: all 50ms ease-out;
 }
 .card:hover:not(.location):not(:has(.card:hover)){
-  /*! z-index: 1000 !important; */
   scale: 1.1;
   &.item{
-    height: 5rem;
-    right: -3.5rem;
-    bottom: 3.5rem;
+    scale: 1.5;
+    &::after{
+      font-size: 1rem !important;
+    }
   }
 }
 
@@ -957,7 +979,11 @@
     scroll-snap-align: end;
     
     &>.location:not(.location__focused){
-      display: block !important;
+      display: grid !important;
+      justify-content: center;
+      align-content: end;
+      color: black;
+      
       width: 4vw;
       aspect-ratio: 1/1;
       border-radius: 50%;
@@ -965,9 +991,24 @@
       
       position: absolute;
       
+      &>*{
+        display: none;
+      }
+      
       &:hover{
         scale: 1.5;
         z-index: 1;
+        
+        &::after{
+          position: relative;
+          content: attr(card);
+          bottom: -1.5rem;
+          text-transform: uppercase;
+          background-color: white;
+          border-radius: .1rem;
+          padding-inline: .3rem;
+          width: max-content;
+        }
       }
     }
     
