@@ -201,7 +201,7 @@
   
   background-position: top;
   background-repeat: repeat-x;
-  background-size: 50% 60%;
+  background-size: auto 60%;
   
   display: flex;
   flex-flow: column;
@@ -275,7 +275,7 @@
   
   display: flex !important;
   align-items: center;
-  align-content: center;
+  /*! align-content: end; */
   
   padding-inline: 4rem !important;
   
@@ -320,7 +320,7 @@
     
     display: flex;
     flex-flow: column-reverse;
-    padding-left: 6rem;
+    padding-left: 7%;
     padding-block: 2rem;
     gap: 1rem;
     
