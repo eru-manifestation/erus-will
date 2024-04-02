@@ -162,10 +162,10 @@
   overflow: hidden;
   position: relative;
 }
-#\[mp1\]          {background-color:#5A9367; grid-area: player-mp; display: none !important;}
-#\[mp2\]          {background-color:#5A9367; grid-area: enemy-mp; display: none !important;}
-#\[out-of-game1\] {background-color:black;   grid-area: player-out; display: none !important;}
-#\[out-of-game2\] {background-color:black;   grid-area: enemy-out; display: none !important;}
+#mp1          {background-color:#5A9367; grid-area: player-mp; display: none !important;}
+#mp2          {background-color:#5A9367; grid-area: enemy-mp; display: none !important;}
+#out-of-game1 {background-color:black;   grid-area: player-out; display: none !important;}
+#out-of-game2 {background-color:black;   grid-area: enemy-out; display: none !important;}
 .events           {background-color:#5CAB7D; grid-area: events; display: none !important;}
 
 .fellowship       {background-color: rgba(209, 183, 153, 0.32);}
@@ -173,11 +173,11 @@
 
 
 
-.ownable[player="[player1]"]{
+.ownable[player="player1"]{
   border: 2px solid blue !important;
 }
 
-.ownable[player="[player2]"]{
+.ownable[player="player2"]{
   border: 2px solid red !important;
 }
 
@@ -257,236 +257,240 @@
     }
   }
   
+  &>.fellowship__focused{
+    position: relative !important;
+    top: 60%;
+    width: 100vw;
+    height: 40vh;
+    z-index: 1;
+    margin: 0 !important;
+    gap: 4rem !important;
+
+    display: flex !important;
+    align-items: center;
+    /*! align-content: end; */
+
+    padding-inline: 4rem !important;
+
+    &::after{
+      display: none;
+    }
+
+    &>.character:hover{
+      z-index: 2;
+    }
+
+    /* ESTILOS DE TODOS LOS ATRIBUTOS */
+  .card{
+    filter: var(--shadow);
+  }
+
+
+  .attribute{
+    position: absolute !important;
+    background-size: cover;
+
+    &:not(:is(.body, .mind, .influence)){
+      filter: var(--shadow);
+    }
+
+    &::after{
+      content:attr(content) !important;
+      position: relative;
+    }
+  }
+
+
+    & .character{
+      margin:auto;
+      height: 90%;
+      /*! aspect-ratio: 3/5; */
+      width: 22vh;
+      border-radius: 5%;
+      border: .75rem ridge var(--character-border) !important;
+      border-width: .75rem !important;
+      border-image: url(character-border1.png) 10 stretch repeat !important;
+
+      position: relative;
+      font-size: 1.2rem;
+
+      display: flex;
+      flex-flow: column-reverse;
+      padding-left: 7%;
+      padding-block: 2rem;
+      gap: 1rem;
+
+      &>*:not(:is(.attribute, .character)){
+        left: 1.5rem;
+        width: 100%;
+      }
+
+      &::after{
+        border: .3rem solid var(--character-border);
+        border-radius: .4rem;
+        position: absolute;
+        top: -1.6rem;
+        left: .6rem;
+        z-index: -2;
+        width: 100%;
+        text-transform: uppercase;
+        text-align: center;
+        content: attr(card);
+        background-color: var(--character-light);
+        color: black;
+
+      }
+
+      /*&>.attribute{
+        display: block !important;
+      }*/
+
+      &>.mp{
+        font-size: 1.5rem;
+        background-image: url(mp-marker.png);
+        width: 3rem;
+        aspect-ratio: 9/31;
+        left: -2rem;
+        top: -2rem;
+        z-index: -1;
+        color: black;
+        display: grid;
+        justify-content: center;
+
+        &::after{
+          top: .4rem;
+        }
+      }
+
+      &>:is(.prowess, .body){
+        font-size: 1.5rem;
+        display: block !important;
+        bottom: -1rem;
+        left: -2rem;
+        height: 3rem;
+        aspect-ratio: 1/1;
+
+        &::after{
+          position: absolute;
+          bottom: .8rem;
+          color: var(--character-light);
+        }
+      }
+
+      &>.prowess {
+        background-image: url(combat-stats.png);
+        &::after{right: 1.8rem;}
+      }
+
+      &>.body::after{
+        left: 1.8rem;
+      }
+
+
+      &>.attribute.corruption {   
+        bottom: -1rem;
+        right: -1.5rem;
+        background-image: url(corruption-marker.png);
+        width: 2.8rem;
+        aspect-ratio: 24/21;
+        display: grid !important;
+        justify-content: center;
+        align-content: center;
+        color: black;
+
+        &[content="0"]::after{
+          content: "" !important;
+        }
+      }
+
+      &>:is(.attribute.influence, .attribute.mind){
+        display: grid !important;
+        justify-content: center;
+        align-content: center;
+        width: 1.3rem;
+        left: -1.2rem;
+
+        &::after{
+          font-size: 1.1rem;
+        }
+      }
+
+      &>.attribute.influence {
+        top: 3.7rem;
+        background-image: url(influence-marker.png);
+        aspect-ratio: 2/3;
+
+
+        &::after{
+          color: var(--character-light);
+          top: 0.2rem;
+        }
+      }
+
+      &>.attribute.mind {
+        top: 1.5rem;
+        background-image: url(mind-marker.png);
+        aspect-ratio: 6/7;
+
+        &::after{
+          color: black;
+          top: -.1rem;
+        }
+      }
+
+      /* ESTILOS DE SEGUIDORES */
+      &>.character{
+        position: absolute;
+        height: 110%;
+        top: 50%;
+        left: 50%;
+        transition-duration: 100ms;
+        transition-delay: 50ms;
+
+        &:hover{
+          scale: 1.2;
+          top:-20%;
+        }
+      }
+
+
+
+      /* ESTILOS DE OBJETOS */
+      &>.item {
+        position: relative;
+        aspect-ratio: 4/3;
+
+        &:hover{
+          z-index: 1;
+        }
+
+        &:hover::after{
+          position: absolute;
+          display: block;
+          bottom: 90%;
+          padding-inline: .3rem;
+          text-align: center;
+          width: 130%;
+        }
+
+        &:hover>.attribute.corruption{
+          display: grid !important;
+        }
+        /*! width: 4rem; */
+      }
+    }
+  }
 }
 
-/* Dar manualmente la clase fellowship__focused a una manualmente para poder trabajar*/
-.fellowship:not(.fellowship__focused){
+  /* Dar manualmente la clase fellowship__focused a una manualmente para poder trabajar*/
+.fellowship{
   display: none;
 }
 
-.fellowship__focused{
-  position: relative !important;
-  top: 60%;
-  width: 100vw;
-  height: 40vh;
-  z-index: 1;
-  margin: 0 !important;
-  gap: 4rem !important;
-  
-  display: flex !important;
-  align-items: center;
-  /*! align-content: end; */
-  
-  padding-inline: 4rem !important;
-  
-  &::after{
-    display: none;
-  }
-  
-
-  /* ESTILOS DE TODOS LOS ATRIBUTOS */
-.card{
-  filter: var(--shadow);
-}
-  
-  
-.attribute{
-  position: absolute !important;
-  background-size: cover;
-  
-  &:not(:is(.body, .mind, .influence)){
-    filter: var(--shadow);
-  }
-      
-  &::after{
-    content:attr(content) !important;
-    position: relative;
-  }
-}
-  
-  
-  & .character{
-    margin:auto;
-    height: 90%;
-    /*! aspect-ratio: 3/5; */
-    width: 22vh;
-    border-radius: 5%;
-    border: .75rem ridge var(--character-border) !important;
-    border-width: .75rem !important;
-    border-image: url(character-border1.png) 10 stretch repeat !important;
-    
-    position: relative;
-    font-size: 1.2rem;
-    
-    display: flex;
-    flex-flow: column-reverse;
-    padding-left: 7%;
-    padding-block: 2rem;
-    gap: 1rem;
-    
-    &>*:not(:is(.attribute, .character)){
-      left: 1.5rem;
-      width: 100%;
-    }
-    
-    &::after{
-      border: .3rem solid var(--character-border);
-      border-radius: .4rem;
-      position: absolute;
-      top: -1.6rem;
-      left: .6rem;
-      z-index: -2;
-      width: 100%;
-      text-transform: uppercase;
-      text-align: center;
-      content: attr(card);
-      background-color: var(--character-light);
-      color: black;
-      
-    }
-    
-    /*&>.attribute{
-      display: block !important;
-    }*/
-    
-    &>.mp{
-      font-size: 1.5rem;
-      background-image: url(mp-marker.png);
-      width: 3rem;
-      aspect-ratio: 9/31;
-      left: -2rem;
-      top: -2rem;
-      z-index: -1;
-      color: black;
-      display: grid;
-      justify-content: center;
-      
-      &::after{
-        top: .4rem;
-      }
-    }
-    
-    &>:is(.prowess, .body){
-      font-size: 1.5rem;
-      display: block !important;
-      bottom: -1rem;
-      left: -2rem;
-      height: 3rem;
-      aspect-ratio: 1/1;
-      
-      &::after{
-        position: absolute;
-        bottom: .8rem;
-        color: var(--character-light);
-      }
-    }
-
-    &>.prowess {
-      background-image: url(combat-stats.png);
-      &::after{right: 1.8rem;}
-    }
-
-    &>.body::after{
-      left: 1.8rem;
-    }
-    
-
-    &>.attribute.corruption {   
-      bottom: -1rem;
-      right: -1.5rem;
-      background-image: url(corruption-marker.png);
-      width: 2.8rem;
-      aspect-ratio: 24/21;
-      display: grid !important;
-      justify-content: center;
-      align-content: center;
-      color: black;
-      
-      &[content="0"]::after{
-        content: "" !important;
-      }
-    }
-    
-    &>:is(.attribute.influence, .attribute.mind){
-      display: grid !important;
-      justify-content: center;
-      align-content: center;
-      width: 1.3rem;
-      left: -1.2rem;
-      
-      &::after{
-        font-size: 1.1rem;
-      }
-    }
-    
-    &>.attribute.influence {
-      top: 3.7rem;
-      background-image: url(influence-marker.png);
-      aspect-ratio: 2/3;
-      
-      
-      &::after{
-        color: var(--character-light);
-        top: 0.2rem;
-      }
-    }
-    
-    &>.attribute.mind {
-      top: 1.5rem;
-      background-image: url(mind-marker.png);
-      aspect-ratio: 6/7;
-      
-      &::after{
-        color: black;
-        top: -.1rem;
-      }
-    }
-    
-    /* ESTILOS DE SEGUIDORES */
-    &>.character{
-      position: absolute;
-      height: 110%;
-      top: 50%;
-      left: 50%;
-      transition-duration: 100ms;
-      transition-delay: 50ms;
-      
-      &:hover{
-        scale: 1.2;
-        top:-20%;
-      }
-    }
-    
-    
-    
-    /* ESTILOS DE OBJETOS */
-    &>.item {
-      position: relative;
-      aspect-ratio: 4/3;
-      
-      &:hover{
-        z-index: 1;
-      }
-      
-      &:hover::after{
-        position: absolute;
-        display: block;
-        bottom: 90%;
-        padding-inline: .3rem;
-        text-align: center;
-        width: 130%;
-      }
-      
-      &:hover>.attribute.corruption{
-        display: grid !important;
-      }
-      /*! width: 4rem; */
-    }
-  }
-}
 
 
-/* Estilos de todos los recursos*/
+
+  /* Estilos de todos los recursos*/
 
 .resource {
   border-image: var(--item-border) 8;
@@ -510,8 +514,8 @@
     text-transform: uppercase;
     content: attr(card);
     background-color: var(--item-border-color-light);
-  }
-  
+ }
+
   &>.attribute.corruption{
     background-image: url(corruption-marker.png);
     height: 2rem;
@@ -523,7 +527,7 @@
     bottom: -1rem;
     filter: brightness(80%) saturate(400%) hue-rotate(145deg);
     text-shadow: none;
-     
+
     &::after{
       font-size: 1rem;
       content: attr(content);
@@ -549,10 +553,6 @@
       font-size: 1rem !important;
     }
   }
-}
-
-.fellowship__focused>.character:hover{
-  z-index: 2;
 }
 
 .card:has(>.state[content="TAPPED"]){
@@ -638,7 +638,7 @@
   }
 }
 
-#\[player1\]{
+#player1{
   left: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
   background-image: url(tw/icons/gandalf.jpg);
   background-color:blue;
@@ -660,7 +660,7 @@
 }
 
 
-#\[player2\]{
+#player2{
   right: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
   background-image: url(tw/icons/saruman.jpg);
   background-color:red;
@@ -697,7 +697,7 @@
   }
 }
 
-#\[draw1\]{
+#draw1{
   left: 1rem;
   top: calc(var(--player-size) / 1.5);
   
@@ -792,7 +792,7 @@
 }
 
 
-#\[player2\]>.attribute.hand{
+#player2>.attribute.hand{
     display: grid !important;
     position: absolute;
     width: 4rem;
@@ -805,7 +805,7 @@
     border: 2px solid black;
 }
 
-#\[hand1\]{
+#hand1{
   position: fixed;
   z-index: 3;
   bottom: 10rem;
@@ -825,9 +825,9 @@
   }
 }
 
-#\[hand2\]{display:none;/* TODO: NO DEBERIA HABER hand2 */}
-#\[draw2\]{display: none !important;}
-#\[discard2\]{display: none !important;}
+#hand2{display:none;/* TODO: NO DEBERIA HABER hand2 */}
+#draw2{display: none !important;}
+#discard2{display: none !important;}
 
 
 .pass{
@@ -876,7 +876,7 @@
 }
 
 
-#\[discard1\]{
+#discard1{
   width: 8rem;
   aspect-ratio: 19/22;
   position: fixed;
@@ -959,12 +959,16 @@
   
   &::after{
     content: "";
-    bottom: -100vh; 
+    bottom: 0vh; 
     z-index: -1;
     width: 100vw;
     height: 10vh;
     position: absolute;
     scroll-snap-align: start;
+  }
+  
+  &:has(.location__focused)::after{
+    bottom: -100vh; 
   }
   
   &>#locations{
@@ -1021,59 +1025,59 @@
 
 */
 
-#\[rivendell\]:not(.location__focused){
+#rivendell:not(.location__focused){
   top: 30%;
   left: 48%;
 }
-#\[lorien\]:not(.location__focused){
+#lorien:not(.location__focused){
   top: 41%;
   left: 52%;
 }
-#\[barrow--downs\]:not(.location__focused){
+#barrow--downs:not(.location__focused){
   top: 35%;
   left: 33%;
 }
-#\[dunnish-clan--hold\]:not(.location__focused){
+#dunnish-clan--hold:not(.location__focused){
   top: 50%;
   left: 39%;
 }
-#\[bree\]:not(.location__focused){
+#bree:not(.location__focused){
   top: 31%;
   left: 31%;
 }
-#\[goblin--gate\]:not(.location__focused){
+#goblin--gate:not(.location__focused){
   top: 23%;
   left: 51%;
 }
-#\[isengard\]:not(.location__focused){
+#isengard:not(.location__focused){
   top: 53%;
   left: 44%;
 }
-#\[wellinghall\]:not(.location__focused){
+#wellinghall:not(.location__focused){
   top: 50%;
   left: 49%;
 }
-#\[edoras\]:not(.location__focused){
+#edoras:not(.location__focused){
   top: 60%;
   left: 50%;
 }
-#\[minas-tirith\]:not(.location__focused){
+#minas-tirith:not(.location__focused){
   top: 66%;
   left: 64%;
 }
-#\[dead-marshes\]:not(.location__focused){
+#dead-marshes:not(.location__focused){
   top: 56%;
   left: 63%;
 }
-#\[thranduils-halls\]:not(.location__focused){
+#thranduils-halls:not(.location__focused){
   top: 16%;
   left: 66%;
 }
-#\[mount-gundabad\]:not(.location__focused){
+#mount-gundabad:not(.location__focused){
   top: 10%;
   left: 50%;
 }
-#\[moria\]:not(.location__focused){
+#moria:not(.location__focused){
   top: 40%;
   left: 46%;
 }

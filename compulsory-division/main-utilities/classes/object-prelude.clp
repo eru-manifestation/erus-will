@@ -11,9 +11,14 @@
 		else
 			(return (str-cat ?data))))
 	(if (multifieldp ?data) then
-		(return (implode$ ?data)))
+		(bind ?res (JSONformat (nth$ 1 ?data)))
+		(foreach ?d (rest$ ?data)
+			(bind ?res (str-cat ?res " " (JSONformat ?d)))
+		)
+		(return ?res)
+		)
 	(if (instance-namep ?data) then
-		(return (str-cat "[" (instance-name-to-symbol ?data) "]")))
+		(return (str-cat ?data)))
 	(if (instance-addressp ?data) then
 		(return (JSONformat (instance-name ?data))))
 	(return "ERROR")

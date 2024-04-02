@@ -5,7 +5,7 @@ const socket = io.connect(window.location.origin,{query:urlParams.toString()});
 const dev = urlParams.get("dev");
 let choice = [];
 
-let closeUp, phase, game_space, locations, events, focusedLocation = "[rivendell]", focusedFellowship = "[fellowship1]";
+let closeUp, phase, game_space, locations, events, focusedLocation = "rivendell", focusedFellowship = "fellowship1";
 
 document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
 
@@ -72,10 +72,10 @@ function makeElement(announce){
 }
 
 function insertingData(announce){
-    let msDelay = 20;
+    let msDelay = 0;
     let animationFunction;
     
-    if(announce.position != "[nil]"){
+    if(announce.position != "nil"){
         animationFunction = () => 
             document.getElementById(announce.position)
             .insertAdjacentHTML("beforeend", makeElement(announce));
@@ -84,7 +84,7 @@ function insertingData(announce){
             animationFunction = () => 
                 locations.insertAdjacentHTML("beforeend", makeElement(announce));
         }else if(announce.classes.includes("event")){
-            msDelay = 300;
+            msDelay = 0; // Los eventos hasta que se estilen ocurren de golpe
             animationFunction = () => {
                 events.insertAdjacentHTML("beforeend", makeElement(announce));
             };
@@ -104,7 +104,7 @@ function modifyElement(announce){
         elementAtt.setAttribute("content",announce.value);
     };
     if (document.getElementById(announce.id).classList.contains("event")){
-        msDelay = 300;
+        msDelay = 0; // Hasta que se estilen, los eventos van de golpe
         animationFunction = () => {
             let element = document.getElementById(announce.id);
             element.setAttribute(announce.slot,announce.value);
@@ -116,7 +116,19 @@ function modifyElement(announce){
 
 
 function emitSimpleChoice(event){
-    send_orders(event.target.id);
+    if(event.target.classList.contains("location") && !event.target.classList.contains("location__focused")){
+        let lastLocation = document.getElementById(focusedLocation);
+        if(lastLocation!=null) lastLocation.classList.remove("location__focused");
+        focusedLocation=event.target.id;
+        event.target.classList.add("location__focused");
+
+        let lastFellowship = document.getElementById(focusedFellowship);
+        if(lastFellowship!=null)    lastFellowship.classList.remove("fellowship__focused");
+        focusedFellowship=document.querySelector(`#${event.target.id}>.fellowship`).id;
+        document.getElementById(focusedFellowship).classList.add("fellowship__focused");
+    }else{
+        send_orders("["+event.target.id+"]");
+    }
     event.preventDefault();
     event.stopPropagation();
 }
@@ -173,11 +185,19 @@ function restartStyles(event){
 
 function completeComplexChoice(event){
     if (event.dataTransfer.types.includes("text/plain")){
-        let data = event.dataTransfer.getData("text/plain")+" "+event.target.id;
+        let data = "["+event.dataTransfer.getData("text/plain")+"] ["+event.target.id+"]";
         send_orders(data);
     }
-    event.stopPropagation();
-    event.preventDefault();
+    prevention(event);
+}
+
+function drawToWorldView(event){
+    if(event.target.id === "PASS"){
+        let fl = document.getElementById(focusedLocation);
+        fl.classList.remove("location__focused");
+        focusedLocation = null;
+    }
+    prevention(event);
 }
 
 function prevention(event){
@@ -201,7 +221,7 @@ function disableChoices(){
             draggable.removeEventListener("click", emitSimpleChoice);
             draggable.removeEventListener("dragstart", startComplexChoice);
             draggable.removeEventListener("dragend", restartStyles);
-            draggable.removeEventListener("dragenter", prevention);
+            draggable.removeEventListener("dragenter", drawToWorldView);
             draggable.removeEventListener("dragover", prevention);
             draggable.removeEventListener("dragleave", prevention);
             draggable.removeEventListener("drop", completeComplexChoice);
@@ -217,7 +237,7 @@ function enableChoices(){
             draggable.addEventListener("click", emitSimpleChoice);
             draggable.addEventListener("dragstart", startComplexChoice);
             draggable.addEventListener("dragend", restartStyles);
-            draggable.addEventListener("dragenter", prevention);
+            draggable.addEventListener("dragenter", drawToWorldView);
             draggable.addEventListener("dragover", prevention);
             draggable.addEventListener("dragleave", prevention);
             draggable.addEventListener("drop", completeComplexChoice);
@@ -245,7 +265,7 @@ function animateAnnounce(announce){
                 case "move":
                     operationData.msDelay = 20;
                     operationData.animationFunction = () => {
-                        const target = document.getElementById(announce.id);
+                        let target = document.getElementById(announce.id);
                         if (target != null)
                             document.getElementById(announce.to).appendChild(target);
                     };

@@ -20,7 +20,7 @@
 	=>
 	(assert (action 
 		(player ?p) 
-		(identifier PASS) 
+		(identifier [PASS]) 
 		(description "Pass") 
 		(event-def pass) 
 		(data)
@@ -33,11 +33,11 @@
 	(do-for-all-facts ((?action action)) (eq ?p ?action:player)
 		(if (eq (length$ ?action:identifier) 1) then
 			(choose ?p { 
-				"vector" : [ (implode$ ?action:identifier) ] , 
+				"vector" : [ (JSONformat ?action:identifier) ] , 
 				"description" : (JSONformat ?action:description) })
 			else
 			(choose ?p { 
-				"vector" : [ (str-cat "[" (nth$ 1 ?action:identifier) "]") , (str-cat "[" (nth$ 2 ?action:identifier)"]" ) ] ,
+				"vector" : [ (JSONformat (nth$ 1 ?action:identifier)) , (JSONformat (nth$ 2 ?action:identifier)) ] ,
 				"description" : (JSONformat ?action:description) })
 		)
 	)
@@ -70,16 +70,16 @@
 				(E-modify (nth$ 1 ?action:data) (nth$ 2 ?action:data) (subseq$ ?action:data 3 100) ?action:reason)
 			)
 			(case play then
-				(E-play (expand$ ?action:data) ?action:reason)
+				(E-play (nth$ 1 ?action:data) (nth$ 2 ?action:data) ?action:reason)
 			)
 			(case discard then
-				(E-discard (expand$ ?action:data) ?action:reason)
+				(E-discard (nth$ 1 ?action:data) ?action:reason)
 			)
 			(case play-by-region then
-				(E-play-by-region (expand$ ?action:data) ?action:reason)
+				(E-play-by-region (nth$ 1 ?action:data) (nth$ 2 ?action:data) (nth$ 3 ?action:data) ?action:reason)
 			)
 			(case play-by-place then
-				(E-play-by-place (expand$ ?action:data) ?action:reason)
+				(E-play-by-place (nth$ 1 ?action:data) (nth$ 2 ?action:data) (nth$ 3 ?action:data) ?action:reason)
 			)
 			(default
 				(eval (str-cat "(make-instance (gen-name EP-" ?action:event-def 
