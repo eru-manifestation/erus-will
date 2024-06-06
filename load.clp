@@ -142,7 +142,6 @@
 )
 
 (deffunction MAIN::debug ($?n)
-    ; Despues del lanzamiento de esta funcion, se sobreescribira para no poder lanzarla mas
     (if (load-all) then
         (dribble-on (str-cat "debug/log" (expand$ ?n) ".txt"))
         (batch "debug/debug.clp")

@@ -1,57 +1,61 @@
 //let W3CWebSocket = require('websocket').w3cwebsocket;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const socket = io.connect(window.location.origin,{query:urlParams.toString()});
+const socket = io.connect(window.location.origin, { query: urlParams.toString() });
 const dev = urlParams.get("dev");
 let choice = [];
+let player = undefined;
 
 let closeUp, phase, game_space, locations, events, focusedLocation = "rivendell", focusedFellowship = "fellowship1";
 
-document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="'+(dev? 'dev-':'')+'styles.css" />');
+document.getElementsByTagName('head')[0]
+    .insertAdjacentHTML('beforeend',
+        '<link rel="stylesheet" href="' + (dev ? 'dev-' : '') + 'styles.css" />');
 
-function fire(title,text,icon){
+
+function fire(title, text, icon) {
     Swal.fire({
-        title:title,
-        text:text,
-        icon:icon,
-        toast:true,
+        title: title,
+        text: text,
+        icon: icon,
+        toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer:3000
+        timer: 3000
     })
 }
-function showChoiceDescription(e){
+function showChoiceDescription(e) {
     fire("Choose to:", e.target.getAttribute("choiceDescription"), "info");
 }
 
-function upcaseFirst(str){
-    if (["a","an","and","of","the","or","in","out"].includes(str))
+function upcaseFirst(str) {
+    if (["a", "an", "and", "of", "the", "or", "in", "out"].includes(str))
         return str;
     else return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function classToImg(cls){
-    return cls.replaceAll("--","")
+function classToImg(cls) {
+    return cls.replaceAll("--", "")
         .split("-")
-        .reduce((a,b)=>a+upcaseFirst(b),"");
+        .reduce((a, b) => a + upcaseFirst(b), "");
 }
 
-function cardClass(cls){
-    return cls.replaceAll("--","\\")
+function cardClass(cls) {
+    return cls.replaceAll("--", "\\")
         .split("-")
-        .reduce((a,b)=>a+" "+b,"")
-        .replaceAll("\\","-");
+        .reduce((a, b) => a + " " + b, "")
+        .replaceAll("\\", "-");
 }
 
-function makeElement(announce){
+function makeElement(announce) {
     let id = announce.id;
-    let fl = (focusedLocation===id)? "location__focused" : ""; // TODO: mejorar un poco
-    let ff = (focusedFellowship===id)? "fellowship__focused" : "";
+    let fl = (focusedLocation === id) ? "location__focused" : "";
+    let ff = (focusedFellowship === id) ? "fellowship__focused" : "";
     let classes = announce.classes;
-    let res = `<div id=${id} class="${classes.reduce((a,b)=>a+" "+b,"") + " " + fl + ff}"`;
-    if(classes.includes("card"))
-        res+=` card="${cardClass(classes[0])}" style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
-    
+    let res = `<div id=${id} class="${classes.reduce((a, b) => a + " " + b, "") + " " + fl + ff}"`;
+    if (classes.includes("card"))
+        res += ` card="${cardClass(classes[0])}" style=background-image:url('../tw/icons/${classToImg(classes[0])}.jpg')`;
+
     let map = new Map(Object.entries(announce));
     map.delete("operation");
     map.delete("id");
@@ -59,31 +63,31 @@ function makeElement(announce){
     map.delete("instance-#");
     map.delete("position");
 
-    if(classes.includes("event")){
+    if (classes.includes("event")) {
         map.set("reason", map.get("reason").split(" ")[0]);
-        map.forEach((value,key) => res+=` ${key}=${value}`);
+        map.forEach((value, key) => res += ` ${key}=${value}`);
         res += ` draggable=true>`;
-    }else{
+    } else {
         res += ` draggable=true>`;
-        map.forEach((value,key) => res+=`<div id="${id}__${key}" class="attribute ${key}" content=${value}></div>`);
+        map.forEach((value, key) => res += `<div id="${id}__${key}" class="attribute ${key}" content=${value}></div>`);
     }
     res += "</div>";
     return res;
 }
 
-function insertingData(announce){
+function insertingData(announce) {
     let msDelay = 0;
     let animationFunction;
-    
-    if(announce.position != "nil"){
-        animationFunction = () => 
+
+    if (announce.position != "nil") {
+        animationFunction = () =>
             document.getElementById(announce.position)
-            .insertAdjacentHTML("beforeend", makeElement(announce));
-    }else{
-        if(announce.classes.includes("location")){
-            animationFunction = () => 
+                .insertAdjacentHTML("beforeend", makeElement(announce));
+    } else {
+        if (announce.classes.includes("location")) {
+            animationFunction = () =>
                 locations.insertAdjacentHTML("beforeend", makeElement(announce));
-        }else if(announce.classes.includes("event")){
+        } else if (announce.classes.includes("event")) {
             msDelay = 0; // Los eventos hasta que se estilen ocurren de golpe
             animationFunction = () => {
                 events.insertAdjacentHTML("beforeend", makeElement(announce));
@@ -94,51 +98,58 @@ function insertingData(announce){
         }
     }
 
-    return {msDelay, animationFunction};
+    return { msDelay, animationFunction };
 }
 
-function modifyElement(announce){
+function modifyElement(announce) {
     let msDelay = 20;
     let animationFunction = () => {
-        let elementAtt = document.getElementById(announce.id+"__"+announce.slot);
-        elementAtt.setAttribute("content",announce.value);
+        let elementAtt = document.getElementById(announce.id + "__" + announce.slot);
+        elementAtt.setAttribute("content", announce.value);
     };
-    if (document.getElementById(announce.id).classList.contains("event")){
+    if (document.getElementById(announce.id).classList.contains("event")) {
         msDelay = 0; // Hasta que se estilen, los eventos van de golpe
         animationFunction = () => {
             let element = document.getElementById(announce.id);
-            element.setAttribute(announce.slot,announce.value);
+            element.setAttribute(announce.slot, announce.value);
         };
     }
-    return {msDelay, animationFunction};
+    return { msDelay, animationFunction };
 }
 
 
 
-function emitSimpleChoice(event){
-    if(event.target.classList.contains("location") && !event.target.classList.contains("location__focused")){
+function emitSimpleChoice(event) {
+    let classes = event.target.classList;
+    if (classes.contains("location") && !classes.contains("location__focused")) {
         let lastLocation = document.getElementById(focusedLocation);
-        if(lastLocation!=null) lastLocation.classList.remove("location__focused");
-        focusedLocation=event.target.id;
-        event.target.classList.add("location__focused");
+        if (lastLocation != null) lastLocation.classList.remove("location__focused");
+        focusedLocation = event.target.id;
+        classes.add("location__focused");
 
         let lastFellowship = document.getElementById(focusedFellowship);
-        if(lastFellowship!=null)    lastFellowship.classList.remove("fellowship__focused");
-        focusedFellowship=document.querySelector(`#${event.target.id}>.fellowship`).id;
+        if (lastFellowship != null) lastFellowship.classList.remove("fellowship__focused");
+        focusedFellowship = document.querySelector(`#${event.target.id}>.fellowship`).id;
         document.getElementById(focusedFellowship).classList.add("fellowship__focused");
-    }else{
-        send_orders("["+event.target.id+"]");
+
+    } else if (classes.contains("fellowship") && !classes.contains("fellowship__focused")) {
+        let lastFellowship = document.getElementById(focusedFellowship);
+        if (lastFellowship != null) lastFellowship.classList.remove("fellowship__focused");
+        classes.add("fellowship__focused");
+        focusedFellowship = event.target.id;
+    } else {
+        send_orders("[" + event.target.id + "]");
     }
     event.preventDefault();
     event.stopPropagation();
 }
 
 
-function removeAllChoiceStyles(){
+function removeAllChoiceStyles() {
     document.querySelectorAll(".choosable")
-        .forEach((choosable)=>choosable.classList.remove("choosable"));
+        .forEach((choosable) => choosable.classList.remove("choosable"));
     document.querySelectorAll(".choosable-final")
-        .forEach((choosable)=>{
+        .forEach((choosable) => {
             choosable.classList.remove("choosable-final");
             choosable.removeAttribute("choiceDescription");
             choosable.removeEventListener("dragenter", showChoiceDescription);
@@ -146,74 +157,83 @@ function removeAllChoiceStyles(){
         });
 }
 
-function startComplexChoice(event){
+function startComplexChoice(event) {
     let draggable = event.target;
     event.dataTransfer.setData("text/plain", draggable.id);
     removeAllChoiceStyles();
 
     choice
-    .filter((singleChoice) => singleChoice.vector[0]===draggable.id & singleChoice.vector.length===2)
-    .forEach((singleChoice) => {
-        let complexChoiceTarget = document.getElementById(singleChoice.vector[1])
-        complexChoiceTarget.classList.add("choosable-final");
-        complexChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
-        complexChoiceTarget.addEventListener("dragenter", showChoiceDescription);
+        .filter((singleChoice) => singleChoice.vector[0] === draggable.id & singleChoice.vector.length === 2)
+        .forEach((singleChoice) => {
+            let complexChoiceTarget = document.getElementById(singleChoice.vector[1])
+            complexChoiceTarget.classList.add("choosable-final");
+            complexChoiceTarget.setAttribute("choiceDescription", singleChoice.description);
+            complexChoiceTarget.addEventListener("dragenter", showChoiceDescription);
 
-        //TODO: Activar aquí el listener sólo para los que les interese?
-    });
+            //TODO: Activar aquí el listener sólo para los que les interese?
+        });
     event.stopPropagation();
 }
 
-function applyStyles(){
+function applyStyles() {
     choice
-    .forEach((singleChoice)=>{
-        if(singleChoice.vector.length===1) {
-            let simpleChoiceTarget = document.getElementById(singleChoice.vector[0]);
-            simpleChoiceTarget.classList.add("choosable-final");
-            simpleChoiceTarget.setAttribute("choiceDescription",singleChoice.description);
-            simpleChoiceTarget.addEventListener("mouseenter", showChoiceDescription);
-        }
-        else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
-    });
+        .forEach((singleChoice) => {
+            if (singleChoice.vector.length === 1) {
+                let simpleChoiceTarget = document.getElementById(singleChoice.vector[0]);
+                simpleChoiceTarget.classList.add("choosable-final");
+                simpleChoiceTarget.setAttribute("choiceDescription", singleChoice.description);
+                simpleChoiceTarget.addEventListener("mouseenter", showChoiceDescription);
+            }
+            else document.getElementById(singleChoice.vector[0]).classList.add("choosable");
+        });
 }
 
-function restartStyles(event){
+function restartStyles(event) {
     removeAllChoiceStyles();
     applyStyles();
     event.stopPropagation();
 }
 
-function completeComplexChoice(event){
-    if (event.dataTransfer.types.includes("text/plain")){
-        let data = "["+event.dataTransfer.getData("text/plain")+"] ["+event.target.id+"]";
+function completeComplexChoice(event) {
+    if (event.dataTransfer.types.includes("text/plain")) {
+        let data = "[" + event.dataTransfer.getData("text/plain") + "] [" + event.target.id + "]";
         send_orders(data);
     }
     prevention(event);
 }
 
-function drawToWorldView(event){
-    if(event.target.id === "PASS"){
-        let fl = document.getElementById(focusedLocation);
-        fl.classList.remove("location__focused");
+function dragInteractions(event) {
+    let classes = event.target.classList;
+    // Trigger World View
+    if (event.target.id === "PASS") {
+        document.getElementById(focusedLocation)?.classList.remove("location__focused");
         focusedLocation = null;
+    // Change fellowship focus
+    } else if (classes.contains("fellowship") && !classes.contains("fellowship__focused")) {
+        setTimeout(() => {
+            let lastFellowship = document.getElementById(focusedFellowship);
+            if (lastFellowship != null) lastFellowship.classList.remove("fellowship__focused");
+            classes.add("fellowship__focused");
+            focusedFellowship = event.target.id;
+        }, 1000);
     }
     prevention(event);
 }
 
-function prevention(event){
+function prevention(event) {
     event.preventDefault();
     event.stopPropagation();
 }
 
-function send_orders(orders){
-    console.log("Orders: {"+orders+"}");
-    socket.emit("orders",orders);
-    orders.value="";
+function send_orders(orders) {
+    console.log("Orders: {" + orders + "}");
+    socket.emit("orders", orders);
+    orders.value = "";
     disableChoices();
 }
 
 
-function disableChoices(){
+function disableChoices() {
     removeAllChoiceStyles();
 
     document.querySelectorAll("*[draggable=true]").forEach(
@@ -221,7 +241,7 @@ function disableChoices(){
             draggable.removeEventListener("click", emitSimpleChoice);
             draggable.removeEventListener("dragstart", startComplexChoice);
             draggable.removeEventListener("dragend", restartStyles);
-            draggable.removeEventListener("dragenter", drawToWorldView);
+            draggable.removeEventListener("dragenter", dragInteractions);
             draggable.removeEventListener("dragover", prevention);
             draggable.removeEventListener("dragleave", prevention);
             draggable.removeEventListener("drop", completeComplexChoice);
@@ -229,7 +249,7 @@ function disableChoices(){
     );
 }
 
-function enableChoices(){
+function enableChoices() {
     applyStyles();
 
     document.querySelectorAll("*[draggable=true]").forEach(
@@ -237,7 +257,7 @@ function enableChoices(){
             draggable.addEventListener("click", emitSimpleChoice);
             draggable.addEventListener("dragstart", startComplexChoice);
             draggable.addEventListener("dragend", restartStyles);
-            draggable.addEventListener("dragenter", drawToWorldView);
+            draggable.addEventListener("dragenter", dragInteractions);
             draggable.addEventListener("dragover", prevention);
             draggable.addEventListener("dragleave", prevention);
             draggable.addEventListener("drop", completeComplexChoice);
@@ -245,14 +265,14 @@ function enableChoices(){
     );
 }
 
-function animateAnnounce(announce){
-    return new Promise((resolve) =>{
-        if(announce!=null)
-            switch(announce.operation){
+function animateAnnounce(announce) {
+    return new Promise((resolve) => {
+        if (announce != null)
+            switch (announce.operation) {
                 case "create":
                     operationData = insertingData(announce);
                     break;
-    
+
                 case "modify":
                     operationData = modifyElement(announce);
                     break;
@@ -270,7 +290,7 @@ function animateAnnounce(announce){
                             document.getElementById(announce.to).appendChild(target);
                     };
                     break;
-                
+
                 case "phase":
                     operationData.msDelay = 1020;
                     operationData.animationFunction = () => {
@@ -279,61 +299,75 @@ function animateAnnounce(announce){
                         setTimeout(() => phase.classList.remove("phaseanimation"), 1000);
                     };
                     break;
-                
+
                 default:
                     console.error("error in operation type");
                     break;
             }
         else {
-            operationData = {msDelay : 20, animationFunction : enableChoices};
+            operationData = { msDelay: 20, animationFunction: enableChoices };
         }
         operationData.animationFunction();
         setTimeout(resolve, operationData.msDelay);
     })
 }
 
-async function animate(announces){
-    for await (announce of announces){
+async function animate(announces) {
+    for await (announce of announces) {
         await animateAnnounce(announce);
     }
 }
 
-function closeUpListener(e){
-    if(closeUp.style.display === "block"){
+function closeUpListener(e) {
+    if (closeUp.style.display === "block") {
         closeUp.style.display = "none";
-    } else if(e.button === 2 && e.target.classList.contains("card")){
+    } else if (e.button === 2 && e.target.classList.contains("card")) {
         closeUp.style.backgroundImage = `url("../tw/${classToImg(e.target.classList[0])}.jpg")`;
         closeUp.style.display = "block";
     }
 }
 
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
     closeUp = document.getElementById("close-up");
     phase = document.getElementById("phase");
     game_space = document.getElementById("game-space");
     locations = document.getElementById("locations");
     events = document.querySelector(".events");
 
-    window.addEventListener("mousedown", closeUpListener)
-    document.addEventListener("contextmenu", (e)=>e?.cancelable && e.preventDefault())
+    window.addEventListener("mousedown", closeUpListener);
+    document.addEventListener("contextmenu", (e) => e?.cancelable && e.preventDefault());
 
-    socket.on("log", (data)=>{
-        console.log("Mensaje recibido:\n"+data);
+    socket.on("player", (playerN) => {
+        console.log("Iniciando partida como " + playerN);
+        player = playerN;
+        const target = player === "player2" ?
+            "#player2__hand, #hand1, #draw1, #discard1" :
+            "#player1__hand, #hand2, #draw2, #discard2";
+        document.styleSheets[0].insertRule(target + "{display:none !important;}");
     });
 
-    socket.on("satm_error", (data)=>{
-        console.log("STAM error:\n"+data);
+    socket.on("log", (data) => {
+        console.log("Mensaje recibido:\n" + data);
+    });
+
+    socket.on("satm_error", (data) => {
+        console.log("STAM error:\n" + data);
         fire("Invalid action", data, "error");
         enableChoices();
     });
 
-    socket.on("satm_ok", (data)=>{
+    socket.on("satm_ok", (data) => {
         data = JSON.parse(data);
-        choice = data.choice.slice(0,-1);
-        
+        choice = data.choice.slice(0, -1);
+
         console.log("Choose:", data.choice);
         console.log("Announces:", data.announces);
         animate(data.announces);
+    });
+
+    socket.on("disconnect", (reason) => {
+        alert("Conexión terminada: "+reason.toString());
+        window.location.href = '/';
     });
 
 });

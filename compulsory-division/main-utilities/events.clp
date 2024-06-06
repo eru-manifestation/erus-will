@@ -39,7 +39,6 @@
 		; En caso de que pase el mando a un evento desactivado, se entiende que quien le pasa el mando es el propio cancelador, que quiere que se le transfiera a su vez a quien tiene abajo, de haberlo
 		(case DEFUSED then 
 			(returnFocus ?self:position)
-			; Puede dar dobles activaciones por retraer y asertar DEFUSED
 			DEFUSED)
 		(default 
 			(println "SATM_ERROR: No se puede reactivar un evento en estado " ?self:state)

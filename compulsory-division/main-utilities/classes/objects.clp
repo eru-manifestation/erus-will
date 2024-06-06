@@ -17,8 +17,11 @@
 )
 
 (defclass MAIN::BASIC (is-a USER)
-	(slot position (visibility public) (access read-write) (default ?DERIVE) (type INSTANCE-NAME) (allowed-classes POSITIONABLE))
-    (slot instance-# (visibility public) (type INTEGER) (default 2) (storage shared) (pattern-match non-reactive))
+	(slot position (visibility public) (access read-write) 
+		(default ?DERIVE) (type INSTANCE-NAME) 
+		(allowed-classes POSITIONABLE))
+    (slot instance-# (visibility public) (type INTEGER) 
+		(default 2) (storage shared) (pattern-match non-reactive))
 )
 
 (defclass MAIN::ATTACKABLE (is-a BASIC)

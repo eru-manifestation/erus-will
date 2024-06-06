@@ -15,6 +15,7 @@
   --shadow: drop-shadow(-.4rem 0rem 1px rgb(0,0,0,0.4));
   --shadow-inverted: drop-shadow(.4rem 0rem 1px rgb(0,0,0,0.4));
   --text-shadow:hsla(0,0%,0%,.5) .1rem .05rem;
+  --fellowship-width__unfocused: 7vw;
   
   /* GUI CONSTANTS */
   --player-size: 30rem;
@@ -38,10 +39,6 @@
 
 .attribute{
     display: none;
-}
-
-.fellowship > .character{
-  aspect-ratio: 1/1;
 }
 
 
@@ -168,8 +165,6 @@
 #out-of-game2 {background-color:black;   grid-area: enemy-out; display: none !important;}
 .events           {background-color:#5CAB7D; grid-area: events; display: none !important;}
 
-.fellowship       {background-color: rgba(209, 183, 153, 0.32);}
-
 
 
 
@@ -189,6 +184,78 @@
 }
 
 /* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
+.fellowship {
+  background-color: rgba(209, 183, 153,1);
+  transition: all 100ms,
+    font-size 300ms 200ms; 
+  font-size: 0rem;
+  height: 35%;
+  position: absolute;
+  bottom: 5%;
+}
+
+
+.fellowship__focused + .fellowship, .fellowship:not(.fellowship__focused):not(.fellowship__focused ~ .fellowship){
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-items: center;
+  width: var(--fellowship-width__unfocused);
+  left: 0rem;
+  gap: 5%;
+  padding: 1rem;
+  background-color: brown;
+  font-size: 1.2rem;
+  overflow: hidden;
+      
+  filter: grayscale(90%);
+  
+  &:hover{
+    filter: grayscale(30%);
+  }
+      
+  &::before{
+    content: "Anterior compañía";
+    text-align: center;
+  }
+      
+  &:hover>.character{
+    right: 0;
+  }
+  
+  &>.character{
+    display: block;
+    width: min(5rem, 100%);
+    aspect-ratio: 1/1 !important;
+    border-radius: 50%;
+    
+    position: relative;
+    right: var(--fellowship-width__unfocused);
+    transition: all 100ms;
+        
+    &>*{
+      display: none;
+    }
+  }
+}
+
+.fellowship__focused ~ .fellowship{
+  &::before{content: "Siguiente compañía" !important;};
+  right: calc(0 - var(--fellowship-width__unfocused));
+  left:calc(100% - var(--fellowship-width__unfocused));
+}
+
+.fellowship__focused + .fellowship{
+  right: 0;
+  &:hover>.character{
+    left: 0;
+  }
+  &>.character{
+    transition: all 100ms;
+    position: relative;
+    left: var(--fellowship-width__unfocused);
+  }
+}
 
 .location__focused{
   width: 100%;
@@ -258,10 +325,11 @@
   }
   
   &>.fellowship__focused{
-    position: relative !important;
+    position: absolute !important;
     top: 60%;
-    width: 100vw;
-    height: 40vh;
+    left: var(--fellowship-width__unfocused);
+    right: var(--fellowship-width__unfocused);
+    width: calc(100% - 2 * var(--fellowship-width__unfocused));
     z-index: 1;
     margin: 0 !important;
     gap: 4rem !important;
@@ -685,19 +753,9 @@
       scale: -1 1;
     }
   }
-  
-  
-  &>.hand{
-    right: 16rem;
-    bottom: 0.5rem;
-    
-    &::after{
-      content: attr(content);
-    }
-  }
 }
 
-#draw1{
+#draw1, #draw2{
   left: 1rem;
   top: calc(var(--player-size) / 1.5);
   
@@ -792,8 +850,8 @@
 }
 
 
-#player2>.attribute.hand{
-    display: grid !important;
+#player1__hand, #player2__hand{
+    display: grid;
     position: absolute;
     width: 4rem;
     aspect-ratio: 1/1;
@@ -803,32 +861,47 @@
     font-size: 2rem;
     color: black;
     border: 2px solid black;
+    top: 85%;
+  
+    &::after{
+      content: attr(content);
+    }
 }
 
-#hand1{
+#player1__hand{
+  left: 52%;
+}
+
+#player2__hand{
+  right: 52%;
+}
+
+#hand1, #hand2{
   position: fixed;
   z-index: 3;
-  bottom: 10rem;
-  left: 10%;
-  width: 80%;
-  height: 10%;
-  display: none; /*flex*/
+  bottom: 0rem;
+  left: 5%;
+  width: 90%;
+  height: 0;
   gap: 1rem;
+  display: grid; /*flex*/
+  grid-template-columns: repeat(auto-fit, 5rem);
+  justify-content: center;
   
-  background-color:#5b3d2d;
   &>.card{
     display: block;
     position: relative;
-    margin:auto;
-    width: 10rem;
+    bottom: 4rem;
+    width: 140%;
     aspect-ratio: 1/1;
+    
+    &:hover{
+      bottom: 100%;
+      scale: 1;
+      width: 200%;
+    }
   }
 }
-
-#hand2{display:none;/* TODO: NO DEBERIA HABER hand2 */}
-#draw2{display: none !important;}
-#discard2{display: none !important;}
-
 
 .pass{
   display: grid;
@@ -876,7 +949,7 @@
 }
 
 
-#discard1{
+#discard1, #discard2{
   width: 8rem;
   aspect-ratio: 19/22;
   position: fixed;
@@ -884,6 +957,9 @@
   bottom: 40%;
   filter: var(--shadow);
   
+  &>.card{
+    display: none;
+  }
   
   &::before{
     text-align: center;
