@@ -1,0 +1,252 @@
+:root{
+  --event-in: rgb(63, 192, 61);
+  --event-out: rgb(63, 61, 192);
+  --event-exec: rgb(192, 61, 61);
+  --event-defused: rgb(192, 61, 192);
+  --event-done: grey;
+  --event-border: white;
+  --event-border-inactive: rgb(69, 69, 69);
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family:monospace;
+  /* outline: 1px solid red; */
+
+
+}
+
+
+#game-space div {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: center;
+  padding: 1rem;
+  margin: .5rem;
+  border: 4px solid grey;
+  text-align: center;
+  color: yellow;
+  position: relative;
+
+  
+  &.attribute{
+    display: none;
+
+    .fellowship .character > &:where(.prowess, .body){
+      margin: 0;
+      padding: 0;
+      display: flex;
+      position: absolute;
+      aspect-ratio: 1/1;
+      width: 3rem;
+      bottom:-0.5rem;
+
+      border-width: 1px;
+      border-radius: 50%;
+    }
+
+    .fellowship .character > &.prowess{
+      left: 1rem;
+      background-color: red;
+    }
+
+    .fellowship .character > &.body{
+      right: 1rem;
+      background-color: blue;
+    }
+
+    &::after{
+      margin: auto;
+      font-size: 2rem;
+      content: attr(content) !important;
+      display: block !important;
+    }
+
+  }
+  
+  &::after{
+    content: attr(id);
+    grid-column: 1/3;
+    grid-row: 1;
+  }
+}
+
+.fellowship > .character{
+  aspect-ratio: 1/1;
+  width: 15rem;
+}
+
+
+/* ICONOS Y SUS ESTILOS */
+#game-space .data-item {
+  display: none;
+  background-image: url(info-icon.png);
+}
+#game-space .attackable:not(.card) {
+  /* display: none; */
+  background-image: url(attackable.png);
+}
+
+.attackable, .data-item{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none !important;
+  color: darkslategrey !important;
+}
+
+
+.card {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#phase{
+  display: none;
+}
+
+.phaseanimation {
+  display: flex !important;
+  position: fixed !important;
+  width: 80%;
+  height: 20%;
+  background-color: green;
+  font-size: 3rem;
+  top: 30%;
+  left: 10%;
+  z-index: 1;
+  opacity: 1;
+
+  animation: 1s linear 0s fadeinout;
+
+  &>span{
+    margin: auto;
+    text-transform: uppercase;
+    text-align: center;
+    word-break: break-word;
+  }
+
+}
+
+.event{
+  border-color: var(--event-border) !important;
+
+  &::after{
+    content: attr(reason) " - " attr(state) !important;
+  }
+
+  &[state^="IN"]{
+    background-color: var(--event-in);
+  }
+  &[state^="EXEC"], &[state="_"]{
+    background-color: var(--event-exec);
+  }
+  &[state^="OUT"]{
+    background-color: var(--event-out);
+  }
+  &[state="DEFUSED"]{
+    background-color: var(--event-defused);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state="DONE"]{
+    background-color: var(--event-done);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state$="HOLD"]{
+    border-color: var(--event-border-inactive) !important;
+  }
+}
+
+
+
+@keyframes fadeinout{
+  0%{
+    opacity: 0;
+  }
+
+  8%{
+    opacity: 1;
+  }
+
+  90%{
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
+  }
+}
+
+#close-up {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 80%;
+	top: 10%;
+	z-index: 2;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top,center;
+}
+
+
+#game-space {
+  display: grid;
+  grid-template-areas:
+  "player         pass        enemy           "
+  "player-hand    locations   enemy-hand      "
+  "player-draw    locations   enemy-draw      "
+  "player-discard locations   enemy-discard   "
+  "player-mp      locations   enemy-mp        "
+  "player-out     locations   enemy-out       "
+  "events         events      events          "
+  ;
+  justify-items: center;
+}
+
+#player1      {background-color:blue;   grid-area: player;}
+#player2      {background-color:red;    grid-area: enemy;}
+.locations        {background-color:rgb(139, 135, 135); grid-area: locations;}
+#hand1        {background-color:#5b3d2d; grid-area: player-hand;}
+#hand2        {background-color:#5b3d2d; grid-area: enemy-hand;}
+#draw1        {background-color:#3D3A4B; grid-area: player-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+}
+#draw2        {background-color:#3D3A4B; grid-area: enemy-draw;
+  &:not(:hover)>div{
+    display: none;
+  }
+}
+#discard1     {background-color:#D3C0CD; grid-area: player-discard;}
+#discard2     {background-color:#D3C0CD; grid-area: enemy-discard;}
+#mp1          {background-color:#5A9367; grid-area: player-mp;}
+#mp2          {background-color:#5A9367; grid-area: enemy-mp;}
+#out-of-game1 {background-color:black;   grid-area: player-out;}
+#out-of-game2 {background-color:black;   grid-area: enemy-out;}
+.events           {background-color:#5CAB7D; grid-area: events;}
+.pass             {background-color: #FFF275;grid-area: pass;}
+
+.fellowship       {background-color: rgba(209, 183, 153, 0.32);}
+
+
+
+
+.ownable[player="player1"]{
+  border: 2px solid blue !important;
+}
+
+.ownable[player="player2"]{
+  border: 2px solid red !important;
+}
+
+.choosable{
+  box-shadow: 0 0 30px rgb(212, 255, 0);
+}
+.choosable-final{
+  box-shadow: 0 0 30px rgb(0, 21, 255);
+}

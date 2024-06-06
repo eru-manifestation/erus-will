@@ -1,35 +1,30 @@
-;/////////////////// ATTACK 3: HACER FRENTE AL GOLPE EN EL ORDEN QUE ELIJA EL DEFENSOR ////////////////////////
 (defmodule attack-3 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Player chooses the order in which strikes execute))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-
-(defrule action-E-select-strike  (declare (salience ?*action-population-salience*))
+(defrule a-attacker-select-strike (declare (salience ?*a-population*))
 	(logical 
-		(only-actions (phase attack-3))
-    	(player ?p)
-
-		(object (is-a E-select-strike) (name ?e) (type IN) 
-        (char ?char) (attackable ?at))
-	)   
-    =>
+		(object (is-a EP-attack) (state EXEC) (fellowship ?fell) (attackable ?at) (strikes $?strikes) (name ?attack))
+		(object (is-a ATTACKABLE) (name ?at) (strikes ?n&:(< 0 ?n)))
+		(object (is-a CHARACTER) (name ?char) (state UNTAPPED))
+		(in (over ?fell) (under ?char))
+		(test (not (member$ ?char ?strikes)))
+	)
+	=>
 	(assert (action 
-		(player ?p)
-		(event-def strike)
-		(description (sym-cat "Execute strike from " ?at " to " ?char))
-		(data (create$ 
-		"( char [" ?char "])" 
-		"( attackable [" ?at "])"
-		"( decl-event [" ?e "])"))
+		(player (send ?at get-player))
+		(event-def modify)
+		(description (sym-cat "Asignar golpe de " ?at " a " ?char))
+		(identifier ?at ?char)
+		(data ?attack strikes (create$ ?strikes ?char))
+		(reason attack-3::a-attacker-select-strike)
+		(blocking TRUE)
 	))
 )

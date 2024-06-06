@@ -1,35 +1,35 @@
 ;/////////////////// LOCATION PHASE 3 1: JUGAR OBJETO MENOR ADICIONAL ////////////////////////
 (defmodule loc-phase-3-1 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Play additional minor item))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-(defrule play-additional-minor-item (declare (salience ?*action-population-salience*))
+(defrule play-additional-minor-item (declare (salience ?*a-population*))
 	(logical
-		(only-actions (phase loc-phase-3-1))
+		?e <- (object (is-a EP-loc-phase) (state EXEC) (fellowship ?fell))
     	(player ?p)
-		(object (is-a EP-loc-phase) (type ONGOING) (fell ?fell))
-		(object (is-a MINOR-ITEM) (player ?p) (state HAND) (name ?item))
+		(object (is-a MINOR-ITEM) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?item))
 		(object (is-a CHARACTER) (player ?p) (state UNTAPPED) (name ?char))
 		(in (over ?fell) (under ?char))
-		(not (object (is-a E-item-play-only-minor)))
+
+		(exists (object (is-a E-play) (target ?t) (position ?e))
+			(object (is-a ITEM) (name ?t))
+		)
+		(not (object (is-a E-modify) (reason loc-phase-3-1::play-additional-minor-item) (state DONE)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def E-item-play-only-minor)
+		(event-def play)
 		(description (sym-cat "Play additional minor item " ?item " under " ?char))
-		(data (create$ 
-		"( item [" ?item "])" 
-		"( owner ["?char "])")))
-	)
+		(identifier ?item ?char)
+		(data ?item ?char)
+		(reason loc-phase-3-1::play-additional-minor-item)
+	))
 )

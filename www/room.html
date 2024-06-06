@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en-us'>
+<style>
+	.container {
+		display: flex;
+		flex-flow: column;
+		gap: 1rem;
+		margin: 2rem;
+		margin-top: 4rem;
+		align-items: center;
+	}
+
+	#room {
+		height: 2rem;
+		width: 40%;
+		text-align: center;
+	}
+
+	#search-room {
+		padding: 1rem;
+	}
+
+	label[for=room] {
+		font-size: 1.5rem;
+	}
+</style>
+<script>
+	function join_room(event) {
+		var dev = document.getElementById("dev").checked;
+		window.location.href = '/index.html?room=' + document.getElementById("room").value + ((dev) ? '&dev=true' : '');
+	}
+
+</script>
+
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width'>
+	<title>SATM Lobby</title>
+</head>
+
+<body>
+	<div class='container'>
+		<label for="room">Escriba el nombre de la habitación</label>
+		<input type="text" id="room"></input>
+		<button type="submit" id="search-room" onclick="join_room()">Join Room</button>
+		<label><input type="checkbox" id="dev" /> Development view</label>
+	</div>
+</body>
+
+</html>

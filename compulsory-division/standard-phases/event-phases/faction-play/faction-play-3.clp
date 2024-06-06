@@ -1,20 +1,32 @@
-;/////////////////// FACTION PLAY 3: FINAL JUGAR FACCION ////////////////////////
 (defmodule faction-play-3 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Final de jugar faccion))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-(defrule end-play-faction (declare (salience ?*event-handler-salience*))
-	?ep<-(object (is-a EP-faction-play) (type ONGOING) (faction ?faction) (char ?char))
+(defrule dice-roll
 	=>
-	(debug Finaliza el intento de ?char de jugar la faccion ?faction)
+	(E-roll-dices faction-influence-roll faction-play-3::dice-roll)
+)
+
+
+(defrule influence-check
+	(object (is-a EP-faction-influence-roll) (state DONE) (res ?dices))
+	(object (is-a EP-faction-play) (active TRUE) (faction ?faction) (character ?char))
+	=>
+	(bind ?favor (+ (send ?char get-influence) ?dices))
+	(bind ?against (send ?faction get-influence-check))
+
+	(if (< ?against ?favor) then
+		(message "Chequeo de influencia de " ?char " para " ?faction " conseguido con " ?favor " de " ?against " necesarios")
+		(complete SUCCESSFUL)
+		else
+		(message "Chequeo de influencia de " ?char " para " ?faction " fallido con " ?favor " de " ?against " necesarios")
+		(complete UNSUCCESSFUL)
+	)
 )

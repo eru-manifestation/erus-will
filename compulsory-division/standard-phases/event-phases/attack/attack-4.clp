@@ -1,33 +1,46 @@
-;/////////////////// ATTACK 4: DECLARAR RESULTADO DEL ATAQUE ////////////////////////
 (defmodule attack-4 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule))
-(debug Declare the result of the attack))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
+
+(defrule a-strike (declare (salience ?*a-population*))
+	(logical 
+		?e <- (object (is-a EP-attack) (state EXEC) (attackable ?at) (strikes $? ?char $?))
+		(player ?p)
+	)   
+    =>
+	(assert (action 
+		(player ?p)
+		(event-def strike)
+		(description (sym-cat "Ejecutar golpe en " ?char))
+		(identifier ?char)
+		(data "(target [" ?char "]) (attackable [" ?at "])")
+		(reason attack-4::a-strike)
+		(blocking TRUE)
+	))
+)
 
 (defrule declare-result#defeated
-	?ep-at <- (object (is-a EP-attack) (type ONGOING))
-	(not (object (is-a EP-strike) (state SUCCESSFUL | UNDEFEATED)))
+	?e <- (object (is-a EP-attack) (active TRUE) (strikes))
+	(not (object (is-a EP-strike) (position ?e) (res ~DEFEATED)))
 	=>
-	(send ?ep-at put-state DEFEATED)
-	(debug Attack defeated)
+	(complete DEFEATED)
+	(message "Todos los golpes han sido superados, el ataque ha sido derrotado")
 )
 
 
 
-(defrule declare-result#successful
-	?ep-at <- (object (is-a EP-attack) (type ONGOING))
-	(exists (object (is-a EP-strike) (state ?state&:(neq DEFEATED ?state))))
+(defrule declare-result#undefeated
+	?e <- (object (is-a EP-attack) (active TRUE) (strikes))
+	(exists (object (is-a EP-strike) (position ?e) (res ~DEFEATED)))
 	=>
-	(send ?ep-at put-state UNDEFEATED)
-	(debug Attack undefeated)
+	(complete UNDEFEATED)
+	(message "Como algun golpe no se considera superado, el ataque ha sido exitoso")
 )

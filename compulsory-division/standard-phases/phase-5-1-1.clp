@@ -1,33 +1,30 @@
 ;/////////////////////// FASE 5 1 1: EJECUCION ELEGIR SI DESCARTAR ///////////////////////
 (defmodule P-5-1-1 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Ejecucion eleccion si descartar))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
 ; ACCIÓN: INICIAR FASE MOVIMIENTO
-(defrule action-discard-one (declare (salience ?*action-population-salience*))
+(defrule a-discard-one (declare (salience ?*a-population*))
 	(logical
-		(only-actions (phase P-5-1-1))
+		(object (is-a EP-turn) (state EXEC))
     	(object (is-a PLAYER) (name ?p))
-		(object (is-a CARD) (player ?p) (state HAND) (name ?c))
-		(not (object (is-a E-player-discard-from-hand) (player ?p)));TODO ES INESTABLE?
+		(object (is-a CARD) (player ?p) (position ?pos&:(eq ?pos (handsymbol ?p))) (name ?c))
+		(not (object (is-a E-modify) (reason P-5-1-1::a-discard-one)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def player-discard-from-hand)
+		(event-def discard)
 		(description (sym-cat "Discard card " ?c " from player " ?p "'s hand"))
-		(data (create$ 
-		"( card [" ?c "])" 
-		"( player [" ?p "])"))
+		(identifier ?c (discardsymbol ?p))
+		(data ?c)
+		(reason P-5-1-1::a-discard-one)
 	))
 )

@@ -1,592 +1,271 @@
-; E-card-untap
-(defclass MAIN::E-card-untap (is-a EVENT)
-    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes CARD))
-)
-
-(defrule MAIN::E-card-untap (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-card-untap) (type IN)
-		(card ?c))
+(defrule MAIN::EI-tap-owner (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-play) (state EXEC) (target ?res) (new ?owner)
+        (reason ?fr))
+    (object (is-a ITEM|ALLY) (name ?res))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-tap-owner)))
+    (test (and
+        (neq start-game-0::initial-items ?fr)
+        (neq loc-phase-3-1::play-additional-minor-item ?fr)
+    ))
     =>
-    (send ?e complete)
-    (send ?c put-state UNTAPPED)
-
-    (debug Untapping ?c)
+    (E-modify ?owner state TAPPED MAIN::EI-tap-owner)
+    (message "Girar el personaje " ?owner " al obtener un objeto o aliado")
 )
 
-; E-cure
-(defclass MAIN::E-cure (is-a EVENT)
-    (slot card (type INSTANCE-NAME) (default ?NONE))
-)
 
-(defrule MAIN::E-cure (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-cure) (type IN)
-		(card ?c))
+(defrule MAIN::EI-tap-location (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-play) (state EXEC) (target ?res) (new ?owner)
+        (reason ?fr))
+    (object (is-a ITEM|ALLY|FACTION) (name ?res))
+    (object (is-a LOCATION) (name ?loc))
+    (in (over ?loc) (under ?owner))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-tap-location)))
+    (test (and
+        (neq start-game-0::initial-items ?fr)
+        (neq loc-phase-3-1::play-additional-minor-item ?fr)
+    ))
     =>
-    (send ?e complete)
-    (send ?c put-state TAPPED)
-
-    (debug Healing ?c)
+    (message "Girar la localizacion " ?loc " al jugar un objeto, faccion o aliado")
+    (E-modify ?loc state TAPPED MAIN::EI-tap-location)
 )
 
 
-; E-char-play
-(defclass MAIN::E-char-play (is-a EVENT)
-    (slot character (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot under (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP CHARACTER))
-)
-
-
-(defrule MAIN::E-char-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-play) (type IN)
-		(character ?c) (under ?u))
+(defrule MAIN::EI-move-corruption (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-modify) (state EXEC) (target ?item) (old ?oldOwner)
+        (reason ?fr&~MAIN::EI-a-reassign-objects))
+    (object (name ?item) (position ?owner) (corruption ?c&:(< 0 ?c)))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-move-corruption)))
+    (test (or 
+        (eq ?fr P-1-1-1::a-item-store)
+        (eq ?fr P-1-1-1::a-item-transfer)
+    ))
     =>
-    (send ?e complete)
-    (in-move ?c ?u)
-    (send ?c put-state UNTAPPED)
-    (debug Playing character ?c under ?u)
+    (make-instance (gen-name EP-corruption-check) of EP-corruption-check 
+        (reason MAIN::EI-move-corruption) 
+        (target ?owner))
+    (message ?oldOwner " debe realizar un chequeo de corrupcion antes de transferir o almacenar objetos que den corrupcion")
 )
 
-
-; E-item-play-only-minor
-(defclass MAIN::E-item-play-only-minor (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
+(defrule MAIN::EI-unfollow (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-discard) (state EXEC) (target ?char))
+	(object (is-a CHARACTER) (name ?char) (position ?fell))
+	(object (is-a CHARACTER) (position ?char) (name ?follower))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-unfollow)))
+	=>
+	(E-modify ?follower position ?fell MAIN::EI-unfollow)
+	(message "Bajar seguidor " ?follower " antes de descartar el personaje")
 )
 
-
-(defrule MAIN::E-item-play-only-minor (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-play-only-minor) (type IN)
-		(item ?item) (owner ?owner))
-    =>
-    (send ?e complete)
-    (in-move ?item ?owner)
-    (send ?item put-state UNTAPPED)
-    (debug Playing minor item ?item under ?owner)
-)
-
-
-; E-item-play
-(defclass MAIN::E-item-play (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot owner (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-
-(defrule MAIN::E-item-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-play) (type IN)
-		(item ?item) (owner ?owner) (loc ?loc))
-    =>
-    (send ?e complete)
-    (in-move ?item ?owner)
-    (send ?item put-state UNTAPPED)
-    (send ?owner put-state TAPPED)
-    (send ?loc put-state TAPPED)
-    (debug Playing item ?item under ?owner)
-)
-
-
-; E-item-transfer
-(defclass MAIN::E-item-transfer (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot disposer (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot receiver (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    ; TODO: Puede un aliado tener un objeto??
-)
-
-(defrule MAIN::E-item-transfer (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-transfer) (type IN) 
-        (item ?item) (receiver ?rec) (disposer ?disp))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?disp))
-    (in-move ?item ?rec)
-
-    (debug Transfering item ?item from ?disp to ?rec)
-)
-
-
-; E-item-store
-(defclass MAIN::E-item-store (is-a EVENT)
-    (slot item (type INSTANCE-NAME) (default ?NONE) (allowed-classes ITEM))
-    (slot bearer (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot haven (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-item-store (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-item-store) (type IN) 
-        (item ?item) (bearer ?bearer) (haven ?haven))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-corruption-check) of EP-corruption-check (character ?bearer))
-    (send ?item put-state MP)
-
-    (debug Storing item ?item in ?haven by ?bearer)
-)
-
-
-; E-loc-organize
-(defclass MAIN::E-loc-organize (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-loc-organize (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-loc-organize) (type IN) 
-        (player ?p) (loc ?loc))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-loc-organize) of EP-loc-organize (player ?p) (loc ?loc))
-    (debug Organizing fellowships of player ?p in ?loc)
-)
-
-
-; E-r-long-event-discard
-(defclass MAIN::E-r-long-event-discard (is-a EVENT)
-    (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
-)
-
-(defrule MAIN::E-r-long-event-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-r-long-event-discard) (type IN) 
-        (r-long-event ?rle))
-    =>
-    (send ?e complete)
-    (send ?rle put-state DISCARD)
-
-    (debug Discarding long-event resoure ?rle)
-)
-
-
-; E-r-long-event-play
-(defclass MAIN::E-r-long-event-play (is-a EVENT)
-    (slot r-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
-)
-
-(defrule MAIN::E-r-long-event-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-r-long-event-play) (type IN) 
-        (r-long-event ?rle))
-    =>
-    (send ?e complete)
-    ; TODO: Qué siginifica jugar un r-long event?
-    (send ?rle put-state UNTAPPED)
-
-    (debug Playing long-event resoure ?rle)
-)
-
-
-; E-a-long-event-discard
-(defclass MAIN::E-a-long-event-discard (is-a EVENT)
-    (slot a-long-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes R-LONG-EVENT))
-)
-
-(defrule MAIN::E-a-long-event-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-a-long-event-discard) (type IN) 
-        (a-long-event ?ale))
-    =>
-    (send ?e complete)
-    ; TODO: Qué siginifica jugar un r-long event?
-    (send ?ale put-state DISCARD)
-
-    (debug Discarding long-event adversity ?ale)
-)
-
-
-; E-fell-decl-remain
-(defclass MAIN::E-fell-decl-remain (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-
-; E-fell-decl-move
-(defclass MAIN::E-fell-decl-move (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-(defmessage-handler E-fell-decl-move init after ()
-	; Defuseo el evento de permanencia en el lugar de la compañía
-	(do-for-instance ((?e E-fell-decl-remain)) (eq ?e:fell ?self:fell) (send ?e defuse))
-)
-
-
-; E-char-discard
-(defclass MAIN::E-char-discard (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-)
-
-(defrule MAIN::E-char-discard (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-discard) (type IN) 
-        (char ?c))
-    =>
-    (send ?e complete)
-    (send ?c put-state DISCARD)
-    ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
-    (debug Discarding character ?c)
-)
-
-
-; E-char-destroy
-(defclass MAIN::E-char-destroy (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-)
-
-(defrule MAIN::E-char-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-destroy) (type IN) 
-        (char ?c))
-    =>
-    (send ?e complete)
-    (send ?c put-state OUT-OF-GAME)
-    ; TODO: COMO DESCARTAR TAMBIÉN SUS OBJETOS
-
-    (debug Destroying character ?c)
-)
-
-
-; E-char-move
-(defclass MAIN::E-char-move (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-)
-
-(defrule MAIN::E-char-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-move) (type IN) 
-        (char ?c) (fell ?fell))
-    =>
-    (send ?e complete)
-    (in-move ?c ?fell)
-    (debug Moving character ?c to ?fell)
-)
-
-
-; E-char-follow
-(defclass MAIN::E-char-follow (is-a EVENT)
-    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot followed (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-)
-
-(defrule MAIN::E-char-follow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-follow) (type IN) 
-        (follower ?follower) (followed ?followed))
-    =>
-    (send ?e complete)
-    (in-move ?follower ?followed)
-    (debug Making character ?follower follower of ?followed)
-)
-
-
-; E-char-unfollow
-(defclass MAIN::E-char-unfollow (is-a EVENT)
-    (slot follower (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-)
-
-(defrule MAIN::E-char-unfollow (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-char-unfollow) (type IN) 
-        (follower ?follower) (fell ?fell))
-    =>
-    (send ?e complete)
-    (in-move ?follower ?fell)
-    (debug Making the follower ?follower an usual character in ?fell)
-)
-
-
-; E-fell-move
-(defclass MAIN::E-fell-move (is-a EVENT)
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-fell-move (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-fell-move) (type IN) 
-        (from ?from) (to ?to) (fell ?fell) (decl-event ?decl-event))
-    =>
-    (send ?e complete)
-    (send ?decl-event complete)
-    (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?from) (to ?to) (fell ?fell))
-    (debug Executing ?fell movement from ?from to ?to)
-)
-
-
-; E-fell-remain
-(defclass MAIN::E-fell-remain (is-a EVENT)
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes EVENT))
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-fell-remain (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-fell-remain) (type IN) 
-        (loc ?loc) (fell ?fell) (decl-event ?decl-event))
-    =>
-    (send ?e complete)
-    (send ?decl-event complete)
-    (make-instance (gen-name EP-fell-move) of EP-fell-move (from ?loc) (to ?loc) (fell ?fell))
-    (debug Executing the remain of ?fell in ?loc)
-)
-
-
-; E-player-draw
-(defclass MAIN::E-player-draw (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot draw-ammount (type INTEGER) (default ?NONE) (range 1 ?VARIABLE))
-)
-
-(defrule MAIN::E-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-player-draw) (type IN) 
-        (player ?p) (draw-ammount ?n))
-    =>
-    (send ?e complete)
-
-    (bind ?chosen (create$))
-	; TODO: ESCOGE LOS PRIMEROS QUE SEAN, NO ES ALEATORIO
-    (do-for-all-instances ((?card CARD) (?ownable OWNABLE)) (and (eq ?card ?ownable) (eq ?card:state DRAW) (eq ?card:player ?p))
-        (if (< 0 ?n) then
-            (bind ?chosen (insert$ ?chosen 1 ?card))
-            (bind ?n (- ?n 1))
-            (send ?card put-state HAND)
-            else
-            break
-        )
-    )
-    (debug Player ?p draws (implode$ ?chosen))
-)
-
-
-; E-fell-move-player-draw
-(defclass MAIN::E-fell-move-player-draw (is-a EVENT)
-    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
-)
-
-(defrule MAIN::E-fell-move-player-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-fell-move-player-draw) (type IN) 
-        (fell-move ?fell-move))
-    (player ?p)
-    =>
-    (send ?e complete)
-    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?p))
-    (send ?fell-move put-player-draw (- (send ?fell-move get-player-draw) 1))
-)
-
-
-; E-fell-move-enemy-draw
-(defclass MAIN::E-fell-move-enemy-draw (is-a EVENT)
-    (slot fell-move (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-fell-move))
-)
-
-(defrule MAIN::E-fell-move-enemy-draw (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-fell-move-enemy-draw) (type IN) 
-        (fell-move ?fell-move))
-    (enemy ?enemy)
-    =>
-    (send ?e complete)
-    (make-instance (gen-name E-player-draw) of E-player-draw (draw-ammount 1) (player ?enemy))
-    (send ?fell-move put-enemy-draw (- (send ?fell-move get-enemy-draw) 1))
-)
-
-
-; E-fell-change-loc
-(defclass MAIN::E-fell-change-loc (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot from (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-    (slot to (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-fell-change-loc (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-fell-change-loc) (type IN) 
-        (fell ?fell) (from ?from) (to ?to))
-    =>
-    (send ?e complete)
-    (in-move ?fell ?to)
-    (debug Changing location of fellowship ?fell from ?from to ?to)
-)
-
-
-; E-loc-destroy
-(defclass MAIN::E-loc-destroy (is-a EVENT)
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-loc-destroy (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-loc-destroy) (type IN) 
-        (loc ?loc))
-    =>
-    (send ?e complete)
-    (send ?loc put-state OUT-OF-GAME)
-    (debug Taking ?loc out of the game)
-)
-
-
-; E-player-discard-from-hand
-(defclass MAIN::E-player-discard-from-hand (is-a EVENT)
-    (slot player (type INSTANCE-NAME) (default ?NONE) (allowed-classes PLAYER))
-    (slot card (type INSTANCE-NAME) (default ?NONE) (allowed-classes OWNABLE))
-)
-
-(defrule MAIN::E-player-discard-from-hand (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-player-discard-from-hand) (type IN) 
-        (player ?p) (card ?c))
-    =>
-    (send ?e complete)
-    (send ?c put-state DISCARD)
-    (debug Discarding ?c of ?p from hand)
-)
-
-
-; E-loc-phase
-(defclass MAIN::E-loc-phase (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-(defrule MAIN::E-loc-phase (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-loc-phase) (type IN) 
-        (fell ?fell) (loc ?loc))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-loc-phase) of EP-loc-phase (fell ?fell) (loc ?loc))
-    (debug Beginning location phase for ?fell in ?loc)
-)
-
-
-; E-ally-play
-(defclass MAIN::E-ally-play (is-a EVENT)
-    (slot ally (type INSTANCE-NAME) (default ?NONE) (allowed-classes ALLY))
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-
-(defrule MAIN::E-ally-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-ally-play) (type IN)
-		(ally ?ally) (char ?char) (loc ?loc))
-    =>
-    (send ?e complete)
-    (in-move ?ally ?char)
-    (send ?ally put-state UNTAPPED)
-    (send ?char put-state TAPPED)
-    (send ?loc put-state TAPPED)
-    (debug Playing ally ?ally under ?char)
-)
-
-
-; E-ally-play
-(defclass MAIN::E-faction-play (is-a EVENT)
-    (slot faction (type INSTANCE-NAME) (default ?NONE) (allowed-classes FACTION))
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot loc (type INSTANCE-NAME) (default ?NONE) (allowed-classes LOCATION))
-)
-
-
-(defrule MAIN::E-faction-play (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-faction-play) (type IN)
-		(faction ?faction) (char ?char) (loc ?loc))
-    =>
-    (send ?e complete)
-    (send ?char put-state TAPPED)
-    (make-instance (gen-name EP-faction-play) of EP-faction-play (faction ?faction) (char ?char) (loc ?loc))
-    (debug Influencing faction ?faction by ?char in ?loc)
-)
-
-
-; E-convoque-council
-(defclass MAIN::E-convoque-council (is-a EVENT))
-
-(defrule MAIN::E-convoque-council (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-convoque-council) (type IN))
-    =>
-    (send ?e complete)
-    (make-instance (gen-name EP-free-council) of EP-free-council)
-)
-
-
-; E-creature-attack-fell
-(defclass MAIN::E-creature-attack-fell (is-a EVENT)
-    (slot fell (type INSTANCE-NAME) (default ?NONE) (allowed-classes FELLOWSHIP))
-    (slot creature (type INSTANCE-NAME) (default ?NONE) (allowed-classes CREATURE))
-    (slot attack-at (type SYMBOL) (default ?NONE))
-    (slot attack (type INSTANCE-NAME) (allowed-classes EP-attack))
-)
-
-(defrule MAIN::E-creature-attack-fell (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-creature-attack-fell) (type IN) 
-        (fell ?fell) (creature ?creature) (attack-at ?attack-at))
-    =>
-    (send ?e complete)
-    (in-move ?creature ?fell)
-    (send ?creature put-state UNTAPPED)
-    (send ?e put-attack (instance-name (make-instance (gen-name EP-attack) of EP-attack (fell ?fell) (attackable ?creature))))
-    (debug Creature ?creature attacking ?fell at ?attack-at)
-)
-
-(defrule MAIN::E-creature-attack-fell#defeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-creature-attack-fell) (type OUT) 
-        (creature ?creature) (attack ?at))
-    (object (is-a EP-attack) (type OUT) (name ?at) (state DEFEATED))
-    =>
-    (send ?creature put-state MP)
-    (debug Creature ?creature has been defeated, moving it to the player's MP)
-)
-
-(defrule MAIN::E-creature-attack-fell#undefeated (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-creature-attack-fell) (type OUT) 
-        (creature ?creature) (attack ?at))
-    (object (is-a EP-attack) (type OUT) (name ?at) (state UNDEFEATED))
-    =>
-    (send ?creature put-state DISCARD)
-    (debug Creature ?creature has not been defeated, moving it to enemy's DISCARD)
-)
-
-
-; E-select-strike
-(defclass MAIN::E-select-strike (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
-)
-
-
-; E-select-strike
-(defclass MAIN::E-strike (is-a EVENT)
-    (slot char (type INSTANCE-NAME) (default ?NONE) (allowed-classes CHARACTER))
-    (slot attackable (type INSTANCE-NAME) (default ?NONE) (allowed-classes ATTACKABLE))
-    (slot decl-event (type INSTANCE-NAME) (default ?NONE) (allowed-classes E-select-strike))
-)
-
-(defrule MAIN::E-strike (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-strike) (type IN) 
-        (char ?char) (attackable ?attackable) (decl-event ?decl))
-    =>
-    (send ?e complete)
-    (send ?decl complete)
-    (make-instance (gen-name EP-strike) of EP-strike (char ?char) (attackable ?attackable))
-    (debug Strike of ?attackable faced by ?char)
-)
-
-
-; E-select-strike
-(defclass MAIN::E-face-strike-hindered (is-a EVENT)
-    (slot strike (type INSTANCE-NAME) (default ?NONE) (allowed-classes EP-strike))
-)
-
-(defrule MAIN::E-face-strike-hindered (declare (auto-focus TRUE) (salience ?*event-handler-salience*))
-    ?e <- (object (is-a E-face-strike-hindered) (type IN) 
-        (strike ?ep-strike))
-    (player ?p)
-    =>
-    (send ?e complete)
-    (send ?ep-strike put-hindered TRUE)
-    (debug ?p chose to face the strike hindered)
-)
-
-
-
-; ; RECOLECTOR DE BASURA
-; (defrule MAIN::event-garbage-collector (declare (auto-focus TRUE) 
-; 		(salience ?*garbage-collector-salience*))
-; 	; Destruye los eventos marcados como terminados
-; 	?e <- (object (is-a EVENT | EVENT-PHASE) (type OUT))
-; 	=>
-; 	(send ?e delete)
+;   TODO: manejo de elecciones en intercepcion
+; (defrule MAIN::EI-a-reassign-objects (declare (auto-focus TRUE) (salience ?*E-intercept*))
+; 	(logical
+;         En el caso de los EI's, la constriccion E-modify con EXEC funciona como only-actions
+; 		?e <- (object (is-a E-discard) (state EXEC) (target ?char))
+;         (object (is-a CHARACTER) (name ?char))
+; 		(object (is-a ITEM) (position ?char) (name ?item))
+
+;   TODO: revisar las condiciones
+; 		(object (is-a FELLOWSHIP) (name ?fell) (player ?p))
+; 		(in (over ?fell) (under ?char))
+
+; 		(object (is-a CHARACTER) (name ?newOwner&:(neq ?char ?newOwner))
+; 			(state UNTAPPED | TAPPED) (player ?p)
+; 		)
+; 		(in (over ?fell) (under ?newOwner))
+
+;         (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-a-reassign-objects)))
+; 	)
+; 	=>; TODO: ACTUALIZAR
+; 	(assert (action 
+; 		(player ?p)
+; 		(event-def modify)
+; 		(description (sym-cat "Transfer item " ?item " from " ?char " to " ?newOwner " before discarding it"))
+; 		(identifier ?item ?newOwner)
+; 		(data ?item position ?newOwner)
+; 		(reason MAIN::EI-a-reassign-objects)
+; 	))
 ; )
+
+
+(defrule MAIN::EI-creature-combat (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-play) (state OUT) (target ?creature) (new ?fell))
+    (object (is-a CREATURE) (name ?creature))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-creature-combat)))
+	=>
+	(make-instance (gen-name EP-combat) of EP-combat
+        (reason MAIN::EI-creature-combat)
+        (attackables ?creature)
+        (target ?fell))
+	(message "Se inicia el ataque de " ?creature " a " ?fell)
+)
+
+; TODO: rediseñar
+(defrule MAIN::EI-manage-tapped-loc (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-modify) (state OUT) (slot position))
+    (object (is-a LOCATION) (name ?loc) (state TAPPED))
+    (player ?p)
+    (not (exists
+        (object (is-a CHARACTER) (name ?char))
+        (in (over ?loc) (under ?char))
+    ))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-manage-tapped-loc)))
+    =>
+    (if (member$ HAVEN (class-subclasses (class ?loc))) then
+        (E-modify ?loc state UNTAPPED MAIN::EI-manage-tapped-loc)
+        (message "Se devuelve " ?loc " al estado inicial")
+    else
+        (E-discard ?loc MAIN::EI-manage-tapped-loc)
+        (message "Se descarta " ?loc " al no tener personajes, no ser refugio y estar girada")
+    )
+)
+
+(defrule MAIN::EI-standarize-hand-after-mov (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-fell-move) (state OUT))
+    (object (is-a PLAYER) (name ?p))
+    (not (object (is-a EVENT) (position ?e) 
+        (reason MAIN::EI-standarize-hand-after-mov)
+        (target ?p)))
+    =>
+    (message ?p " repone su mano tras la fase de movimiento")
+    (make-instance (gen-name EP-standarize-hand) of EP-standarize-hand 
+        (reason MAIN::EI-standarize-hand-after-mov) 
+        (target ?p))
+)
+
+(defrule MAIN::EI-movement-phase (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-modify) (state IN) (reason P-3-1-1::a-fell-move)
+        (target ?fell) (new ?to))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-movement-phase)))
+    =>
+    (message "Se ejecuta la fase de movimiento para mover la copañia")
+    (make-instance (gen-name EP-fell-move) of EP-fell-move
+        (reason MAIN::EI-movement-phase)
+        (fellowship ?fell)
+        (to ?to)
+    )
+)
+
+(defrule MAIN::EI-check-mov-phase (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-modify) (state IN) (reason P-3-1-1::a-fell-move))
+    (or (object (is-a EP-fell-move) (position ?e) (state DEFUSED))
+        (object (is-a EP-fell-move) (position ?e) (state OUT) (res UNSUCCESSFUL)))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-check-mov-phase)))
+    =>
+    (E-cancel MAIN::EI-check-mov-phase)
+)
+
+
+(defrule MAIN::EI-creature-combat#defeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-combat) (state OUT) 
+        (position ?pos)
+        (attackables ?at $?)(res DEFEATED))
+    (object (is-a CREATURE) (name ?at)) ; TODO: Informarse si es correcto, que compone un combate
+    (object (is-a E-modify) (name ?pos) (target ?creature))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-creature-combat#defeated)))
+    =>
+    ;   TODO: es el mp correcto?
+    (E-modify ?creature position (mpsymbol (send ?creature get-player))
+        MAIN::EI-creature-combat#defeated)
+    (message "La criatura " ?creature " ha sido derrotada, se añade a la pila de puntos de victoria")
+)
+
+(defrule MAIN::E-creature-combat-fell#undefeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-combat) (state OUT) 
+        (position ?pos)
+        (attackables ?at $?) (res UNDEFEATED|UNDEFINED))
+    (object (is-a CREATURE) (name ?at)) ; TODO: Informarse si es correcto, que compone un combate
+    (object (is-a E-modify) (name ?pos) (target ?creature))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::E-creature-combat-fell#undefeated)))
+    =>
+    (E-discard ?creature MAIN::E-creature-combat-fell#undefeated)
+    (message "La criatura " ?creature " no ha sido derrotada, se mueve al descarte enemigo")
+)
+
+
+(defrule MAIN::EI-tap-unhindered (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-strike) (state OUT) (res DEFEATED|PARTIALLY-UNDEFEATED) (target ?t) (hindered FALSE))
+    (object (name ?t) (state UNTAPPED))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-tap-unhindered)))
+	=>
+	(E-modify ?t state TAPPED MAIN::EI-tap-unhindered)
+)
+
+
+(defrule MAIN::EI-wound (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-strike) (state OUT) (res UNDEFEATED) (target ?t))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-wound)))
+	=>
+	(E-modify ?t state WOUNDED MAIN::EI-wound)
+)
+
+
+(defrule MAIN::EI-gain-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-faction-play) (state OUT) (res SUCCESSFUL)
+        (character ?char) (faction ?faction) (name ?en))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-gain-faction)))
+    =>
+    (E-play ?faction (mpsymbol (send ?faction get-player)) MAIN::EI-gain-faction)
+    (message "La faccion " ?faction " influenciada por " ?char " se mueve a la pila de puntos de victoria")
+)
+
+
+(defrule MAIN::EI-discard-faction (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a EP-faction-play) (state OUT|DEFUSED) (res ~SUCCESSFUL)
+        (character ?char) (faction ?faction) (name ?en))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-discard-faction)))
+    =>
+    (E-discard ?faction MAIN::EI-discard-faction)
+    (message "La faccion " ?faction " no ha sido influenciada por " ?char " se mueve a la pila de descarte")
+)
+
+
+(defrule MAIN::EI-failed-res-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a EP-resistance-check) (state OUT) (res NOT-PASSED)
+        (target ?t))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-failed-res-check)))
+    =>
+    (E-modify ?t position (outofgamesymbol (send ?t get-player))
+        MAIN::EI-failed-res-check)
+    (message ?t "se elimina del juego por haber fallado el chequeo de resistencia")
+)
+
+
+(defrule MAIN::EI-failed-corr-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a EP-corruption-check) (state OUT) (res NOT-PASSED)
+        (target ?t))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-failed-corr-check)))
+    =>
+    (message ?t " se descarta por no haber superado el chequeo de resistencia")
+    (E-discard ?t MAIN::EI-failed-corr-check)
+)
+
+
+(defrule MAIN::EI-corrupted-corr-check (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    (object (is-a EP-corruption-check) (state OUT) (res CORRUPTED)
+        (target ?t))
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-corrupted-corr-check)))
+    =>
+    (E-modify ?t position (outofgamesymbol (send ?t get-player))
+        MAIN::EI-corrupted-corr-check)
+    (message ?t " abandona la partida por haberse dejado dominar por la corrupcion")
+)
+
+
+(defrule MAIN::EI-unique (declare (auto-focus TRUE) (salience ?*E-intercept*))
+    ?e <- (object (is-a E-play) (state IN) (target ?t))
+    (object (is-a CARD) (name ?t) (unique TRUE))
+    (exists 
+        (object (is-a STACK) (player ?p) (name ?hand&:(eq ?hand (handsymbol ?p))))
+        (object (is-a STACK) (player ?p) (name ?draw&:(eq ?draw (drawsymbol ?p))))
+        (object (is-a STACK) (player ?p) (name ?discard&:(eq ?discard (discardsymbol ?p))))
+        (object (is-a E-play) (state DONE) (target ?c2))
+        (object (is-a CARD) (unique TRUE) (name ?c2&:(eq (class ?c2) (class ?t)))
+            (position ~?hand&~?draw&~?discard))
+    )
+    (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-unique)))
+    =>
+    (E-cancel MAIN::EI-unique)
+    (message ?t " no se puede volver a jugar, es una carta unica que ya ha aparecido")
+)
+
+;TODO: Manejar objetos al destruir un personaje

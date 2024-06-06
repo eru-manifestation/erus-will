@@ -1,30 +1,28 @@
 ;/////////////////////// FREE COUNCIL 2 1: NOMBRAMIENTO DEL VENCEDOR ///////////////////////
 (defmodule free-council-2-1 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Nombramiento del vencedor del concilio))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
 (defrule declare-winner
     (player ?p)
     (enemy ?e)
-	=>		
+	=>
+	; TODO: hay que revisar si al fallar los chequeos de corrupcion ninguno llega a 20?
 	(halt)
 	(if (< (send ?p get-mp) (send ?e get-mp)) then
-		(debug THE WINNER OF THE COUNCIL IS ?p)
+		(message "THE WINNER OF THE COUNCIL IS " ?p)
 		else
 		(if (< (send ?p get-mp) (send ?e get-mp)) then
-			(debug THE WINNER OF THE COUNCIL IS ?e)
+			(message "THE WINNER OF THE COUNCIL IS " ?e)
 			else
-			(debug THERE IS A TIE)
+			(message "THERE IS A TIE")
 		)
 	)
 )

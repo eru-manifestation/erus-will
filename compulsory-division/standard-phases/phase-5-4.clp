@@ -1,60 +1,58 @@
 ;/////////////////////// FASE 5 4: CONVOCAR EL CONCILIO LIBRE ///////////////////////
 (defmodule P-5-4 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Convoque free council if the conditions are met))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
 (defrule mandatory-council
-	(not (exists 
-		(object (is-a OWNABLE) (name ?owned-card))
-		(object (is-a CARD) (name ?owned-card) (state DRAW))
-	))
+	(player ?player)
+	(enemy ?enemy)
+	(not (object (is-a CARD) 
+		(position ?pos&:(or (eq ?pos (drawsymbol ?player)) (eq ?pos (drawsymbol ?enemy)))))
+	)
 	=>
-	(make-instance (gen-name E-convoque-council) of E-convoque-council)
-	(debug El Concilio de los Pueblos Libres ha sido convocado)
+	(make-instance (gen-name EP-free-council) of EP-free-council (reason P-5-4::mandatory-council))
+	(message "El Concilio de los Pueblos Libres se ejecuta por falta de cartas que robar")
 )
 
 
-(defrule arrange-council#mp (declare (salience ?*action-population-salience*))
+(defrule arrange-council#mp (declare (salience ?*a-population*))
 	(logical 
-		(only-actions (phase P-5-4))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p) (council FALSE) (name ?turn))
 		(object (is-a PLAYER) (name ?p) (mp ?mp&:(<= 20 ?mp)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def convoque-council)
+		(event-def modify)
 		(description (sym-cat "Convoque council"))
-		(data (create$))
+		(identifier [COUNCIL])
+		(data ?turn council TRUE)
+		(reason P-5-4::arrange-council#mp)
 	))
 )
 
 
-(defrule arrange-council#empty-deck (declare (salience ?*action-population-salience*))
+(defrule arrange-council#empty-deck (declare (salience ?*a-population*))
 	(logical 
-		(only-actions (phase P-5-4))
-    	(player ?p)
-
+		(object (is-a EP-turn) (state EXEC) (player ?p) (council FALSE) (name ?turn))
 		(not (exists 
-			(object (is-a OWNABLE) (name ?owned-card) (player ?p))
-			(object (is-a CARD) (name ?owned-card) (state DRAW))
+			(object (is-a CARD) (position ?pos&:(eq ?pos (drawsymbol ?p))))
 		))
 	)
 	=>
 	(assert (action 
 		(player ?p)
-		(event-def convoque-council)
+		(event-def modify)
 		(description (sym-cat "Convoque council"))
-		(data (create$))
+		(identifier [COUNCIL])
+		(data ?turn council TRUE)
+		(reason P-5-4::arrange-council#empty-deck)
 	))
 )

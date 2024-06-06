@@ -1,135 +1,1161 @@
+:root{
+  /* LOCATION VIEW CONSTANTS */
+  --curtain-opening: -65%;
+  --color-light: whitesmoke;
+  --character-light: whitesmoke;
+  --character-border: hsla(185, 24%, 60%, 1);
+  --item-border-color: hsla(14, 61%,38%, 1);
+  --item-border-color-light: hsla(15, 38%, 63%, 1);
+  --item-border: repeating-linear-gradient(
+    -90deg, 
+    var(--item-border-color-light),
+    var(--item-border-color), 
+    var(--item-border-color-light) 
+    1.5rem);
+  --shadow: drop-shadow(-.4rem 0rem 1px rgb(0,0,0,0.4));
+  --shadow-inverted: drop-shadow(.4rem 0rem 1px rgb(0,0,0,0.4));
+  --text-shadow:hsla(0,0%,0%,.5) .1rem .05rem;
+  --fellowship-width__unfocused: 7vw;
+  
+  /* GUI CONSTANTS */
+  --player-size: 30rem;
+  --player-border-size: 2rem;
+  --sun-color: hsla(60,50%,50%,1);
+  --sun-size: 10vh;
+  --moon-color: hsla(0,0%,0%,.8);
+}
+
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family:monospace;
+  /*! outline: 1px solid red; */
 
-  /* outline: 1px solid red; */
-}
 
-body {
-  /* width: 90%;
-    max-width: 900px; */
-  margin: 2em auto;
-  font:
-    0.9em/1.2 Arial,
-    Helvetica,
-    sans-serif;
-}
-.container {
-  display:grid
-}
-
-.top-bar{
-  grid-row: 1;
-  grid-column: 3 / 10;
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-}
-
-.sidebar{
-  display: grid;
-  background:linear-gradient(rgb(216, 147, 35) , rgb(128, 82, 7));
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.sidebar .card{
-  width: 10vh;
-  height: 100%;
-}
-
-/* .sidebar:hover {
-  width: 30rem;
-  transition-duration: 1s;
-} */
-
-.sidebar-left {
-  grid-column: 1 / 3;
-  grid-row: 1 / 12;
-}
-
-.sidebar-right {
-  grid-column: 10 / 12;
-  grid-row: 1 / 12;
-}
-
-.mp-counter{
-  font-size: 4rem;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-}
-
-.player1{
-  color: rgb(22, 155, 237);
-}
-
-.player2{
-  color: rgb(235, 50, 75);
-}
-
-.panel{
-  grid-row: 2 / 12;
-  grid-column: 3 / 10;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.level-0 {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  border-radius: 5px;
-  padding: 10px;
-  padding-top: 35rem;
-  background-color: rgb(122, 231, 204);
 }
 
 
-.level-1 {
-  display: grid;
-  justify-items: center;
-  /* grid-template-rows: auto; */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  /* grid-auto-flow: row; */
-  /* grid-template-columns: 100px 100px; */
-  
-  border-radius: 5px;
-  padding: 10px;
-  background-color: rgba(171, 176, 174, 0.848);
-  border: 2px solid rgba(25, 28, 29, 0.297);
-}
-
-.level-2 {
-  /* margin: 0.5rem; */
-  border-radius: 2rem;
-  width: 12rem;
-  height: 7rem;
-  display: grid;
-  padding-top: 4rem;
-  border: 3px solid rgba(229, 249, 255, 0.797);
-  align-items: end;
-  
-  padding: 10px;
-  background-color: rgb(50, 175, 115);
+.attribute{
+    display: none;
 }
 
 
-.level-3 {
-  /* margin: 0.5rem; */
-  border-radius: 2rem;
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid rgba(229, 249, 255, 0.797);
-  /* background-size: 150%; */
+/* ICONOS Y SUS ESTILOS */
+#game-space .data-item {
+  display: none;
+  background-image: url(info-icon.png);
+}
+#game-space .attackable:not(.card) {
+  background-image: url(attackable.png);
 }
 
-.game-element {
+.attackable, .data-item{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border: none !important;
+  color: darkslategrey !important;
+}
+
+
+.card {
   background-repeat: no-repeat;
   background-size: cover;
-  /* background-size: 120%;
-    background-position-x: 40%;
-    background-position-y: 20%; */
 }
+
+#phase{
+  display: none;
+}
+
+.phaseanimation {
+  display: flex !important;
+  position: fixed !important;
+  width: 80%;
+  height: 20%;
+  background-color: green;
+  font-size: 3rem;
+  top: 30%;
+  left: 10%;
+  z-index: 1;
+  opacity: 1;
+
+  animation: 1s linear 0s fadeinout;
+
+  &>span{
+    margin: auto;
+    text-transform: uppercase;
+    text-align: center;
+    word-break: break-word;
+  }
+
+}
+
+.event{
+  border-color: var(--event-border) !important;
+
+  &::after{
+    content: attr(reason) " - " attr(state) !important;
+  }
+
+  &[state^="IN"]{
+    background-color: var(--event-in);
+  }
+  &[state^="EXEC"], &[state="_"]{
+    background-color: var(--event-exec);
+  }
+  &[state^="OUT"]{
+    background-color: var(--event-out);
+  }
+  &[state="DEFUSED"]{
+    background-color: var(--event-defused);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state="DONE"]{
+    background-color: var(--event-done);
+    border-color: var(--event-border-inactive) !important;
+  }
+  &[state$="HOLD"]{
+    border-color: var(--event-border-inactive) !important;
+  }
+}
+
+
+
+@keyframes fadeinout{
+  0%{
+    opacity: 0;
+  }
+
+  8%{
+    opacity: 1;
+  }
+
+  90%{
+    opacity: 1;
+  }
+
+  100%{
+    opacity: 0;
+  }
+}
+
+#close-up {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 80%;
+	top: 10%;
+	z-index: 2;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top,center;
+}
+
+
+#game-space {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+#mp1          {background-color:#5A9367; grid-area: player-mp; display: none !important;}
+#mp2          {background-color:#5A9367; grid-area: enemy-mp; display: none !important;}
+#out-of-game1 {background-color:black;   grid-area: player-out; display: none !important;}
+#out-of-game2 {background-color:black;   grid-area: enemy-out; display: none !important;}
+.events           {background-color:#5CAB7D; grid-area: events; display: none !important;}
+
+
+
+
+.ownable[player="player1"]{
+  border: 2px solid blue !important;
+}
+
+.ownable[player="player2"]{
+  border: 2px solid red !important;
+}
+
+.choosable{
+  box-shadow: 0 0 30px rgb(212, 255, 0);
+}
+.choosable-final{
+  box-shadow: 0 0 30px rgb(0, 21, 255);
+}
+
+/* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
+.fellowship {
+  background-color: rgba(209, 183, 153,1);
+  transition: all 100ms,
+    font-size 300ms 200ms; 
+  font-size: 0rem;
+  height: 35%;
+  position: absolute;
+  bottom: 5%;
+}
+
+
+.fellowship__focused + .fellowship, .fellowship:not(.fellowship__focused):not(.fellowship__focused ~ .fellowship){
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-items: center;
+  width: var(--fellowship-width__unfocused);
+  left: 0rem;
+  gap: 5%;
+  padding: 1rem;
+  background-color: brown;
+  font-size: 1.2rem;
+  overflow: hidden;
+      
+  filter: grayscale(90%);
+  
+  &:hover{
+    filter: grayscale(30%);
+  }
+      
+  &::before{
+    content: "Anterior compañía";
+    text-align: center;
+  }
+      
+  &:hover>.character{
+    right: 0;
+  }
+  
+  &>.character{
+    display: block;
+    width: min(5rem, 100%);
+    aspect-ratio: 1/1 !important;
+    border-radius: 50%;
+    
+    position: relative;
+    right: var(--fellowship-width__unfocused);
+    transition: all 100ms;
+        
+    &>*{
+      display: none;
+    }
+  }
+}
+
+.fellowship__focused ~ .fellowship{
+  &::before{content: "Siguiente compañía" !important;};
+  right: calc(0 - var(--fellowship-width__unfocused));
+  left:calc(100% - var(--fellowship-width__unfocused));
+}
+
+.fellowship__focused + .fellowship{
+  right: 0;
+  &:hover>.character{
+    left: 0;
+  }
+  &>.character{
+    transition: all 100ms;
+    position: relative;
+    left: var(--fellowship-width__unfocused);
+  }
+}
+
+.location__focused{
+  width: 100%;
+  height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0;
+  position: relative;
+  top: 101vh; /* 1vh extra para conseguir un scroll mas agradable */
+  
+  background-position: top;
+  background-repeat: repeat-x;
+  background-size: auto 60%;
+  
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  
+  overflow: hidden;
+  
+  &::after, &::before{
+    transition: left 300ms ease-out 100ms,
+      right 300ms ease-out 100ms;
+    content: "";
+    position: absolute;
+    background-image: url(cortina.png), 
+      linear-gradient(100deg, 
+        rgba(80,0,14,1) 0%, 
+        rgba(120,0,30,1) 84%, 
+        rgba(0,0,0,0) 80%, 
+        rgba(0,0,0,0) 100%); 
+    height: 60%;
+    width: 100%;
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+  }
+  
+  &::before{
+    filter: var(--shadow-inverted);
+    left: var(--curtain-opening); 
+  }
+  
+  &::after{
+    filter: var(--shadow);
+    right: var(--curtain-opening);
+    scale: -1 1;
+  }
+  
+  /* ANIMACION PARA CERRAR LAS CORTINAS
+  &:not(:has(.fellowship__focused:hover)):hover{
+    &::before{
+      left: -30%;
+    }
+    &::after{
+      right: -30%;
+    }
+  }*/
+  
+  &:not(:has(.fellowship__focused:hover)):hover{
+    &::before{
+      left: calc( var(--curtain-opening) - 1rem);
+    }
+    &::after{
+      right: calc( var(--curtain-opening) - 1rem);
+    }
+  }
+  
+  &>.fellowship__focused{
+    position: absolute !important;
+    top: 60%;
+    left: var(--fellowship-width__unfocused);
+    right: var(--fellowship-width__unfocused);
+    width: calc(100% - 2 * var(--fellowship-width__unfocused));
+    z-index: 1;
+    margin: 0 !important;
+    gap: 4rem !important;
+
+    display: flex !important;
+    align-items: center;
+    /*! align-content: end; */
+
+    padding-inline: 4rem !important;
+
+    &::after{
+      display: none;
+    }
+
+    &>.character:hover{
+      z-index: 2;
+    }
+
+    /* ESTILOS DE TODOS LOS ATRIBUTOS */
+  .card{
+    filter: var(--shadow);
+  }
+
+
+  .attribute{
+    position: absolute !important;
+    background-size: cover;
+
+    &:not(:is(.body, .mind, .influence)){
+      filter: var(--shadow);
+    }
+
+    &::after{
+      content:attr(content) !important;
+      position: relative;
+    }
+  }
+
+
+    & .character{
+      margin:auto;
+      height: 90%;
+      /*! aspect-ratio: 3/5; */
+      width: 22vh;
+      border-radius: 5%;
+      border: .75rem ridge var(--character-border) !important;
+      border-width: .75rem !important;
+      border-image: url(character-border1.png) 10 stretch repeat !important;
+
+      position: relative;
+      font-size: 1.2rem;
+
+      display: flex;
+      flex-flow: column-reverse;
+      padding-left: 7%;
+      padding-block: 2rem;
+      gap: 1rem;
+
+      &>*:not(:is(.attribute, .character)){
+        left: 1.5rem;
+        width: 100%;
+      }
+
+      &::after{
+        border: .3rem solid var(--character-border);
+        border-radius: .4rem;
+        position: absolute;
+        top: -1.6rem;
+        left: .6rem;
+        z-index: -2;
+        width: 100%;
+        text-transform: uppercase;
+        text-align: center;
+        content: attr(card);
+        background-color: var(--character-light);
+        color: black;
+
+      }
+
+      /*&>.attribute{
+        display: block !important;
+      }*/
+
+      &>.mp{
+        font-size: 1.5rem;
+        background-image: url(mp-marker.png);
+        width: 3rem;
+        aspect-ratio: 9/31;
+        left: -2rem;
+        top: -2rem;
+        z-index: -1;
+        color: black;
+        display: grid;
+        justify-content: center;
+
+        &::after{
+          top: .4rem;
+        }
+      }
+
+      &>:is(.prowess, .body){
+        font-size: 1.5rem;
+        display: block !important;
+        bottom: -1rem;
+        left: -2rem;
+        height: 3rem;
+        aspect-ratio: 1/1;
+
+        &::after{
+          position: absolute;
+          bottom: .8rem;
+          color: var(--character-light);
+        }
+      }
+
+      &>.prowess {
+        background-image: url(combat-stats.png);
+        &::after{right: 1.8rem;}
+      }
+
+      &>.body::after{
+        left: 1.8rem;
+      }
+
+
+      &>.attribute.corruption {   
+        bottom: -1rem;
+        right: -1.5rem;
+        background-image: url(corruption-marker.png);
+        width: 2.8rem;
+        aspect-ratio: 24/21;
+        display: grid !important;
+        justify-content: center;
+        align-content: center;
+        color: black;
+
+        &[content="0"]::after{
+          content: "" !important;
+        }
+      }
+
+      &>:is(.attribute.influence, .attribute.mind){
+        display: grid !important;
+        justify-content: center;
+        align-content: center;
+        width: 1.3rem;
+        left: -1.2rem;
+
+        &::after{
+          font-size: 1.1rem;
+        }
+      }
+
+      &>.attribute.influence {
+        top: 3.7rem;
+        background-image: url(influence-marker.png);
+        aspect-ratio: 2/3;
+
+
+        &::after{
+          color: var(--character-light);
+          top: 0.2rem;
+        }
+      }
+
+      &>.attribute.mind {
+        top: 1.5rem;
+        background-image: url(mind-marker.png);
+        aspect-ratio: 6/7;
+
+        &::after{
+          color: black;
+          top: -.1rem;
+        }
+      }
+
+      /* ESTILOS DE SEGUIDORES */
+      &>.character{
+        position: absolute;
+        height: 110%;
+        top: 50%;
+        left: 50%;
+        transition-duration: 100ms;
+        transition-delay: 50ms;
+
+        &:hover{
+          scale: 1.2;
+          top:-20%;
+        }
+      }
+
+
+
+      /* ESTILOS DE OBJETOS */
+      &>.item {
+        position: relative;
+        aspect-ratio: 4/3;
+
+        &:hover{
+          z-index: 1;
+        }
+
+        &:hover::after{
+          position: absolute;
+          display: block;
+          bottom: 90%;
+          padding-inline: .3rem;
+          text-align: center;
+          width: 130%;
+        }
+
+        &:hover>.attribute.corruption{
+          display: grid !important;
+        }
+        /*! width: 4rem; */
+      }
+    }
+  }
+}
+
+  /* Dar manualmente la clase fellowship__focused a una manualmente para poder trabajar*/
+.fellowship{
+  display: none;
+}
+
+
+
+
+  /* Estilos de todos los recursos*/
+
+.resource {
+  border-image: var(--item-border) 8;
+  border-width: .3rem;
+  border-style: ridge;
+  background-position: 50% 65%;
+  background-size: 150%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-light);
+  text-shadow: var(--text-shadow);
+  
+  &::after{
+    display: none;
+    position: absolute;
+    border: .3rem solid var(--item-border-color);
+    border-radius: .4rem;
+    font-size: 1rem;
+    width: max-content;
+    text-transform: uppercase;
+    content: attr(card);
+    background-color: var(--item-border-color-light);
+ }
+
+  &>.attribute.corruption{
+    background-image: url(corruption-marker.png);
+    height: 2rem;
+    aspect-ratio: 24/21;
+    justify-content: center;
+    align-content: center;
+    color: black;
+    right: -1rem;
+    bottom: -1rem;
+    filter: brightness(80%) saturate(400%) hue-rotate(145deg);
+    text-shadow: none;
+
+    &::after{
+      font-size: 1rem;
+      content: attr(content);
+    }
+  }
+}
+
+
+
+
+/* Efecto hover a todas las cartas menos localizacion*/
+
+.card:not(.location){
+  scale: 1;
+  bottom: 0;
+  transition: all 50ms ease-out;
+}
+.card:hover:not(.location):not(:has(.card:hover)){
+  scale: 1.1;
+  &.item{
+    scale: 1.5;
+    &::after{
+      font-size: 1rem !important;
+    }
+  }
+}
+
+.card:has(>.state[content="TAPPED"]){
+  filter:grayscale(80%);
+}
+
+
+/*
+
+  GUI
+
+*/
+
+
+.object.player{
+  position:fixed;
+  width: calc(2 * var(--player-border-size) + var(--player-size));
+  top: calc(0rem - var(--player-border-size)  - var(--player-size) / 2);
+  aspect-ratio: 1/1;
+  border-radius: 40%;
+  background-position: calc(var(--player-size) / 2) calc(var(--player-size) / 2);
+  background-size: 50% 50%;
+  background-clip: border-box;
+  border-width: var(--player-border-size);
+  border-color: black;
+  border-style: solid;
+  
+  &::after{
+    position: absolute;
+    bottom: calc(var(--player-border-size) / 1.5);
+    content: attr(id);
+    text-transform: uppercase;
+  }
+  
+  &>.attribute.general-influence{
+    display: grid;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    width: 3rem;
+    aspect-ratio: 2/3;
+    background-image: url(influence-marker.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: var(--shadow);
+    
+    &::after{
+      position:relative;
+      content: attr(content);
+      color: var(--character-light);
+      top: 45%;
+      font-size: 1.5rem;
+      
+    }
+  }
+  
+  
+  &>.attribute.mp{
+    display: block;
+    position: absolute;
+    top: calc(50% + 1rem);
+    rotate: 8deg;
+    /*! width: calc(35vw - var(--player-size) / 2 - var(--player-border-size)); */
+    height: 8rem;
+    aspect-ratio: 1/1;
+    background-image: url(brazo.png);
+    background-size: cover;
+    background-position: right;
+    
+    &::after{
+      content: attr(content);
+      position: absolute;
+      font-size: 2rem;
+      text-align: center;
+      right: .8rem;
+      rotate: -8deg;
+      color: black;
+      background-color: hsla(0,0%,100%,.8);
+      height: 2.4rem;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+    }
+  }
+}
+
+#player1{
+  left: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
+  background-image: url(tw/icons/gandalf.jpg);
+  background-color:blue;
+  filter: drop-shadow(0rem 0rem 0.1rem black) var(--shadow-inverted);
+  
+  &::after{
+    rotate: -40deg;
+    right: calc(var(--player-border-size) / 1.5);
+  }
+  
+  &>.attribute.general-influence{
+    left: 50%;
+  }
+  
+  &>.attribute.mp{
+      left: calc(100% + var(--player-border-size) - .3rem);
+  }
+  
+}
+
+
+#player2{
+  right: calc(0rem - var(--player-border-size) - var(--player-size) / 2);
+  background-image: url(tw/icons/saruman.jpg);
+  background-color:red;
+  filter: drop-shadow(0rem 0rem 0.1rem black) var(--shadow);
+  
+  &::after{
+    rotate: 40deg;
+    left: calc( var(--player-border-size) / 1.5);
+  }
+  
+  
+  &>.attribute.general-influence{
+    right: 50%;
+  }
+  
+  &>.attribute.mp{
+    right: calc(100% + var(--player-border-size) - .3rem);
+    scale: -1 1;
+    rotate: -8deg;
+    
+    &::after{
+      scale: -1 1;
+    }
+  }
+}
+
+#draw1, #draw2{
+  left: 1rem;
+  top: calc(var(--player-size) / 1.5);
+  
+  display: grid;
+  gap: 2rem;
+  justify-content: center;
+  align-content: baseline;
+  position: fixed;
+  width: 4rem;
+  height: 4rem;
+  background-color: brown !important;
+  font-size: 2rem;
+  color: black;
+  border: 2px solid black;
+  border-top-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+  
+  grid-template-columns: repeat(auto-fill, 13rem);
+  /*grid-template-rows: 2rem repeat(auto-fill, 11rem);´*/
+  transition: width .1s, 
+    height .1s, 
+    top .1s,
+    border-top-left-radius .1s,
+    border-top-right-radius .1s;
+  z-index: 1;
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar{display: none;}
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  
+  &>.card{
+    margin: 10%;
+    display: none;
+    scale: 0;
+    transition: scale .1s .1s;
+  }
+    
+  &::before{
+    grid-column: 1 / -1;
+    position: relative;
+    top: 4rem;
+    text-align: center;
+    content: "ROBAR";
+    
+    transition: top .1s;
+  }
+  
+  &:hover{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 1rem;
+    padding-top: 0;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  
+    width: 80%;
+    height: calc(100% - 1rem);
+    top: 1rem;
+  
+    
+    &>.card{
+      display: block;
+      scale: 1;
+      height: 11rem;
+    }
+    
+    &::after{
+      content: "";
+      grid-column: 1 / -1;
+      height: 2rem;
+      border-top-color: black;
+      border-top-style: double;
+      border-top-width: .5rem;
+    }
+    
+    &::before{
+      padding-top: 2rem;
+      position: sticky;
+      content: "CARTAS POR ROBAR";
+      top: 0;
+      background-color: brown;
+      border-bottom-color: black;
+      border-bottom-style: double;
+      border-block-width: .5rem;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+    }
+    
+  }
+}
+
+
+#player1__hand, #player2__hand{
+    display: grid;
+    position: absolute;
+    width: 4rem;
+    aspect-ratio: 1/1;
+    background-color: brown !important;
+    justify-content: center;
+    align-content: center;
+    font-size: 2rem;
+    color: black;
+    border: 2px solid black;
+    top: 85%;
+  
+    &::after{
+      content: attr(content);
+    }
+}
+
+#player1__hand{
+  left: 52%;
+}
+
+#player2__hand{
+  right: 52%;
+}
+
+#hand1, #hand2{
+  position: fixed;
+  z-index: 3;
+  bottom: 0rem;
+  left: 5%;
+  width: 90%;
+  height: 0;
+  gap: 1rem;
+  display: grid; /*flex*/
+  grid-template-columns: repeat(auto-fit, 5rem);
+  justify-content: center;
+  
+  &>.card{
+    display: block;
+    position: relative;
+    bottom: 4rem;
+    width: 140%;
+    aspect-ratio: 1/1;
+    
+    &:hover{
+      bottom: 100%;
+      scale: 1;
+      width: 200%;
+    }
+  }
+}
+
+.pass{
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  position: fixed;
+  top: 1%;
+  right: calc(50% - var(--sun-size) / 2);
+  width: var(--sun-size);
+  aspect-ratio: 1/1;
+  background-color: var(--sun-color);
+  border-radius: 50%;
+  /*overflow: hidden;*/
+  border: 1px solid var(--moon-color);
+  filter: drop-shadow(0 0 0.2rem  var(--sun-color));
+  color: var(--sun-color);
+  
+  &::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 5%;
+    left: -10%; /*TODO: Cambiar entre -100% y 100% para pasar el dia*/
+    width: 90%;
+    aspect-ratio: 1/1;
+    background-color: var(--moon-color);
+    /*background-image: url(moon.png);
+    background-size: cover;
+    background-position: 80% 85%;*/
+    border-radius: 50%;
+    filter: drop-shadow(0 0 0.2rem  var(--moon-color));
+  }
+  
+  &:hover{
+    scale: 1.1;
+    
+    &::after{
+      position: relative;
+      padding: .5rem;
+      content: "PASAR";
+      
+    }
+    
+  }
+}
+
+
+#discard1, #discard2{
+  width: 8rem;
+  aspect-ratio: 19/22;
+  position: fixed;
+  right: 0%;
+  bottom: 40%;
+  filter: var(--shadow);
+  
+  &>.card{
+    display: none;
+  }
+  
+  &::before{
+    text-align: center;
+    color: black;
+    font-size: 0rem;
+    text-shadow: 1px -1px 4px white;
+    
+    display: block;
+    content: "DESCARTE";
+    background-image: url(discard1.png);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 3;
+    
+    transition: all 50ms;
+  }
+  
+  &:hover::before{
+    font-size: 1.5rem;
+  }
+
+  &::after{
+    display: block;
+    content: "";
+    background-image: url(discard2.png);
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    
+    transition: all .5s;
+  }
+  
+  &:hover::after{
+    transform: scaleX(75%);
+    right: -12%;
+    filter: blur(.001rem) brightness(.8);
+  }
+}
+
+
+/*
+
+  WOLRDVIEW
+
+*/
+
+
+#game-space{
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar{display: none;} 
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none; /*   Firefox */
+  
+  
+  &::before{
+    content: "";
+    z-index: -1;
+    width: 100vw;
+    height: 10vh;
+    top: 5px;
+    position: absolute;
+    scroll-snap-align: start;
+  }
+  
+  &::after{
+    content: "";
+    bottom: 0vh; 
+    z-index: -1;
+    width: 100vw;
+    height: 10vh;
+    position: absolute;
+    scroll-snap-align: start;
+  }
+  
+  &:has(.location__focused)::after{
+    bottom: -100vh; 
+  }
+  
+  &>#locations{
+    background-image: url(map-geography.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+
+    height: 100vh;
+    width: 100vw;
+    
+    scroll-snap-align: end;
+    
+    &>.location:not(.location__focused){
+      display: grid !important;
+      justify-content: center;
+      align-content: end;
+      color: black;
+      
+      width: 4vw;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      border: 2px solid black;
+      
+      position: absolute;
+      
+      &>*{
+        display: none;
+      }
+      
+      &:hover{
+        scale: 1.5;
+        z-index: 1;
+        
+        &::after{
+          position: relative;
+          content: attr(card);
+          bottom: -1.5rem;
+          text-transform: uppercase;
+          background-color: white;
+          border-radius: .1rem;
+          padding-inline: .3rem;
+          width: max-content;
+        }
+      }
+    }
+    
+  }
+}
+
+/*
+
+  ESTILOS DE LOCALIZACIONES NO ENFOCADAS
+
+*/
+
+#rivendell:not(.location__focused){
+  top: 30%;
+  left: 48%;
+}
+#lorien:not(.location__focused){
+  top: 41%;
+  left: 52%;
+}
+#barrow--downs:not(.location__focused){
+  top: 35%;
+  left: 33%;
+}
+#dunnish-clan--hold:not(.location__focused){
+  top: 50%;
+  left: 39%;
+}
+#bree:not(.location__focused){
+  top: 31%;
+  left: 31%;
+}
+#goblin--gate:not(.location__focused){
+  top: 23%;
+  left: 51%;
+}
+#isengard:not(.location__focused){
+  top: 53%;
+  left: 44%;
+}
+#wellinghall:not(.location__focused){
+  top: 50%;
+  left: 49%;
+}
+#edoras:not(.location__focused){
+  top: 60%;
+  left: 50%;
+}
+#minas-tirith:not(.location__focused){
+  top: 66%;
+  left: 64%;
+}
+#dead-marshes:not(.location__focused){
+  top: 56%;
+  left: 63%;
+}
+#thranduils-halls:not(.location__focused){
+  top: 16%;
+  left: 66%;
+}
+#mount-gundabad:not(.location__focused){
+  top: 10%;
+  left: 50%;
+}
+#moria:not(.location__focused){
+  top: 40%;
+  left: 46%;
+}
+
+

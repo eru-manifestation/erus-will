@@ -1,36 +1,31 @@
 ;/////////////////////// FASE 4: FASE DE LUGARES ///////////////////////
 (defmodule P-4 (import MAIN ?ALL))
 ;/////CLOCK
-(defrule clock (declare (salience ?*clock-salience*)) => (tic (get-focus)))
-;/////INI
-(defrule ini (declare (salience ?*universal-rules-salience*)) ?ini<-(ini) => (retract ?ini)
-(foreach ?rule (get-defrule-list) (refresh ?rule)) 
-(debug Fase de lugares))
+(defrule clock (declare (salience ?*clock*)) => (tic))
+
 ;/////ACTION MANAGEMENT
-(defrule choose-action (declare (salience ?*action-selection-salience*))
+(defrule choose-action (declare (salience ?*a-selection*))
 	?inf<-(infinite) (object (is-a PLAYER) (name ?p)) (exists (action (player ?p))) => 
-	(retract ?inf) (assert (infinite)) (play-actions ?p))
+	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
 
-; ACCIÓN: INICIAR FASE MOVIMIENTO
-(defrule action-loc-phase (declare (salience ?*action-population-salience*))
+; ACCIÓN: INICIAR FASE LUGARES
+(defrule a-loc-phase (declare (salience ?*a-population*))
 	(logical
-		(only-actions (phase P-4))
-    	(player ?p)
+		(object (is-a EP-turn) (state EXEC) (player ?p))
 
-		(object (is-a FELLOWSHIP) (empty FALSE) (name ?fell) (player ?p))
-		(object (is-a LOCATION) (name ?loc))
-		(in (transitive FALSE) (over ?loc) (under ?fell))
-		(not (object (is-a E-loc-phase) (loc ?loc) (fell ?fell))) ;TODO ARREGLAR ESTO
+		(object (is-a FELLOWSHIP) (empty FALSE) (player ?p) (name ?fell))
+		(not (object (is-a EP-loc-phase) (fellowship ?fell)))
 	)
 	=>
 	(assert (action 
 		(player ?p)
 		(event-def loc-phase)
-		(description (sym-cat "Begin location phase for " ?fell " in " ?loc))
-		(data (create$ 
-		"( fell [" ?fell "])"
-		"( loc [" ?loc "])"))
+		(description (sym-cat "Begin location phase for " ?fell))
+		(identifier ?fell)
+		(data "(fellowship [" ?fell "])")
+		(reason P-4::a-loc-phase)
+		(blocking TRUE)
 	))
 )
