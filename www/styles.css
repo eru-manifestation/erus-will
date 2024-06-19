@@ -16,12 +16,14 @@
   --shadow-inverted: drop-shadow(.4rem 0rem 1px rgb(0,0,0,0.4));
   --text-shadow:hsla(0,0%,0%,.5) .1rem .05rem;
   --fellowship-width__unfocused: 7vw;
+  --fellowship-color: hsl(32,37%,27%);
   
   /* GUI CONSTANTS */
   --player-size: 30rem;
   --player-border-size: 2rem;
   --sun-color: hsla(60,50%,50%,1);
   --sun-size: 10vh;
+  --sun-right: 40%;
   --moon-color: hsla(0,0%,0%,.8);
 }
 
@@ -66,15 +68,27 @@
 }
 
 #phase{
-  display: none;
+  display: block;
+  position: absolute;
+
+  right: calc(var(--sun-right) + var(--sun-size) / 2 + 1rem);
+  left: calc(var(--sun-right) / 1.2);
+  background-color: green;
+  font-size: 1.3rem;
+  top: 1%;
+  z-index: 1;
+  height: var(--sun-size);
+  border-radius: 1rem;
+  padding: 1rem;
+  text-align: right;
+  word-break: break-word;
 }
 
-.phaseanimation {
+#phase.phaseanimation {
   display: flex !important;
   position: fixed !important;
   width: 80%;
   height: 20%;
-  background-color: green;
   font-size: 3rem;
   top: 30%;
   left: 10%;
@@ -87,7 +101,6 @@
     margin: auto;
     text-transform: uppercase;
     text-align: center;
-    word-break: break-word;
   }
 
 }
@@ -185,7 +198,7 @@
 
 /* ESTILOS DE LA LOCALIZACIÓN ENFOCADA */
 .fellowship {
-  background-color: rgba(209, 183, 153,1);
+  background-color: var(--fellowship-color);
   transition: all 100ms,
     font-size 300ms 200ms; 
   font-size: 0rem;
@@ -207,6 +220,9 @@
   background-color: brown;
   font-size: 1.2rem;
   overflow: hidden;
+  border-radius: 1rem;
+  bottom: 0;
+  height: 40%;
       
   filter: grayscale(90%);
   
@@ -275,7 +291,8 @@
   align-items: center;
   
   overflow: hidden;
-  
+  background-color: var(--fellowship-color);
+
   &::after, &::before{
     transition: left 300ms ease-out 100ms,
       right 300ms ease-out 100ms;
@@ -909,8 +926,7 @@
   align-content: center;
   position: fixed;
   top: 1%;
-  right: calc(50% - var(--sun-size) / 2);
-  width: var(--sun-size);
+  right: calc(var(--sun-right) - var(--sun-size) / 2);  width: var(--sun-size);
   aspect-ratio: 1/1;
   background-color: var(--sun-color);
   border-radius: 50%;

@@ -352,7 +352,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     socket.on("satm_error", (data) => {
         console.log("STAM error:\n" + data);
-        fire("Invalid action", data, "error");
+        console.log(data)
+        msg = upcaseFirst(player)+": There is no available action associated to ";
+        if(data.includes(" ")){
+            let index = data.indexOf(" ")
+            msg += "dragging "+data.substring(0,index)+" to "+data.substring(index);
+        }else
+            msg += data;
+        fire("Invalid action", msg, "error");
         enableChoices();
     });
 
