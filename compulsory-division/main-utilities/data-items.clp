@@ -1,13 +1,13 @@
 (defmessage-handler data-item-add init after ()
     (send ?self put-position ?self:target)
-    (message "Se modifica " ?self:target-slot " de " ?self:target " por " ?self:motive)
-    (send ?self:target modify ?self:target-slot 
-        (+ (send ?self:target (sym-cat get- ?self:target-slot)) ?self:value))
+    (bind ?value (+ (send ?self:target (sym-cat get- ?self:target-slot)) ?self:value))
+    (message "Se modifica " ?self:target-slot " de " ?self:target " por " ?self:motive " (" ?value ")")
+    (send ?self:target modify ?self:target-slot ?value)
 )
 (defmessage-handler data-item-add delete before ()
-    (message "Se desactiva la modificacion de " ?self:target-slot " de " ?self:target " por " ?self:motive)
-    (send ?self:target modify ?self:target-slot 
-        (- (send ?self:target (sym-cat get- ?self:target-slot)) ?self:value))
+    (bind ?value (- (send ?self:target (sym-cat get- ?self:target-slot)) ?self:value))
+    (message "Se desactiva la modificacion de " ?self:target-slot " de " ?self:target " por " ?self:motive " (" ?value ")")
+    (send ?self:target modify ?self:target-slot ?value)
 )
 
 (defmessage-handler data-item-remove init after ()

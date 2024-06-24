@@ -10,7 +10,7 @@
 
 
 (defrule attack
-	(object (is-a EP-combat) (target ?fell) (attackables ?at $?))
+	(object (is-a EP-combat) (state EXEC) (target ?fell) (attackables ?at $?))
 	=>
 	(make-instance (gen-name EP-attack) of EP-attack 
 		(reason combat-1::attack)

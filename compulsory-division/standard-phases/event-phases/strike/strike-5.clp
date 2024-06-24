@@ -31,6 +31,7 @@
 				(attacker ?char)
 				(target ?at))
 			else
+			(message El personaje saca ?d y supera los ?at-prowess del enemigo, y como su adversario no tiene valor de resistencia, derrota el golpe)
 			(complete DEFEATED)
 		)
 		else
@@ -40,6 +41,7 @@
 				(attacker ?at)
 				(target ?char))
 			else
+			(message El personaje saca ?d y supera los ?at-prowess del enemigo, pero el enemigo debe fallar su chequeo de resistencia)
 			(complete PARTIALLY-UNDEFEATED)
 		)
 	)

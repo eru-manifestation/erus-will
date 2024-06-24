@@ -8,4 +8,7 @@
 	(retract ?inf) (assert (infinite)) (collect-actions ?p))
 
 
-(defrule roll => (complete (+ (random 1 6) (random 1 6))))
+(defrule roll => 
+	(bind ?value (+ (random 1 6) (random 1 6)))
+	(message En la tirada sale ?value)
+	(complete ?value))

@@ -69,6 +69,7 @@
     (message Creating inital card of Saruman)
 
     ; PERSONAJES
+    (init-card WOLVES 3 2); Los pongo adelante para poder probar el combate
     (init-card GIMLI 1 2)
     (init-card LEGOLAS 1 2)
     (init-card ELLADAN 1 2)
@@ -110,7 +111,6 @@
     (init-card AROUSE-MINIONS 3 2)
     (init-card RIVER 2 2)
     (init-card WARGS 3 2)
-    (init-card WOLVES 3 2)
     (init-card GHOSTS 2 2)
     (init-card LESSER-SPIDERS 3 2)
     (init-card GHOULS 2 2)

@@ -17,6 +17,7 @@
   --text-shadow:hsla(0,0%,0%,.5) .1rem .05rem;
   --fellowship-width__unfocused: 7vw;
   --fellowship-color: hsl(32,37%,27%);
+  --creature-size: 10rem;
   
   /* GUI CONSTANTS */
   --player-size: 30rem;
@@ -96,7 +97,7 @@
   font-size: 3rem;
   top: 30%;
   left: 10%;
-  z-index: 1;
+  z-index: 10;
   opacity: 1;
 
   animation: 1s linear 0s fadeinout;
@@ -389,6 +390,34 @@
     }
   }
 
+    &>.creature{
+      width: var(--creature-size);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      position: absolute;
+      display: flex;
+      top: calc(0rem - var(--creature-size) - 10%);
+      left: calc(50% - var(--creature-size) / 2);
+        
+       
+
+      &>.prowess {
+        background-image: url(combat-stats.png);
+        font-size: 1.5rem;
+        display: block !important;
+        bottom: -.2rem;
+        left: 0rem;
+        height: 2.2rem;
+        aspect-ratio: 1/1;
+        
+        &::after{
+          position: absolute;
+          bottom: .3rem;
+          color: var(--character-light);
+          right: calc(50% - .2rem);
+        }
+      }
+    }
 
     & .character{
       margin:auto;

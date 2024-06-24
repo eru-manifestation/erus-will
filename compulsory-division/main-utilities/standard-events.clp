@@ -157,10 +157,10 @@
 
 (defrule MAIN::EI-creature-combat#defeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a EP-combat) (state OUT) 
-        (position ?pos)
-        (attackables ?at $?)(res DEFEATED))
-    (object (is-a CREATURE) (name ?at)) ; TODO: Informarse si es correcto, que compone un combate
-    (object (is-a E-modify) (name ?pos) (target ?creature))
+        (position ?pos) (res DEFEATED))
+    (object (is-a EP-attack) (position ?e) (attackable ?creature))
+    (object (is-a CREATURE) (name ?creature)) ; TODO: Informarse si es correcto, que compone un combate
+    ;(object (is-a E-modify) (name ?pos) (target ?creature))
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-creature-combat#defeated)))
     =>
     ;   TODO: es el mp correcto?
@@ -171,10 +171,10 @@
 
 (defrule MAIN::E-creature-combat-fell#undefeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
     ?e <- (object (is-a EP-combat) (state OUT) 
-        (position ?pos)
-        (attackables ?at $?) (res UNDEFEATED|UNDEFINED))
-    (object (is-a CREATURE) (name ?at)) ; TODO: Informarse si es correcto, que compone un combate
-    (object (is-a E-modify) (name ?pos) (target ?creature))
+        (position ?pos) (res UNDEFEATED|UNDEFINED))
+    (object (is-a EP-attack) (position ?e) (attackable ?creature))
+    (object (is-a CREATURE) (name ?creature)) ; TODO: Informarse si es correcto, que compone un combate
+    ;(object (is-a E-modify) (name ?pos) (target ?creature))
     (not (object (is-a EVENT) (position ?e) (reason MAIN::E-creature-combat-fell#undefeated)))
     =>
     (E-discard ?creature MAIN::E-creature-combat-fell#undefeated)
