@@ -2,7 +2,7 @@
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const socket = io.connect(window.location.origin, { query: urlParams.toString() });
-const dev = urlParams.get("dev");
+const dev = urlParams.get("dev")!=null;
 let choice = [];
 let player = undefined;
 
@@ -338,12 +338,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("contextmenu", (e) => e?.cancelable && e.preventDefault());
 
     socket.on("player", (playerN) => {
-        console.log("Iniciando partida como " + playerN);
+        console.log("Iniciando partida como " + playerN + (dev? " en modo desarrollador":""));
         player = playerN;
         const target = player === "player2" ?
             "#player2__hand, #hand1, #draw1, #discard1" :
             "#player1__hand, #hand2, #draw2, #discard2";
-        document.styleSheets[0].insertRule(target + "{display:none !important;}");
+        if(!dev)
+            document.styleSheets[0].insertRule(target + "{display:none !important;}");
     });
 
     socket.on("log", (data) => {
