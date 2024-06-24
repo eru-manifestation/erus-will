@@ -51,14 +51,18 @@
 }
 #game-space .attackable:not(.card) {
   background-image: url(attackable.png);
+  width: 5rem;
+  aspect-ratio: 1/1;
+  position: absolute;
+  bottom: 40%;
+  border-radius: 50%;
+  border: 2px solid black !important;
 }
 
 .attackable, .data-item{
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  border: none !important;
-  color: darkslategrey !important;
 }
 
 

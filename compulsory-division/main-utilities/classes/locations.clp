@@ -177,6 +177,7 @@
     (make-instance attackable-barrow--downs of ATTACKABLE (race UNDEAD) (prowess 8))
     (make-instance attackable-goblin--gate of ATTACKABLE (race ORC) (prowess 6) (strikes 3))
     (make-instance attackable-isengard of ATTACKABLE (race WOLF) (prowess 7) (strikes 3))
+    (make-instance attackable-dead-marshes of ATTACKABLE (race ORC) (prowess 8) (strikes 2))
     (make-instance attackable-gundabad of ATTACKABLE (race ORC) (prowess 8) (strikes 2))
     (make-instance attackable-moria of ATTACKABLE (race ORC) (prowess 7) (strikes 4))
 
@@ -205,7 +206,7 @@
     (make-instance wellinghall of WELLINGHALL)
     (make-instance edoras of EDORAS)
     (make-instance minas-tirith of MINAS-TIRITH)
-    (make-instance dead-marshes of DEAD-MARSHES)
+    (make-instance dead-marshes of DEAD-MARSHES (automatic-attacks [attackable-dead-marshes]))
     (make-instance thranduils-halls of THRANDUILS-HALLS)
     (make-instance mount-gundabad of MOUNT-GUNDABAD (automatic-attacks [attackable-gundabad]))
     (make-instance moria of MORIA (automatic-attacks [attackable-moria]))
