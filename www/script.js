@@ -62,6 +62,7 @@ function makeElement(announce) {
     map.delete("classes");
     map.delete("instance-#");
     map.delete("position");
+    map.delete("motive") // El campo motivo de los data-item puede dar problemas en el arbol HTML
 
     if (classes.includes("event")) {
         map.set("reason", map.get("reason").split(" ")[0]);
@@ -107,12 +108,35 @@ function modifyElement(announce) {
         let elementAtt = document.getElementById(announce.id + "__" + announce.slot);
         elementAtt.setAttribute("content", announce.value);
     };
-    if (document.getElementById(announce.id).classList.contains("event")) {
-        msDelay = 0; // Hasta que se estilen, los eventos van de golpe
-        animationFunction = () => {
-            let element = document.getElementById(announce.id);
-            element.setAttribute(announce.slot, announce.value);
-        };
+    let element = document.getElementById(announce.id);
+    let classes = element.classList;
+    if (classes.contains("event")) {
+        if(classes.contains("ep-dices") && announce.slot==="res" && element.getAttribute('state')==="EXEC"){
+            // Estilos de generación del resultado de dados
+            msDelay=2000;
+            animationFunction = () => {
+                let element = document.getElementById(announce.id);
+                element.classList.add("resultRoll");
+                element.setAttribute(announce.slot, announce.value);
+                setTimeout(()=>element.classList.remove("resultRoll"),msDelay);
+            };
+        }else if(classes.contains("ep-dices") && announce.slot==="res" && element.getAttribute('state')==="DONE"){
+            // Estilos de modificación de la tirada
+            msDelay=1000;
+            animationFunction = () => {
+                let element = document.getElementById(announce.id);
+                element.classList.add("modifyRoll");
+                setTimeout(()=>element.setAttribute(announce.slot, announce.value),msDelay/2);
+                setTimeout(()=>element.classList.remove("modifyRoll"),msDelay);
+            };
+        }else{
+
+            msDelay = 0; // Para cambios en eventos sin estilar
+            animationFunction = () => {
+                let element = document.getElementById(announce.id);
+                element.setAttribute(announce.slot, announce.value);
+            };
+        }
     }
     return { msDelay, animationFunction };
 }
