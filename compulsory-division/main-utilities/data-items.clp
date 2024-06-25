@@ -220,7 +220,7 @@
 ; strike-5
 (defrule MAIN::DIP-strike-tapped (declare (auto-focus TRUE) (salience ?*universal-rules*))
     (logical
-        ?e <- (object (is-a EP-strike) (active TRUE) (target ?char))
+        ?e <- (object (is-a EP-strike) (active TRUE) (state ~OUT) (target ?char))
         (object (name ?char) (state TAPPED))
 	    (object (is-a EP-strike-roll) (position ?e) (state DONE) (name ?d))
     )

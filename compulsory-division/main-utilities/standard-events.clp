@@ -9,7 +9,7 @@
     ))
     =>
     (E-modify ?owner state TAPPED MAIN::EI-tap-owner)
-    (message "Girar el personaje " ?owner " al obtener un objeto o aliado")
+    (phase (str-cat  "Girar el personaje " ?owner " al obtener un objeto o aliado"))
 )
 
 
@@ -25,7 +25,7 @@
         (neq loc-phase-3-1::play-additional-minor-item ?fr)
     ))
     =>
-    (message "Girar la localizacion " ?loc " al jugar un objeto, faccion o aliado")
+    (phase (str-cat  "Girar la localizacion " ?loc " al jugar un objeto, faccion o aliado"))
     (E-modify ?loc state TAPPED MAIN::EI-tap-location)
 )
 
@@ -43,7 +43,7 @@
     (make-instance (gen-name EP-corruption-check) of EP-corruption-check 
         (reason MAIN::EI-move-corruption) 
         (target ?owner))
-    (message ?oldOwner " debe realizar un chequeo de corrupcion antes de transferir o almacenar objetos que den corrupcion")
+    (phase (str-cat  ?oldOwner " debe realizar un chequeo de corrupcion antes de transferir o almacenar objetos que den corrupcion"))
 )
 
 (defrule MAIN::EI-unfollow (declare (auto-focus TRUE) (salience ?*E-intercept*))
@@ -53,7 +53,7 @@
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-unfollow)))
 	=>
 	(E-modify ?follower position ?fell MAIN::EI-unfollow)
-	(message "Bajar seguidor " ?follower " antes de descartar el personaje")
+	(phase (str-cat  "Bajar seguidor " ?follower " antes de descartar el personaje"))
 )
 
 ;   TODO: manejo de elecciones en intercepcion
@@ -96,7 +96,7 @@
         (reason MAIN::EI-creature-combat)
         (attackables ?creature)
         (target ?fell))
-	(message "Se inicia el ataque de " ?creature " a " ?fell)
+	(phase (str-cat  "Se inicia el ataque de " ?creature " a " ?fell))
 )
 
 ; TODO: rediseñar
@@ -112,10 +112,10 @@
     =>
     (if (member$ HAVEN (class-subclasses (class ?loc))) then
         (E-modify ?loc state UNTAPPED MAIN::EI-manage-tapped-loc)
-        (message "Se devuelve " ?loc " al estado inicial")
+        (phase (str-cat  "Se devuelve " ?loc " al estado inicial"))
     else
         (E-discard ?loc MAIN::EI-manage-tapped-loc)
-        (message "Se descarta " ?loc " al no tener personajes, no ser refugio y estar girada")
+        (phase (str-cat  "Se descarta " ?loc " al no tener personajes, no ser refugio y estar girada"))
     )
 )
 
@@ -126,7 +126,7 @@
         (reason MAIN::EI-standarize-hand-after-mov)
         (target ?p)))
     =>
-    (message ?p " repone su mano tras la fase de movimiento")
+    (phase (str-cat  ?p " repone su mano tras la fase de movimiento"))
     (make-instance (gen-name EP-standarize-hand) of EP-standarize-hand 
         (reason MAIN::EI-standarize-hand-after-mov) 
         (target ?p))
@@ -137,7 +137,7 @@
         (target ?fell) (new ?to))
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-movement-phase)))
     =>
-    (message "Se ejecuta la fase de movimiento para mover la copañia")
+    (phase "Se ejecuta la fase de movimiento para mover la copañia")
     (make-instance (gen-name EP-fell-move) of EP-fell-move
         (reason MAIN::EI-movement-phase)
         (fellowship ?fell)
@@ -166,7 +166,7 @@
     ;   TODO: es el mp correcto?
     (E-modify ?creature position (mpsymbol (send ?creature get-player))
         MAIN::EI-creature-combat#defeated)
-    (message "La criatura " ?creature " ha sido derrotada, se añade a la pila de puntos de victoria")
+    (phase (str-cat  "La criatura " ?creature " ha sido derrotada, se añade a la pila de puntos de victoria"))
 )
 
 (defrule MAIN::E-creature-combat-fell#undefeated (declare (auto-focus TRUE) (salience ?*E-intercept*))
@@ -178,7 +178,7 @@
     (not (object (is-a EVENT) (position ?e) (reason MAIN::E-creature-combat-fell#undefeated)))
     =>
     (E-discard ?creature MAIN::E-creature-combat-fell#undefeated)
-    (message "La criatura " ?creature " no ha sido derrotada, se mueve al descarte enemigo")
+    (phase (str-cat  "La criatura " ?creature " no ha sido derrotada, se mueve al descarte enemigo"))
 )
 
 
@@ -205,7 +205,7 @@
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-gain-faction)))
     =>
     (E-play ?faction (mpsymbol (send ?faction get-player)) MAIN::EI-gain-faction)
-    (message "La faccion " ?faction " influenciada por " ?char " se mueve a la pila de puntos de victoria")
+    (phase (str-cat  "La faccion " ?faction " influenciada por " ?char " se mueve a la pila de puntos de victoria"))
 )
 
 
@@ -215,7 +215,7 @@
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-discard-faction)))
     =>
     (E-discard ?faction MAIN::EI-discard-faction)
-    (message "La faccion " ?faction " no ha sido influenciada por " ?char " se mueve a la pila de descarte")
+    (phase (str-cat  "La faccion " ?faction " no ha sido influenciada por " ?char " se mueve a la pila de descarte"))
 )
 
 
@@ -226,7 +226,7 @@
     =>
     (E-modify ?t position (outofgamesymbol (send ?t get-player))
         MAIN::EI-failed-res-check)
-    (message ?t "se elimina del juego por haber fallado el chequeo de resistencia")
+    (phase (str-cat  ?t " se elimina del juego por haber fallado el chequeo de resistencia"))
 )
 
 
@@ -235,7 +235,7 @@
         (target ?t))
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-failed-corr-check)))
     =>
-    (message ?t " se descarta por no haber superado el chequeo de resistencia")
+    (phase (str-cat  ?t " se descarta por no haber superado el chequeo de resistencia"))
     (E-discard ?t MAIN::EI-failed-corr-check)
 )
 
@@ -247,7 +247,7 @@
     =>
     (E-modify ?t position (outofgamesymbol (send ?t get-player))
         MAIN::EI-corrupted-corr-check)
-    (message ?t " abandona la partida por haberse dejado dominar por la corrupcion")
+    (phase (str-cat  ?t " abandona la partida por haberse dejado dominar por la corrupcion"))
 )
 
 
@@ -265,7 +265,7 @@
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-unique)))
     =>
     (E-cancel MAIN::EI-unique)
-    (message ?t " no se puede volver a jugar, es una carta unica que ya ha aparecido")
+    (phase (str-cat  ?t " no se puede volver a jugar, es una carta unica que ya ha aparecido"))
 )
 
 ;TODO: Manejar objetos al destruir un personaje

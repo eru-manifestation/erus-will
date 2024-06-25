@@ -30,8 +30,13 @@
 				(reason strike-5::execute-strike#enemy-res-check)
 				(attacker ?char)
 				(target ?at))
+			(phase (str-cat "El personaje saca " ?d " y con sus " ?prowess
+				" puntos de fuerza supera los " ?at-prowess 
+				" del enemigo, su adversario debe fallar el chequeo de resistencia para ser derrotado"))
 			else
-			(message El personaje saca ?d y supera los ?at-prowess del enemigo, y como su adversario no tiene valor de resistencia, derrota el golpe)
+			(phase (str-cat "El personaje saca " ?d " y con sus " ?prowess
+				" puntos de fuerza supera los " ?at-prowess 
+				" del enemigo, y como su adversario no tiene valor de resistencia, derrota el golpe"))
 			(complete DEFEATED)
 		)
 		else
@@ -40,8 +45,13 @@
 				(reason strike-5::execute-strike#defender-res-check)
 				(attacker ?at)
 				(target ?char))
+			(phase (str-cat "El personaje saca " ?d " y con sus " ?prowess
+				" puntos de fuerza pierde contra con los " ?at-prowess 
+				" del enemigo, por lo que debe ejecutar un chequeo de resistencia"))
 			else
-			(message El personaje saca ?d y supera los ?at-prowess del enemigo, pero el enemigo debe fallar su chequeo de resistencia)
+			(phase (str-cat "El personaje saca " ?d " y con sus " ?prowess
+				" puntos de fuerza empata con los " ?at-prowess 
+				" del enemigo, por lo que no logra derrotar completamente el golpe"))
 			(complete PARTIALLY-UNDEFEATED)
 		)
 	)

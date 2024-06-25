@@ -120,13 +120,13 @@ function modifyElement(announce) {
                 element.setAttribute(announce.slot, announce.value);
                 setTimeout(()=>element.classList.remove("resultRoll"),msDelay);
             };
-        }else if(classes.contains("ep-dices") && announce.slot==="res" && element.getAttribute('state')==="DONE"){
+        }else if(classes.contains("ep-dices") && announce.slot==="res" && element.getAttribute('state')==="DONE" && true){//TODO
             // Estilos de modificación de la tirada
             msDelay=1000;
             animationFunction = () => {
                 let element = document.getElementById(announce.id);
                 element.classList.add("modifyRoll");
-                setTimeout(()=>element.setAttribute(announce.slot, announce.value),msDelay/2);
+                setTimeout(()=>element.setAttribute(announce.slot, announce.value),msDelay/3);
                 setTimeout(()=>element.classList.remove("modifyRoll"),msDelay);
             };
         }else{

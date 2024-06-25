@@ -114,3 +114,8 @@
 	(bind ?*message* (insert$ ?*message* (+ 1 (length$ ?*message*)) ?insert))
 	TRUE
 )
+
+(deffunction MAIN::phase (?message)
+	(announce all { "operation" : "phase" , "description" : ?message } )
+	(message ?message)
+)

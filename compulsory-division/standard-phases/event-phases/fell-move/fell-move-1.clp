@@ -9,6 +9,7 @@
 
 
 (defrule reveal-move 
+    (object (is-a EP-fell-move) (active TRUE)  (fellowship ?fell) (to ?to))
     =>
-    ;TODO REVELAR
+    (phase (str-cat "La compañía " ?fell " parte de camino a " ?to))
 )
