@@ -9,7 +9,7 @@
   --item-border: repeating-linear-gradient(-90deg,
       var(--item-border-color-light),
       var(--item-border-color),
-      var(--item-border-color-light) 1.5rem);
+      var(--item-border-color-light) 10px);
   --shadow: drop-shadow(-.4rem 0rem 1px rgb(0, 0, 0, 0.4));
   --shadow-inverted: drop-shadow(.4rem 0rem 1px rgb(0, 0, 0, 0.4));
   --text-shadow: hsla(0, 0%, 0%, .5) .1rem .05rem;
@@ -510,32 +510,45 @@
       top: calc(0rem - var(--creature-size) - 10%);
       left: calc(50% - var(--creature-size) / 2);
 
-
-
-      &>.prowess {
-        background-image: url(combat-stats.png);
+      &>.attribute:is(.prowess, .body) {
         font-size: 1.5rem;
         display: block !important;
-        bottom: -.2rem;
+        bottom: 0rem;
         left: 0rem;
-        height: 2.2rem;
+        height: 2.5rem;
         aspect-ratio: 1/1;
 
         &::after {
           position: absolute;
-          bottom: .3rem;
+          bottom: 20%;
           color: var(--character-light);
-          right: calc(50% - .2rem);
         }
+      }
+
+      &>.prowess {
+        background-image: url(combat-stats.png);
+
+        &::after {
+          right: 60%;
+        }
+      }
+
+      &>.body::after {
+        left: 60%;
+        z-index: 1;
+      }
+
+      &>:is(.body, .prowess)[content='nil']::after {
+        content: '-' !important;
       }
     }
 
     & .character {
       margin: auto;
-      height: 90%;
-      /*! aspect-ratio: 3/5; */
-      width: 22vh;
-      border-radius: 5%;
+      aspect-ratio: 3/5;
+      width: 20vh;
+      max-height: 90%;
+     /* border-radius: 5%;*/
       border: .75rem ridge var(--character-border) !important;
       border-width: .75rem !important;
       border-image: url(character-border1.png) 10 stretch repeat !important;
@@ -545,7 +558,7 @@
 
       display: flex;
       flex-flow: column-reverse;
-      padding-left: 7%;
+      padding-left: 5vh;
       padding-block: 2rem;
       gap: 1rem;
 
@@ -589,6 +602,7 @@
         &::after {
           top: .4rem;
         }
+        &[content="0"]::after {content: "" !important;}
       }
 
       &>:is(.prowess, .body) {
@@ -669,6 +683,7 @@
           top: -.1rem;
         }
       }
+      &>.attribute.mind[content='0'] {display: none !important;}
 
       /* ESTILOS DE SEGUIDORES */
       &>.character {
