@@ -1,7 +1,7 @@
 {
-  "name": "object_wrap",
-  "version": "0.0.0",
-  "description": "Node.js Addons Example #6",
+  "name": "tfg_satm",
+  "version": "1.0.0",
+  "description": "Trabajo Final de Grado de Pablo Ortega Peral: El Señor de los Anillos, la Tierra Media. Sistema basado en conocimiento que interpreta una partida accesible a través del navegador web.",
   "main": "addon.js",
   "private": true,
   "gypfile": true,

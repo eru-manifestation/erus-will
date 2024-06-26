@@ -34,7 +34,7 @@
   font-family: monospace;
   /*! outline: 1px solid red; */
 
-
+  color: white;
 }
 
 
@@ -503,6 +503,7 @@
 
     &>.creature {
       width: var(--creature-size);
+      height: var(--creature-size);
       aspect-ratio: 1/1;
       border-radius: 50%;
       position: absolute;
@@ -882,7 +883,7 @@
   background-size: 50% 50%;
   background-clip: border-box;
   border-width: var(--player-border-size);
-  border-color: black;
+  border-color: rgb(151, 151, 151) !important;
   border-style: solid;
 
   &::after {
