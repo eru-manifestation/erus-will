@@ -82,7 +82,7 @@
 
 /* ICONOS Y SUS ESTILOS */
 #game-space .data-item {
-  display: none;
+  /* display: none; */
   background-image: url(info-icon.png);
 }
 #game-space .attackable:not(.card) {
