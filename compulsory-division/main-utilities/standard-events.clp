@@ -192,7 +192,7 @@
 
 
 (defrule MAIN::EI-wound (declare (auto-focus TRUE) (salience ?*E-intercept*))
-    ?e <- (object (is-a EP-strike) (state OUT) (res PARTIALLY-UNDEFEATED|UNDEFEATED) (target ?t))
+    ?e <- (object (is-a EP-strike) (state OUT) (res UNDEFEATED) (target ?t))
     (not (object (is-a EVENT) (position ?e) (reason MAIN::EI-wound)))
 	=>
 	(E-modify ?t state WOUNDED MAIN::EI-wound)

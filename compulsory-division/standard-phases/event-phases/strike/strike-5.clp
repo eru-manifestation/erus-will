@@ -71,8 +71,5 @@
 	?e <- (object (is-a EP-strike) (active TRUE))
 	?res <- (object (is-a EP-resistance-check) (position ?e) (reason strike-5::execute-strike#defender-res-check) (state DONE | DEFUSED))
 	=>
-	(complete (switch (send ?res get-res)
-		(case PASSED then PARTIALLY-UNDEFEATED)
-		(default UNDEFEATED)
-	))
+	(complete UNDEFEATED)
 )

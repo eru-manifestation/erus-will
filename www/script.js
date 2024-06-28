@@ -5,6 +5,8 @@ const socket = io.connect(window.location.origin, { query: urlParams.toString() 
 const dev = urlParams.get("dev")!=null;
 let choice = [];
 let player = undefined;
+let animations = [];
+let animating = false;
 
 let closeUp, phase, game_space, locations, events, focusedLocation = "rivendell", focusedFellowship = "fellowship1";
 
@@ -291,7 +293,7 @@ function enableChoices() {
 
 function animateAnnounce(announce) {
     return new Promise((resolve) => {
-        if (announce != null)
+        if (announce !== undefined)
             switch (announce.operation) {
                 case "create":
                     operationData = insertingData(announce);
@@ -336,10 +338,13 @@ function animateAnnounce(announce) {
     })
 }
 
-async function animate(announces) {
-    for await (announce of announces) {
+async function animate() {
+    animating = true;
+    do{
+        announce = animations.shift();
         await animateAnnounce(announce);
-    }
+    }while(announce !== undefined)
+    animating = false;
 }
 
 function closeUpListener(e) {
@@ -394,7 +399,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Choose:", data.choice);
         console.log("Announces:", data.announces);
-        animate(data.announces);
+        
+        animations = animations.concat(data.announces.slice(0,-1));
+        if(!animating)   animate();
     });
 
     socket.on("disconnect", (reason) => {

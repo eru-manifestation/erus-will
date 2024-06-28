@@ -89,7 +89,7 @@
   text-align: left;
   word-break: break-word;
   
-  &:not(:hover){
+  &:not(:hover,.phaseanimation){
     height: var(--sun-size);
     text-overflow: ellipsis;
     overflow: hidden;
