@@ -86,8 +86,15 @@
   z-index: 1;
   border-radius: 1rem;
   padding: 1rem;
-  text-align: right;
+  text-align: left;
   word-break: break-word;
+  
+  &:not(:hover){
+    height: var(--sun-size);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 
 #phase.phaseanimation {
@@ -1303,9 +1310,9 @@
 
   &>#locations {
     background-image: url(map-geography.jpg);
-    background-size: contain;
+    background-size: auto 100%;
     background-repeat: no-repeat;
-    background-position: 50% 50%;
+    background-position: center;
 
     height: 100vh;
     width: 100vw;
@@ -1318,10 +1325,10 @@
       align-content: end;
       color: black;
 
-      width: 4vw;
+      width: 6vh;
       aspect-ratio: 1/1;
       border-radius: 50%;
-      border: 2px solid black;
+      border: 1px solid black;
 
       position: absolute;
 
@@ -1356,43 +1363,43 @@
 */
 
 #rivendell:not(.location__focused) {
-  top: 30%;
-  left: 48%;
+  top: 28%;
+  left: calc(50% - 4vh);
 }
 
 #lorien:not(.location__focused) {
   top: 41%;
-  left: 52%;
+  left: calc(50% + 3vh);
 }
 
 #barrow--downs:not(.location__focused) {
   top: 35%;
-  left: 33%;
+  left: calc(50% - 25vh);
 }
 
 #dunnish-clan--hold:not(.location__focused) {
   top: 50%;
-  left: 39%;
+  left: calc(50% - 16vh);
 }
 
 #bree:not(.location__focused) {
   top: 31%;
-  left: 31%;
+  left: calc(50% - 30vh);
 }
 
 #goblin--gate:not(.location__focused) {
   top: 23%;
-  left: 51%;
+  left: calc(50% + 3vh);
 }
 
 #isengard:not(.location__focused) {
   top: 53%;
-  left: 44%;
+  left: calc(50% - 8vh);
 }
 
 #wellinghall:not(.location__focused) {
   top: 50%;
-  left: 49%;
+  left: calc(50% - 1vh);
 }
 
 #edoras:not(.location__focused) {
@@ -1402,25 +1409,25 @@
 
 #minas-tirith:not(.location__focused) {
   top: 66%;
-  left: 64%;
+  left: calc(50% + 21vh);
 }
 
 #dead-marshes:not(.location__focused) {
   top: 56%;
-  left: 63%;
+  left: calc(50% + 21vh);
 }
 
 #thranduils-halls:not(.location__focused) {
   top: 16%;
-  left: 66%;
+  left: calc(50% + 26vh);
 }
 
 #mount-gundabad:not(.location__focused) {
   top: 10%;
-  left: 50%;
+  left: calc(50% + 3vh);
 }
 
 #moria:not(.location__focused) {
   top: 40%;
-  left: 46%;
+  left: calc(50% - 6vh);
 }
